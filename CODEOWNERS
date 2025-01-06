@@ -138,11 +138,6 @@
 /bundles/org.openhab.binding.gce/ @clinique
 /bundles/org.openhab.binding.generacmobilelink/ @digitaldan
 /bundles/org.openhab.binding.giraone/ @matgroe
-/bundles/org.openhab.binding.giratest/ @matgroe@gmail.com
-/bundles/org.openhab.binding.giratest/ @matgroe@gmail.com
-/bundles/org.openhab.binding.giraone/ @matgroe@gmail.com
-/bundles/org.openhab.binding.giratest/ @matgroe@gmail.com
-/bundles/org.openhab.binding.giratest/ @matgroe@gmail.com
 /bundles/org.openhab.binding.globalcache/ @mhilbush
 /bundles/org.openhab.binding.goecharger/ @SamuelBrucksch
 /bundles/org.openhab.binding.govee/ @stefan-hoehn
