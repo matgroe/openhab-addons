@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.openhab.addons</groupId>
@@ -161,7 +163,6 @@
     <module>org.openhab.binding.gardena</module>
     <module>org.openhab.binding.gce</module>
     <module>org.openhab.binding.generacmobilelink</module>
-    <module>org.openhab.binding.giraone</module>
     <module>org.openhab.binding.goecharger</module>
     <module>org.openhab.binding.govee</module>
     <module>org.openhab.binding.gpio</module>
@@ -486,6 +487,7 @@
     <module>org.openhab.voice.voskstt</module>
     <module>org.openhab.voice.watsonstt</module>
     <module>org.openhab.voice.whisperstt</module>
+    <module>org.openhab.binding.giraone</module>
   </modules>
   <properties>
     <m2e.jdt.annotationpath>target/dependency</m2e.jdt.annotationpath>
