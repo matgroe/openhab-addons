@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.thing.ThingTypeUID;
 
@@ -31,7 +33,17 @@ public class GiraOneBindingConstants {
     private static final String BINDING_ID = "giraone";
 
     // List of all Thing Type UIDs
-    public static final ThingTypeUID THING_TYPE_G1_SERVER = new ThingTypeUID(BINDING_ID, "server");
+    public static final String SERVER_TYPE_ID = "server";
+    public static final String DEVICE_TYPE_ID = "device";
+    public static final String TEMPERATURE_TYPE_ID = "temperature";
+
+    // List of all Thing Type UIDs
+    public static final ThingTypeUID G1_SERVER_TYPE_UID = new ThingTypeUID(BINDING_ID, SERVER_TYPE_ID);
+    public static final ThingTypeUID DEVICE_TYPE_UID = new ThingTypeUID(BINDING_ID, DEVICE_TYPE_ID);
+    public static final ThingTypeUID TEMPERATURE_THING_UID = new ThingTypeUID(BINDING_ID, TEMPERATURE_TYPE_ID);
+
+    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(G1_SERVER_TYPE_UID, DEVICE_TYPE_UID,
+            TEMPERATURE_THING_UID);
 
     // List of all Channel ids
     public static final String CHANNEL_1 = "channel1";

@@ -10,17 +10,20 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal;
+package org.openhab.binding.giraone.internal.handler;
 
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
 
+import java.util.Collection;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.thing.Channel;
-import org.openhab.core.thing.ChannelUID;
-import org.openhab.core.thing.Thing;
-import org.openhab.core.thing.ThingStatus;
-import org.openhab.core.thing.binding.BaseThingHandler;
+import org.openhab.binding.giraone.internal.GiraOneConfiguration;
+import org.openhab.binding.giraone.internal.discovery.GiraOneThingDiscoveryService;
+import org.openhab.core.thing.*;
+import org.openhab.core.thing.binding.BaseBridgeHandler;
+import org.openhab.core.thing.binding.ThingHandlerService;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelTypeUID;
@@ -30,20 +33,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link GiraOneServerHandler} is responsible for handling commands, which are
+ * The {@link GiraOneBridgeHandler} is responsible for handling commands, which are
  * sent to one of the channels.
  *
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneServerHandler extends BaseThingHandler {
+public class GiraOneBridgeHandler extends BaseBridgeHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(GiraOneServerHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
 
     private @Nullable GiraOneConfiguration config;
 
-    public GiraOneServerHandler(Thing thing) {
-        super(thing);
+    public GiraOneBridgeHandler(Bridge bridge) {
+        super(bridge);
+    }
+
+    @Override
+    public Collection<Class<? extends ThingHandlerService>> getServices() {
+        return Set.of(GiraOneThingDiscoveryService.class);
     }
 
     @Override
@@ -64,7 +72,7 @@ public class GiraOneServerHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        logger.info("Initializing ....");
+        logger.info("Initializing . xxx ...");
         config = getConfigAs(GiraOneConfiguration.class);
 
         // TODO: Initialize the handler.
