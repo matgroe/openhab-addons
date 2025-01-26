@@ -13,8 +13,7 @@
 
 package org.openhab.binding.giraone.internal.discovery;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HOST;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.THING_TYPE_G1_SERVER;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
 
 import java.util.Map;
 import java.util.Objects;
@@ -35,21 +34,28 @@ import org.slf4j.LoggerFactory;
 
 @NonNullByDefault
 @Component(service = { UpnpDiscoveryParticipant.class })
-public class GiraOneDiscoveryParticipant implements UpnpDiscoveryParticipant {
-    private final Logger logger = LoggerFactory.getLogger(GiraOneDiscoveryParticipant.class);
+public class GiraOneBridgeDiscoveryParticipant implements UpnpDiscoveryParticipant {
+    private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeDiscoveryParticipant.class);
     private final static String DEVICE_NAMESPACE = "gira-de";
     private final static String DEVICE_TYPE = "Device";
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypeUIDs() {
-        return Set.of(THING_TYPE_G1_SERVER);
+        return SUPPORTED_THING_TYPES_UIDS;
+    }
+
+    private boolean isValidRemoteDevice(RemoteDevice device) {
+        return DEVICE_NAMESPACE.equals(device.getType().getNamespace())
+                && DEVICE_TYPE.equals(device.getType().getType());
+    }
+
+    private String formatRemoteDevice(RemoteDevice device) {
+        return String.format("");
     }
 
     @Override
     public @Nullable DiscoveryResult createResult(RemoteDevice device) {
-        if (DEVICE_NAMESPACE.equals(device.getType().getNamespace())
-                && DEVICE_TYPE.equals(device.getType().getType())) {
-
+        if (this.isValidRemoteDevice(device)) {
             String manufacturer = device.getDetails().getManufacturerDetails().getManufacturer();
             String model = device.getDetails().getModelDetails().getModelName();
             String serialNumber = device.getDetails().getModelDetails().getModelNumber();
@@ -58,7 +64,8 @@ public class GiraOneDiscoveryParticipant implements UpnpDiscoveryParticipant {
             String host = device.getIdentity().getDescriptorURL().getHost();
             String label = String.format("%s (%s)", model, firmwareVersion);
 
-            logger.info("Found device {} -- {}@{} :: FW='', SN#='{}'", udn, model, host, firmwareVersion, serialNumber);
+            logger.info("Found device {} -- {}@{} :: FW='{}', SN#='{}'", udn, model, host, firmwareVersion,
+                    serialNumber);
 
             return DiscoveryResultBuilder.create(Objects.requireNonNull(getThingUID(device)))
                     .withProperties(Map.of(HOST, host, Thing.PROPERTY_MODEL_ID, model, Thing.PROPERTY_VENDOR,
@@ -71,6 +78,12 @@ public class GiraOneDiscoveryParticipant implements UpnpDiscoveryParticipant {
 
     @Override
     public @Nullable ThingUID getThingUID(RemoteDevice device) {
-        return new ThingUID(THING_TYPE_G1_SERVER, device.getDetails().getModelDetails().getModelNumber().toLowerCase());
+        if (this.isValidRemoteDevice(device)) {
+            logger.info("getThingUID {}, {}", G1_SERVER_TYPE_UID,
+                    device.getDetails().getModelDetails().getModelNumber().toLowerCase());
+            return new ThingUID(G1_SERVER_TYPE_UID,
+                    device.getDetails().getModelDetails().getModelNumber().toLowerCase());
+        }
+        return null;
     }
 }

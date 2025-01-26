@@ -4,8 +4,9 @@
 	xsi:schemaLocation="https://openhab.org/schemas/addon/v1.0.0 https://openhab.org/schemas/addon-1.0.0.xsd">
 
 	<type>binding</type>
-	<name>GiraOne Binding</name>
-	<description>This is the binding for GiraOne Servers.</description>
+	<name>Gira One Smart-Home</name>
+	<description>This is the binding for Gira One Smart-Home.</description>
+	<connection>local</connection>
 
 	<discovery-methods>
 		<discovery-method>
