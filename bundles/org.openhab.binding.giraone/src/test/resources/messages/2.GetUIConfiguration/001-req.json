@@ -1,0 +1,8 @@
+{
+    "request": {
+        "command": "GetUIConfiguration",
+        "guid": "",
+        "urns": true,
+        "_gdsqueryId": 3
+    }
+}

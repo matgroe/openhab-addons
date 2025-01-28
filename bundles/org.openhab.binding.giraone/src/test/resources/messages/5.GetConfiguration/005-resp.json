@@ -1,0 +1,33 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "object": {
+      "displayName": "User",
+      "enabled": "true",
+      "iconID": "1",
+      "id": "216491",
+      "mainType": "Profile",
+      "name": "User",
+      "subType": "User",
+      "type": "GDSTYPEDELEMENT",
+      "urn": "urn:gds:pfe:ProfileCollection:User",
+      "visible": "true"
+    },
+    "request": {
+      "command": "GetConfiguration",
+      "object": {
+        "urn": "urn:gds:pfe:ProfileCollection:User"
+      },
+      "_gdsqueryId": "19"
+    },
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

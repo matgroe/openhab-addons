@@ -1,0 +1,25 @@
+{
+  "event": {
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    },
+    "error": {
+      "code": "0",
+      "text": "OK",
+      "hint": ""
+    },
+    "type": "Value",
+    "value": {
+      "id": "220945",
+      "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-3:Step-Up-Down",
+      "new": "1",
+      "old": "1",
+      "newInternal": "2.3:true",
+      "oldInternal": "2.3:true",
+      "state": "Value",
+      "source": "k:12.0.7"
+    }
+  }
+}

@@ -49,10 +49,6 @@ public class GiraOneBridgeDiscoveryParticipant implements UpnpDiscoveryParticipa
                 && DEVICE_TYPE.equals(device.getType().getType());
     }
 
-    private String formatRemoteDevice(RemoteDevice device) {
-        return String.format("");
-    }
-
     @Override
     public @Nullable DiscoveryResult createResult(RemoteDevice device) {
         if (this.isValidRemoteDevice(device)) {

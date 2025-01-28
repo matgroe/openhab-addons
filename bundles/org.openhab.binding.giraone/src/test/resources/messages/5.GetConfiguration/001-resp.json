@@ -1,0 +1,62 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "object": {
+      "channelType": "General GDS Channel",
+      "displayName": "PresenceSimulation",
+      "enabled": "true",
+      "extendedType": "de.gira.schema.channels.PresenceSimulation",
+      "fieldHandler": "PresenceSimulation",
+      "fieldHandlerParameters": "HandleValue:true",
+      "id": "1080",
+      "metadata": [
+        {
+          "key": "ResetOnGpaCommisioning",
+          "value": "false"
+        }
+      ],
+      "name": "PresenceSimulation",
+      "parameters": [
+        {
+          "key": "ChannelViewIds",
+          "set": "CurrentFilter",
+          "value": "[]"
+        },
+        {
+          "key": "ChannelViewUrns",
+          "set": "CurrentFilter",
+          "value": "[]"
+        },
+        {
+          "key": "Project",
+          "set": "CurrentFilter",
+          "value": "ID1c47ddc9-4672-4463-b915-219883210049"
+        },
+        {
+          "key": "SupportedChannelViews",
+          "set": "CurrentFilter",
+          "value": "[216200,216363,216084,216170,216164,216138,216353,216070,216042,216259,216323,216122,216178,216227,216300,216036,216245,216120,216309,216032,216076,216275,216294,216158,216096,216074,216347,216052,216341,216186,216321,216361,216367,216011,216058,216064,216048,216239,216225,216237,216082,216257,216066,216176,216279,216304]"
+        }
+      ],
+      "type": "CHANNEL",
+      "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:PresenceSimulation",
+      "visible": "true"
+    },
+    "request": {
+      "command": "GetConfiguration",
+      "object": {
+        "id": "1080"
+      },
+      "_gdsqueryId": "6"
+    },
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

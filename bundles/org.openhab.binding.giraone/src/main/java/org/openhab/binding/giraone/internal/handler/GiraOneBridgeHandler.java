@@ -55,6 +55,18 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
     }
 
     @Override
+    public void dispose() {
+        logger.info("Disposing 'Gira One Bridge'");
+        super.dispose();
+    }
+
+    @Override
+    public void handleRemoval() {
+        logger.info("Handle Removal of 'Gira One Bridge'");
+        super.handleRemoval();
+    }
+
+    @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         if (CHANNEL_1.equals(channelUID.getId())) {
             if (command instanceof RefreshType) {
@@ -72,7 +84,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
 
     @Override
     public void initialize() {
-        logger.info("Initializing . xxx ...");
+        logger.info("Initializing 'Gira One Bridge'");
         config = getConfigAs(GiraOneConfiguration.class);
 
         // TODO: Initialize the handler.
