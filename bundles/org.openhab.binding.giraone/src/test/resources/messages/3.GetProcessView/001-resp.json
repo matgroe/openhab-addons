@@ -1,0 +1,1169 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "processView": {
+      "datapoints": [
+        {
+          "id": "40001",
+          "state": "2",
+          "valueState": "Value"
+        },
+        {
+          "id": "40002",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "40004",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "40005",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "40007",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "40008",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "40010",
+          "state": "2",
+          "valueState": "Value"
+        },
+        {
+          "id": "40011",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215266",
+          "state": "64",
+          "valueState": "Value"
+        },
+        {
+          "id": "215274",
+          "state": "72",
+          "valueState": "Value"
+        },
+        {
+          "id": "215306",
+          "state": "63",
+          "valueState": "Value"
+        },
+        {
+          "id": "215317",
+          "state": "69",
+          "valueState": "Value"
+        },
+        {
+          "id": "215351",
+          "state": "68",
+          "valueState": "Value"
+        },
+        {
+          "id": "215443",
+          "state": "72",
+          "valueState": "Value"
+        },
+        {
+          "id": "215451",
+          "state": "69",
+          "valueState": "Value"
+        },
+        {
+          "id": "215454",
+          "state": "20.92",
+          "valueState": "Value"
+        },
+        {
+          "id": "215479",
+          "state": "66",
+          "valueState": "Value"
+        },
+        {
+          "id": "215482",
+          "state": "21.16",
+          "valueState": "Value"
+        },
+        {
+          "id": "215498",
+          "state": "73",
+          "valueState": "Value"
+        },
+        {
+          "id": "215501",
+          "state": "21.2",
+          "valueState": "Value"
+        },
+        {
+          "id": "215530",
+          "state": "70",
+          "valueState": "Value"
+        },
+        {
+          "id": "215533",
+          "state": "19.3",
+          "valueState": "Value"
+        },
+        {
+          "id": "215579",
+          "state": "72",
+          "valueState": "Value"
+        },
+        {
+          "id": "215582",
+          "state": "20.74",
+          "valueState": "Value"
+        },
+        {
+          "id": "215611",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215612",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215613",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215616",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215617",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215618",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215621",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215622",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215623",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215626",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215627",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215628",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215632",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215633",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215634",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215637",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215638",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215639",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215642",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215643",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215644",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215647",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215648",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215649",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215655",
+          "state": "18.73",
+          "valueState": "Value"
+        },
+        {
+          "id": "215656",
+          "state": "18.7",
+          "valueState": "Value"
+        },
+        {
+          "id": "215657",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215658",
+          "state": "2",
+          "valueState": "Value"
+        },
+        {
+          "id": "215661",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215666",
+          "state": "21.42",
+          "valueState": "Value"
+        },
+        {
+          "id": "215667",
+          "state": "20",
+          "valueState": "Value"
+        },
+        {
+          "id": "215668",
+          "state": "2",
+          "valueState": "Value"
+        },
+        {
+          "id": "215669",
+          "state": "2",
+          "valueState": "Value"
+        },
+        {
+          "id": "215672",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215677",
+          "state": "19.94",
+          "valueState": "Value"
+        },
+        {
+          "id": "215678",
+          "state": "20",
+          "valueState": "Value"
+        },
+        {
+          "id": "215679",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215680",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215683",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215688",
+          "state": "19.99",
+          "valueState": "Value"
+        },
+        {
+          "id": "215689",
+          "state": "20",
+          "valueState": "Value"
+        },
+        {
+          "id": "215690",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215691",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215694",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215699",
+          "state": "19.7",
+          "valueState": "Value"
+        },
+        {
+          "id": "215700",
+          "state": "19",
+          "valueState": "Value"
+        },
+        {
+          "id": "215701",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215702",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215705",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215710",
+          "state": "19.81",
+          "valueState": "Value"
+        },
+        {
+          "id": "215711",
+          "state": "20",
+          "valueState": "Value"
+        },
+        {
+          "id": "215712",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215713",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215716",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215724",
+          "state": "20.92",
+          "valueState": "Value"
+        },
+        {
+          "id": "215725",
+          "state": "21.5",
+          "valueState": "Value"
+        },
+        {
+          "id": "215726",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215727",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215730",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215735",
+          "state": "20.76",
+          "valueState": "Value"
+        },
+        {
+          "id": "215736",
+          "state": "20.5",
+          "valueState": "Value"
+        },
+        {
+          "id": "215737",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215738",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215741",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215746",
+          "state": "21.28",
+          "valueState": "Value"
+        },
+        {
+          "id": "215747",
+          "state": "21",
+          "valueState": "Value"
+        },
+        {
+          "id": "215748",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215749",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215752",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215757",
+          "state": "21.52",
+          "valueState": "Value"
+        },
+        {
+          "id": "215758",
+          "state": "21.5",
+          "valueState": "Value"
+        },
+        {
+          "id": "215759",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215760",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215763",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215768",
+          "state": "21.36",
+          "valueState": "Value"
+        },
+        {
+          "id": "215769",
+          "state": "21.5",
+          "valueState": "Value"
+        },
+        {
+          "id": "215770",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215771",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215774",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215779",
+          "state": "20.36",
+          "valueState": "Value"
+        },
+        {
+          "id": "215780",
+          "state": "18",
+          "valueState": "Value"
+        },
+        {
+          "id": "215781",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215782",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215785",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215792",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215793",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215794",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215795",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215796",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215799",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215800",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215801",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215802",
+          "state": "6.666667",
+          "valueState": "Value"
+        },
+        {
+          "id": "215803",
+          "state": "25.098039",
+          "valueState": "Value"
+        },
+        {
+          "id": "215806",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215807",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215808",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215809",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215810",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215813",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215814",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215815",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215816",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215820",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215821",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215822",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215823",
+          "state": "98.823529",
+          "valueState": "Value"
+        },
+        {
+          "id": "215827",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215828",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215829",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215830",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215834",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215835",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215836",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215837",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215841",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215844",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215848",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215849",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215850",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215851",
+          "state": "95.686275",
+          "valueState": "Value"
+        },
+        {
+          "id": "215852",
+          "state": "49.411765",
+          "valueState": "Value"
+        },
+        {
+          "id": "215855",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215856",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215857",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215858",
+          "state": "98.431373",
+          "valueState": "Value"
+        },
+        {
+          "id": "215859",
+          "state": "70.196078",
+          "valueState": "Value"
+        },
+        {
+          "id": "215862",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215863",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215864",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215865",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215866",
+          "state": "67.843137",
+          "valueState": "Value"
+        },
+        {
+          "id": "215869",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215870",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215871",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215872",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215873",
+          "state": "49.411765",
+          "valueState": "Value"
+        },
+        {
+          "id": "215876",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215877",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215878",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215879",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215880",
+          "state": "49.411765",
+          "valueState": "Value"
+        },
+        {
+          "id": "215883",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215884",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215885",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215886",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215887",
+          "state": "49.019608",
+          "valueState": "Value"
+        },
+        {
+          "id": "215890",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215891",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215892",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215893",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215894",
+          "state": "49.019608",
+          "valueState": "Value"
+        },
+        {
+          "id": "215897",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215898",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215899",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215900",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215901",
+          "state": "49.411765",
+          "valueState": "Value"
+        },
+        {
+          "id": "215904",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215905",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215906",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215907",
+          "state": "98.039216",
+          "valueState": "Value"
+        },
+        {
+          "id": "215908",
+          "state": "49.411765",
+          "valueState": "Value"
+        },
+        {
+          "id": "215911",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215914",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215917",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215920",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215923",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215926",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215930",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215931",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215932",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215933",
+          "state": "96.078431",
+          "valueState": "Value"
+        },
+        {
+          "id": "215934",
+          "state": "60",
+          "valueState": "Value"
+        },
+        {
+          "id": "215937",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215938",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215939",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215940",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215941",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215944",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215945",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215946",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215947",
+          "state": "100",
+          "valueState": "Value"
+        },
+        {
+          "id": "215948",
+          "state": "50",
+          "valueState": "Value"
+        },
+        {
+          "id": "215951",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215952",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215953",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215954",
+          "state": "100",
+          "valueState": "Value"
+        },
+        {
+          "id": "215955",
+          "state": "50",
+          "valueState": "Value"
+        },
+        {
+          "id": "215958",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215959",
+          "state": "",
+          "valueState": "Missing"
+        },
+        {
+          "id": "215960",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215961",
+          "state": "100",
+          "valueState": "Value"
+        },
+        {
+          "id": "215962",
+          "state": "50",
+          "valueState": "Value"
+        },
+        {
+          "id": "215965",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215968",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215971",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215974",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215977",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215980",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215983",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215986",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215989",
+          "state": "1",
+          "valueState": "Value"
+        },
+        {
+          "id": "215992",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215995",
+          "state": "0",
+          "valueState": "Value"
+        },
+        {
+          "id": "215998",
+          "state": "0",
+          "valueState": "Value"
+        }
+      ]
+    },
+    "request": {
+      "cached": "true",
+      "command": "GetProcessView",
+      "ui": "true",
+      "_gdsqueryId": "4"
+    },
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

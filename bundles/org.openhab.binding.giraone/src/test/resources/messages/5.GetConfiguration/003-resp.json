@@ -1,0 +1,185 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "object": {
+      "channelType": "General GDS Channel",
+      "displayName": "Raffstores Bad",
+      "enabled": "true",
+      "extendedType": "de.gira.schema.channels.FunctionScene",
+      "fieldHandler": "",
+      "id": "40003",
+      "metadata": [
+        {
+          "key": "ChannelViewId",
+          "value": "216222"
+        },
+        {
+          "key": "FALLBACK_SCENE_NR",
+          "value": "1"
+        },
+        {
+          "key": "ResetOnGpaCommisioning",
+          "value": "true"
+        },
+        {
+          "key": "conf:EntityId",
+          "value": "b4785976-3132-41f3-b665-2448b1dac348"
+        }
+      ],
+      "name": "Function-Scene-2",
+      "outputDatapoints": [
+        {
+          "id": "1000503",
+          "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:Function-Scene-2:Scene-Set"
+        }
+      ],
+      "sceneSet": {
+        "datapoints": [
+          {
+            "id": "216349",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Position"
+          },
+          {
+            "id": "216350",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Slat-Position"
+          },
+          {
+            "id": "216056",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Position"
+          },
+          {
+            "id": "216055",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Slat-Position"
+          },
+          {
+            "id": "216346",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Position"
+          },
+          {
+            "id": "216344",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Slat-Position"
+          }
+        ],
+        "enabled": "true",
+        "name": "Scene-Set",
+        "scenes": [
+          {
+            "datapoints": [
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216349",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216350",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216056",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216055",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216346",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216344",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Slat-Position",
+                "value": "50"
+              }
+            ],
+            "name": "0 = Rollläden Auf",
+            "number": "1"
+          },
+          {
+            "datapoints": [
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216349",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216350",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216056",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216055",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216346",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216344",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Slat-Position",
+                "value": "100"
+              }
+            ],
+            "name": "1 = Rollläden Ab",
+            "number": "2"
+          }
+        ]
+      },
+      "type": "CHANNEL",
+      "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Scene-2",
+      "visible": "true"
+    },
+    "request": {
+      "command": "GetConfiguration",
+      "object": {
+        "id": "40003"
+      },
+      "_gdsqueryId": "8"
+    },
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

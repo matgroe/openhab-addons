@@ -1,0 +1,8 @@
+{
+    "request": {
+        "command": "GetProcessView",
+        "ui": "true",
+        "cached": "true",
+        "_gdsqueryId": 4
+    }
+}

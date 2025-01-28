@@ -1,0 +1,9 @@
+{
+    "request": {
+        "command": "GetConfiguration",
+        "object": {
+            "urn": "urn:gds:pfe:ProfileCollection:User"
+        },
+        "_gdsqueryId": 19
+    }
+}

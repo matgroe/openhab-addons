@@ -1,0 +1,14 @@
+{
+    "response": {
+      "error": {
+        "code": "123",
+        "hint": "Some Error Description",
+        "text": "NOK"
+      },
+      "version": {
+        "major": "1",
+        "minor": "0",
+        "text": "1.0"
+      }
+    }
+  }
