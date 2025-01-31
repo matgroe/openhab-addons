@@ -9,21 +9,18 @@ class GiraOneMessageJsonTypeAdapter {
     protected static final String PROPERTY_ERROR = "error";
 
     boolean hasError(JsonObject jsonObject) {
-        if (jsonObject != null
-                && jsonObject.has(PROPERTY_ERROR)) {
-            return ! "OK".equalsIgnoreCase(jsonObject.getAsJsonObject(PROPERTY_ERROR).get("text").getAsString());
+        if (jsonObject != null && jsonObject.has(PROPERTY_ERROR)) {
+            return !"OK".equalsIgnoreCase(jsonObject.getAsJsonObject(PROPERTY_ERROR).get("text").getAsString());
         }
         return false;
     }
 
     boolean isResponse(JsonElement jsonElement) {
-        return jsonElement != null
-                && isResponse(jsonElement.getAsJsonObject());
+        return jsonElement != null && isResponse(jsonElement.getAsJsonObject());
     }
 
     boolean isResponse(JsonObject jsonObject) {
-        return jsonObject != null
-                && jsonObject.has(PROPERTY_RESPONSE);
+        return jsonObject != null && jsonObject.has(PROPERTY_RESPONSE);
     }
 
     JsonObject getResponse(JsonElement jsonElement) {
@@ -31,17 +28,14 @@ class GiraOneMessageJsonTypeAdapter {
     }
 
     boolean isEvent(JsonElement jsonElement) {
-        return jsonElement != null
-                && isEvent(jsonElement.getAsJsonObject());
+        return jsonElement != null && isEvent(jsonElement.getAsJsonObject());
     }
 
     boolean isEvent(JsonObject jsonObject) {
-        return jsonObject != null
-                && jsonObject.has(PROPERTY_EVENT);
+        return jsonObject != null && jsonObject.has(PROPERTY_EVENT);
     }
 
     JsonObject getEvent(JsonElement jsonElement) {
         return jsonElement.getAsJsonObject().get(PROPERTY_EVENT).getAsJsonObject();
     }
-
 }

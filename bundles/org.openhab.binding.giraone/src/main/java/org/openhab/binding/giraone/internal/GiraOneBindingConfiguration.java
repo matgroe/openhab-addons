@@ -15,12 +15,12 @@ package org.openhab.binding.giraone.internal;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * The {@link GiraOneConfiguration} class contains fields mapping thing configuration parameters.
+ * The {@link GiraOneBindingConfiguration} class contains fields mapping thing configuration parameters.
  *
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneConfiguration {
+public class GiraOneBindingConfiguration {
 
     /**
      * Sample configuration parameters. Replace with your own.

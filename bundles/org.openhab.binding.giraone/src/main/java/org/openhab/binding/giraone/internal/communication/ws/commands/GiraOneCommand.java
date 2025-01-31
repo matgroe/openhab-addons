@@ -8,12 +8,12 @@ package org.openhab.binding.giraone.internal.communication.ws.commands;
  */
 public enum GiraOneCommand {
     /** First Command to send to server, otherwise no events are getting generated */
-    RegisterApplication( null),
+    RegisterApplication(null),
 
     /** Reads all Things and channels to be represented by any UI */
-    GetUIConfiguration( "config"),
+    GetUIConfiguration("config"),
 
-    GetProcessView( "processView");
+    GetProcessView("processView");
 
     private final String responsePropertyName;
 

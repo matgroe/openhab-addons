@@ -1,11 +1,10 @@
 package org.openhab.binding.giraone.internal.communication.ws.gson;
 
-import com.google.gson.*;
-import io.swagger.v3.core.util.Json;
-import org.openhab.binding.giraone.internal.communication.ws.GiraOneCommandResponse;
+import java.lang.reflect.Type;
+
 import org.openhab.binding.giraone.internal.communication.ws.GiraOneEvent;
 
-import java.lang.reflect.Type;
+import com.google.gson.*;
 
 class GiraOneEventDeserializer extends GiraOneMessageJsonTypeAdapter implements JsonDeserializer<GiraOneEvent> {
 
@@ -18,7 +17,8 @@ class GiraOneEventDeserializer extends GiraOneMessageJsonTypeAdapter implements 
     }
 
     @Override
-    public GiraOneEvent deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+    public GiraOneEvent deserialize(JsonElement jsonElement, Type type,
+            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (isEvent(jsonElement)) {
             JsonObject value = getValue(jsonElement);
             return new Gson().fromJson(value, GiraOneEvent.class);

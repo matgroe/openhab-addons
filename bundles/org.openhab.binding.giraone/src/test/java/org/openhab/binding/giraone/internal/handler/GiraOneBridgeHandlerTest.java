@@ -1,12 +1,10 @@
 package org.openhab.binding.giraone.internal.handler;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.openhab.core.thing.Bridge;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GiraOneBridgeHandlerTest {
     private Bridge bridge;
@@ -14,8 +12,8 @@ class GiraOneBridgeHandlerTest {
 
     @BeforeEach
     void setUp() {
-        //bridge = Mockito.mock(Bridge.class);
-        //bridgeHandler = new GiraOneBridgeHandler(bridge);
+        // bridge = Mockito.mock(Bridge.class);
+        // bridgeHandler = new GiraOneBridgeHandler(bridge);
     }
 
     @Test
@@ -24,6 +22,6 @@ class GiraOneBridgeHandlerTest {
 
     @Test
     void initialize() {
-       // bridgeHandler.initialize();
+        // bridgeHandler.initialize();
     }
 }
