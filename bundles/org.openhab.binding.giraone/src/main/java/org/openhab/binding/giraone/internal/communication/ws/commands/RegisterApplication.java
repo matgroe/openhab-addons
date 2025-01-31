@@ -39,5 +39,4 @@ public class RegisterApplication extends ServerCommand {
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
     }
-
 }

@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.GiraOneConfiguration;
+import org.openhab.binding.giraone.internal.GiraOneBindingConfiguration;
 import org.openhab.binding.giraone.internal.discovery.GiraOneThingDiscoveryService;
 import org.openhab.core.thing.*;
 import org.openhab.core.thing.binding.BaseBridgeHandler;
@@ -43,7 +43,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
 
-    private @Nullable GiraOneConfiguration config;
+    private @Nullable GiraOneBindingConfiguration config;
 
     public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
@@ -85,7 +85,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
     @Override
     public void initialize() {
         logger.info("Initializing 'Gira One Bridge'");
-        config = getConfigAs(GiraOneConfiguration.class);
+        config = getConfigAs(GiraOneBindingConfiguration.class);
 
         // TODO: Initialize the handler.
         // The framework requires you to return from this method quickly, i.e. any network access must be done in
