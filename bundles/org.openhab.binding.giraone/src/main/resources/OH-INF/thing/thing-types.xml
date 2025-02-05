@@ -4,20 +4,19 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!-- Sample Thing Type -->
-	<thing-type id="lightning" listed="false">
+	<!-- All Non-Known Devices are getting mapped to the unkown thing -->
+	<thing-type id="unknown" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 
-		<label>Beleuchtung</label>
-		<description>Sample thing for GiraOne Binding</description>
-
-		<channels>
-			<channel id="channel1" typeId="temperature-channel"/>
-		</channels>
+		<label>Unknown Device</label>
+		<description>Unknown or Non-Supported Device</description>
 
 	</thing-type>
+
+
+
 
 	<!-- Sample Channel Type -->
 	<channel-type id="temperature-channel">

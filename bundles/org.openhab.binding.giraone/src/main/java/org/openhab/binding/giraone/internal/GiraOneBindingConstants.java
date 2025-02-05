@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2024 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -11,6 +11,18 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.giraone.internal;
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 
 import java.util.Set;
 
@@ -30,20 +42,17 @@ public class GiraOneBindingConstants {
     public static final String HOST = "hostname";
     public static final String USER_NAME = "username";
 
-    private static final String BINDING_ID = "giraone";
+    static final String BINDING_ID = "giraone";
 
     // List of all Thing Type UIDs
-    public static final String SERVER_TYPE_ID = "server";
-    public static final String DEVICE_TYPE_ID = "device";
-    public static final String TEMPERATURE_TYPE_ID = "temperature";
+    static final String SERVER_TYPE_ID = "server";
+    static final String DEVICE_TYPE_ID = "device";
 
     // List of all Thing Type UIDs
-    public static final ThingTypeUID G1_SERVER_TYPE_UID = new ThingTypeUID(BINDING_ID, SERVER_TYPE_ID);
+    public static final ThingTypeUID BRIDGE_TYPE_UID = new ThingTypeUID(BINDING_ID, SERVER_TYPE_ID);
     public static final ThingTypeUID DEVICE_TYPE_UID = new ThingTypeUID(BINDING_ID, DEVICE_TYPE_ID);
-    public static final ThingTypeUID TEMPERATURE_THING_UID = new ThingTypeUID(BINDING_ID, TEMPERATURE_TYPE_ID);
 
-    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(G1_SERVER_TYPE_UID, DEVICE_TYPE_UID,
-            TEMPERATURE_THING_UID);
+    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(BRIDGE_TYPE_UID, DEVICE_TYPE_UID);
 
     // List of all Channel ids
     public static final String CHANNEL_1 = "channel1";

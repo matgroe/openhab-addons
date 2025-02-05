@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2024 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,7 +16,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.handler.GiraOneBridgeHandler;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
@@ -44,8 +43,12 @@ public class GiraOneHandlerFactory extends BaseThingHandlerFactory {
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        if (G1_SERVER_TYPE_UID.equals(thingTypeUID)) {
-            return new GiraOneBridgeHandler((Bridge) thing);
+        if (BRIDGE_TYPE_UID.equals(thingTypeUID)) {
+
+            org.openhab.binding.giraone.internal.GiraOneBridgeHandler bridgeHandler = new org.openhab.binding.giraone.internal.GiraOneBridgeHandler(
+                    (Bridge) thing);
+
+            return bridgeHandler;
         }
 
         return null;
