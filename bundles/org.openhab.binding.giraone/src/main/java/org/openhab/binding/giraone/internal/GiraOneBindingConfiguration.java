@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2010-2024 Contributors to the openHAB project
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -22,11 +22,11 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault
 public class GiraOneBindingConfiguration {
 
-    /**
-     * Sample configuration parameters. Replace with your own.
-     */
     public String hostname = "";
     public String username = "";
     public String password = "";
+
     public int refreshInterval = 60;
+    public int defaultTimeoutSeconds = 10;
+    public int maxTextMessageSize = 102400; //
 }

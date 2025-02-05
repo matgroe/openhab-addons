@@ -1,0 +1,89 @@
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+package org.openhab.binding.giraone.internal.typeadapters;
+
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
+import org.openhab.binding.giraone.internal.dto.GiraOneProjectItem;
+
+import com.google.gson.*;
+
+/**
+ * Deserializes a Json Element to {@link GiraOneProject} within context of Gson parsing.
+ *
+ * @author Matthias Gröger - Initial contribution
+ */
+@NonNullByDefault
+public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProject> {
+    private final static String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
+    private final static String PROPERTY_CHANNEL_VIEW_URN = "channelViewUrn";
+    private final static String PROPERTY_CHANNEL_TYPE = "channelType";
+    private final static String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";
+
+    private final static String CONTENT_ROOT_MAIN_TYPE = "Root";
+    private final static String CONTENT_ROOT_SUB_TYPE = CONTENT_ROOT_MAIN_TYPE;
+    private final static String PROPERTY_CONTENT_MAIN_TYPE = "mainType";
+    private final static String PROPERTY_CONTENT_SUB_TYPE = "subType";
+
+    @Override
+    @Nullable
+    public GiraOneProject deserialize(JsonElement jsonElement, Type type,
+            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (!jsonElement.isJsonArray()) {
+            throw new JsonParseException("JsonArray expected here.");
+        }
+        JsonArray content = jsonElement.getAsJsonArray();
+        Optional<JsonElement> jsonRoot = content.asList().stream().filter(this::isProjectContentRootObject).findFirst();
+        if (jsonRoot.isPresent()) {
+            GiraOneProjectItem root = jsonDeserializationContext.deserialize(jsonRoot.get(), GiraOneProjectItem.class);
+
+            List<GiraOneProjectChannel> channels = content.asList().stream().filter(this::isProjectChannelObject)
+                    .map(f -> makeChannel(f, jsonDeserializationContext)).collect(Collectors.toList());
+
+            return new GiraOneProject(root, channels);
+        }
+        throw new JsonParseException("Cannot parse received JsonArray.");
+    }
+
+    private boolean isProjectContentRootObject(JsonElement jsonElement) {
+        if (jsonElement.isJsonObject()) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            if (jsonObject.has(PROPERTY_CONTENT_MAIN_TYPE) && jsonObject.has(PROPERTY_CONTENT_SUB_TYPE)) {
+                return CONTENT_ROOT_MAIN_TYPE.equals(jsonObject.get(PROPERTY_CONTENT_MAIN_TYPE).getAsString())
+                        && CONTENT_ROOT_SUB_TYPE.equals(jsonObject.get(PROPERTY_CONTENT_SUB_TYPE).getAsString());
+            }
+        }
+        return false;
+    }
+
+    private boolean isProjectChannelObject(JsonElement jsonElement) {
+        if (jsonElement.isJsonObject()) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            return jsonObject.has(PROPERTY_CHANNEL_VIEW_ID) && jsonObject.has(PROPERTY_CHANNEL_VIEW_URN)
+                    && jsonObject.has(PROPERTY_CHANNEL_TYPE) && jsonObject.has(PROPERTY_CHANNEL_TYPE_ID);
+        }
+        return false;
+    }
+
+    private GiraOneProjectChannel makeChannel(JsonElement jsonElement,
+            JsonDeserializationContext jsonDeserializationContext) {
+        return jsonDeserializationContext.deserialize(jsonElement, GiraOneProjectChannel.class);
+    }
+}
