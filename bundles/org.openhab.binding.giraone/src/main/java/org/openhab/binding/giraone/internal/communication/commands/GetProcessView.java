@@ -10,24 +10,24 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.communication;
+package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * Generic Exception with Gira One Domain.
+ * {@link ServerCommand} for reading the current state for all channels and items
+ * from Gira One Server.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-
-    public GiraOneException(String message) {
-        super(message);
+public class GetProcessView extends ServerCommand {
+    public static GenericBuilder<GetProcessView> builder() {
+        return GenericBuilder.of(GetProcessView::new);
     }
 
-    public GiraOneException(String message, Throwable t) {
-        super(message, t);
+    protected GetProcessView() {
+        super(GiraOneCommand.GetUIConfiguration);
     }
 }

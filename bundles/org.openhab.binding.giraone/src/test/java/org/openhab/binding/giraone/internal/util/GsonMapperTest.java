@@ -30,6 +30,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
+import org.openhab.binding.giraone.internal.dto.GiraOneProcessView;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 
 import com.google.gson.Gson;
@@ -82,7 +83,7 @@ public class GsonMapperTest {
         GiraOneEvent event = gson.fromJson(message, GiraOneEvent.class);
         assertNotNull(event);
 
-        assertEquals("220940", event.getId());
+        assertEquals(220940, event.getId());
         assertEquals("2.3:false", event.getNewInternal());
         assertEquals("2.3:true", event.getOldInternal());
         assertEquals("0", event.getNewValue());
@@ -113,5 +114,17 @@ public class GsonMapperTest {
         GiraOneProject g1Project = response.getReply(GiraOneProject.class);
         assertNotNull(g1Project);
         g1Project.getAllChannels().forEach(System.out::println);
+    }
+
+    @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneProcessView")
+    @Test
+    void shouldDeserialize2GiraOneCommandResponseWithGiraOneProcessView() {
+        String message = ResourceLoader.loadStringResource("/messages/3.GetProcessView/001-resp.json");
+        GiraOneCommandResponse response = gson.fromJson(message, GiraOneCommandResponse.class);
+        assertNotNull(response);
+        assertEquals(GiraOneCommand.GetProcessView, response.getRequestServerCommand().getCommand());
+        GiraOneProcessView processView = response.getReply(GiraOneProcessView.class);
+        assertNotNull(processView);
+        processView.getDatapoints().forEach(System.out::println);
     }
 }

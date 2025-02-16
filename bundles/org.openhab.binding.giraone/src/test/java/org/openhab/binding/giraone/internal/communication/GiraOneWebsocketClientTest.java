@@ -14,29 +14,28 @@ package org.openhab.binding.giraone.internal.communication;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.concurrent.CompletableFuture;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openhab.binding.giraone.internal.GiraOneBindingConfiguration;
+import org.openhab.binding.giraone.internal.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
 
 /**
- * Test class for {@link GiraOneWebsocketClient}
+ * Test class for {@link GiraOneServerClient}
  * 
  * @author Matthias Groeger - Initial contribution
  */
 class GiraOneWebsocketClientTest {
 
     private GiraOneBindingConfiguration configuration;
-    private GiraOneWebsocketClient wsClient;
-    private GiraOneClient giraClient;
+    private GiraOneServerClient giraClient;
 
     @BeforeEach
     void setUp() {
@@ -46,29 +45,33 @@ class GiraOneWebsocketClientTest {
         configuration = new GiraOneBindingConfiguration();
         configuration.username = "User";
         configuration.password = "!Ncc1701D";
-        configuration.hostname = "192.168.178.138";
+        configuration.hostname = "192.168.178.38";
 
-        wsClient = new GiraOneWebsocketClient(configuration.hostname, configuration.username, configuration.password);
-        giraClient = wsClient;
+        giraClient = new GiraOneServerClient(configuration.hostname, configuration.username, configuration.password);
     }
 
     @DisplayName("Compute Websocket Authentication Token")
     @ParameterizedTest
     @CsvSource({ "Blah, 1q2w3e4r5t, uiQmxhaDoxcTJ3M2U0cjV0", "User, Pass!Word, uiVXNlcjpQYXNzIVdvcmQ=" })
     public void testComputeWebsocketAuthToken(String username, String password, String expected) {
-        String token = wsClient.computeWebsocketAuthToken(username, password);
+        String token = giraClient.computeWebsocketAuthToken(username, password);
         assertEquals(expected, token);
     }
 
     @Test
     void testConnect() throws Exception {
         giraClient.subscribeOnConnectionState(this::xxx);
-        CompletableFuture.runAsync(() -> {
-            wsClient.connectionState.onNext(GiraOneClient.ConnectionState.Connected);
-        });
+        giraClient.connect();
+        for (int i = 0; i < 100; i++) {
+            Thread.sleep(200);
+        }
     }
 
-    private void xxx(GiraOneClient.ConnectionState connectionState) {
+    private void xxx(GiraOneConnectionState connectionState) {
         System.out.println(connectionState);
+        if (connectionState == GiraOneConnectionState.Connected) {
+            GiraOneProject p = giraClient.lookupGiraOneProject();
+            System.out.println(p);
+        }
     }
 }

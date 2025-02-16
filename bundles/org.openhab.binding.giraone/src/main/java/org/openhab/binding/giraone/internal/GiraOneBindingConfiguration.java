@@ -28,5 +28,5 @@ public class GiraOneBindingConfiguration {
 
     public int refreshInterval = 60;
     public int defaultTimeoutSeconds = 10;
-    public int maxTextMessageSize = 102400; //
+    public int maxTextMessageSize = 102400;
 }

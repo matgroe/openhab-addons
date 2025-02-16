@@ -174,8 +174,29 @@ public class GiraOneProject {
      * @return a {@link Collection} of {@link GiraOneProjectChannel}
      */
     public Collection<GiraOneProjectChannel> lookupProjectChannels(final GiraOneProjectItem item) {
-        Collection<Integer> refIds = item.getItemReferences().stream().map(GiraOneItemReference::getReferenceId)
-                .collect(Collectors.toList());
+        Collection<Integer> refIds = item.getItemReferences().stream().map(GiraOneItemReference::getReferenceId).toList();
         return this.channels.stream().filter(f -> refIds.contains(f.getChannelViewId())).collect(Collectors.toList());
+    }
+
+    private Optional<GiraOneDataPoint> lookupChannelDatapoint(GiraOneProjectChannel channel, int dataPointId) {
+        return channel.getDataPoints().stream().filter(dp -> dp.getId() == dataPointId).findFirst();
+    }
+
+    private boolean isChannelContainingDatapoint(GiraOneProjectChannel channel, GiraOneDataPoint dataPoint) {
+        return lookupChannelDatapoint(channel, dataPoint.getId()).isPresent();
+    }
+
+    public GiraOneDataPointState enrichDataPointState(GiraOneDataPointState dataPointState) {
+        Optional<GiraOneProjectChannel> channel = this.channels.stream()
+                .filter(ch -> this.isChannelContainingDatapoint(ch, dataPointState)).findFirst();
+        channel.ifPresent(giraOneProjectChannel -> {
+            dataPointState.setChannelViewId(giraOneProjectChannel.getChannelViewId());
+            dataPointState.setChannelViewUrn(giraOneProjectChannel.getChannelViewUrn());
+
+            GiraOneDataPoint dataPoint = lookupChannelDatapoint(giraOneProjectChannel, dataPointState.getId()).get();
+            dataPointState.setUrn(dataPoint.getUrn());
+            dataPointState.setDataPoint(dataPoint.getDataPoint());
+        });
+        return dataPointState;
     }
 }

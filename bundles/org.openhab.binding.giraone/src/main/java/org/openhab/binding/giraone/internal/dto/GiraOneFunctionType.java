@@ -23,8 +23,8 @@ public enum GiraOneFunctionType {
     Light("de.gira.schema.functions.KNX.Light"),
     Covering("de.gira.schema.functions.Covering"),
     HeatingCooling("de.gira.schema.functions.KNX.HeatingCooling"),
-    FloatStatus("de.gira.schema.functions.NumericFloatStatus"),
-    FunctionScene("de.gira.schema.functions.FunctionScene"),
+    Status("de.gira.schema.functions.NumericFloatStatus"),
+    Scene("de.gira.schema.functions.FunctionScene"),
     Switch("de.gira.schema.functions.Switch"),
     Unknown("Unknown");
 

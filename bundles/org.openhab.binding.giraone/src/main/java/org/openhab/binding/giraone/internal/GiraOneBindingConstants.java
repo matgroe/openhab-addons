@@ -37,23 +37,57 @@ import org.openhab.core.thing.ThingTypeUID;
  */
 @NonNullByDefault
 public class GiraOneBindingConstants {
-
     // server config properties
     public static final String HOST = "hostname";
     public static final String USER_NAME = "username";
 
-    static final String BINDING_ID = "giraone";
+    // List of all ThingTypeIDs
+    public static final String BINDING_ID = "giraone";
+    public static final String BRIDGE_TYPE_ID = "server";
+    public static final String GENERIC_TYPE_ID = "generic";
+    public static final String DIMMER_TYPE_ID = "dimmer-light";
+    public static final String HEATING_COOLING_TYPE_ID = "heating-cooling-underfloor";
+    public static final String TEMPERATURE_TYPE_ID = "status-temperature";
+    public static final String HUMIDITY_TYPE_ID = "status-humidity";
+    public static final String SCENE_TYPE_ID = "function-scene";
+    public static final String SWITCH_LAMP_TYPE_ID = "switch-lamp";
+    public static final String SWITCH_POWER_OUTLET_TYPE_ID = "switch-power-outlet";
+    public static final String COVERING_SHUTTER_TYPE_ID = "covering-shutter";
 
-    // List of all Thing Type UIDs
-    static final String SERVER_TYPE_ID = "server";
-    static final String DEVICE_TYPE_ID = "device";
-
-    // List of all Thing Type UIDs
-    public static final ThingTypeUID BRIDGE_TYPE_UID = new ThingTypeUID(BINDING_ID, SERVER_TYPE_ID);
-    public static final ThingTypeUID DEVICE_TYPE_UID = new ThingTypeUID(BINDING_ID, DEVICE_TYPE_ID);
-
-    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(BRIDGE_TYPE_UID, DEVICE_TYPE_UID);
+    /**
+     * The {@link ThingTypeUID} for the GiraOne Bridge
+     */
+    public static final ThingTypeUID BRIDGE_TYPE_UID = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_ID);
+    public static final ThingTypeUID GENERIC_TYPE_UID = new ThingTypeUID(BINDING_ID, GENERIC_TYPE_ID);
+    /**
+     * List of all supported {@link ThingTypeUID} within this binding.
+     */
+    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPE_UID = Set.of(BRIDGE_TYPE_UID, GENERIC_TYPE_UID,
+            new ThingTypeUID(BINDING_ID, DIMMER_TYPE_ID), new ThingTypeUID(BINDING_ID, HEATING_COOLING_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, HUMIDITY_TYPE_ID), new ThingTypeUID(BINDING_ID, TEMPERATURE_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SCENE_TYPE_ID), new ThingTypeUID(BINDING_ID, SWITCH_LAMP_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SWITCH_POWER_OUTLET_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, COVERING_SHUTTER_TYPE_ID));
 
     // List of all Channel ids
     public static final String CHANNEL_1 = "channel1";
+    public static final String CHANNEL_ON_OFF = "on-off";
+    public static final String CHANNEL_SHIFT = "shift";
+    public static final String CHANNEL_BRIGHTNESS = "brightness";
+    public static final String CHANNEL_STEP_UP_DOWN = "step-up-down";
+    public static final String CHANNEL_UP_DOWN = "up-down";
+    public static final String CHANNEL_MOVEMENT = "movement";
+    public static final String CHANNEL_POSITION = "position";
+    public static final String CHANNEL_SLAT_POSITION = "slat-position";
+    public static final String CHANNEL_CURRENT = "current";
+    public static final String CHANNEL_SET_POINT = "set-point";
+    public static final String CHANNEL_MODE = "mode";
+    public static final String CHANNEL_STATUS = "status";
+    public static final String CHANNEL_PRESENCE = "presence";
+    public static final String CHANNEL_HEATING = "heating";
+    public static final String CHANNEL_COOLING = "cooling";
+    public static final String CHANNEL_HEAT_COOL = "heat-cool";
+    public static final String CHANNEL_FLOAT = "float";
+    public static final String CHANNEL_EXECUTE = "execute";
+    public static final String CHANNEL_TEACH = "teach";
 }

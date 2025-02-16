@@ -36,21 +36,16 @@ public class GiraOneHandlerFactory extends BaseThingHandlerFactory {
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
-        return SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
+        return thingTypeUID.getBindingId().equals(BINDING_ID);
     }
 
     @Override
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
-
         if (BRIDGE_TYPE_UID.equals(thingTypeUID)) {
-
-            org.openhab.binding.giraone.internal.GiraOneBridgeHandler bridgeHandler = new org.openhab.binding.giraone.internal.GiraOneBridgeHandler(
-                    (Bridge) thing);
-
-            return bridgeHandler;
+            return new GiraOneBridgeHandler((Bridge) thing);
+        } else {
+            return new GiraOneThingHandler(thing);
         }
-
-        return null;
     }
 }

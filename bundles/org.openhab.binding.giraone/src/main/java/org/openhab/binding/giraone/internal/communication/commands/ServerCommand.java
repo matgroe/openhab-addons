@@ -34,6 +34,9 @@ import com.google.gson.annotations.SerializedName;
 public class ServerCommand {
     @SerializedName(value = "_gdsqueryId")
     private String commandId;
+
+    private boolean urns = true;
+
     private final GiraOneCommand command;
 
     protected ServerCommand(GiraOneCommand command) {
