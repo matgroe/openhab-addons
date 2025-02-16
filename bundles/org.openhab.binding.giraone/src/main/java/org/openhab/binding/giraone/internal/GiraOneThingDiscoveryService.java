@@ -15,14 +15,24 @@ package org.openhab.binding.giraone.internal;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
+import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.core.config.discovery.AbstractThingHandlerDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
+import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -37,14 +47,16 @@ import org.slf4j.LoggerFactory;
 @Component(scope = ServiceScope.PROTOTYPE, service = GiraOneThingDiscoveryService.class)
 @NonNullByDefault
 public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryService<GiraOneBridgeHandler> {
-    private final Logger logger = LoggerFactory.getLogger(GiraOneThingDiscoveryService.class);
-
-    private ThingUID bridgeUID = new ThingUID(GiraOneBindingConstants.BRIDGE_TYPE_UID, "unknown");
-
     private static final int TIMEOUT = 60;
     private static final int BACKGROUND_DISCOVERY_DELAY = 5;
 
+    private final Logger logger = LoggerFactory.getLogger(GiraOneThingDiscoveryService.class);
+
+    private ThingUID bridgeUID = new ThingUID(GiraOneBindingConstants.BRIDGE_TYPE_UID, "unknown");
     private @Nullable ScheduledFuture<?> backgroundDiscoveryJob = null;
+    private @Nullable GiraOneBridge giraOneBridge;
+    private long timestampLastDiscovery = Instant.now().toEpochMilli();
+    private Disposable disposableOnConnectionState = Disposable.empty();
 
     public GiraOneThingDiscoveryService() throws IllegalArgumentException {
         super(GiraOneBridgeHandler.class, TIMEOUT);
@@ -54,8 +66,19 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     public void initialize() {
         if (getThingHandler() != null) {
             bridgeUID = getThingHandler().getThing().getUID();
+            giraOneBridge = ((GiraOneBridgeHandler) getThingHandler());
+            disposableOnConnectionState = Objects.requireNonNull(giraOneBridge).subscribeOnConnectionState(this::onConnectionStateChanged);
         }
+
         super.initialize();
+    }
+
+    @Override
+    public void dispose() {
+        removeOlderResults(Instant.now().toEpochMilli(), bridgeUID);
+        disposableOnConnectionState.dispose();
+        disposableOnConnectionState = Disposable.empty();
+        super.dispose();
     }
 
     @Override
@@ -73,25 +96,76 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         backgroundDiscoveryJob = scheduler.schedule(runnable, BACKGROUND_DISCOVERY_DELAY, TimeUnit.SECONDS);
     }
 
-    void discoverDevices() {
+    private void discoverDevices() {
+        try {
+            GiraOneProject project = Objects.requireNonNull(giraOneBridge).lookupGiraOneProject();
+            project.getAllChannels().stream().map(this::createDiscoverResultFromChannel).forEach(this::thingDiscovered);
+        } catch (IllegalStateException exp) {
+            logger.warn("Discovery of Devices failed :: {}", exp.getMessage());
+        } finally {
+            removeOlderResults(this.timestampLastDiscovery, bridgeUID);
+            this.timestampLastDiscovery = Instant.now().toEpochMilli();
+        }
+    }
+
+    @NonNull
+    private String formatThingTypeId(GiraOneProjectChannel channel) {
+        switch (channel.getFunctionType()) {
+            case Covering -> {
+                return CaseFormatter
+                        .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelType().toString());
+            }
+            case Status -> {
+                return CaseFormatter
+                        .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelTypeId().toString());
+            }
+            default -> {
+                return CaseFormatter
+                        .lowerCaseHyphen(channel.getChannelType().toString() + channel.getChannelTypeId().toString());
+            }
+        }
+    }
+
+    @NonNull
+    ThingTypeUID detectThingTypeUID(GiraOneProjectChannel channel) {
+        String thingTypeId = formatThingTypeId(channel);
+        Optional<ThingTypeUID> opt = GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID.stream()
+                .filter(t -> t.getId().equals(thingTypeId)).findFirst();
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
+            return GiraOneBindingConstants.GENERIC_TYPE_UID;
+        }
+    }
+
+    private DiscoveryResult createDiscoverResultFromChannel(GiraOneProjectChannel channel) {
+        ThingTypeUID thingTypeUid = detectThingTypeUID(channel);
+        logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
+
+        Map<String, Object> properties = new HashMap<>(1);
+        properties.put("channelId", channel.getChannelId());
+        properties.put("channelUrn", channel.getChannelUrn());
+        properties.put("channelViewId", channel.getChannelViewId());
+        properties.put("channelViewUrn", channel.getChannelViewUrn());
+        properties.put("functionType", channel.getFunctionType().getName());
+        properties.put("channelType", channel.getChannelType().getName());
+        properties.put("channelTypeId", channel.getChannelTypeId().getName());
+        properties.put("iconId", channel.getIconId());
+        properties.put("dataPoints", channel.getDataPoints().stream().filter(f -> f.getId() > 0)
+                .map(GiraOneDataPoint::getDataPoint).collect(Collectors.toList()));
+
+        String label = channel.getName();
+        String thingId = String.format("%d", channel.getChannelViewId());
+
+        return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId)).withLabel(label)
+                .withBridge(bridgeUID).withProperties(properties).withRepresentationProperty("channelViewId").build();
     }
 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-
             logger.info("Running DeviceDiscovery ....");
-            ThingUID uid = new ThingUID(GiraOneBindingConstants.DEVICE_TYPE_UID, bridgeUID, "deviceId");
-            Map<String, Object> properties = new HashMap<>(1);
-            properties.put("deviceId", "device.deviceId");
-            properties.put("interface", "device.interfaceType");
-
-            String deviceLabel = "device.deviceLabel";
-
-            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid).withLabel(deviceLabel)
-                    .withRepresentationProperty("deviceId").withBridge(bridgeUID).withProperties(properties).build();
-
-            thingDiscovered(discoveryResult);
+            discoverDevices();
         }
     };
 
@@ -107,5 +181,14 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     public void deactivate() {
         logger.info("deactivate");
         stopBackgroundScanning();
+    }
+
+    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
+        logger.info("ConnectionStateChanged to {}", connectionState);
+        if (connectionState == GiraOneConnectionState.Connected) {
+            discoverDevices();
+        } else {
+            stopBackgroundDiscovery();
+        }
     }
 }

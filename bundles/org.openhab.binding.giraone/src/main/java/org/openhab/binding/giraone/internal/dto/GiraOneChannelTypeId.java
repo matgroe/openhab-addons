@@ -21,16 +21,16 @@ import java.util.Arrays;
  * @author Matthias Gröger - Initial contribution
  */
 public enum GiraOneChannelTypeId {
-    Float("NumericFloatStatus.Temperatur"),
-    FunctionScene("FunctionScene.Scene"),
-    HeatingCoolingSwitchable("KNX.HeatingCooling.HeatingUnderfloorHeatingWaterBased"),
+    Temperature("NumericFloatStatus.Temperatur"),
+    Scene("FunctionScene.Scene"),
+    Underfloor("KNX.HeatingCooling.HeatingUnderfloorHeatingWaterBased"),
     Humidity("NumericFloatStatus.Humidity"),
     Light("KNX.Light.Light"),
-    SwitchLamp("Switch.Lamp"),
-    SwitchPowerOutlet("Switch.PowerOutlet"),
-    CoveringAwning("Covering.Awning"),
-    CoveringRoofWindow("Covering.RoofWindow"),
-    CoveringVenetianBlind("Covering.VenetianBlind"),
+    Lamp("Switch.Lamp"),
+    PowerOutlet("Switch.PowerOutlet"),
+    Awning("Covering.Awning"),
+    RoofWindow("Covering.RoofWindow"),
+    VenetianBlind("Covering.VenetianBlind"),
 
     Unknown("Unknown");
 

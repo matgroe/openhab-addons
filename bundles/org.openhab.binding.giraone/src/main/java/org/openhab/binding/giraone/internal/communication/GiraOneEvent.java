@@ -25,7 +25,7 @@ import com.google.gson.annotations.SerializedName;
 @NonNullByDefault({})
 public class GiraOneEvent {
     @Nullable
-    private String id;
+    private Integer id;
 
     @Nullable
     private String urn;
@@ -50,7 +50,7 @@ public class GiraOneEvent {
     @Nullable
     private String source;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 

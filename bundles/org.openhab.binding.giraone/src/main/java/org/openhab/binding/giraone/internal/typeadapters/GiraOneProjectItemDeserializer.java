@@ -23,7 +23,12 @@ import org.openhab.binding.giraone.internal.dto.GiraOneItemMainType;
 import org.openhab.binding.giraone.internal.dto.GiraOneItemSubType;
 import org.openhab.binding.giraone.internal.dto.GiraOneProjectItem;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
  * Deserializes a Json Element to {@link GiraOneProjectItem} within context of Gson parsing.

@@ -17,12 +17,16 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
 import java.util.Collection;
 import java.util.Set;
 
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConfiguration;
+import org.openhab.binding.giraone.internal.communication.GiraOneEvent;
 import org.openhab.binding.giraone.internal.communication.GiraOneException;
-import org.openhab.binding.giraone.internal.communication.GiraOneWebsocketClient;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerClient;
+import org.openhab.binding.giraone.internal.dto.GiraOneDataPointState;
+import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingStatus;
@@ -34,6 +38,9 @@ import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+
 /**
  * The {@link GiraOneBridgeHandler} is responsible for handling commands, which are
  * sent to one of the channels.
@@ -41,14 +48,17 @@ import org.slf4j.LoggerFactory;
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneBridgeHandler extends BaseBridgeHandler {
-
+public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBridge {
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
-    private final GiraOneWebsocketClient giraOneServer;
+    private final GiraOneServerClient giraOneServer;
+    private final Subject<GiraOneDataPointState> datapointStates = PublishSubject.create();
+
+    private Disposable disposableConnectionState = Disposable.empty();
+    private Disposable disposableEvents = Disposable.empty();
 
     public GiraOneBridgeHandler(@NonNull Bridge bridge) {
         super(bridge);
-        this.giraOneServer = new GiraOneWebsocketClient(getConfigAs(GiraOneClientConfiguration.class));
+        this.giraOneServer = new GiraOneServerClient(getConfigAs(GiraOneClientConfiguration.class));
     }
 
     @Override
@@ -60,6 +70,12 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
     public void dispose() {
         logger.info("Disposing 'Gira One Bridge'");
         giraOneServer.disconnect();
+        disposableConnectionState.dispose();
+        disposableEvents.dispose();
+
+        disposableConnectionState = Disposable.empty();
+        disposableEvents = Disposable.empty();
+
         super.dispose();
     }
 
@@ -107,7 +123,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
         scheduler.execute(() -> {
             try {
                 this.giraOneServer.connect();
-                this.giraOneServer.subscribeOnConnectionState(this::onConnectionStateChanged);
+                disposableConnectionState = this.giraOneServer.subscribeOnConnectionState(this::onConnectionStateChanged);
+                disposableEvents = this.giraOneServer.subscribeOnGiraOneEvents(this::onGiraOneEvent);
+
             } catch (GiraOneException exp) {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
                         "Can not access device as username and/or password are invalid");
@@ -129,16 +147,37 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler {
         // "Can not access device as username and/or password are invalid");
     }
 
-    private void onConnectionStateChanged(GiraOneClient.ConnectionState connectionState) {
+    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
         logger.info("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneClient.ConnectionState.Connected) {
+        if (connectionState == GiraOneConnectionState.Connected) {
             updateStatus(ThingStatus.ONLINE);
         } else {
             updateStatus(ThingStatus.OFFLINE);
         }
     }
 
-    GiraOneClient getGiraOneClient() {
-        return this.giraOneServer;
+    private void onGiraOneEvent(GiraOneEvent event) {
+        GiraOneDataPointState state = new GiraOneDataPointState();
+        state.setId(event.getId());
+        state.setState(event.getNewValue());
+        logger.debug("emitting GiraOneDataPointState :: {}", state);
+        this.datapointStates.onNext(lookupGiraOneProject().enrichDataPointState(state));
+    }
+
+    @Override
+    public GiraOneProject lookupGiraOneProject() {
+        return this.giraOneServer.lookupGiraOneProject();
+    }
+
+    public Collection<GiraOneDataPointState> lookupProcessGiraOneDataPointStates() {
+        return this.giraOneServer.lookupProcessGiraOneDataPointStates();
+    }
+
+    public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNextEvent) {
+        return this.giraOneServer.subscribeOnConnectionState(onNextEvent);
+    }
+
+   public Disposable subscribeOnGiraOneDataPointStates(final int channelViewId, Consumer<GiraOneDataPointState> onNext) {
+        return this.datapointStates.filter(f -> f.getChannelViewId() == channelViewId).subscribe(onNext);
     }
 }

@@ -46,7 +46,7 @@ public class GiraOneBridgeDiscoveryParticipant implements UpnpDiscoveryParticipa
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypeUIDs() {
-        return SUPPORTED_THING_TYPES_UIDS;
+        return SUPPORTED_THING_TYPE_UID;
     }
 
     private boolean isValidRemoteDevice(RemoteDevice device) {

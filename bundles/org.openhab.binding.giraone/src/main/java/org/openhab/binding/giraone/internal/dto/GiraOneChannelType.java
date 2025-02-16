@@ -21,12 +21,12 @@ import java.util.Arrays;
  */
 public enum GiraOneChannelType {
 
-    BlindWithPos("de.gira.schema.channels.BlindWithPos"),
+    Shutter("de.gira.schema.channels.BlindWithPos"),
     Dimmer("de.gira.schema.channels.KNX.Dimmer"),
     Float("de.gira.schema.channels.Float"),
     Switch("de.gira.schema.channels.Switch"),
-    FunctionScene("de.gira.schema.channels.FunctionScene"),
-    HeatingCoolingSwitchable("de.gira.schema.channels.KNX.HeatingCoolingSwitchable"),
+    Function("de.gira.schema.channels.FunctionScene"),
+    HeatingCooling("de.gira.schema.channels.KNX.HeatingCoolingSwitchable"),
     Unknown("Unknown");
 
     private final String name;

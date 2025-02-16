@@ -5,23 +5,89 @@
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
 	<!-- All Non-Known Devices are getting mapped to the unkown thing -->
-	<thing-type id="unknown" listed="false">
+	<thing-type id="generic">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 
-		<label>Unknown Device</label>
-		<description>Unknown or Non-Supported Device</description>
+		<label>Generic Device</label>
+		<description>Generic device with all ..</description>
+		<representation-property>channelUrn</representation-property>
+
+		<config-description>
+			<parameter name="channelUrn" type="text" required="true">
+				<label>Unique Device Id</label>
+				<description>This is the unique id of the free@home device (Please do not modify after the Thing is generated)</description>
+			</parameter>
+		</config-description>
 
 	</thing-type>
 
+	<thing-type id="dimmer-light">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
 
+		<label>Dimmable Light</label>
+		<description>Dimmable Light</description>
 
+		<!-- dataPoints=[OnOff, Shift, Brightness] -->
 
-	<!-- Sample Channel Type -->
-	<channel-type id="temperature-channel">
+	</thing-type>
+
+	<thing-type id="status-temperature">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+
+		<label>Temperature</label>
+		<description>Temperature Status Value</description>
+
+		<!-- dataPoints=[OnOff, Shift, Brightness] -->
+		<channels>
+			<channel id="float" typeId="temperature"/>
+		</channels>
+
+	</thing-type>
+
+	<thing-type id="status-humidity">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+
+		<label>Humidity</label>
+		<description>Humidity Status Value</description>
+
+		<channels>
+			<channel id="float" typeId="humidity"/>
+		</channels>
+
+	</thing-type>
+
+	<!-- all supported channels
+
+		on-off, shift, brightness, step-up-down, up-down, movement,
+		position, slat-position, current, set-point, mode, status,
+		presence, heating, cooling, heat-cool, float, execute, teach
+
+	-->
+	<channel-type id="on-off">
 		<item-type>Number:Temperature</item-type>
-		<label>Example Temperature</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+		<label>Temperature</label>
 		<description>Sample channel for GiraOne Binding</description>
 	</channel-type>
+
+	<channel-type id="humidity">
+		<item-type unitHint="%">Number:Dimensionless</item-type>
+		<label>Humidity</label>
+		<state readOnly="true" pattern="%.1f %%"/>
+	</channel-type>
+
+	<channel-type id="temperature">
+		<item-type unitHint="%">Number:Dimensionless</item-type>
+		<label>Temperature</label>
+		<state readOnly="true" pattern="%.1f C"/>
+	</channel-type>
+
+
 </thing:thing-descriptions>

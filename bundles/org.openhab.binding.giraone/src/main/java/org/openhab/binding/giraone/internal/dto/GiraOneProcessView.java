@@ -10,24 +10,20 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.communication;
+package org.openhab.binding.giraone.internal.dto;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import java.util.List;
 
 /**
- * Generic Exception with Gira One Domain.
+ * This class represents the current ProcessView with all datapoints and their values.
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
-public class GiraOneException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+public class GiraOneProcessView {
 
-    public GiraOneException(String message) {
-        super(message);
-    }
+    private List<GiraOneDataPointState> datapoints;
 
-    public GiraOneException(String message, Throwable t) {
-        super(message, t);
+    public List<GiraOneDataPointState> getDatapoints() {
+        return datapoints;
     }
 }

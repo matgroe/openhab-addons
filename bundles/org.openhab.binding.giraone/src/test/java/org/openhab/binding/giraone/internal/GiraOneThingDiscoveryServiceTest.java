@@ -12,13 +12,34 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
+import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.dto.GiraOneFunctionType;
+import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
+import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
+import org.openhab.binding.giraone.internal.util.ResourceLoader;
+import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.ThingHandler;
+
+import com.google.gson.Gson;
 
 /**
  * Test class for {@link GiraOneThingDiscoveryService}.
@@ -26,15 +47,28 @@ import org.openhab.core.thing.binding.ThingHandler;
  * @author Matthias Groeger - Initial contribution
  */
 class GiraOneThingDiscoveryServiceTest {
-    private GiraOneThingDiscoveryService discoveryService = spy(GiraOneThingDiscoveryService.class);;
+    private GiraOneThingDiscoveryService discoveryService = spy(GiraOneThingDiscoveryService.class);
+    private GiraOneBridge giraOneClient = mock(GiraOneBridge.class);
 
     @BeforeEach
     void setUp() {
-        ThingHandler thingHandler = mock(ThingHandler.class);
-        Thing thing = mock(Thing.class);
+        Gson gson = GsonMapperFactory.createGson();
+        String message = ResourceLoader.loadStringResource("/messages/2.GetUIConfiguration/001-resp.json");
+        GiraOneCommandResponse response = gson.fromJson(message, GiraOneCommandResponse.class);
+        assertNotNull(response);
+        assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
+        GiraOneProject project = response.getReply(GiraOneProject.class);
+        assertNotNull(project);
+
+        GiraOneBridgeHandler thingHandler = mock(GiraOneBridgeHandler.class,
+                Mockito.withSettings().extraInterfaces(Bridge.class));
+        Thing thing = mock(Thing.class, Mockito.withSettings().extraInterfaces(Bridge.class));
+
+        when(thingHandler.lookupGiraOneProject()).thenReturn(project);
+
         when(thing.getUID()).thenReturn(
-                new ThingUID(GiraOneBindingConstants.BINDING_ID, GiraOneBindingConstants.SERVER_TYPE_ID, "junit"));
-        when(thingHandler.getThing()).thenReturn(thing);
+                new ThingUID(GiraOneBindingConstants.BINDING_ID, GiraOneBindingConstants.BRIDGE_TYPE_ID, "junit"));
+        when(thingHandler.getThing()).thenReturn((Bridge) thing);
 
         discoveryService = spy(GiraOneThingDiscoveryService.class);
         when(discoveryService.getThingHandler()).thenReturn(thingHandler);
@@ -51,5 +85,50 @@ class GiraOneThingDiscoveryServiceTest {
 
     @Test
     void getThingUID() {
+    }
+
+    private static Stream<Arguments> provideForTestDetectThingTypeUid() {
+        return Stream.of(
+                Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Shutter, GiraOneChannelTypeId.RoofWindow,
+                        GiraOneBindingConstants.COVERING_SHUTTER_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Shutter, GiraOneChannelTypeId.Awning,
+                        GiraOneBindingConstants.COVERING_SHUTTER_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Shutter,
+                        GiraOneChannelTypeId.VenetianBlind, GiraOneBindingConstants.COVERING_SHUTTER_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Unknown,
+                        GiraOneChannelTypeId.VenetianBlind, GiraOneBindingConstants.GENERIC_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Light, GiraOneChannelType.Dimmer, GiraOneChannelTypeId.Light,
+                        GiraOneBindingConstants.DIMMER_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.HeatingCooling, GiraOneChannelType.HeatingCooling,
+                        GiraOneChannelTypeId.Underfloor, GiraOneBindingConstants.HEATING_COOLING_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Float, GiraOneChannelTypeId.Temperature,
+                        GiraOneBindingConstants.TEMPERATURE_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Float, GiraOneChannelTypeId.Humidity,
+                        GiraOneBindingConstants.HUMIDITY_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Float, GiraOneChannelTypeId.PowerOutlet,
+                        GiraOneBindingConstants.GENERIC_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Scene, GiraOneChannelType.Function, GiraOneChannelTypeId.Scene,
+                        GiraOneBindingConstants.SCENE_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Switch, GiraOneChannelType.Switch, GiraOneChannelTypeId.Lamp,
+                        GiraOneBindingConstants.SWITCH_LAMP_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Switch, GiraOneChannelType.Switch, GiraOneChannelTypeId.PowerOutlet,
+                        GiraOneBindingConstants.SWITCH_POWER_OUTLET_TYPE_ID),
+                Arguments.of(GiraOneFunctionType.Unknown, GiraOneChannelType.Unknown, GiraOneChannelTypeId.Unknown,
+                        GiraOneBindingConstants.GENERIC_TYPE_ID));
+    }
+
+    @DisplayName("test the mapping from GiraOneProjectChannel to ThingTypeUID")
+    @ParameterizedTest
+    @MethodSource("provideForTestDetectThingTypeUid")
+    void testDetectThingTypeUid(GiraOneFunctionType functionType, GiraOneChannelType channelType,
+            GiraOneChannelTypeId channelTypeId, String expected) {
+        GiraOneProjectChannel channel = mock(GiraOneProjectChannel.class);
+        when(channel.getChannelTypeId()).thenReturn(channelTypeId);
+        when(channel.getChannelType()).thenReturn(channelType);
+        when(channel.getFunctionType()).thenReturn(functionType);
+
+        ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
+
+        assertEquals(expected, thingTypeUID.getId());
     }
 }

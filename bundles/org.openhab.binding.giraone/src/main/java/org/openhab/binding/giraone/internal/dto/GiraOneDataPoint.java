@@ -30,12 +30,24 @@ public class GiraOneDataPoint {
         return dataPoint;
     }
 
+    public void setDataPoint(String dataPoint) {
+        this.dataPoint = dataPoint;
+    }
+
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getUrn() {
         return urn;
+    }
+
+    public void setUrn(String urn) {
+        this.urn = urn;
     }
 
     @Override
