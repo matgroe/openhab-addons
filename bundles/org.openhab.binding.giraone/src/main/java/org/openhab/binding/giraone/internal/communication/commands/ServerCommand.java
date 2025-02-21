@@ -12,9 +12,7 @@
  */
 package org.openhab.binding.giraone.internal.communication.commands;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -33,17 +31,13 @@ import com.google.gson.annotations.SerializedName;
 @NonNullByDefault
 public class ServerCommand {
     @SerializedName(value = "_gdsqueryId")
-    private String commandId;
-
-    private boolean urns = true;
+    private Integer commandId;
 
     private final GiraOneCommand command;
 
     protected ServerCommand(GiraOneCommand command) {
         this.command = command;
-        this.commandId = UUID.nameUUIDFromBytes(
-                (command.name() + System.currentTimeMillis() + System.nanoTime()).getBytes(StandardCharsets.UTF_8))
-                .toString();
+        this.commandId = ServerCommandSequence.generate();
     }
 
     public GiraOneCommand getCommand() {

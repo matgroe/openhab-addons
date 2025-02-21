@@ -4,7 +4,10 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!-- All Non-Known Devices are getting mapped to the unkown thing -->
+	<!--
+		All Non-Known Devices are getting mapped to the unkown thing
+		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
+	-->
 	<thing-type id="generic">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
@@ -30,8 +33,11 @@
 
 		<label>Dimmable Light</label>
 		<description>Dimmable Light</description>
-
-		<!-- dataPoints=[OnOff, Shift, Brightness] -->
+		<channels>
+			<channel id="on-off" typeId="system.power"/>
+			<!-- channel id="shift" typeId="shift"/ -->
+			<channel id="brightness" typeId="system.brightness"/>
+		</channels>
 
 	</thing-type>
 
@@ -41,11 +47,9 @@
 		</supported-bridge-type-refs>
 
 		<label>Temperature</label>
-		<description>Temperature Status Value</description>
-
-		<!-- dataPoints=[OnOff, Shift, Brightness] -->
+		<description>Temperature Status Value Indoor</description>
 		<channels>
-			<channel id="float" typeId="temperature"/>
+			<channel id="float" typeId="system.indoor-temperature"/>
 		</channels>
 
 	</thing-type>
@@ -56,10 +60,10 @@
 		</supported-bridge-type-refs>
 
 		<label>Humidity</label>
-		<description>Humidity Status Value</description>
+		<description>Atmospheric humidity in percent</description>
 
 		<channels>
-			<channel id="float" typeId="humidity"/>
+			<channel id="float" typeId="system.atmospheric-humidity"/>
 		</channels>
 
 	</thing-type>
@@ -84,9 +88,9 @@
 	</channel-type>
 
 	<channel-type id="temperature">
-		<item-type unitHint="%">Number:Dimensionless</item-type>
+		<item-type unitHint="C">Number:Dimensionless</item-type>
 		<label>Temperature</label>
-		<state readOnly="true" pattern="%.1f C"/>
+		<state readOnly="true" pattern="%.1f °C"/>
 	</channel-type>
 
 

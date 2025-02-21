@@ -47,6 +47,10 @@ public class GiraOneCommandResponse {
 
     public <T> T getReply(Class<T> classOfT) {
         String responseProperty = getRequestServerCommand().getCommand().getResponsePropertyName();
-        return GsonMapperFactory.createGson().fromJson(responseBody.get(responseProperty), classOfT);
+        if (responseProperty.isEmpty()) {
+            return GsonMapperFactory.createGson().fromJson(responseBody, classOfT);
+        } else {
+            return GsonMapperFactory.createGson().fromJson(responseBody.get(responseProperty), classOfT);
+        }
     }
 }

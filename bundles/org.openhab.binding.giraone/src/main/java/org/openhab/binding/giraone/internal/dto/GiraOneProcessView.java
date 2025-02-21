@@ -12,7 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.dto;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class represents the current ProcessView with all datapoints and their values.
@@ -21,9 +24,26 @@ import java.util.List;
  */
 public class GiraOneProcessView {
 
-    private List<GiraOneDataPointState> datapoints;
+    private final long creationTimestamp;
+    private final List<GiraOneChannelDataPoint> datapoints = new ArrayList<>();
 
-    public List<GiraOneDataPointState> getDatapoints() {
+    public static GiraOneProcessView expired() {
+        return new GiraOneProcessView(0L);
+    }
+
+    public GiraOneProcessView() {
+        this(Instant.now().toEpochMilli());
+    }
+
+    private GiraOneProcessView(long creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
+    public boolean isOlderThan(final long time, TimeUnit unit) {
+        return (creationTimestamp + unit.toMillis(time)) - Instant.now().toEpochMilli() < 0;
+    }
+
+    public List<GiraOneChannelDataPoint> getDatapoints() {
         return datapoints;
     }
 }

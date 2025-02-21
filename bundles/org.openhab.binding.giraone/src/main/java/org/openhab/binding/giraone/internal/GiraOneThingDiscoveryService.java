@@ -19,13 +19,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
-import io.reactivex.rxjava3.disposables.Disposable;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
@@ -38,6 +34,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * The {@link GiraOneThingDiscoveryService}
@@ -67,7 +65,8 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         if (getThingHandler() != null) {
             bridgeUID = getThingHandler().getThing().getUID();
             giraOneBridge = ((GiraOneBridgeHandler) getThingHandler());
-            disposableOnConnectionState = Objects.requireNonNull(giraOneBridge).subscribeOnConnectionState(this::onConnectionStateChanged);
+            disposableOnConnectionState = Objects.requireNonNull(giraOneBridge)
+                    .subscribeOnConnectionState(this::onConnectionStateChanged);
         }
 
         super.initialize();
@@ -108,7 +107,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         }
     }
 
-    @NonNull
     private String formatThingTypeId(GiraOneProjectChannel channel) {
         switch (channel.getFunctionType()) {
             case Covering -> {
@@ -126,7 +124,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         }
     }
 
-    @NonNull
     ThingTypeUID detectThingTypeUID(GiraOneProjectChannel channel) {
         String thingTypeId = formatThingTypeId(channel);
         Optional<ThingTypeUID> opt = GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID.stream()
@@ -142,7 +139,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         ThingTypeUID thingTypeUid = detectThingTypeUID(channel);
         logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
 
-        Map<String, Object> properties = new HashMap<>(1);
+        Map<String, Object> properties = new HashMap<>(20);
         properties.put("channelId", channel.getChannelId());
         properties.put("channelUrn", channel.getChannelUrn());
         properties.put("channelViewId", channel.getChannelViewId());
@@ -151,20 +148,19 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         properties.put("channelType", channel.getChannelType().getName());
         properties.put("channelTypeId", channel.getChannelTypeId().getName());
         properties.put("iconId", channel.getIconId());
-        properties.put("dataPoints", channel.getDataPoints().stream().filter(f -> f.getId() > 0)
-                .map(GiraOneDataPoint::getDataPoint).collect(Collectors.toList()));
+        properties.put("dataPoints", channel.getDataPoints().stream().filter(f -> f.getId() > 0).toList());
 
         String label = channel.getName();
         String thingId = String.format("%d", channel.getChannelViewId());
 
         return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId)).withLabel(label)
-                .withBridge(bridgeUID).withProperties(properties).withRepresentationProperty("channelViewId").build();
+                .withBridge(bridgeUID).withProperties(properties).withRepresentationProperty("channelViewUrn").build();
     }
 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            logger.info("Running DeviceDiscovery ....");
+            logger.debug("Running DeviceDiscovery ....");
             discoverDevices();
         }
     };

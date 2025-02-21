@@ -15,6 +15,7 @@ package org.openhab.binding.giraone.internal.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -30,6 +31,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProcessView;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 
@@ -47,6 +49,11 @@ public class GsonMapperTest {
     @BeforeEach
     void setUp() {
         gson = GsonMapperFactory.createGson();
+    }
+
+    private GiraOneCommandResponse createGiraOneCommandResponseFrom(final String message) {
+        return Objects.requireNonNull(
+                gson.fromJson(ResourceLoader.loadStringResource(message), GiraOneCommandResponse.class));
     }
 
     private static Stream<Arguments> provideWebsocketMessageTypes() {
@@ -98,8 +105,8 @@ public class GsonMapperTest {
     @DisplayName("message should deserialize to GiraOneCommandResponse")
     @Test
     void shouldDeserialize2GiraOneCommandResponse() {
-        String message = ResourceLoader.loadStringResource("/messages/2.GetUIConfiguration/001-resp.json");
-        GiraOneCommandResponse response = gson.fromJson(message, GiraOneCommandResponse.class);
+        GiraOneCommandResponse response = createGiraOneCommandResponseFrom(
+                "/messages/2.GetUIConfiguration/001-resp.json");
         assertNotNull(response);
         assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
     }
@@ -107,8 +114,8 @@ public class GsonMapperTest {
     @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneDeviceConfiguration")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneDeviceConfiguration() {
-        String message = ResourceLoader.loadStringResource("/messages/2.GetUIConfiguration/001-resp.json");
-        GiraOneCommandResponse response = gson.fromJson(message, GiraOneCommandResponse.class);
+        GiraOneCommandResponse response = createGiraOneCommandResponseFrom(
+                "/messages/2.GetUIConfiguration/001-resp.json");
         assertNotNull(response);
         assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
         GiraOneProject g1Project = response.getReply(GiraOneProject.class);
@@ -119,12 +126,22 @@ public class GsonMapperTest {
     @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneProcessView")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneProcessView() {
-        String message = ResourceLoader.loadStringResource("/messages/3.GetProcessView/001-resp.json");
-        GiraOneCommandResponse response = gson.fromJson(message, GiraOneCommandResponse.class);
+        GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/3.GetProcessView/001-resp.json");
         assertNotNull(response);
         assertEquals(GiraOneCommand.GetProcessView, response.getRequestServerCommand().getCommand());
         GiraOneProcessView processView = response.getReply(GiraOneProcessView.class);
         assertNotNull(processView);
         processView.getDatapoints().forEach(System.out::println);
+    }
+
+    @DisplayName("message should deserialize to GiraOneCommandResponse of with GiraOneProcessView")
+    @Test
+    void shouldDeserialize2GiraOneCommandResponseWithGiraOneValue() {
+        GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/2.GetValue/001-resp.json");
+        assertNotNull(response);
+        assertEquals(GiraOneCommand.GetValue, response.getRequestServerCommand().getCommand());
+        GiraOneChannelDataPoint state = response.getReply(GiraOneChannelDataPoint.class);
+        assertNotNull(state);
+        // processView.getDatapoints().forEach(System.out::println);
     }
 }

@@ -12,13 +12,19 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPointState;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 
-import java.util.Collection;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 
+/**
+ * Use the interface {@link GiraOneBridge} to access the GiraOne Bridge.
+ *
+ * @author Matthias Groeger - Initial contribution
+ */
+@NonNullByDefault
 public interface GiraOneBridge {
 
     /**
@@ -28,8 +34,9 @@ public interface GiraOneBridge {
      */
     GiraOneProject lookupGiraOneProject();
 
-    Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNextEvent);
+    void lookupGiraOneChannelDataPointValues(int channelViewId);
 
-    Disposable subscribeOnGiraOneDataPointStates(int channelViewId, Consumer<GiraOneDataPointState> onNext);
+    Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> consumer);
 
+    Disposable subscribeOnGiraOneDataPointStates(int channelViewId, Consumer<GiraOneChannelDataPoint> consumer);
 }

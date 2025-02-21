@@ -13,9 +13,8 @@
 package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
-
-import com.google.gson.annotations.SerializedName;
 
 /**
  * {@link ServerCommand} for reading the current state for all channels and items
@@ -24,34 +23,41 @@ import com.google.gson.annotations.SerializedName;
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GetProcessView extends ServerCommand {
-    public static GenericBuilder<GetProcessView> builder() {
-        return GenericBuilder.of(GetProcessView::new);
+public class GetValue extends ServerCommand {
+    public static GenericBuilder<GetValue> builder() {
+        return GenericBuilder.of(GetValue::new);
     }
 
-    @SerializedName(value = "ui")
-    private boolean fromUI = true;
+    private @Nullable Integer id;
+    private @Nullable String urn;
 
-    @SerializedName(value = "cache")
-    private boolean fromCache = true;
+    private String internal = "true";
 
-    protected GetProcessView() {
-        super(GiraOneCommand.GetProcessView);
+    protected GetValue() {
+        super(GiraOneCommand.GetValue);
     }
 
-    public boolean isFromUI() {
-        return fromUI;
+    public @Nullable Integer getId() {
+        return id;
     }
 
-    public void setFromUI(boolean fromUI) {
-        this.fromUI = fromUI;
+    public void setId(@Nullable Integer id) {
+        this.id = id;
     }
 
-    public boolean isFromCache() {
-        return fromCache;
+    public @Nullable String getUrn() {
+        return urn;
     }
 
-    public void setFromCache(boolean fromCache) {
-        this.fromCache = fromCache;
+    public void setUrn(@Nullable String urn) {
+        this.urn = urn;
+    }
+
+    public String getInternal() {
+        return internal;
+    }
+
+    public void setInternal(String internal) {
+        this.internal = internal;
     }
 }
