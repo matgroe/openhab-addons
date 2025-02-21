@@ -1,0 +1,8 @@
+{
+  "request": {
+    "command": "GetValue",
+    "id": 1082,
+    "internal": "true",
+    "_gdsqueryId": 63
+  }
+}

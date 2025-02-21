@@ -15,7 +15,7 @@ package org.openhab.binding.giraone.internal.dto;
 import java.util.Arrays;
 
 /**
- * GiraOneFunctionType
+ * The enumeration of GiraOneFunctionTypes
  *
  * @author Matthias Gröger - Initial contribution
  */

@@ -35,7 +35,7 @@
 			<parameter name="defaultTimeoutSeconds" type="integer" unit="s" min="1">
 				<label>Default Timeout</label>
 				<description>How long should be waited on any answer before failing?.</description>
-				<default>30</default>
+				<default>60</default>
 				<advanced>true</advanced>
 			</parameter>
 

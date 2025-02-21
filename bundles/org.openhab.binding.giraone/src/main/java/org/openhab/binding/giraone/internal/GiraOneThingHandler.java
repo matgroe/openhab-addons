@@ -26,12 +26,13 @@ package org.openhab.binding.giraone.internal;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPointState;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
+import org.openhab.binding.giraone.internal.util.CaseFormatter;
+import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
@@ -75,7 +76,8 @@ public class GiraOneThingHandler extends BaseThingHandler {
             giraOneBridge = (GiraOneBridge) getBridge().getHandler();
 
             if (giraOneBridge != null) {
-                this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId, this::onDataPointState);
+                this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
+                        this::onDataPointState);
             }
             updateStatus(ThingStatus.ONLINE);
         } else {
@@ -93,8 +95,10 @@ public class GiraOneThingHandler extends BaseThingHandler {
         }
     }
 
-    private void onDataPointState(GiraOneDataPointState giraOneDataPointState) {
+    private void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
         logger.debug("onDataPointState {}", giraOneDataPointState);
+        String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getDataPoint());
+        updateState(channelId, ThingStateFactory.from(channelId, giraOneDataPointState.getValue()));
     }
 
     @Override
@@ -113,14 +117,7 @@ public class GiraOneThingHandler extends BaseThingHandler {
     public void handleCommand(ChannelUID channelUID, Command command) {
         logger.debug("handleCommand {}, {}", channelUID, command);
         if (command instanceof RefreshType) {
-            /*Optional<GiraOneDataPointState> state = Objects.requireNonNull(this.giraOneBridge)
-                    .lookupProcessGiraOneDataPointStates().stream()
-                    .filter(f -> f.getChannelViewId() == this.channelViewId).findFirst();
-
-            if (state.isPresent()) {
-                logger.info("state is {}", state);
-            }
-            */
+            Objects.requireNonNull(this.giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
         }
     }
 }

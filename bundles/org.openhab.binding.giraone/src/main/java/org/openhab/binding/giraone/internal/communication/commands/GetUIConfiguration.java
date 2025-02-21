@@ -13,6 +13,7 @@
 package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
@@ -27,7 +28,39 @@ public class GetUIConfiguration extends ServerCommand {
         return GenericBuilder.of(GetUIConfiguration::new);
     }
 
+    private boolean urns = true;
+    @Nullable
+    private String guid = null;
+    @Nullable
+    private String instanceId = null;
+
     protected GetUIConfiguration() {
         super(GiraOneCommand.GetUIConfiguration);
+    }
+
+    public boolean withUrns() {
+        return urns;
+    }
+
+    public void withUrns(boolean urns) {
+        this.urns = urns;
+    }
+
+    @Nullable
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+    }
+
+    @Nullable
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }

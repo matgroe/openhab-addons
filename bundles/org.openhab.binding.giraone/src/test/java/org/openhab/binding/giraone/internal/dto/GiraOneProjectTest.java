@@ -149,9 +149,9 @@ class GiraOneProjectTest {
         GiraOneProcessView processView = response.getReply(GiraOneProcessView.class);
         assertNotNull(processView);
 
-        Collection<GiraOneDataPointState> list = processView.getDatapoints().stream().map(project::enrichDataPointState)
-                .collect(Collectors.toList());
-        Optional<GiraOneDataPointState> state = list.stream().filter(f -> f.getId() == dataPointId).findFirst();
+        Collection<GiraOneChannelDataPoint> list = processView.getDatapoints().stream()
+                .map(project::enrichChannelDataPoint).collect(Collectors.toList());
+        Optional<GiraOneChannelDataPoint> state = list.stream().filter(f -> f.getId() == dataPointId).findFirst();
         assertTrue(state.isPresent());
         assertEquals(channelViewId, state.get().getChannelViewId());
         assertEquals(urn, state.get().getChannelViewUrn());

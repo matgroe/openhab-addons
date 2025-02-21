@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.giraone.internal.dto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +28,10 @@ import java.util.stream.Stream;
 public class GiraOneProject {
     private final GiraOneProjectItem root;
     private final Collection<GiraOneProjectChannel> channels;
+
+    public static GiraOneProject empty() {
+        return new GiraOneProject(new GiraOneProjectItem(), new ArrayList<>());
+    }
 
     /**
      * Constructor.
@@ -167,6 +172,17 @@ public class GiraOneProject {
     }
 
     /**
+     * Performs a lookup within the internal {@link Collection} of {@link GiraOneProjectChannel}
+     * by the given channelViewId.
+     *
+     * @param channelViewId The channelViewId
+     * @return A collection of {@link GiraOneProjectChannel}, if there is any
+     */
+    public Collection<GiraOneProjectChannel> lookupChannelByChannelViewId(final int channelViewId) {
+        return this.channels.stream().filter(f -> f.getChannelViewId() == channelViewId).toList();
+    }
+
+    /**
      * This method takes {@link GiraOneProjectItem} and dereferences the internal channel references to the
      * concerning {@link GiraOneProjectChannel} objects.
      * 
@@ -174,7 +190,8 @@ public class GiraOneProject {
      * @return a {@link Collection} of {@link GiraOneProjectChannel}
      */
     public Collection<GiraOneProjectChannel> lookupProjectChannels(final GiraOneProjectItem item) {
-        Collection<Integer> refIds = item.getItemReferences().stream().map(GiraOneItemReference::getReferenceId).toList();
+        Collection<Integer> refIds = item.getItemReferences().stream().map(GiraOneItemReference::getReferenceId)
+                .toList();
         return this.channels.stream().filter(f -> refIds.contains(f.getChannelViewId())).collect(Collectors.toList());
     }
 
@@ -186,16 +203,20 @@ public class GiraOneProject {
         return lookupChannelDatapoint(channel, dataPoint.getId()).isPresent();
     }
 
-    public GiraOneDataPointState enrichDataPointState(GiraOneDataPointState dataPointState) {
+    public GiraOneChannelDataPoint enrichChannelDataPoint(GiraOneChannelDataPoint dataPointState) {
         Optional<GiraOneProjectChannel> channel = this.channels.stream()
                 .filter(ch -> this.isChannelContainingDatapoint(ch, dataPointState)).findFirst();
+
         channel.ifPresent(giraOneProjectChannel -> {
             dataPointState.setChannelViewId(giraOneProjectChannel.getChannelViewId());
             dataPointState.setChannelViewUrn(giraOneProjectChannel.getChannelViewUrn());
 
-            GiraOneDataPoint dataPoint = lookupChannelDatapoint(giraOneProjectChannel, dataPointState.getId()).get();
-            dataPointState.setUrn(dataPoint.getUrn());
-            dataPointState.setDataPoint(dataPoint.getDataPoint());
+            Optional<GiraOneDataPoint> dataPoint = lookupChannelDatapoint(giraOneProjectChannel,
+                    dataPointState.getId());
+            if (dataPoint.isPresent()) {
+                dataPointState.setUrn(dataPoint.get().getUrn());
+                dataPointState.setDataPoint(dataPoint.get().getDataPoint());
+            }
         });
         return dataPointState;
     }

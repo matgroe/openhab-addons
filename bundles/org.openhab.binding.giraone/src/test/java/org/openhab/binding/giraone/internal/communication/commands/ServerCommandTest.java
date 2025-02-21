@@ -13,6 +13,7 @@
 package org.openhab.binding.giraone.internal.communication.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Test;
@@ -23,19 +24,42 @@ import org.junit.jupiter.api.Test;
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
-class RegisterApplicationTest {
+class ServerCommandTest {
     private static final String APP_ID = "APP_ID_123";
     private static final String APP_TYPE = "APP_TYPE";
     private static final String INSTANCE_ID = "InstanceId";
+    private static final String GUID = "InstanceId";
+    private static final String URN = "junit:test:blah-blah";
 
     @Test
-    void builder() {
+    void shouldBuildGiraOneCommandRegisterApplication() {
         RegisterApplication cmd = RegisterApplication.builder().with(RegisterApplication::setApplicationId, APP_ID)
                 .with(RegisterApplication::setApplicationType, APP_TYPE)
                 .with(RegisterApplication::setInstanceId, INSTANCE_ID).build();
 
+        assertEquals(GiraOneCommand.RegisterApplication, cmd.getCommand());
         assertEquals(APP_ID, cmd.getApplicationId());
         assertEquals(APP_TYPE, cmd.getApplicationType());
         assertEquals(INSTANCE_ID, cmd.getInstanceId());
+    }
+
+    @Test
+    void shouldBuildGiraOneCommandGetUIConfiguration() {
+        GetUIConfiguration cmd = GetUIConfiguration.builder().with(GetUIConfiguration::setGuid, INSTANCE_ID).build();
+        assertEquals(GiraOneCommand.GetUIConfiguration, cmd.getCommand());
+    }
+
+    @Test
+    void shouldBuildGiraOneCommandGetProcessView() {
+        GetProcessView cmd = GetProcessView.builder().build();
+        assertEquals(GiraOneCommand.GetProcessView, cmd.getCommand());
+    }
+
+    @Test
+    void shouldBuildGiraOneCommandGetValue() {
+        GetValue cmd = GetValue.builder().with(GetValue::setUrn, URN).build();
+        assertEquals(GiraOneCommand.GetValue, cmd.getCommand());
+        assertEquals(URN, cmd.getUrn());
+        assertNull(cmd.getId());
     }
 }

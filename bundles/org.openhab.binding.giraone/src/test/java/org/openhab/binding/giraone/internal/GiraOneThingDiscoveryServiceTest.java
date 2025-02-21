@@ -48,7 +48,6 @@ import com.google.gson.Gson;
  */
 class GiraOneThingDiscoveryServiceTest {
     private GiraOneThingDiscoveryService discoveryService = spy(GiraOneThingDiscoveryService.class);
-    private GiraOneBridge giraOneClient = mock(GiraOneBridge.class);
 
     @BeforeEach
     void setUp() {

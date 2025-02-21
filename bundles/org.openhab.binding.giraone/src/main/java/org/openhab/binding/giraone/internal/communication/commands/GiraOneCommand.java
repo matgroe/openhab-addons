@@ -24,13 +24,29 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public enum GiraOneCommand {
+
     /** First Command to send to server, otherwise no events are getting generated */
     RegisterApplication(""),
 
     /** Reads all Things and channels to be represented by any UI */
     GetUIConfiguration("config"),
 
-    GetProcessView("processView");
+    /** Reads a datapoints value */
+    GetValue(""),
+
+    /** Reads the current states for all channels */
+    GetProcessView("processView"),
+
+    /** Reads the gira one server device configuration */
+    GetDeviceConfig("deviceConfig"),
+
+    /** Read the trigger times from server */
+    GetNextTriggerTimes("triggerTimes"),
+
+    /** TODO: document */
+    GetConfiguration("object")
+
+    ;
 
     private final String responsePropertyName;
 
