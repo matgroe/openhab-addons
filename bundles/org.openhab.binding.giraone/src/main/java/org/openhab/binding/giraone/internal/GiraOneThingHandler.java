@@ -26,13 +26,18 @@ package org.openhab.binding.giraone.internal;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
@@ -59,12 +64,10 @@ public class GiraOneThingHandler extends BaseThingHandler {
     private @Nullable ScheduledFuture<?> backgroundDiscoveryJob = null;
     private @Nullable GiraOneBridge giraOneBridge;
     private Disposable disposableOnDataPointState = Disposable.empty();
+    private Disposable disposableOnConnectionState = Disposable.empty();
 
     public GiraOneThingHandler(Thing thing) {
         super(thing);
-    }
-
-    private void updateChannelValue() {
     }
 
     @Override
@@ -73,15 +76,15 @@ public class GiraOneThingHandler extends BaseThingHandler {
         if (getBridge() != null) {
             this.channelViewId = Integer
                     .parseInt(Objects.requireNonNull(getThing().getProperties().get("channelViewId")));
-            giraOneBridge = (GiraOneBridge) getBridge().getHandler();
 
+            giraOneBridge = (GiraOneBridge) getBridge().getHandler();
             if (giraOneBridge != null) {
                 this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
                         this::onDataPointState);
+                this.disposableOnConnectionState = giraOneBridge.subscribeOnConnectionState(this::onConnectionState);
             }
-            updateStatus(ThingStatus.ONLINE);
         } else {
-            updateStatus(ThingStatus.UNINITIALIZED, ThingStatusDetail.BRIDGE_OFFLINE);
+            updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE);
         }
     }
 
@@ -89,16 +92,29 @@ public class GiraOneThingHandler extends BaseThingHandler {
     public void dispose() {
         try {
             this.disposableOnDataPointState.dispose();
+            this.disposableOnConnectionState.dispose();
             super.dispose();
         } finally {
             this.disposableOnDataPointState = Disposable.empty();
+            this.disposableOnConnectionState = Disposable.empty();
         }
     }
 
     private void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
         logger.debug("onDataPointState {}", giraOneDataPointState);
-        String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getDataPoint());
-        updateState(channelId, ThingStateFactory.from(channelId, giraOneDataPointState.getValue()));
+        if (giraOneDataPointState.getValue() != null) {
+            String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getName());
+            updateState(channelId, ThingStateFactory.from(channelId, giraOneDataPointState.getValue()));
+        }
+    }
+
+    private void onConnectionState(GiraOneConnectionState connectionState) {
+        if (connectionState == GiraOneConnectionState.Connected) {
+            Objects.requireNonNull(giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
+            updateStatus(ThingStatus.ONLINE);
+        } else {
+            updateStatus(ThingStatus.UNINITIALIZED, ThingStatusDetail.BRIDGE_OFFLINE);
+        }
     }
 
     @Override
@@ -113,11 +129,39 @@ public class GiraOneThingHandler extends BaseThingHandler {
         super.thingUpdated(thing);
     }
 
+    private Optional<GiraOneDataPoint> findGiraOneDataPoint(final String ohChannel) {
+        Optional<GiraOneProjectChannel> channel = Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
+                .lookupChannelByChannelViewId(this.channelViewId);
+        return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
+                .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(ohChannel)).findFirst());
+    }
+
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        logger.debug("handleCommand {}, {}", channelUID, command);
-        if (command instanceof RefreshType) {
-            Objects.requireNonNull(this.giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
+        Optional<GiraOneDataPoint> datapoint = findGiraOneDataPoint(channelUID.getId());
+        if (datapoint.isPresent()) {
+            logger.debug("handleCommand {}, {}", channelUID, command);
+            switch ((Object) command) {
+                case RefreshType cmd -> handleRefreshTypeCommand(cmd);
+                case DecimalType cmd -> handleDecimalTypeCommand(datapoint.get(), cmd);
+                case OnOffType cmd -> handleOnOffTypeCommand(datapoint.get(), cmd);
+                default -> throw new IllegalStateException("Unsupported value: " + (Object) command);
+            }
+        } else {
+            logger.debug("not responsible for handling handleCommand {}, {}", channelUID, command);
         }
+    }
+
+    void handleRefreshTypeCommand(RefreshType command) {
+        Objects.requireNonNull(this.giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
+    }
+
+    void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {
+        Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, command.intValue());
+    }
+
+    void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
+        String value = command == OnOffType.ON ? "1" : "0";
+        Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, value);
     }
 }

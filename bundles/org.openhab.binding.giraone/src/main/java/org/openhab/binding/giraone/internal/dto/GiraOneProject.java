@@ -73,7 +73,7 @@ public class GiraOneProject {
     /**
      * @return Returna a {@link Collection} of all {@link GiraOneProjectChannel} within this project.
      */
-    public Collection<GiraOneProjectChannel> getAllChannels() {
+    public Collection<GiraOneProjectChannel> lookupChannels() {
         return channels;
     }
 
@@ -176,10 +176,10 @@ public class GiraOneProject {
      * by the given channelViewId.
      *
      * @param channelViewId The channelViewId
-     * @return A collection of {@link GiraOneProjectChannel}, if there is any
+     * @return A {@link Optional} of {@link GiraOneProjectChannel}, if there is any
      */
-    public Collection<GiraOneProjectChannel> lookupChannelByChannelViewId(final int channelViewId) {
-        return this.channels.stream().filter(f -> f.getChannelViewId() == channelViewId).toList();
+    public Optional<GiraOneProjectChannel> lookupChannelByChannelViewId(final int channelViewId) {
+        return this.channels.stream().filter(f -> f.getChannelViewId() == channelViewId).findFirst();
     }
 
     /**
@@ -195,29 +195,36 @@ public class GiraOneProject {
         return this.channels.stream().filter(f -> refIds.contains(f.getChannelViewId())).collect(Collectors.toList());
     }
 
-    private Optional<GiraOneDataPoint> lookupChannelDatapoint(GiraOneProjectChannel channel, int dataPointId) {
-        return channel.getDataPoints().stream().filter(dp -> dp.getId() == dataPointId).findFirst();
+    /**
+     * Creates a {@link GiraOneChannelDataPoint} from the given {@link GiraOneDataPoint} and
+     * {@link GiraOneProjectChannel}
+     * objects. Missing data is getting enriched to the destination object, if it's available.
+     *
+     * @param projectChannel - The {@link GiraOneChannelDataPoint}
+     * @param dataPoint - The {@link GiraOneDataPoint}
+     *
+     * @return the {@link GiraOneChannelDataPoint}
+     */
+    private GiraOneChannelDataPoint createGiraOneChannelDataPoint(GiraOneProjectChannel projectChannel,
+            GiraOneDataPoint dataPoint) {
+        GiraOneChannelDataPoint channelDp = new GiraOneChannelDataPoint(dataPoint);
+        channelDp.setChannelViewId(projectChannel.getChannelViewId());
+        channelDp.setChannelViewUrn(projectChannel.getChannelViewUrn());
+        if (projectChannel.getGiraOneDataPoint(dataPoint.getId()).isPresent()) {
+            channelDp.setName(projectChannel.getGiraOneDataPoint(dataPoint.getId()).get().getName());
+        }
+        return channelDp;
     }
 
-    private boolean isChannelContainingDatapoint(GiraOneProjectChannel channel, GiraOneDataPoint dataPoint) {
-        return lookupChannelDatapoint(channel, dataPoint.getId()).isPresent();
-    }
-
-    public GiraOneChannelDataPoint enrichChannelDataPoint(GiraOneChannelDataPoint dataPointState) {
-        Optional<GiraOneProjectChannel> channel = this.channels.stream()
-                .filter(ch -> this.isChannelContainingDatapoint(ch, dataPointState)).findFirst();
-
-        channel.ifPresent(giraOneProjectChannel -> {
-            dataPointState.setChannelViewId(giraOneProjectChannel.getChannelViewId());
-            dataPointState.setChannelViewUrn(giraOneProjectChannel.getChannelViewUrn());
-
-            Optional<GiraOneDataPoint> dataPoint = lookupChannelDatapoint(giraOneProjectChannel,
-                    dataPointState.getId());
-            if (dataPoint.isPresent()) {
-                dataPointState.setUrn(dataPoint.get().getUrn());
-                dataPointState.setDataPoint(dataPoint.get().getDataPoint());
-            }
-        });
-        return dataPointState;
+    /**
+     * This method iterates through over all channels and creates new {@link GiraOneChannelDataPoint} object which
+     * combines all relevant information about the given datapoint and it's assigned channels.
+     *
+     * @param dataPoint - The {@link GiraOneDataPoint} to assign on it's referenced channel
+     * @return A {@link Collection} of {@link GiraOneChannelDataPoint}
+     */
+    public Collection<GiraOneChannelDataPoint> lookupGiraOneChannelDataPoints(GiraOneDataPoint dataPoint) {
+        return this.channels.stream().filter(ch -> ch.containsGiraOneDataPoint(dataPoint.getId()))
+                .map(ch -> createGiraOneChannelDataPoint(ch, dataPoint)).toList();
     }
 }

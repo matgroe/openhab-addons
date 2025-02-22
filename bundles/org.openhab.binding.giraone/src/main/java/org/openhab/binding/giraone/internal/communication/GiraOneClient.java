@@ -37,6 +37,7 @@ import org.openhab.binding.giraone.internal.communication.commands.GetValue;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
+import org.openhab.binding.giraone.internal.communication.commands.SetValue;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
@@ -207,8 +208,17 @@ public class GiraOneClient implements WebSocketListener {
     public void lookupGiraOneDataPoint(final int datapointId) {
         if (connectionState.getValue() == GiraOneConnectionState.Connected) {
             send(GetValue.builder().with(GetValue::setId, datapointId).build());
+        } else {
+            throw new IllegalStateException("Must be in ConnectionState.Connected");
         }
-        throw new IllegalStateException("Must be in ConnectionState.Connected");
+    }
+
+    public void setGiraOneDataPointValue(final GiraOneDataPoint datapoint, final String value) {
+        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
+            send(SetValue.builder().with(SetValue::setId, datapoint.getId()).with(SetValue::setValue, value).build());
+        } else {
+            throw new IllegalStateException("Must be in ConnectionState.Connected");
+        }
     }
 
     public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNext) {

@@ -98,7 +98,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     private void discoverDevices() {
         try {
             GiraOneProject project = Objects.requireNonNull(giraOneBridge).lookupGiraOneProject();
-            project.getAllChannels().stream().map(this::createDiscoverResultFromChannel).forEach(this::thingDiscovered);
+            project.lookupChannels().stream().map(this::createDiscoverResultFromChannel).forEach(this::thingDiscovered);
         } catch (IllegalStateException exp) {
             logger.warn("Discovery of Devices failed :: {}", exp.getMessage());
         } finally {
@@ -140,6 +140,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
 
         Map<String, Object> properties = new HashMap<>(20);
+        properties.put("timestamp", System.currentTimeMillis());
         properties.put("channelId", channel.getChannelId());
         properties.put("channelUrn", channel.getChannelUrn());
         properties.put("channelViewId", channel.getChannelViewId());
@@ -147,8 +148,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         properties.put("functionType", channel.getFunctionType().getName());
         properties.put("channelType", channel.getChannelType().getName());
         properties.put("channelTypeId", channel.getChannelTypeId().getName());
-        properties.put("iconId", channel.getIconId());
-        properties.put("dataPoints", channel.getDataPoints().stream().filter(f -> f.getId() > 0).toList());
 
         String label = channel.getName();
         String thingId = String.format("%d", channel.getChannelViewId());

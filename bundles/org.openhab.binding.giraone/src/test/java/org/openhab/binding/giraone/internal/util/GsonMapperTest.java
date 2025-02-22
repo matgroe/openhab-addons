@@ -120,7 +120,7 @@ public class GsonMapperTest {
         assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
         GiraOneProject g1Project = response.getReply(GiraOneProject.class);
         assertNotNull(g1Project);
-        g1Project.getAllChannels().forEach(System.out::println);
+        g1Project.lookupChannels().forEach(System.out::println);
     }
 
     @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneProcessView")

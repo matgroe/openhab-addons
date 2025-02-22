@@ -12,7 +12,9 @@
  */
 package org.openhab.binding.giraone.internal.dto;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -35,10 +37,7 @@ public class GiraOneProjectChannel {
     private GiraOneChannelTypeId channelTypeId;
     private String name;
 
-    @SerializedName(value = "iconID")
-    private int iconId;
-
-    private Collection<GiraOneDataPoint> dataPoints;
+    private final Collection<GiraOneDataPoint> dataPoints = new ArrayList<>();
 
     public int getChannelId() {
         return channelId;
@@ -72,8 +71,12 @@ public class GiraOneProjectChannel {
         return name;
     }
 
-    public int getIconId() {
-        return iconId;
+    public boolean containsGiraOneDataPoint(int datapointId) {
+        return this.dataPoints.stream().anyMatch(f -> f.getId() == datapointId);
+    }
+
+    public Optional<GiraOneDataPoint> getGiraOneDataPoint(int datapointId) {
+        return this.dataPoints.stream().filter(f -> f.getId() == datapointId).findFirst();
     }
 
     public Collection<GiraOneDataPoint> getDataPoints() {
@@ -84,6 +87,6 @@ public class GiraOneProjectChannel {
     public String toString() {
         return String.format("%s{name='%s', functionType=%s, channelType=%s, channelTypeId=%s, dataPoints=%s}",
                 getClass().getSimpleName(), name, functionType, channelType, channelTypeId,
-                dataPoints.stream().map(GiraOneDataPoint::getDataPoint).toList());
+                dataPoints.stream().map(GiraOneDataPoint::getName).toList());
     }
 }

@@ -13,13 +13,27 @@
 package org.openhab.binding.giraone.internal.dto;
 
 /**
- * GiraOneChannelDataPoint
+ * The {@link GiraOneChannelDataPoint} represents a single {@link GiraOneDataPoint}
+ * within a {@link GiraOneProjectChannel}.
  *
  * @author Matthias Gröger - Initial contribution
  */
 public class GiraOneChannelDataPoint extends GiraOneDataPoint {
 
+    public GiraOneChannelDataPoint() {
+        super();
+    }
+
+    public GiraOneChannelDataPoint(GiraOneDataPoint dataPoint) {
+        this();
+        this.setId(dataPoint.getId());
+        this.setName(dataPoint.getName());
+        this.setUrn(dataPoint.getUrn());
+        this.setValue(dataPoint.getValue());
+    }
+
     private int channelViewId;
+
     private String channelViewUrn;
 
     public int getChannelViewId() {
@@ -40,7 +54,8 @@ public class GiraOneChannelDataPoint extends GiraOneDataPoint {
 
     @Override
     public String toString() {
-        return String.format("{channelViewId=%d, datapointId=%d, dataPoint=%s, urn=%s, value=%s}", channelViewId,
-                super.getId(), super.getDataPoint(), super.getUrn(), super.getValue());
+        return String.format("{channelViewId=%d, channelViewUrn=%s datapointId=%d, dataPoint=%s, urn=%s, value=%s}",
+                getChannelViewId(), getChannelViewUrn(), super.getId(), super.getName(), super.getUrn(),
+                super.getValue());
     }
 }
