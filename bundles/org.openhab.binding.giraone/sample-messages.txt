@@ -1,0 +1,88 @@
+{
+  "dataPoint": "OnOff",
+  "id": 202984,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-1:OnOff"
+}
+-- licht Büro On
+{"request":{"command":"SetValue","id":202984,"value":1}}
+-- licht Büro Off
+{"request":{"command":"SetValue","id":202984,"value":0}}
+
+
+{
+  "dataPoint": "Brightness",
+  "id": 202986,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-1:Brightness"
+}
+-- licht Büro 34%
+{"request":{"command":"SetValue","id":202986,"value":34}}
+
+
+{
+  "dataPoint": "Set-Point",
+  "id": 203120,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-3:Set-Point"
+}
+-- Heizung Wert
+{"request":{"command":"SetValue","id":203120,"value":20.5}}
+
+{
+  "dataPoint": "Mode",
+  "id": 203121,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-3:Mode"
+}
+-- Heizung Modus "Komfort"
+{"request":{"command":"SetValue","id":203121,"value":1}}
+-- Heizung Modus "Standby"
+{"request":{"command":"SetValue","id":203121,"value":2}}
+-- Heizung Modus "Nacht"
+{"request":{"command":"SetValue","id":203121,"value":3}}
+-- Heizung Modus "Frostschutz"
+{"request":{"command":"SetValue","id":203121,"value":4}}
+
+
+{
+  "dataPoint": "Step-Up-Down",
+  "id": 203228,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Step-Up-Down"
+}
+Raffstore - Stop
+{"request":{"command":"SetValue","id":203228,"value":0}}
+
+{
+  "dataPoint": "Slat-Position",
+  "id": 203232,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Slat-Position"
+}
+Raffstore - Lammellen 97%
+{"request":{"command":"SetValue","id":203232,"value":"97"}}
+
+{
+  "dataPoint": "Position",
+  "id": 203231,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Position"
+}
+Raffstore - Position 100%
+{"request":{"command":"SetValue","id":203231,"value":"100"}}
+
+{
+  "dataPoint": "Step-Up-Down",
+  "id": 203165,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-1:Step-Up-Down"
+}
+Gast Dachfenster Beschattung Ab
+{"request":{"command":"SetValue","id":203165,"value":0}}
+Gast Dachfenster Beschattung Auf
+{"request":{"command":"SetValue","id":203165,"value":1}}
+
+
+{
+  "dataPoint": "Step-Up-Down",
+  "id": 203186,
+  "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-4:Step-Up-Down"
+}
+Gast Fenster Ab
+{"request":{"command":"SetValue","id":203186,"value":1}}
+
+Gast Fenster Auf
+{"request":{"command":"SetValue","id":203186,"value":0}}

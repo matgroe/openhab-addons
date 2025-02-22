@@ -12,9 +12,8 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
-
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -25,6 +24,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneException;
 import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingStatus;
@@ -32,7 +32,6 @@ import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.binding.BaseBridgeHandler;
 import org.openhab.core.thing.binding.ThingHandlerService;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,18 +90,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (CHANNEL_1.equals(channelUID.getId())) {
-            if (command instanceof RefreshType) {
-                // TODO: handle data refresh
-            }
-
-            // TODO: handle command
-
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information:
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
-        }
+        // intentionally empty, the GiraOneThingHandler is responsible for handling commands
     }
 
     @Override
@@ -163,25 +151,12 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     void onGiraOneDataPoint(GiraOneDataPoint dataPoint) {
-        GiraOneChannelDataPoint channelDataPoint = new GiraOneChannelDataPoint();
-        channelDataPoint.setId(dataPoint.getId());
-        channelDataPoint.setValue(dataPoint.getValue());
-        channelDataPoint = enrichChannelDataPoint(channelDataPoint);
-        logger.debug("emitting GiraOneChannelDataPoint :: {}", channelDataPoint);
-        this.channelDataPoints.onNext(channelDataPoint);
-    }
-
-    GiraOneChannelDataPoint enrichChannelDataPoint(GiraOneChannelDataPoint dataPointState) {
-        return lookupGiraOneProject().enrichChannelDataPoint(dataPointState);
-    }
-
-    private void writeLog(GiraOneChannelDataPoint state) {
-        this.logger.debug("{}", state);
+        lookupGiraOneProject().lookupGiraOneChannelDataPoints(dataPoint).forEach(channelDataPoints::onNext);
     }
 
     @Override
     public synchronized GiraOneProject lookupGiraOneProject() {
-        if (this.giraOneProject.getAllChannels().isEmpty()) {
+        if (this.giraOneProject.lookupChannels().isEmpty()) {
             this.giraOneProject = this.giraOneServerClient.lookupGiraOneProject();
         }
         return this.giraOneProject;
@@ -189,6 +164,15 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void lookupGiraOneChannelDataPointValues(final int channelViewId) {
+        Optional<GiraOneProjectChannel> channel = this.lookupGiraOneProject()
+                .lookupChannelByChannelViewId(channelViewId);
+        channel.ifPresent(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
+                .map(GiraOneDataPoint::getId).forEach(giraOneServerClient::lookupGiraOneDataPoint));
+    }
+
+    @Override
+    public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value) {
+        this.giraOneServerClient.setGiraOneDataPointValue(dataPoint, value.toString());
     }
 
     @Override

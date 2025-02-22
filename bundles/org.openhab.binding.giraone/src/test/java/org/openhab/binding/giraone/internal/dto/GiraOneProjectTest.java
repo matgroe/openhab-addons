@@ -16,16 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
@@ -129,31 +125,15 @@ class GiraOneProjectTest {
         assertEquals(item.getItemReferences().size(), channels.size());
     }
 
-    private static Stream<Arguments> provideDataPointId2ChannelViewId() {
-        return Stream.of(Arguments.of(215820, 216214,
-                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-5:Step-Up-Down"),
-                Arguments.of(215821, 216214,
-                        "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-5:Up-Down"),
-                Arguments.of(215822, 216214,
-                        "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-5:Movement"));
-    }
-
-    @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneProcessView")
-    @ParameterizedTest
-    @MethodSource("provideDataPointId2ChannelViewId")
-    void testEnrichDatapointState(int dataPointId, int channelViewId, String urn) {
-        String message = ResourceLoader.loadStringResource("/messages/3.GetProcessView/001-resp.json");
-        GiraOneCommandResponse response = gson.fromJson(message, GiraOneCommandResponse.class);
-        assertNotNull(response);
-        assertEquals(GiraOneCommand.GetProcessView, response.getRequestServerCommand().getCommand());
-        GiraOneProcessView processView = response.getReply(GiraOneProcessView.class);
-        assertNotNull(processView);
-
-        Collection<GiraOneChannelDataPoint> list = processView.getDatapoints().stream()
-                .map(project::enrichChannelDataPoint).collect(Collectors.toList());
-        Optional<GiraOneChannelDataPoint> state = list.stream().filter(f -> f.getId() == dataPointId).findFirst();
-        assertTrue(state.isPresent());
-        assertEquals(channelViewId, state.get().getChannelViewId());
-        assertEquals(urn, state.get().getChannelViewUrn());
+    @Test
+    void testLookupGiraOneChannelDataPoints() {
+        GiraOneDataPoint dp = new GiraOneDataPoint();
+        dp.setId(215656);
+        dp.setValue("12345");
+        dp.setUrn("junit:test:12345");
+        Collection<GiraOneChannelDataPoint> chdps = project.lookupGiraOneChannelDataPoints(dp);
+        assertFalse(chdps.isEmpty());
+        GiraOneChannelDataPoint chdp = (GiraOneChannelDataPoint) chdps.toArray()[0];
+        assertEquals(dp.getId(), chdp.getId());
     }
 }

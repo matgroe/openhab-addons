@@ -31,8 +31,11 @@ public enum GiraOneCommand {
     /** Reads all Things and channels to be represented by any UI */
     GetUIConfiguration("config"),
 
-    /** Reads a datapoints value */
+    /** Reads a datapoint value */
     GetValue(""),
+
+    /** sets a datapoint value */
+    SetValue(""),
 
     /** Reads the current states for all channels */
     GetProcessView("processView"),
