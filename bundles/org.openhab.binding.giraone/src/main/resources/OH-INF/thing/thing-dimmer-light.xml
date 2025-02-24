@@ -38,60 +38,6 @@
 			<!-- channel id="shift" typeId="shift"/ -->
 			<channel id="brightness" typeId="system.brightness"/>
 		</channels>
-
 	</thing-type>
-
-	<thing-type id="status-temperature">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-
-		<label>Temperature</label>
-		<description>Temperature Status Value Indoor</description>
-		<channels>
-			<channel id="float" typeId="system.indoor-temperature"/>
-		</channels>
-
-	</thing-type>
-
-	<thing-type id="status-humidity">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-
-		<label>Humidity</label>
-		<description>Atmospheric humidity in percent</description>
-
-		<channels>
-			<channel id="float" typeId="system.atmospheric-humidity"/>
-		</channels>
-
-	</thing-type>
-
-	<!-- all supported channels
-
-		on-off, shift, brightness, step-up-down, up-down, movement,
-		position, slat-position, current, set-point, mode, status,
-		presence, heating, cooling, heat-cool, float, execute, teach
-
-	-->
-	<channel-type id="on-off">
-		<item-type>Number:Temperature</item-type>
-		<label>Temperature</label>
-		<description>Sample channel for GiraOne Binding</description>
-	</channel-type>
-
-	<channel-type id="humidity">
-		<item-type unitHint="%">Number:Dimensionless</item-type>
-		<label>Humidity</label>
-		<state readOnly="true" pattern="%.1f %%"/>
-	</channel-type>
-
-	<channel-type id="temperature">
-		<item-type unitHint="C">Number:Dimensionless</item-type>
-		<label>Temperature</label>
-		<state readOnly="true" pattern="%.1f °C"/>
-	</channel-type>
-
 
 </thing:thing-descriptions>

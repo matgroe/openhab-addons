@@ -63,7 +63,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     @Override
     public void initialize() {
         if (getThingHandler() != null) {
-            bridgeUID = getThingHandler().getThing().getUID();
+            bridgeUID = Objects.requireNonNull(getThingHandler()).getThing().getUID();
             giraOneBridge = ((GiraOneBridgeHandler) getThingHandler());
             disposableOnConnectionState = Objects.requireNonNull(giraOneBridge)
                     .subscribeOnConnectionState(this::onConnectionStateChanged);

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<!--
+		All Non-Known Devices are getting mapped to the unkown thing
+		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
+	-->
+	<thing-type id="status-temperature">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+
+		<label>Temperature</label>
+		<description>Temperature Status Value Indoor</description>
+		<channels>
+			<channel id="float" typeId="system.indoor-temperature"/>
+		</channels>
+	</thing-type>
+
+	<channel-type id="temperature">
+		<category>TemperatureHot</category>
+		<item-type unitHint="C">Number:Dimensionless</item-type>
+		<label>Temperature</label>
+		<state readOnly="true" pattern="%.1f °C"/>
+	</channel-type>
+
+
+</thing:thing-descriptions>

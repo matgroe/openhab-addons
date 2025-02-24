@@ -23,7 +23,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -54,11 +53,11 @@ import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
 /**
- * Client which handles the communication to the Gira One Server via Websocket.
+ * The class acts as client for the Gira One Server and handles the
+ * communication via Websocket.
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({})
 public class GiraOneClient implements WebSocketListener {
     private final static String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
     private final static int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * 1024);
@@ -76,9 +75,19 @@ public class GiraOneClient implements WebSocketListener {
 
     private Disposable dataPointDisposabe = Disposable.empty();
 
+    /** Observe this subject for received Command-Reponses from Gira Server */
     final Subject<GiraOneCommandResponse> responses = PublishSubject.create();
+
+    /** Observe this subject for received events from Gira Server */
     final Subject<GiraOneEvent> events = PublishSubject.create();
+
+    /**
+     * Observe this subject for datapoint values from Gira Server. It combines
+     * value events and GetVale responses as well.
+     */
     final Subject<GiraOneDataPoint> dataPoints = PublishSubject.create();
+
+    /** Observe this subject for Gira Server connection state */
     final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
 
     /**
@@ -150,6 +159,11 @@ public class GiraOneClient implements WebSocketListener {
         }
     }
 
+    /**
+     * Establish a new Websocket connection to the Gira One Server.
+     *
+     * @throws GiraOneException
+     */
     public void connect() throws GiraOneException {
         logger.debug("Connecting to {}", this.giraOneWssEndpoint);
         this.connectionState.onNext(GiraOneConnectionState.Connecting);
@@ -159,6 +173,25 @@ public class GiraOneClient implements WebSocketListener {
         HttpClient httpClient = new HttpClient(new SslContextFactory.Client(true));
         WebSocketClient webSocketClient = createWebSocketClient(httpClient);
         initiateWebsocketSession(webSocketClient);
+    }
+
+    /**
+     * Terminate the websocket connection.
+     */
+    public void disconnect() {
+        try {
+            if (this.websocketSession != null) {
+                this.websocketSession.close();
+            }
+            this.jettyThreadPool.stop();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.websocketSession = null;
+            this.jettyThreadPool = null;
+            this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+            this.dataPointDisposabe.dispose();
+        }
     }
 
     void observeAndEmitDataPointValues() {
@@ -178,24 +211,6 @@ public class GiraOneClient implements WebSocketListener {
         dataPoint.setUrn(event.getUrn());
         dataPoint.setValue(event.getNewValue());
         return dataPoint;
-    }
-
-    public void disconnect() {
-        try {
-            if (this.websocketSession != null) {
-                this.websocketSession.close();
-            }
-            if (this.jettyThreadPool != null) {
-                this.jettyThreadPool.stop();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            this.websocketSession = null;
-            this.jettyThreadPool = null;
-            this.connectionState.onNext(GiraOneConnectionState.Disconnected);
-            this.dataPointDisposabe.dispose();
-        }
     }
 
     public GiraOneProject lookupGiraOneProject() {

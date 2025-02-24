@@ -12,7 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 
@@ -34,17 +37,19 @@ public class GiraOneCommandResponse {
     }
 
     public ServerCommand getRequestServerCommand() {
-        return getRequest(ServerCommand.class);
+        return Objects.requireNonNull(getRequest(ServerCommand.class), "Should not be null at any time");
     }
 
     public boolean isInitatedBy(ServerCommand other) {
         return getRequestServerCommand().equals(other);
     }
 
+    @Nullable
     public <T> T getRequest(Class<T> classOfT) {
         return GsonMapperFactory.createGson().fromJson(responseBody.get(PROPERTY_REQUEST), classOfT);
     }
 
+    @Nullable
     public <T> T getReply(Class<T> classOfT) {
         String responseProperty = getRequestServerCommand().getCommand().getResponsePropertyName();
         if (responseProperty.isEmpty()) {
