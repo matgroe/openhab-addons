@@ -28,7 +28,6 @@ class ServerCommandTest {
     private static final String APP_ID = "APP_ID_123";
     private static final String APP_TYPE = "APP_TYPE";
     private static final String INSTANCE_ID = "InstanceId";
-    private static final String GUID = "InstanceId";
     private static final String URN = "junit:test:blah-blah";
 
     @Test

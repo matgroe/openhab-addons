@@ -11,6 +11,7 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.giraone.internal;
+
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

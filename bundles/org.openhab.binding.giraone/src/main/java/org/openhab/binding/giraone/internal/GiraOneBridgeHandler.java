@@ -13,6 +13,7 @@
 package org.openhab.binding.giraone.internal;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,6 +29,7 @@ import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.binding.BaseBridgeHandler;
 import org.openhab.core.thing.binding.ThingHandlerService;
 import org.openhab.core.types.Command;
@@ -67,8 +69,17 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
+    public void handleConfigurationUpdate(Map<String, Object> configurationParameters) {
+        super.handleConfigurationUpdate(configurationParameters);
+    }
+
+    @Override
+    public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
+        super.bridgeStatusChanged(bridgeStatusInfo);
+    }
+
+    @Override
     public void dispose() {
-        logger.info("Disposing 'Gira One Bridge'");
         disposableConnectionState.dispose();
         disposableDataPoint.dispose();
 
@@ -83,7 +94,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void handleRemoval() {
-        logger.info("Handle Removal of 'Gira One Bridge'");
+        this.giraOneServerClient.disconnect();
         super.handleRemoval();
     }
 
@@ -118,7 +129,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
                         .subscribeOnConnectionState(this::onConnectionStateChanged);
 
                 disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneDataPoints(this::onGiraOneDataPoint);
-
             } catch (GiraOneException exp) {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, exp.getMessage());
             }
@@ -140,7 +150,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
-        logger.info("ConnectionStateChanged to {}", connectionState);
+        logger.debug("ConnectionStateChanged to {}", connectionState);
         if (connectionState == GiraOneConnectionState.Connected) {
             lookupGiraOneProject();
             updateStatus(ThingStatus.ONLINE);

@@ -11,18 +11,6 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.giraone.internal;
-/*
- * Copyright (c) 2010-2025 Contributors to the openHAB project
- *
- * See the NOTICE file(s) distributed with this work for additional
- * information.
- *
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0
- *
- * SPDX-License-Identifier: EPL-2.0
- */
 
 import java.util.Map;
 import java.util.Objects;
@@ -42,6 +30,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
@@ -70,32 +59,43 @@ public class GiraOneThingHandler extends BaseThingHandler {
         super(thing);
     }
 
+    private GiraOneBridge getGiraOneBridge() throws NullPointerException {
+        Objects.requireNonNull(getBridge(), "getBridge() must not evaluate to null");
+        return (GiraOneBridge) Objects.requireNonNull(getBridge().getHandler());
+    }
+
+    @Override
+    public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
+        super.bridgeStatusChanged(bridgeStatusInfo);
+    }
+
     @Override
     public void initialize() {
         logger.debug("initialize {}", getThing().getUID());
-        disposeSubscriptions();
-        if (getBridge() != null) {
+        try {
             this.channelViewId = Integer
                     .parseInt(Objects.requireNonNull(getThing().getProperties().get("channelViewId")));
+            this.giraOneBridge = getGiraOneBridge();
 
-            giraOneBridge = (GiraOneBridge) getBridge().getHandler();
-            if (giraOneBridge != null) {
-                this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
-                        this::onDataPointState);
-                this.disposableOnConnectionState = giraOneBridge.subscribeOnConnectionState(this::onConnectionState);
-            }
-        } else {
-            updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE);
+            this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
+                    this::onDataPointState);
+
+            this.disposableOnConnectionState = giraOneBridge.subscribeOnConnectionState(this::onConnectionState);
+
+            updateStatus(ThingStatus.ONLINE);
+            giraOneBridge.lookupGiraOneChannelDataPointValues(this.channelViewId);
+        } catch (NullPointerException exp) {
+            updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
         }
     }
 
     private void disposeSubscriptions() {
         try {
-            this.disposableOnDataPointState.dispose();
             this.disposableOnConnectionState.dispose();
+            this.disposableOnDataPointState.dispose();
         } finally {
-            this.disposableOnDataPointState = Disposable.empty();
             this.disposableOnConnectionState = Disposable.empty();
+            this.disposableOnDataPointState = Disposable.empty();
         }
     }
 
@@ -114,11 +114,13 @@ public class GiraOneThingHandler extends BaseThingHandler {
     }
 
     private void onConnectionState(GiraOneConnectionState connectionState) {
+        logger.debug("ConnectionStateChanged to {}", connectionState);
         if (connectionState == GiraOneConnectionState.Connected) {
             Objects.requireNonNull(giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
             updateStatus(ThingStatus.ONLINE);
         } else {
-            updateStatus(ThingStatus.UNINITIALIZED, ThingStatusDetail.BRIDGE_OFFLINE);
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE,
+                    String.format("Bridge has GiraOneConnectionState of %s", connectionState.name()));
         }
     }
 

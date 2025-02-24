@@ -62,7 +62,10 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
             List<GiraOneProjectChannel> channels = content.asList().stream().filter(this::isProjectChannelObject)
                     .map(f -> makeChannel(f, jsonDeserializationContext)).collect(Collectors.toList());
 
-            return new GiraOneProject(root, channels);
+            if (root != null) {
+                return new GiraOneProject(root, channels);
+            }
+            return GiraOneProject.empty();
         }
         throw new JsonParseException("Cannot parse received JsonArray.");
     }
