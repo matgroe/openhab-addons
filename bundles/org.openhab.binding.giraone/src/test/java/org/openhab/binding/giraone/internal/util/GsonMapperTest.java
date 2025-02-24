@@ -120,7 +120,6 @@ public class GsonMapperTest {
         assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
         GiraOneProject g1Project = response.getReply(GiraOneProject.class);
         assertNotNull(g1Project);
-        g1Project.lookupChannels().forEach(System.out::println);
     }
 
     @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneProcessView")
@@ -131,7 +130,6 @@ public class GsonMapperTest {
         assertEquals(GiraOneCommand.GetProcessView, response.getRequestServerCommand().getCommand());
         GiraOneProcessView processView = response.getReply(GiraOneProcessView.class);
         assertNotNull(processView);
-        processView.getDatapoints().forEach(System.out::println);
     }
 
     @DisplayName("message should deserialize to GiraOneCommandResponse of with GiraOneProcessView")
@@ -142,6 +140,5 @@ public class GsonMapperTest {
         assertEquals(GiraOneCommand.GetValue, response.getRequestServerCommand().getCommand());
         GiraOneChannelDataPoint state = response.getReply(GiraOneChannelDataPoint.class);
         assertNotNull(state);
-        // processView.getDatapoints().forEach(System.out::println);
     }
 }

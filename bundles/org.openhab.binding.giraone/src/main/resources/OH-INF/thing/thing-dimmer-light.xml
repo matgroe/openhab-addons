@@ -8,24 +8,6 @@
 		All Non-Known Devices are getting mapped to the unkown thing
 		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
 	-->
-	<thing-type id="generic">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-
-		<label>Generic Device</label>
-		<description>Generic device with all ..</description>
-		<representation-property>channelUrn</representation-property>
-
-		<config-description>
-			<parameter name="channelUrn" type="text" required="true">
-				<label>Unique Device Id</label>
-				<description>This is the unique id of the free@home device (Please do not modify after the Thing is generated)</description>
-			</parameter>
-		</config-description>
-
-	</thing-type>
-
 	<thing-type id="dimmer-light">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>

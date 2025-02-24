@@ -42,7 +42,7 @@ public class GiraOneHandlerFactory extends BaseThingHandlerFactory {
     @Override
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
-        if (BRIDGE_TYPE_UID.equals(thingTypeUID)) {
+        if (thing instanceof Bridge && BRIDGE_TYPE_UID.equals(thingTypeUID)) {
             return new GiraOneBridgeHandler((Bridge) thing);
         } else {
             return new GiraOneThingHandler(thing);

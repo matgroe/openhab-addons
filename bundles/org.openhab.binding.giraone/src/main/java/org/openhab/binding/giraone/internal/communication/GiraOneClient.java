@@ -169,7 +169,6 @@ public class GiraOneClient implements WebSocketListener {
         this.connectionState.onNext(GiraOneConnectionState.Connecting);
 
         observeAndEmitDataPointValues();
-
         HttpClient httpClient = new HttpClient(new SslContextFactory.Client(true));
         WebSocketClient webSocketClient = createWebSocketClient(httpClient);
         initiateWebsocketSession(webSocketClient);
@@ -195,6 +194,10 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     void observeAndEmitDataPointValues() {
+        // dispose existing observable
+        dataPointDisposabe.dispose();
+
+        // and create a new one
         dataPointDisposabe = Observable
                 .merge(this.responses.filter(f -> f.getRequestServerCommand().getCommand() == GiraOneCommand.GetValue)
                         .map(this::createGiraOneChannelDataPoint), this.events.map(this::createGiraOneChannelDataPoint))
@@ -253,7 +256,7 @@ public class GiraOneClient implements WebSocketListener {
     void send(ServerCommand command) {
         try {
             String message = gson.toJson(command, ServerCommand.class);
-            logger.debug("ServerCommand '{}' :: {}", command.getCommand(), message);
+            logger.trace("ServerCommand '{}' :: {}", command.getCommand(), message);
             Objects.requireNonNull(websocketSession).getRemote().sendString(message);
         } catch (IOException exp) {
             throw new GiraOneException("Error on executing server command", exp);
@@ -289,7 +292,7 @@ public class GiraOneClient implements WebSocketListener {
 
     @Override
     public void onWebSocketText(String message) {
-        logger.debug("Received Message :: {}", message);
+        logger.trace("Received Message :: {}", message);
         GiraOneMessageType type = gson.fromJson(message, GiraOneMessageType.class);
         switch (type) {
             case Event -> this.events.onNext(gson.fromJson(message, GiraOneEvent.class));
@@ -299,7 +302,7 @@ public class GiraOneClient implements WebSocketListener {
 
     @Override
     public void onWebSocketClose(int code, String reason) {
-        logger.debug("WebSocket is closed with code={} and reason={}", code, reason);
+        logger.info("WebSocket is closed with code={} and reason={}", code, reason);
         this.connectionState.onNext(GiraOneConnectionState.Disconnected);
     }
 

@@ -13,8 +13,9 @@
 
 package org.openhab.binding.giraone.internal.discovery;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HOST;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.THING_TYPE_G1_SERVER;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
 
 import java.util.Map;
 import java.util.Objects;
@@ -42,7 +43,12 @@ public class GiraOneDiscoveryParticipant implements UpnpDiscoveryParticipant {
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypeUIDs() {
-        return Set.of(THING_TYPE_G1_SERVER);
+        return SUPPORTED_THING_TYPE_UID;
+    }
+
+    private boolean isValidRemoteDevice(RemoteDevice device) {
+        return DEVICE_NAMESPACE.equals(device.getType().getNamespace())
+                && DEVICE_TYPE.equals(device.getType().getType());
     }
 
     @Override
@@ -56,7 +62,7 @@ public class GiraOneDiscoveryParticipant implements UpnpDiscoveryParticipant {
             String udn = device.getIdentity().getUdn().getIdentifierString();
             String firmwareVersion = device.getDetails().getSerialNumber().split(",")[1];
             String host = device.getIdentity().getDescriptorURL().getHost();
-            String label = String.format("%s (%s)", model, firmwareVersion);
+            String label = String.format("%s (%s)", model, host);
 
             logger.info("Found device {} -- {}@{} :: FW='', SN#='{}'", udn, model, host, firmwareVersion, serialNumber);
 
@@ -71,6 +77,11 @@ public class GiraOneDiscoveryParticipant implements UpnpDiscoveryParticipant {
 
     @Override
     public @Nullable ThingUID getThingUID(RemoteDevice device) {
-        return new ThingUID(THING_TYPE_G1_SERVER, device.getDetails().getModelDetails().getModelNumber().toLowerCase());
+        if (this.isValidRemoteDevice(device)) {
+            logger.info("getThingUID {}, {}", BRIDGE_TYPE_UID,
+                    device.getDetails().getModelDetails().getModelNumber().toLowerCase());
+            return new ThingUID(BRIDGE_TYPE_UID, device.getDetails().getModelDetails().getModelNumber().toLowerCase());
+        }
+        return null;
     }
 }

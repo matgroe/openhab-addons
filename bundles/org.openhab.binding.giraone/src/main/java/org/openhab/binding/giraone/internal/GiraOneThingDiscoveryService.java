@@ -13,6 +13,7 @@
 package org.openhab.binding.giraone.internal;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -109,10 +110,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     private String formatThingTypeId(GiraOneProjectChannel channel) {
         switch (channel.getFunctionType()) {
-            case Covering -> {
-                return CaseFormatter
-                        .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelType().toString());
-            }
             case Status -> {
                 return CaseFormatter
                         .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelTypeId().toString());
@@ -140,7 +137,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
 
         Map<String, Object> properties = new HashMap<>(20);
-        properties.put("timestamp", System.currentTimeMillis());
+        properties.put("timestamp", new Date().toString());
         properties.put("channelId", channel.getChannelId());
         properties.put("channelUrn", channel.getChannelUrn());
         properties.put("channelViewId", channel.getChannelViewId());
