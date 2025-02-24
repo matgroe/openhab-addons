@@ -73,6 +73,7 @@ public class GiraOneThingHandler extends BaseThingHandler {
     @Override
     public void initialize() {
         logger.debug("initialize {}", getThing().getUID());
+        disposeSubscriptions();
         if (getBridge() != null) {
             this.channelViewId = Integer
                     .parseInt(Objects.requireNonNull(getThing().getProperties().get("channelViewId")));
@@ -88,16 +89,20 @@ public class GiraOneThingHandler extends BaseThingHandler {
         }
     }
 
-    @Override
-    public void dispose() {
+    private void disposeSubscriptions() {
         try {
             this.disposableOnDataPointState.dispose();
             this.disposableOnConnectionState.dispose();
-            super.dispose();
         } finally {
             this.disposableOnDataPointState = Disposable.empty();
             this.disposableOnConnectionState = Disposable.empty();
         }
+    }
+
+    @Override
+    public void dispose() {
+        disposeSubscriptions();
+        super.dispose();
     }
 
     private void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {

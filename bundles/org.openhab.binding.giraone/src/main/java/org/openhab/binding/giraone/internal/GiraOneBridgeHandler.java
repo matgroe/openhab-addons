@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConfiguration;
@@ -57,7 +56,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     private Disposable disposableConnectionState = Disposable.empty();
     private Disposable disposableDataPoint = Disposable.empty();
 
-    public GiraOneBridgeHandler(@NonNull Bridge bridge) {
+    public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
         this.giraOneServerClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
     }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<!--
+		All Non-Known Devices are getting mapped to the unkown thing
+		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
+	-->
+	<thing-type id="heating-cooling-underfloor">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+
+		<label>Heating/Cooling</label>
+		<description>Underfloor Heating or Cooling</description>
+
+		<channels>
+			<!-- channel id="current" typeId="system.atmospheric-humidity"/ -->
+			<channel id="set-point" typeId="set-point-temperature"/>
+			<channel id="mode" typeId="mode-temperature"/>
+			<!-- channel id="status" typeId="system.atmospheric-humidity"/ -->
+			<!-- channel id="heating" typeId="system.atmospheric-humidity"/ -->
+		</channels>
+	</thing-type>
+
+	<channel-type id="set-point-temperature" advanced="true">
+		<item-type>Number</item-type>
+		<label>Setpoint Temperature</label>
+		<category>Temperature</category>
+		<state min="12" max="30" step="0.5" pattern="%.1f °C" readOnly="false"/>
+	</channel-type>
+
+	<channel-type id="mode-temperature">
+		<kind>trigger</kind>
+		<label>Operation Mode</label>
+		<event>
+			<options>
+				<option value="1">Komfort</option>
+				<option value="2">Standby</option>
+				<option value="3">Nacht</option>
+				<option value="4">Frostschutz</option>
+			</options>
+		</event>
+	</channel-type>
+
+</thing:thing-descriptions>
