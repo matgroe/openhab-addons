@@ -54,9 +54,9 @@ class GiraOneProjectTest {
     @Test
     void shouldFindChannelByUrn() {
         String urn = "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-23";
-        Optional<GiraOneProjectChannel> channel = project.lookupChannelByChannelUrn(urn);
+        Optional<GiraOneProjectChannel> channel = project.lookupChannelByChannelViewUrn(urn);
         assertTrue(channel.isPresent());
-        assertEquals(urn, channel.get().getChannelUrn());
+        assertEquals(urn, channel.get().getChannelViewUrn());
     }
 
     @DisplayName("should lookup channels by GiraOneFunctionType")

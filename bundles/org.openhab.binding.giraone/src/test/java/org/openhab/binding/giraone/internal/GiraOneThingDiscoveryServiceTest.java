@@ -89,11 +89,11 @@ class GiraOneThingDiscoveryServiceTest {
     private static Stream<Arguments> provideForTestDetectThingTypeUid() {
         return Stream.of(
                 Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Shutter, GiraOneChannelTypeId.RoofWindow,
-                        GiraOneBindingConstants.COVERING_SHUTTER_TYPE_ID),
+                        GiraOneBindingConstants.SHUTTER_ROOF_WINDOW_TYPE_ID),
                 Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Shutter, GiraOneChannelTypeId.Awning,
-                        GiraOneBindingConstants.COVERING_SHUTTER_TYPE_ID),
+                        GiraOneBindingConstants.SHUTTER_AWNING_TYPE_ID),
                 Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Shutter,
-                        GiraOneChannelTypeId.VenetianBlind, GiraOneBindingConstants.COVERING_SHUTTER_TYPE_ID),
+                        GiraOneChannelTypeId.VenetianBlind, GiraOneBindingConstants.SHUTTER_VENETIAN_BLIND_TYPE_ID),
                 Arguments.of(GiraOneFunctionType.Covering, GiraOneChannelType.Unknown,
                         GiraOneChannelTypeId.VenetianBlind, GiraOneBindingConstants.GENERIC_TYPE_ID),
                 Arguments.of(GiraOneFunctionType.Light, GiraOneChannelType.Dimmer, GiraOneChannelTypeId.Light,

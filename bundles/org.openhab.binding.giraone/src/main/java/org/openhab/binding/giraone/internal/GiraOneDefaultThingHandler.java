@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import java.util.Map;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
+
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ScheduledFuture;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -26,11 +26,12 @@ import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.StopMoveType;
+import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
-import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
@@ -40,56 +41,41 @@ import org.slf4j.LoggerFactory;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
- * The {@link GiraOneThingHandler} is responsible for handling commands, which are
+ * The {@link GiraOneDefaultThingHandler} is responsible for handling commands, which are
  * sent to one of the channels.
  *
  * @author matthias - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneThingHandler extends BaseThingHandler {
+public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(GiraOneThingHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(GiraOneDefaultThingHandler.class);
     private int channelViewId;
-    private @Nullable ScheduledFuture<?> backgroundDiscoveryJob = null;
     private @Nullable GiraOneBridge giraOneBridge;
     private Disposable disposableOnDataPointState = Disposable.empty();
     private Disposable disposableOnConnectionState = Disposable.empty();
 
-    public GiraOneThingHandler(Thing thing) {
+    public GiraOneDefaultThingHandler(Thing thing) {
         super(thing);
     }
 
-    private GiraOneBridge getGiraOneBridge() throws NullPointerException {
+    protected GiraOneBridge getGiraOneBridge() throws NullPointerException {
         Objects.requireNonNull(getBridge(), "getBridge() must not evaluate to null");
         return (GiraOneBridge) Objects.requireNonNull(getBridge().getHandler());
-    }
-
-    @Override
-    public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
-        super.bridgeStatusChanged(bridgeStatusInfo);
     }
 
     @Override
     public void initialize() {
         logger.debug("initialize {}", getThing().getUID());
         try {
-            this.channelViewId = Integer
-                    .parseInt(Objects.requireNonNull(getThing().getProperties().get("channelViewId")));
             this.giraOneBridge = getGiraOneBridge();
-
-            this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
-                    this::onDataPointState);
-
             this.disposableOnConnectionState = giraOneBridge.subscribeOnConnectionState(this::onConnectionState);
-
-            updateStatus(ThingStatus.ONLINE);
-            giraOneBridge.lookupGiraOneChannelDataPointValues(this.channelViewId);
         } catch (NullPointerException exp) {
             updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
         }
     }
 
-    private void disposeSubscriptions() {
+    protected void disposeSubscriptions() {
         try {
             this.disposableOnConnectionState.dispose();
             this.disposableOnDataPointState.dispose();
@@ -105,7 +91,13 @@ public class GiraOneThingHandler extends BaseThingHandler {
         super.dispose();
     }
 
-    private void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
+    /**
+     * Handler function for receiving {@link GiraOneChannelDataPoint} which contains
+     * the value for an item channel.
+     * 
+     * @param giraOneDataPointState
+     */
+    protected void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
         logger.debug("onDataPointState {}", giraOneDataPointState);
         if (giraOneDataPointState.getValue() != null) {
             String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getName());
@@ -113,30 +105,44 @@ public class GiraOneThingHandler extends BaseThingHandler {
         }
     }
 
-    private void onConnectionState(GiraOneConnectionState connectionState) {
+    /**
+     * Handler function for receiving updates on the {@link GiraOneBridge} connection state.
+     *
+     * @param connectionState The {@link GiraOneBridgeConnectionState}.
+     */
+    protected void onConnectionState(GiraOneBridgeConnectionState connectionState) {
         logger.debug("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneConnectionState.Connected) {
-            Objects.requireNonNull(giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
-            updateStatus(ThingStatus.ONLINE);
+        if (connectionState == GiraOneBridgeConnectionState.Connected) {
+            this.channelViewId = detectChannelViewId();
+            if (this.channelViewId > 0 && giraOneBridge != null) {
+                this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
+                        this::onDataPointState);
+                giraOneBridge.lookupGiraOneChannelDataPointValues(this.channelViewId);
+                updateStatus(ThingStatus.ONLINE);
+            } else {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+            }
         } else {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE,
-                    String.format("Bridge has GiraOneConnectionState of %s", connectionState.name()));
+                    String.format("Bridge has GiraOneBridgeConnectionState of %s", connectionState.name()));
         }
     }
 
-    @Override
-    public void handleConfigurationUpdate(Map<String, Object> configurationParameters) {
-        logger.debug("handleConfigurationUpdate {}", configurationParameters);
-        super.handleConfigurationUpdate(configurationParameters);
+    /**
+     *
+     * @return an {@link Optional<GiraOneProjectChannel>}
+     */
+    protected Optional<GiraOneProjectChannel> lookupGiraOneProjectChannel() {
+        String channelViewUrn = Objects.requireNonNull(getThing().getProperties().get(PROPERTY_CHANNELVIEW_URN));
+        return Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
+                .lookupChannelByChannelViewUrn(channelViewUrn);
     }
 
-    @Override
-    public void thingUpdated(Thing thing) {
-        logger.debug("thingUpdated {}", thing);
-        super.thingUpdated(thing);
+    protected int detectChannelViewId() {
+        return lookupGiraOneProjectChannel().map(GiraOneProjectChannel::getChannelViewId).orElse(0);
     }
 
-    private Optional<GiraOneDataPoint> findGiraOneDataPoint(final String ohChannel) {
+    protected Optional<GiraOneDataPoint> findGiraOneDataPoint(final String ohChannel) {
         Optional<GiraOneProjectChannel> channel = Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
                 .lookupChannelByChannelViewId(this.channelViewId);
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
@@ -147,11 +153,13 @@ public class GiraOneThingHandler extends BaseThingHandler {
     public void handleCommand(ChannelUID channelUID, Command command) {
         Optional<GiraOneDataPoint> datapoint = findGiraOneDataPoint(channelUID.getId());
         if (datapoint.isPresent()) {
-            logger.debug("handleCommand {}, {}", channelUID, command);
+            logger.debug("handleCommand :: channelUID={}, command={}", channelUID, command);
             switch ((Object) command) {
                 case RefreshType cmd -> handleRefreshTypeCommand(cmd);
                 case DecimalType cmd -> handleDecimalTypeCommand(datapoint.get(), cmd);
                 case OnOffType cmd -> handleOnOffTypeCommand(datapoint.get(), cmd);
+                case UpDownType cmd -> handleUpDownType(datapoint.get(), cmd);
+                case StopMoveType cmd -> handleStopMoveType(datapoint.get(), cmd);
                 default -> throw new IllegalStateException("Unsupported value: " + (Object) command);
             }
         } else {
@@ -159,16 +167,31 @@ public class GiraOneThingHandler extends BaseThingHandler {
         }
     }
 
-    void handleRefreshTypeCommand(RefreshType command) {
+    protected void handleRefreshTypeCommand(RefreshType command) {
+        logger.trace("handleRefreshTypeCommand :: channelViewId={}, command={}", this.channelViewId, command);
         Objects.requireNonNull(this.giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
     }
 
-    void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {
+    protected void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {
+        logger.trace("handleDecimalTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.intValue());
         Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, command.intValue());
     }
 
-    void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
+    protected void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
+        logger.trace("handleOnOffTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.name());
         String value = command == OnOffType.ON ? "1" : "0";
         Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, value);
+    }
+
+    protected void handleUpDownType(GiraOneDataPoint datapoint, UpDownType command) {
+        logger.trace("handleUpDownType :: datapoint={}, command={}", datapoint.getId(), command.name());
+        switch (command) {
+            case DOWN -> Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, 100);
+            case UP -> Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, 0);
+        }
+    }
+
+    protected void handleStopMoveType(GiraOneDataPoint datapoint, StopMoveType command) {
+        logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint.getId(), command.name());
     }
 }

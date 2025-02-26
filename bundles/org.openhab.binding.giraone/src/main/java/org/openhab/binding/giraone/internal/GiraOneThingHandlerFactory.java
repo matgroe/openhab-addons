@@ -25,14 +25,14 @@ import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * The {@link GiraOneHandlerFactory} is responsible for creating things and thing
+ * The {@link GiraOneThingHandlerFactory} is responsible for creating things and thing
  * handlers.
  *
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
 @Component(configurationPid = "binding.giraone", service = ThingHandlerFactory.class)
-public class GiraOneHandlerFactory extends BaseThingHandlerFactory {
+public class GiraOneThingHandlerFactory extends BaseThingHandlerFactory {
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -44,8 +44,10 @@ public class GiraOneHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
         if (thing instanceof Bridge && BRIDGE_TYPE_UID.equals(thingTypeUID)) {
             return new GiraOneBridgeHandler((Bridge) thing);
+        } else if (SUPPORTED_SHUTTER_THING_TYPE_UID.contains(thingTypeUID)) {
+            return new GiraOneShutterThingHandler(thing);
         } else {
-            return new GiraOneThingHandler(thing);
+            return new GiraOneDefaultThingHandler(thing);
         }
     }
 }

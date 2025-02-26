@@ -12,8 +12,15 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
+
 import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,7 +54,8 @@ import io.reactivex.rxjava3.disposables.Disposable;
 @NonNullByDefault
 public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryService<GiraOneBridgeHandler> {
     private static final int TIMEOUT = 60;
-    private static final int BACKGROUND_DISCOVERY_DELAY = 5;
+    private static final int BACKGROUND_DISCOVERY_DELAY = 15;
+    private static final int BACKGROUND_DISCOVERY_REPEAT_AFTER = 300;
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneThingDiscoveryService.class);
 
@@ -93,7 +101,8 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     @Override
     protected void startScan() {
-        backgroundDiscoveryJob = scheduler.schedule(runnable, BACKGROUND_DISCOVERY_DELAY, TimeUnit.SECONDS);
+        backgroundDiscoveryJob = this.scheduler.schedule(this::discoverDevices, BACKGROUND_DISCOVERY_DELAY,
+                TimeUnit.SECONDS);
     }
 
     private void discoverDevices() {
@@ -137,20 +146,20 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
 
         Map<String, Object> properties = new HashMap<>(20);
-        properties.put("timestamp", new Date().toString());
-        properties.put("channelId", channel.getChannelId());
-        properties.put("channelUrn", channel.getChannelUrn());
-        properties.put("channelViewId", channel.getChannelViewId());
-        properties.put("channelViewUrn", channel.getChannelViewUrn());
-        properties.put("functionType", channel.getFunctionType().getName());
-        properties.put("channelType", channel.getChannelType().getName());
-        properties.put("channelTypeId", channel.getChannelTypeId().getName());
+        properties.put(PROPERTY_CHANNEL_ID, channel.getChannelId());
+        properties.put(PROPERTY_CHANNEL_URN, channel.getChannelUrn());
+        properties.put(PROPERTY_CHANNELVIEW_ID, channel.getChannelViewId());
+        properties.put(PROPERTY_CHANNELVIEW_URN, channel.getChannelViewUrn());
+        properties.put(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
+        properties.put(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
+        properties.put(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
 
         String label = channel.getName();
         String thingId = String.format("%d", channel.getChannelViewId());
 
         return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId)).withLabel(label)
-                .withBridge(bridgeUID).withProperties(properties).withRepresentationProperty("channelViewUrn").build();
+                .withBridge(bridgeUID).withProperties(properties).withRepresentationProperty(PROPERTY_CHANNELVIEW_URN)
+                .build();
     }
 
     Runnable runnable = new Runnable() {
@@ -175,9 +184,9 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         stopBackgroundScanning();
     }
 
-    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
+    private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
         logger.info("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneConnectionState.Connected) {
+        if (connectionState == GiraOneBridgeConnectionState.Connected) {
             discoverDevices();
         } else {
             stopBackgroundDiscovery();

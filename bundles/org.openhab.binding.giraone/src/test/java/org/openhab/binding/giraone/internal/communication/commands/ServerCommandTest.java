@@ -49,12 +49,6 @@ class ServerCommandTest {
     }
 
     @Test
-    void shouldBuildGiraOneCommandGetProcessView() {
-        GetProcessView cmd = GetProcessView.builder().build();
-        assertEquals(GiraOneCommand.GetProcessView, cmd.getCommand());
-    }
-
-    @Test
     void shouldBuildGiraOneCommandGetValue() {
         GetValue cmd = GetValue.builder().with(GetValue::setUrn, URN).build();
         assertEquals(GiraOneCommand.GetValue, cmd.getCommand());

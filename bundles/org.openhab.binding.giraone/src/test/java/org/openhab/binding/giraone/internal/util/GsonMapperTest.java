@@ -32,7 +32,6 @@ import org.openhab.binding.giraone.internal.communication.commands.GiraOneComman
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
 import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
-import org.openhab.binding.giraone.internal.dto.GiraOneProcessView;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 
 import com.google.gson.Gson;
@@ -111,7 +110,7 @@ public class GsonMapperTest {
         assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
     }
 
-    @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneDeviceConfiguration")
+    @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneDeviceConfiguration")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneDeviceConfiguration() {
         GiraOneCommandResponse response = createGiraOneCommandResponseFrom(
@@ -122,17 +121,7 @@ public class GsonMapperTest {
         assertNotNull(g1Project);
     }
 
-    @DisplayName("message should deserialize to GiraOneCommandResponse with GiraOneProcessView")
-    @Test
-    void shouldDeserialize2GiraOneCommandResponseWithGiraOneProcessView() {
-        GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/3.GetProcessView/001-resp.json");
-        assertNotNull(response);
-        assertEquals(GiraOneCommand.GetProcessView, response.getRequestServerCommand().getCommand());
-        GiraOneProcessView processView = response.getReply(GiraOneProcessView.class);
-        assertNotNull(processView);
-    }
-
-    @DisplayName("message should deserialize to GiraOneCommandResponse of with GiraOneProcessView")
+    @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneChannelDataPoint")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneValue() {
         GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/2.GetValue/001-resp.json");

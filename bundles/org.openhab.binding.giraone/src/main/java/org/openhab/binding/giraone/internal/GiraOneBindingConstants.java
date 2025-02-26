@@ -13,6 +13,8 @@
 package org.openhab.binding.giraone.internal;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.thing.ThingTypeUID;
@@ -29,6 +31,15 @@ public class GiraOneBindingConstants {
     public static final String HOST = "hostname";
     public static final String USER_NAME = "username";
 
+    // Thing Property Names
+    public static final String PROPERTY_CHANNEL_ID = "channelId";
+    public static final String PROPERTY_CHANNEL_URN = "channelUrn";
+    public static final String PROPERTY_CHANNELVIEW_ID = "channelViewId";
+    public static final String PROPERTY_CHANNELVIEW_URN = "channelViewUrn";
+    public static final String PROPERTY_FUNCTION_TYPE = "functionType";
+    public static final String PROPERTY_CHANNEL_TYPE = "channelType";
+    public static final String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";
+
     // List of all ThingTypeIDs
     public static final String BINDING_ID = "giraone";
     public static final String BRIDGE_TYPE_ID = "server";
@@ -40,25 +51,38 @@ public class GiraOneBindingConstants {
     public static final String SCENE_TYPE_ID = "function-scene";
     public static final String SWITCH_LAMP_TYPE_ID = "switch-lamp";
     public static final String SWITCH_POWER_OUTLET_TYPE_ID = "switch-power-outlet";
-    public static final String COVERING_SHUTTER_TYPE_ID = "covering-shutter";
+    public static final String SHUTTER_VENETIAN_BLIND_TYPE_ID = "shutter-venetian-blind";
+    public static final String SHUTTER_ROOF_WINDOW_TYPE_ID = "shutter-roof-window";
+    public static final String SHUTTER_AWNING_TYPE_ID = "shutter-awning";
 
     /**
      * The {@link ThingTypeUID} for the GiraOne Bridge
      */
     public static final ThingTypeUID BRIDGE_TYPE_UID = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_ID);
     public static final ThingTypeUID GENERIC_TYPE_UID = new ThingTypeUID(BINDING_ID, GENERIC_TYPE_ID);
-    /**
-     * List of all supported {@link ThingTypeUID} within this binding.
-     */
-    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPE_UID = Set.of(BRIDGE_TYPE_UID, GENERIC_TYPE_UID,
+
+    public static final Set<ThingTypeUID> SUPPORTED_SHUTTER_THING_TYPE_UID = Set.of(
+            new ThingTypeUID(BINDING_ID, SHUTTER_VENETIAN_BLIND_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SHUTTER_AWNING_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SHUTTER_ROOF_WINDOW_TYPE_ID));
+
+    public static final Set<ThingTypeUID> SUPPORTED_GENERIC_TYPE_UID = Set.of(BRIDGE_TYPE_UID, GENERIC_TYPE_UID,
             new ThingTypeUID(BINDING_ID, DIMMER_TYPE_ID), new ThingTypeUID(BINDING_ID, HEATING_COOLING_TYPE_ID),
             new ThingTypeUID(BINDING_ID, HUMIDITY_TYPE_ID), new ThingTypeUID(BINDING_ID, TEMPERATURE_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SCENE_TYPE_ID), new ThingTypeUID(BINDING_ID, SWITCH_LAMP_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SWITCH_POWER_OUTLET_TYPE_ID),
-            new ThingTypeUID(BINDING_ID, COVERING_SHUTTER_TYPE_ID));
+            new ThingTypeUID(BINDING_ID, SHUTTER_VENETIAN_BLIND_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SHUTTER_AWNING_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SHUTTER_ROOF_WINDOW_TYPE_ID));
+
+    /**
+     * List of all supported {@link ThingTypeUID} within this binding.
+     */
+    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPE_UID = Stream
+            .concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream())
+            .collect(Collectors.toUnmodifiableSet());
 
     // List of all Channel ids
-    public static final String CHANNEL_1 = "channel1";
     public static final String CHANNEL_ON_OFF = "on-off";
     public static final String CHANNEL_SHIFT = "shift";
     public static final String CHANNEL_BRIGHTNESS = "brightness";
