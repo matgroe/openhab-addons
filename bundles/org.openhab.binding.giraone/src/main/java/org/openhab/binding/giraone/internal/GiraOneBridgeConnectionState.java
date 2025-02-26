@@ -15,14 +15,14 @@ package org.openhab.binding.giraone.internal;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * The enumeration {@link GiraOneConnectionState} is responsible for describing
+ * The enumeration {@link GiraOneBridgeConnectionState} is responsible for describing
  * the current connection state between {@link GiraOneBridge} und the physical
  * GiraOne Server within your network.
  *
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
-public enum GiraOneConnectionState {
+public enum GiraOneBridgeConnectionState {
     Disconnected,
     Connecting,
     Connected,

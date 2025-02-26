@@ -41,7 +41,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommandSequence;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
@@ -97,10 +97,10 @@ class GiraOneClientTest {
     @DisplayName("Test Connect, Register and Disconnect against Gira One Server Websocket")
     @Test
     void testConnectRegisterAndDisconnect() throws Exception {
-        assertEquals(GiraOneConnectionState.Disconnected, giraClient.connectionState.getValue());
+        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraClient.connectionState.getValue());
 
         giraClient.connect();
-        assertEquals(GiraOneConnectionState.Connecting, giraClient.connectionState.getValue());
+        assertEquals(GiraOneBridgeConnectionState.Connecting, giraClient.connectionState.getValue());
 
         giraClient.onWebSocketConnect(websocketSession);
 
@@ -114,11 +114,11 @@ class GiraOneClientTest {
 
         giraClient.onWebSocketText(ResourceLoader.loadStringResource("/messages/1.RegisterApplication/001-resp.json"));
         await().atMost(ONE_SECOND).untilAsserted(() -> {
-            assertEquals(GiraOneConnectionState.Connected, giraClient.connectionState.getValue());
+            assertEquals(GiraOneBridgeConnectionState.Connected, giraClient.connectionState.getValue());
         });
 
         giraClient.disconnect();
-        assertEquals(GiraOneConnectionState.Disconnected, giraClient.connectionState.getValue());
+        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraClient.connectionState.getValue());
     }
 
     private void sendWebsocketText(final String text) {
@@ -131,10 +131,8 @@ class GiraOneClientTest {
         return Stream.of(
                 Arguments.of("/messages/1.RegisterApplication/001-resp.json", GiraOneCommand.RegisterApplication),
                 Arguments.of("/messages/2.GetUIConfiguration/001-resp.json", GiraOneCommand.GetUIConfiguration),
-                Arguments.of("/messages/3.GetProcessView/001-resp.json", GiraOneCommand.GetProcessView),
                 Arguments.of("/messages/4.GetDeviceConfig/001-resp.json", GiraOneCommand.GetDeviceConfig),
                 Arguments.of("/messages/6.GetNextTriggerTimes/001-resp.json", GiraOneCommand.GetNextTriggerTimes),
-                Arguments.of("/messages/5.GetConfiguration/001-resp.json", GiraOneCommand.GetConfiguration),
                 Arguments.of("/messages/2.GetValue/001-resp.json", GiraOneCommand.GetValue));
     }
 

@@ -37,19 +37,11 @@ public enum GiraOneCommand {
     /** sets a datapoint value */
     SetValue(""),
 
-    /** Reads the current states for all channels */
-    GetProcessView("processView"),
-
     /** Reads the gira one server device configuration */
     GetDeviceConfig("deviceConfig"),
 
     /** Read the trigger times from server */
-    GetNextTriggerTimes("triggerTimes"),
-
-    /** TODO: document */
-    GetConfiguration("object")
-
-    ;
+    GetNextTriggerTimes("triggerTimes");
 
     private final String responsePropertyName;
 

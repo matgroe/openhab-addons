@@ -100,7 +100,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        // intentionally empty, the GiraOneThingHandler is responsible for handling commands
+        // intentionally empty, the GiraOneDefaultThingHandler is responsible for handling commands
     }
 
     @Override
@@ -149,9 +149,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         // "Can not access device as username and/or password are invalid");
     }
 
-    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
+    private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
         logger.debug("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneConnectionState.Connected) {
+        if (connectionState == GiraOneBridgeConnectionState.Connected) {
             lookupGiraOneProject();
             updateStatus(ThingStatus.ONLINE);
         } else {
@@ -185,7 +185,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
-    public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNextEvent) {
+    public Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeConnectionState> onNextEvent) {
         return this.giraOneServerClient.subscribeOnConnectionState(onNextEvent);
     }
 

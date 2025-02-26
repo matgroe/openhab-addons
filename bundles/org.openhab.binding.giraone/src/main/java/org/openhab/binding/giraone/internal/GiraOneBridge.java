@@ -54,18 +54,18 @@ public interface GiraOneBridge {
     void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value);
 
     /**
-     * Observes the {@link GiraOneConnectionState} of the {@link GiraOneBridge}
+     * Observes the {@link GiraOneBridgeConnectionState} of the {@link GiraOneBridge}
      *
-     * @param consumer - The consumer method to receive GiraOneConnectionState Events.
+     * @param consumer - The consumer method to receive GiraOneBridgeConnectionState Events.
      * @return A {@link Disposable}
      */
-    Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> consumer);
+    Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeConnectionState> consumer);
 
     /**
      * Observes all {@link GiraOneChannelDataPoint} for the given channel.
      *
      * @param channelViewId - The channelViewId to observe.
-     * @param consumer - The consumer method to receive GiraOneConnectionState Events.
+     * @param consumer - The consumer method to receive GiraOneBridgeConnectionState Events.
      * @return A {@link Disposable}
      */
     Disposable subscribeOnGiraOneDataPointStates(int channelViewId, Consumer<GiraOneChannelDataPoint> consumer);
