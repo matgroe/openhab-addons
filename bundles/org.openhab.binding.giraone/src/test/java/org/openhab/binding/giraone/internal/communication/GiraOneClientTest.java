@@ -44,7 +44,7 @@ import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommandSequence;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneValue;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
 /**
@@ -160,7 +160,7 @@ class GiraOneClientTest {
     void shoutEmitDatapointOnWebSocketTextWithValueEvent() {
         giraClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/0.Events/001-evt.json"));
-        GiraOneDataPoint dp = giraClient.dataPoints.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
+        GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
         assertNotNull(dp);
     }
 
@@ -169,7 +169,7 @@ class GiraOneClientTest {
     void shoutEmitDatapointOnWebSocketTextWithValueResponse() {
         giraClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/2.GetValue/001-resp.json"));
-        GiraOneDataPoint dp = giraClient.dataPoints.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
+        GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
         assertNotNull(dp);
     }
 
@@ -182,8 +182,8 @@ class GiraOneClientTest {
     void shouldNotEmitDatapointOnWebSocketTextWithCommandResponse(String messageSource) {
         giraClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource(messageSource));
-        GiraOneDataPoint dp = giraClient.dataPoints.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
-                .onErrorComplete().blockingGet();
+        GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).onErrorComplete()
+                .blockingGet();
         assertNull(dp);
     }
 }

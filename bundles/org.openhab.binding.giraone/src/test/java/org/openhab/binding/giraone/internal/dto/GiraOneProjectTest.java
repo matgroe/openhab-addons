@@ -50,10 +50,10 @@ class GiraOneProjectTest {
         assertNotNull(project);
     }
 
-    @DisplayName("should find existing channel by urn")
+    @DisplayName("should find existing channel by channelViewUrn")
     @Test
-    void shouldFindChannelByUrn() {
-        String urn = "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-23";
+    void shouldFindChannelByChannelViewUrn() {
+        String urn = "urn:gds:chv:KNXheating2Fcooling-Heating-Cooling-Switchable-9";
         Optional<GiraOneProjectChannel> channel = project.lookupChannelByChannelViewUrn(urn);
         assertTrue(channel.isPresent());
         assertEquals(urn, channel.get().getChannelViewUrn());
@@ -127,13 +127,11 @@ class GiraOneProjectTest {
 
     @Test
     void testLookupGiraOneChannelDataPoints() {
-        GiraOneDataPoint dp = new GiraOneDataPoint();
-        dp.setId(215656);
-        dp.setValue("12345");
-        dp.setUrn("junit:test:12345");
-        Collection<GiraOneChannelDataPoint> chdps = project.lookupGiraOneChannelDataPoints(dp);
-        assertFalse(chdps.isEmpty());
-        GiraOneChannelDataPoint chdp = (GiraOneChannelDataPoint) chdps.toArray()[0];
-        assertEquals(dp.getId(), chdp.getId());
+        GiraOneDataPoint dp = project.lookupGiraOneDataPoint(215656).orElse(null);
+        assertNotNull(dp);
+        assertEquals(215656, dp.getId());
+        assertEquals("urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Set-Point",
+                dp.getUrn());
+        assertEquals("Set-Point", dp.getName());
     }
 }

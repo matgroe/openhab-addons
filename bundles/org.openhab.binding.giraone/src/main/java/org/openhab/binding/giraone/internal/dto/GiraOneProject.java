@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.giraone.internal.dto;
 
+import org.openhab.binding.giraone.internal.util.GenericBuilder;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -218,13 +220,13 @@ public class GiraOneProject {
      */
     private GiraOneChannelDataPoint createGiraOneChannelDataPoint(GiraOneProjectChannel projectChannel,
             GiraOneDataPoint dataPoint) {
-        GiraOneChannelDataPoint channelDp = new GiraOneChannelDataPoint(dataPoint);
-        channelDp.setChannelViewId(projectChannel.getChannelViewId());
-        channelDp.setChannelViewUrn(projectChannel.getChannelViewUrn());
-        if (projectChannel.getGiraOneDataPoint(dataPoint.getId()).isPresent()) {
-            channelDp.setName(projectChannel.getGiraOneDataPoint(dataPoint.getId()).get().getName());
-        }
-        return channelDp;
+
+        GenericBuilder<GiraOneChannelDataPoint> builder =  GenericBuilder.of(GiraOneChannelDataPoint::new);
+
+        return builder.with(GiraOneChannelDataPoint::setChannelViewId, projectChannel.getChannelViewId())
+                .with(GiraOneChannelDataPoint::setChannelViewUrn,projectChannel.getChannelViewUrn())
+                .with(GiraOneChannelDataPoint::setGiraOneDataPoint, dataPoint).build();
+
     }
 
     /**
@@ -237,5 +239,18 @@ public class GiraOneProject {
     public Collection<GiraOneChannelDataPoint> lookupGiraOneChannelDataPoints(GiraOneDataPoint dataPoint) {
         return this.channels.stream().filter(ch -> ch.containsGiraOneDataPoint(dataPoint.getId()))
                 .map(ch -> createGiraOneChannelDataPoint(ch, dataPoint)).toList();
+    }
+
+    /**
+     * This method iterates searches over all channels for the given dataPointId and returns the
+     * concerning {@link GiraOneDataPoint} if there is any.
+     *
+     * @param dataPointId - The datapoint identifier
+     * @return A {@link Optional} of {@link GiraOneDataPoint}
+     */
+    public Optional<GiraOneDataPoint> lookupGiraOneDataPoint(final int dataPointId) {
+        return this.channels.stream().filter(ch -> ch.containsGiraOneDataPoint(dataPointId))
+                .map(GiraOneProjectChannel::getDataPoints).flatMap(Collection::stream)
+                .filter(x -> x.getId() == dataPointId).findFirst();
     }
 }

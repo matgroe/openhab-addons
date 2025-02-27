@@ -15,15 +15,8 @@ package org.openhab.binding.giraone.internal.dto;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * The GiraOneDataPoint represents a single datapoint like
- * - OnOff
- * - Step-Up-Down
- * - Up-Down
- * - Movement
- * - Position
- * - Slat-Position
- * - Float (e.g. humidity, temperature)
- * and is getting mapped to {@link org.openhab.core.thing.Channel}
+ * The GiraOneDataPoint defines a source of data which may have a
+ * value.
  *
  * @author Matthias Gröger - Initial contribution
  */
@@ -33,7 +26,6 @@ public class GiraOneDataPoint {
     private String dataPointName;
     private int id;
     private String urn;
-    private String value;
 
     public String getName() {
         return dataPointName;
@@ -59,16 +51,8 @@ public class GiraOneDataPoint {
         this.urn = urn;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     @Override
     public String toString() {
-        return String.format("{id=%d, dataPoint=%s, value=%s, urn=%s}", id, dataPointName, value, urn);
+        return String.format("{id=%d, dataPoint=%s, urn=%s}", id, dataPointName, urn);
     }
 }

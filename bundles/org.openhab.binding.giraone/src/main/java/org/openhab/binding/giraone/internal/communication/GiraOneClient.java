@@ -38,8 +38,9 @@ import org.openhab.binding.giraone.internal.communication.commands.GiraOneComman
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
 import org.openhab.binding.giraone.internal.communication.commands.SetValue;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.dto.GiraOneValue;
+import org.openhab.binding.giraone.internal.dto.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.core.id.InstanceUUID;
 import org.slf4j.Logger;
@@ -91,10 +92,10 @@ public class GiraOneClient implements WebSocketListener {
     final Subject<GiraOneEvent> events = PublishSubject.create();
 
     /**
-     * Observe this subject for datapoint values from Gira Server. It combines
-     * value events and GetVale responses as well.
+     * Observe this subject for received values from Gira Server. It combines
+     * value {@link GiraOneEvent} and {@link GetValue} responses as well.
      */
-    final Subject<GiraOneDataPoint> dataPoints = PublishSubject.create();
+    final Subject<GiraOneValue> values = PublishSubject.create();
 
     /** Observe this subject for Gira Server connection state */
     final ReplaySubject<GiraOneBridgeConnectionState> connectionState = ReplaySubject.createWithSize(1);
@@ -213,20 +214,16 @@ public class GiraOneClient implements WebSocketListener {
         // and create a new one
         dataPointDisposabe = Observable
                 .merge(this.responses.filter(f -> f.getRequestServerCommand().getCommand() == GiraOneCommand.GetValue)
-                        .map(this::createGiraOneChannelDataPoint), this.events.map(this::createGiraOneChannelDataPoint))
-                .subscribe(this.dataPoints::onNext);
+                        .map(this::createGiraOneValue), this.events.map(this::createGiraOneValue))
+                .subscribe(this.values::onNext);
     }
 
-    private GiraOneDataPoint createGiraOneChannelDataPoint(GiraOneCommandResponse response) {
-        return response.getReply(GiraOneDataPoint.class);
+    private GiraOneValue createGiraOneValue(GiraOneCommandResponse response) {
+        return response.getReply(GiraOneValue.class);
     }
 
-    private GiraOneDataPoint createGiraOneChannelDataPoint(GiraOneEvent event) {
-        GiraOneDataPoint dataPoint = new GiraOneDataPoint();
-        dataPoint.setId(event.getId());
-        dataPoint.setUrn(event.getUrn());
-        dataPoint.setValue(event.getNewValue());
-        return dataPoint;
+    private GiraOneValue createGiraOneValue(GiraOneEvent event) {
+        return new GiraOneValueChange(event.getId(), event.getNewValue(), event.getOldValue());
     }
 
     public GiraOneProject lookupGiraOneProject() {
@@ -236,7 +233,7 @@ public class GiraOneClient implements WebSocketListener {
         throw new IllegalStateException("Must be in ConnectionState.Connected");
     }
 
-    public void lookupGiraOneDataPoint(final int datapointId) {
+    public void lookupGiraOneValue(final int datapointId) {
         if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
             send(GetValue.builder().with(GetValue::setId, datapointId).build());
         } else {
@@ -244,9 +241,10 @@ public class GiraOneClient implements WebSocketListener {
         }
     }
 
-    public void setGiraOneDataPointValue(final GiraOneDataPoint datapoint, final String value) {
+    public void setGiraOneValue(final GiraOneValue value) {
         if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
-            send(SetValue.builder().with(SetValue::setId, datapoint.getId()).with(SetValue::setValue, value).build());
+            send(SetValue.builder().with(SetValue::setId, value.getId()).with(SetValue::setValue, value.getValue())
+                    .build());
         } else {
             throw new IllegalStateException("Must be in ConnectionState.Connected");
         }
@@ -256,8 +254,8 @@ public class GiraOneClient implements WebSocketListener {
         return this.connectionState.subscribe(onNext);
     }
 
-    public Disposable subscribeOnGiraOneDataPoints(Consumer<GiraOneDataPoint> onNext) {
-        return this.dataPoints.subscribe(onNext);
+    public Disposable subscribeOnGiraOneValues(Consumer<GiraOneValue> onNext) {
+        return this.values.subscribe(onNext);
     }
 
     /**

@@ -42,7 +42,7 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
 
     @Override
     protected void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
-        String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getName());
+        String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getGiraOneDataPoint().getName());
         this.isMoving = (GiraOneBindingConstants.CHANNEL_MOVEMENT.equals(channelId)
                 && "1".equals(giraOneDataPointState.getValue()));
         super.onDataPointState(giraOneDataPointState);

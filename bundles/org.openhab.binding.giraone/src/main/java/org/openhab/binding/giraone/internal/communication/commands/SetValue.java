@@ -28,7 +28,7 @@ public class SetValue extends ServerCommand {
     }
 
     private @Nullable Integer id;
-    private @Nullable String value;
+    private @Nullable Object value;
 
     protected SetValue() {
         super(GiraOneCommand.SetValue);
@@ -42,11 +42,11 @@ public class SetValue extends ServerCommand {
         this.id = id;
     }
 
-    public @Nullable String getValue() {
+    public @Nullable Object getValue() {
         return value;
     }
 
-    public void setValue(@Nullable String value) {
+    public void setValue(@Nullable Object value) {
         this.value = value;
     }
 }

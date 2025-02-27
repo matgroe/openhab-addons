@@ -101,7 +101,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     protected void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
         logger.debug("onDataPointState {}", giraOneDataPointState);
         if (giraOneDataPointState.getValue() != null) {
-            String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getName());
+            String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getGiraOneDataPoint().getName());
             updateState(channelId, ThingStateFactory.from(channelId, giraOneDataPointState.getValue()));
         }
     }
@@ -194,11 +194,12 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     protected void handleStopMoveType(GiraOneDataPoint datapoint, StopMoveType command) {
-        logger.warn("handleStopMoveType is not implemented :: datapoint={}, command={}", datapoint.getId(), command.name());
+        logger.warn("handleStopMoveType is not implemented :: datapoint={}, command={}", datapoint.getId(),
+                command.name());
     }
 
-    protected  void handleStringType(GiraOneDataPoint datapoint, StringType command) {
-        logger.warn("handleStringType is not implemented :: datapoint={}, command={}", datapoint.getId(), command.toString());
+    protected void handleStringType(GiraOneDataPoint datapoint, StringType command) {
+        logger.warn("handleStringType is not implemented :: datapoint={}, command={}", datapoint.getId(),
+                command.toString());
     }
-
 }

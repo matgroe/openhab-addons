@@ -25,6 +25,7 @@ import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
+import org.openhab.binding.giraone.internal.dto.GiraOneValue;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingStatus;
@@ -128,7 +129,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
                 disposableConnectionState = this.giraOneServerClient
                         .subscribeOnConnectionState(this::onConnectionStateChanged);
 
-                disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneDataPoints(this::onGiraOneDataPoint);
+                disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneValues(this::onGiraOneValue);
             } catch (GiraOneException exp) {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, exp.getMessage());
             }
@@ -159,8 +160,10 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         }
     }
 
-    void onGiraOneDataPoint(GiraOneDataPoint dataPoint) {
-        lookupGiraOneProject().lookupGiraOneChannelDataPoints(dataPoint).forEach(channelDataPoints::onNext);
+    void onGiraOneValue(GiraOneValue giraOneValue) {
+        Optional<GiraOneDataPoint> dataPoint = lookupGiraOneProject().lookupGiraOneDataPoint(giraOneValue.getId());
+        dataPoint.ifPresent(giraOneDataPoint -> lookupGiraOneProject().lookupGiraOneChannelDataPoints(giraOneDataPoint)
+                .stream().peek(x -> x.setValue(giraOneValue.getValue().toString())).forEach(channelDataPoints::onNext));
     }
 
     @Override
@@ -176,12 +179,12 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         Optional<GiraOneProjectChannel> channel = this.lookupGiraOneProject()
                 .lookupChannelByChannelViewId(channelViewId);
         channel.ifPresent(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
-                .map(GiraOneDataPoint::getId).forEach(giraOneServerClient::lookupGiraOneDataPoint));
+                .map(GiraOneDataPoint::getId).forEach(giraOneServerClient::lookupGiraOneValue));
     }
 
     @Override
     public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value) {
-        this.giraOneServerClient.setGiraOneDataPointValue(dataPoint, value.toString());
+        this.giraOneServerClient.setGiraOneValue(new GiraOneValue(dataPoint.getId(), value));
     }
 
     @Override
