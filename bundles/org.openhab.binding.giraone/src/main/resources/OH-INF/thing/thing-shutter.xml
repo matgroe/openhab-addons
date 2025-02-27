@@ -13,9 +13,9 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
-
 		<label>Shutter</label>
 		<description>Venetianblind Roller- or Covering Shutter </description>
+		<category>Blinds</category>
 
 		<channels>
 			<channel id="events" typeId="sendEvent"/>
@@ -25,6 +25,15 @@
 			<channel id="position" typeId="shutter-position"/>
 			<channel id="slat-position" typeId="shutter-slat-position"/>
 		</channels>
+
+		<properties>
+			<property name="channelViewUrn">Unique ChannelView URN</property>
+			<property name="functionType">Channel Function Type</property>
+			<property name="channelType">Channel Type</property>
+			<property name="channelTypeId">Channel Type ID</property>
+		</properties>
+		<representation-property>channelViewUrn</representation-property>
+
 	</thing-type>
 
 	<channel-type id="shutter-position">
@@ -41,7 +50,7 @@
 
 	<channel-type id="shutter-slat-position">
 		<item-type>Number:Dimensionless</item-type>
-		<label>Slat Position</label>
+		<label>Shutter Slat Position</label>
 		<description>Change Venetian Blind Slat Position</description>
 		<category>Rollershutter</category>
 		<tags>
@@ -52,11 +61,18 @@
 	</channel-type>
 
 	<channel-type id="shutter-movement">
-		<item-type>Switch</item-type>
-		<label>Shutter Moving</label>
+		<item-type>String</item-type>
+		<label>Shutter Moving State</label>
 		<description>Gives informationa </description>
-		<category>Rollershutter</category>
-		<state readOnly="true"/>
+		<category>Motion</category>
+		<state>
+			<options>
+				<option value="STOPPED">Stopped</option>
+				<option value="UP">Up</option>
+				<option value="DOWN">Down</option>
+			</options>
+		</state>
+		<autoUpdatePolicy>veto</autoUpdatePolicy>
 	</channel-type>
 
 	<channel-type id="shutter-up-down">
@@ -72,7 +88,7 @@
 		<label>Step Up/Down</label>
 		<description>Raise/lower the blind level by single step</description>
 		<category>Rollershutter</category>
-		<state readOnly="false"/>
+		<state/>
 	</channel-type>
 
 	<channel-type id="sendEvent">

@@ -4,10 +4,6 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!--
-		All Non-Known Devices are getting mapped to the unkown thing
-		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
-	-->
 	<thing-type id="generic">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
@@ -24,6 +20,4 @@
 			</parameter>
 		</config-description>
 	</thing-type>
-
-
 </thing:thing-descriptions>

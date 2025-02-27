@@ -27,6 +27,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.websocket.api.CloseStatus;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
@@ -64,6 +65,13 @@ public class GiraOneClient implements WebSocketListener {
     private final static int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * 1024);
     private final static int DEFAULT_TIMEOUT_SECONDS = 10;
     private final static int THREAD_POOL_SIZE = 4;
+
+    // websocket close codes : https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
+    private final static CloseStatus WS_CLOSURE_NORMAL = new CloseStatus(1000, "Normal Closure");
+    private final static CloseStatus WS_CLOSURE_UNSUPPORTED_DATA = new CloseStatus(1003, "Unsupported Data");
+    private final static CloseStatus WS_CLOSURE_UNAUTHORIZED = new CloseStatus(3000, "Unauthorized");
+    private final static CloseStatus WS_CLOSURE_FORBIDDEN = new CloseStatus(3003, "Forbidden");
+
     private final Logger logger = LoggerFactory.getLogger(GiraOneClient.class);
     private final Gson gson;
     private final String giraOneWssEndpoint;
@@ -179,9 +187,13 @@ public class GiraOneClient implements WebSocketListener {
      * Terminate the websocket connection.
      */
     public void disconnect() {
+        disconnect(WS_CLOSURE_NORMAL);
+    }
+
+    private void disconnect(CloseStatus closeStatus) {
         try {
             if (this.websocketSession != null) {
-                this.websocketSession.close();
+                this.websocketSession.close(closeStatus);
             }
             this.jettyThreadPool.stop();
         } catch (Exception e) {

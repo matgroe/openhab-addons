@@ -100,7 +100,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        // intentionally empty, the GiraOneDefaultThingHandler is responsible for handling commands
+        // intentionally empty, the GiraOne*ThingHandler are responsible for handling commands
     }
 
     @Override

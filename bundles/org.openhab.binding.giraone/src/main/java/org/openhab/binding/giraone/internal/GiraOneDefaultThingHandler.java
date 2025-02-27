@@ -27,6 +27,7 @@ import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.StopMoveType;
+import org.openhab.core.library.types.StringType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -160,6 +161,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                 case OnOffType cmd -> handleOnOffTypeCommand(datapoint.get(), cmd);
                 case UpDownType cmd -> handleUpDownType(datapoint.get(), cmd);
                 case StopMoveType cmd -> handleStopMoveType(datapoint.get(), cmd);
+                case StringType cmd -> handleStringType(datapoint.get(), cmd);
                 default -> throw new IllegalStateException("Unsupported value: " + (Object) command);
             }
         } else {
@@ -192,6 +194,11 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     protected void handleStopMoveType(GiraOneDataPoint datapoint, StopMoveType command) {
-        logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint.getId(), command.name());
+        logger.warn("handleStopMoveType is not implemented :: datapoint={}, command={}", datapoint.getId(), command.name());
     }
+
+    protected  void handleStringType(GiraOneDataPoint datapoint, StringType command) {
+        logger.warn("handleStringType is not implemented :: datapoint={}, command={}", datapoint.getId(), command.toString());
+    }
+
 }

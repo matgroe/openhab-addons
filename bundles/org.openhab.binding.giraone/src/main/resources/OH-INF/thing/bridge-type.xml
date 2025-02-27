@@ -39,7 +39,7 @@
 				<advanced>true</advanced>
 			</parameter>
 
-			<parameter name="maxTextMessageSize" type="integer" unit="B" min="100000">
+			<parameter name="maxTextMessageSize" type="integer" min="100000">
 				<label>Maximum number of Bytes to accept from Gira One Server for a single message.</label>
 				<description>Increase this value for large installations.</description>
 				<default>350000</default>

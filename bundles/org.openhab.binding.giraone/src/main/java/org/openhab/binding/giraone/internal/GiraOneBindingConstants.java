@@ -29,12 +29,8 @@ import org.openhab.core.thing.ThingTypeUID;
 public class GiraOneBindingConstants {
     // server config properties
     public static final String HOST = "hostname";
-    public static final String USER_NAME = "username";
 
     // Thing Property Names
-    public static final String PROPERTY_CHANNEL_ID = "channelId";
-    public static final String PROPERTY_CHANNEL_URN = "channelUrn";
-    public static final String PROPERTY_CHANNELVIEW_ID = "channelViewId";
     public static final String PROPERTY_CHANNELVIEW_URN = "channelViewUrn";
     public static final String PROPERTY_FUNCTION_TYPE = "functionType";
     public static final String PROPERTY_CHANNEL_TYPE = "channelType";

@@ -26,9 +26,9 @@
 	</thing-type>
 
 	<channel-type id="current-temperature">
-		<category>TemperatureHot</category>
 		<item-type>Number:Dimensionless</item-type>
 		<label>Current Temperature</label>
+		<category>TemperatureHot</category>
 		<tags>
 			<tag>Measurement</tag>
 			<tag>Temperature</tag>
@@ -37,9 +37,9 @@
 	</channel-type>
 
 	<channel-type id="set-point-temperature">
-		<category>Temperature</category>
 		<item-type>Number</item-type>
 		<label>Setpoint Temperature</label>
+		<category>Temperature</category>
 		<tags>
 			<tag>Setpoint</tag>
 			<tag>Level</tag>

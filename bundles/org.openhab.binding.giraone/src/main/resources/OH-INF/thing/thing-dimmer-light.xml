@@ -4,9 +4,6 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!--
-		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
-	-->
 	<thing-type id="dimmer-light">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
@@ -16,7 +13,6 @@
 		<description>Dimmable Light</description>
 		<channels>
 			<channel id="on-off" typeId="system.power"/>
-			<!-- channel id="shift" typeId="shift"/ -->
 			<channel id="brightness" typeId="system.brightness"/>
 		</channels>
 	</thing-type>
