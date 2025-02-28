@@ -10,10 +10,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * This class describes an project item within the GiraOne Project. A {@link GiraOneProjectItem} might
@@ -22,6 +25,7 @@ import java.util.Collection;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneProjectItem {
     private GiraOneItemMainType mainType;
     private GiraOneItemSubType subType;

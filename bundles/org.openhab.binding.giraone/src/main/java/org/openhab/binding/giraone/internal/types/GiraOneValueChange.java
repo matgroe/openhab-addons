@@ -10,14 +10,14 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * The GiraOneValue represents a changed value for a single source of data
- * within the Gira One project. If offers the current ({@link GiraOneValue#getValue()})
- * and the previous ({@link GiraOneValueChange#getPreviousValue()})value as well.
+ * The {@link GiraOneValueChange} represents value change for a single source of data. The
+ * {@link org.openhab.binding.giraone.internal.communication.GiraOneClient} emits {@link GiraOneValueChange}
+ * as a result after received a {@link GiraOneEvent}
  *
  * @author Matthias Gröger - Initial contribution
  */
@@ -25,16 +25,19 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public class GiraOneValueChange extends GiraOneValue {
 
     /**
-     * The previous value, the current value is available in super class
+     * The previous value, the current value is available via super class
      */
-    private final Object previousValue;
+    private final String previousValue;
 
-    public GiraOneValueChange(int id, Object value, Object previous) {
+    public GiraOneValueChange(int id, String value, String previous) {
         super(id, value);
         this.previousValue = previous;
     }
 
-    public Object getPreviousValue() {
+    /**
+     * @return The previous value
+     */
+    public String getPreviousValue() {
         return previousValue;
     }
 

@@ -10,15 +10,18 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import java.util.Arrays;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * The enumeration of GiraOneFunctionTypes
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault()
 public enum GiraOneFunctionType {
     Light("de.gira.schema.functions.KNX.Light"),
     Covering("de.gira.schema.functions.Covering"),

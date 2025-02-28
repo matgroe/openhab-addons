@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

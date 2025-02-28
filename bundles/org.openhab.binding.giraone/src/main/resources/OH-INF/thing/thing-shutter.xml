@@ -21,7 +21,7 @@
 			<channel id="events" typeId="sendEvent"/>
 			<channel id="step-up-down" typeId="shutter-step-up-down"/>
 			<channel id="up-down" typeId="shutter-up-down"/>
-			<channel id="movement" typeId="shutter-movement"/>
+			<channel id="internal-movement-state" typeId="shutter-movement"/>
 			<channel id="position" typeId="shutter-position"/>
 			<channel id="slat-position" typeId="shutter-slat-position"/>
 		</channels>
@@ -65,7 +65,7 @@
 		<label>Shutter Moving State</label>
 		<description>Gives informationa </description>
 		<category>Motion</category>
-		<state>
+		<state readOnly="true">
 			<options>
 				<option value="STOPPED">Stopped</option>
 				<option value="UP">Up</option>

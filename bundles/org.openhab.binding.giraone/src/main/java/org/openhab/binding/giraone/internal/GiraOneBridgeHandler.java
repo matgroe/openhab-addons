@@ -21,11 +21,11 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneException;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneValue;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
@@ -112,8 +112,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
         this.scheduleBackgroundInitialization();
-
-
     }
 
     private void scheduleBackgroundInitialization() {
@@ -167,8 +165,13 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     void onGiraOneValue(GiraOneValue giraOneValue) {
         lookupGiraOneProject().lookupGiraOneDataPoint(giraOneValue.getId())
                 .ifPresent(giraOneDataPoint -> lookupGiraOneProject().lookupGiraOneChannels(giraOneDataPoint).stream()
-                    .map(channel -> createGiraOneChannelValue(channel, giraOneDataPoint))
-                    .peek(c -> c.setGiraOneValue(giraOneValue)).forEach(channelValues::onNext));
+                        .map(channel -> createGiraOneChannelValue(channel, giraOneDataPoint))
+                        .peek(c -> c.setGiraOneValue(giraOneValue)).peek(this::write2Log)
+                        .forEach(channelValues::onNext));
+    }
+
+    private void write2Log(GiraOneChannelValue giraOneChannelValue) {
+        this.logger.debug("emitting GiraOneChannelValue :: {}", giraOneChannelValue);
     }
 
     @Override
@@ -187,7 +190,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
-    public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value) {
+    public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, String value) {
         this.giraOneServerClient.setGiraOneValue(new GiraOneValue(dataPoint.getId(), value));
     }
 

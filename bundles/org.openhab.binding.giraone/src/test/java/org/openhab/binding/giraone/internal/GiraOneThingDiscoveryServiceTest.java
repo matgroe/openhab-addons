@@ -18,6 +18,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,11 +29,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelType;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelTypeId;
-import org.openhab.binding.giraone.internal.dto.GiraOneFunctionType;
-import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 import org.openhab.core.thing.Bridge;
@@ -46,6 +48,7 @@ import com.google.gson.Gson;
  *
  * @author Matthias Groeger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 class GiraOneThingDiscoveryServiceTest {
     private GiraOneThingDiscoveryService discoveryService = spy(GiraOneThingDiscoveryService.class);
 

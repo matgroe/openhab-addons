@@ -10,11 +10,14 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +26,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneChannel {
 
     @SerializedName(value = "channelID")

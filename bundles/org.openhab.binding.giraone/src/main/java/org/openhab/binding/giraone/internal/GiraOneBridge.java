@@ -13,9 +13,9 @@
 package org.openhab.binding.giraone.internal;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.dto.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -59,7 +59,7 @@ public interface GiraOneBridge {
      * @param dataPoint The {@link GiraOneDataPoint} to change.
      * @param value The new value
      */
-    void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value);
+    void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, String value);
 
     /**
      * Observes all {@link GiraOneChannelValue} for the given channel.

@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
@@ -44,7 +46,9 @@ import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommandSequence;
-import org.openhab.binding.giraone.internal.dto.GiraOneValue;
+import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
+import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
 /**
@@ -52,6 +56,7 @@ import org.openhab.binding.giraone.internal.util.ResourceLoader;
  * 
  * @author Matthias Groeger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 class GiraOneClientTest {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final static int RCV_TIMEOUT = 2;
@@ -162,6 +167,9 @@ class GiraOneClientTest {
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/0.Events/001-evt.json"));
         GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
         assertNotNull(dp);
+        assertInstanceOf(GiraOneValueChange.class, dp);
+        assertEquals("1", ((GiraOneValueChange) dp).getPreviousValue());
+        assertEquals("0", dp.getValue());
     }
 
     @DisplayName("Received GetValue responses must be mapped to DataPoint and provided by 'dataPoints' Observable ")
@@ -171,6 +179,8 @@ class GiraOneClientTest {
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/2.GetValue/001-resp.json"));
         GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
         assertNotNull(dp);
+        assertEquals(1002, dp.getId());
+        assertEquals("1", dp.getValue());
     }
 
     @DisplayName("Received ServerCommandResponses must not be provided by 'dataPoints' Observable ")

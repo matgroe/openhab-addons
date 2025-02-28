@@ -10,26 +10,39 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-
-package org.openhab.binding.giraone.internal.communication.commands;
+package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * Utility class for generating reliable incrementing sequence ids.
+ * GiraOneItemSubType
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault()
-public class ServerCommandSequence {
-
-    private static int counter = 1;
-
-    public static synchronized void reset() {
-        counter = 1;
-    }
-
-    public static synchronized int generate() {
-        return ++counter;
-    }
+public enum GiraOneItemSubType {
+    Root,
+    Collection,
+    SecurityArea,
+    Room,
+    Floor,
+    ControlCabinet,
+    Building,
+    DcsLine,
+    Lighting,
+    Switching,
+    Covering,
+    HVAC,
+    Scenes,
+    Timer,
+    Security,
+    Monitor,
+    Control,
+    Sequences,
+    Logic,
+    Cameras,
+    Multimedia,
+    Links,
+    User,
+    Unknown
 }

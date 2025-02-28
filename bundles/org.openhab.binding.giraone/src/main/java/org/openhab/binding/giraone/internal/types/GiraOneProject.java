@@ -10,13 +10,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * This class represents the project installation within your as configured GiraOne SmartHome
@@ -25,6 +28,7 @@ import java.util.stream.Stream;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneProject {
     private final GiraOneProjectItem root;
     private final Collection<GiraOneChannel> channels;

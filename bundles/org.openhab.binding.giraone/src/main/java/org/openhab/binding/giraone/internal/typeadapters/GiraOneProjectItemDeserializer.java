@@ -18,10 +18,10 @@ import java.util.Arrays;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelViewRef;
-import org.openhab.binding.giraone.internal.dto.GiraOneItemMainType;
-import org.openhab.binding.giraone.internal.dto.GiraOneItemSubType;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectItem;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelViewRef;
+import org.openhab.binding.giraone.internal.types.GiraOneItemMainType;
+import org.openhab.binding.giraone.internal.types.GiraOneItemSubType;
+import org.openhab.binding.giraone.internal.types.GiraOneProjectItem;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+
+package org.openhab.binding.giraone.internal.util;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+
+/**
+ * Utility provides test data for various unit tests.
+ *
+ * @author Matthias Groeger - Initial contribution
+ */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
+public class TestDataProvider {
+
+    private static GiraOneDataPoint dataPointBuilder(final String name, final int id, final String urn) {
+        return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setId, id)
+                .with(GiraOneDataPoint::setName, name).with(GiraOneDataPoint::setUrn, urn).build();
+    }
+
+    public static GiraOneDataPoint createDataPointStepUpDown() {
+        return dataPointBuilder("Step-Up-Down", 215876,
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down");
+    }
+
+    public static GiraOneDataPoint dataPointUpDown() {
+        return dataPointBuilder("Up-Down", 215877,
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Step-Up-Down");
+    }
+
+    public static GiraOneDataPoint dataPointMovement() {
+        return dataPointBuilder("Movement", 215878,
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Movement");
+    }
+
+    public static GiraOneDataPoint dataPointPosition() {
+        return dataPointBuilder("Position", 215879,
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Position");
+    }
+
+    public static GiraOneDataPoint dataPointSlatPosition() {
+        return dataPointBuilder("Step-Up-Down", 215880,
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Slat-Position");
+    }
+}

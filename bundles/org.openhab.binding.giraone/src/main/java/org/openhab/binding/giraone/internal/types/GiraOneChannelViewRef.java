@@ -10,13 +10,23 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * GiraOneItemReference
+ * GiraOneChannelViewRef
  *
  * @author Matthias Gröger - Initial contribution
  */
-public interface GiraOneItemReference {
-    int getReferenceId();
+@NonNullByDefault({ DefaultLocation.PARAMETER })
+public class GiraOneChannelViewRef implements GiraOneItemReference {
+
+    private int channelViewID;
+
+    @Override
+    public int getReferenceId() {
+        return channelViewID;
+    }
 }

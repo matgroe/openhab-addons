@@ -10,7 +10,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -20,6 +23,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneDataPoint {
 
     @SerializedName(value = "dataPoint")

@@ -14,16 +14,8 @@ package org.openhab.binding.giraone.internal.util;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
-import org.openhab.binding.giraone.internal.communication.GiraOneEvent;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelType;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelTypeId;
-import org.openhab.binding.giraone.internal.dto.GiraOneFunctionType;
-import org.openhab.binding.giraone.internal.dto.GiraOneItemMainType;
-import org.openhab.binding.giraone.internal.dto.GiraOneItemSubType;
-import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectItem;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneChannelTypeDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneChannelTypeIdDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneCommandRequestSerializer;
@@ -35,6 +27,14 @@ import org.openhab.binding.giraone.internal.typeadapters.GiraOneItemSubTypeDeser
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneMessageTypeDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneProjectDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneProjectItemDeserializer;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
+import org.openhab.binding.giraone.internal.types.GiraOneItemMainType;
+import org.openhab.binding.giraone.internal.types.GiraOneItemSubType;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneProjectItem;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

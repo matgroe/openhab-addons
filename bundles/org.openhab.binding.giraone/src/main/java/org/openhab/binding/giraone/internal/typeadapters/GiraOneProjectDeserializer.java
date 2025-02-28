@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
-import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectItem;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneProjectItem;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

@@ -19,9 +19,9 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
-import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.library.types.DecimalType;
@@ -36,6 +36,7 @@ import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
+import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,18 +93,48 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         super.dispose();
     }
 
+    @Override
+    protected void updateState(String channelID, State state) {
+        logger.debug("update channel state  :: {} --> {}", channelID, state.toString());
+        super.updateState(channelID, state);
+    }
+
+    /**
+     * Builds the openhab channelId from the given {@link GiraOneDataPoint}. The
+     * generated value must match the channel.id property in the thing.xml in order
+     * to match the wanted openhab channel.
+     *
+     * @param dataPoint The {@link GiraOneDataPoint}
+     * @return referencing id for the thing channel
+     */
+    protected String buildThingChannelId(GiraOneDataPoint dataPoint) {
+        return CaseFormatter.lowerCaseHyphen(dataPoint.getName());
+    }
+
+    /**
+     * Builds the openhab channelId from the given {@link GiraOneChannelValue}. The
+     * generated value must match the channel.id property in the thing.xml in order
+     * to match the wanted openhab channel.
+     *
+     * @param channelValue {@link GiraOneChannelValue}
+     * @return referencing id for the thing channel
+     */
+    protected String buildThingChannelId(GiraOneChannelValue channelValue) {
+        return buildThingChannelId(channelValue.getGiraOneDataPoint());
+    }
+
     /**
      * Handler function for receiving {@link GiraOneChannelValue} which contains
      * the value for an item channel.
      * 
-     * @param giraOneDataPointState
+     * @param channelValue The value to apply on a Openhab Thing
      */
     protected void onDataPointState(GiraOneChannelValue channelValue) {
         logger.debug("onDataPointState {}", channelValue);
         if (channelValue.getGiraOneValue() != null) {
-            String channelId = CaseFormatter.lowerCaseHyphen(channelValue.getGiraOneDataPoint().getName());
-            updateState(channelId,
-                    ThingStateFactory.from(channelId, channelValue.getGiraOneValue().getValue().toString()));
+            String thingChannelId = buildThingChannelId(channelValue);
+            updateState(thingChannelId,
+                    ThingStateFactory.from(thingChannelId, channelValue.getGiraOneValue().getValue().toString()));
         }
     }
 
@@ -144,7 +175,12 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         return lookupGiraOneProjectChannel().map(GiraOneChannel::getChannelViewId).orElse(0);
     }
 
-    protected Optional<GiraOneDataPoint> findGiraOneDataPoint(final String ohChannel) {
+    /**
+     *
+     * @param ohChannel the channel id in OpenHab context
+     * @return
+     */
+    protected Optional<GiraOneDataPoint> findGiraOneDataPointWithinChannelView(final String ohChannel) {
         Optional<GiraOneChannel> channel = Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
                 .lookupChannelByChannelViewId(this.channelViewId);
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
@@ -153,7 +189,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        Optional<GiraOneDataPoint> datapoint = findGiraOneDataPoint(channelUID.getId());
+        Optional<GiraOneDataPoint> datapoint = findGiraOneDataPointWithinChannelView(channelUID.getId());
         if (datapoint.isPresent()) {
             logger.debug("handleCommand :: channelUID={}, command={}", channelUID, command);
             switch ((Object) command) {
@@ -177,7 +213,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     protected void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {
         logger.trace("handleDecimalTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.intValue());
-        Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, command.intValue());
+        Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, command.toString());
     }
 
     protected void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
@@ -189,8 +225,10 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     protected void handleUpDownType(GiraOneDataPoint datapoint, UpDownType command) {
         logger.trace("handleUpDownType :: datapoint={}, command={}", datapoint.getId(), command.name());
         switch (command) {
-            case DOWN -> Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, 100);
-            case UP -> Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, 0);
+            case DOWN ->
+                Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, Integer.toString(100));
+            case UP ->
+                Objects.requireNonNull(this.giraOneBridge).setGiraOneDataPointValue(datapoint, Integer.toString(0));
         }
     }
 

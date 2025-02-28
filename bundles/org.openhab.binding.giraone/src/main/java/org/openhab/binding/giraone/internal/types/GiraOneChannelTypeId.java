@@ -10,9 +10,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import java.util.Arrays;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Enumeration describes channel type id
@@ -20,6 +22,7 @@ import java.util.Arrays;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault()
 public enum GiraOneChannelTypeId {
     Temperature("NumericFloatStatus.Temperatur"),
     Scene("FunctionScene.Scene"),

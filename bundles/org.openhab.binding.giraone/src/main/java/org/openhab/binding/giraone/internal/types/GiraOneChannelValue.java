@@ -10,7 +10,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * The {@link GiraOneChannelValue} represents a single {@link GiraOneDataPoint}
@@ -18,6 +21,7 @@ package org.openhab.binding.giraone.internal.dto;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneChannelValue {
 
     private int channelViewId;
@@ -60,7 +64,7 @@ public class GiraOneChannelValue {
 
     @Override
     public String toString() {
-        return String.format("{channelViewId=%d, channelViewUrn=%s datapointId=%d, dataPoint=%s, urn=%s, value=%s}",
+        return String.format("{channelViewId=%d, channelViewUrn=%s, datapointId=%d, dataPoint=%s, urn=%s, value=%s}",
                 getChannelViewId(), getChannelViewUrn(), giraOneDataPoint.getId(), giraOneDataPoint.getName(),
                 giraOneDataPoint.getUrn(), getGiraOneValue());
     }

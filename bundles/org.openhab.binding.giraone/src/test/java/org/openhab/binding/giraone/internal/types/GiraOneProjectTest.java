@@ -10,13 +10,15 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collection;
 import java.util.Optional;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,7 @@ import com.google.gson.Gson;
  *
  * @author Matthias Groeger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 class GiraOneProjectTest {
     private final Gson gson = GsonMapperFactory.createGson();
 

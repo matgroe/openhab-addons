@@ -10,15 +10,18 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import java.util.Arrays;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Enumeration describes channel type for {@link GiraOneProjectItem}
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault
 public enum GiraOneChannelType {
 
     Shutter("de.gira.schema.channels.BlindWithPos"),

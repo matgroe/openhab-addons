@@ -10,13 +10,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * The GiraOneValue represents a value for a single source of data
- * within the Gira One project.
+ * The {@link GiraOneValue} represents a value for a single source of data
+ * within the Gira One project. The {@link org.openhab.binding.giraone.internal.communication.GiraOneClient} emits
+ * a {@link GiraOneValue} as result of sending a
+ * {@link org.openhab.binding.giraone.internal.communication.commands.GetValue}
+ * {@link org.openhab.binding.giraone.internal.communication.commands.ServerCommand}.
  *
  * @author Matthias Gröger - Initial contribution
  */
@@ -28,9 +31,13 @@ public class GiraOneValue {
      * belongs to.
      */
     private final int id;
-    private final Object value;
 
-    public GiraOneValue(int id, Object value) {
+    /**
+     * The value as received from Gira One Server.
+     */
+    private final String value;
+
+    public GiraOneValue(int id, String value) {
         this.id = id;
         this.value = value;
     }
@@ -39,7 +46,7 @@ public class GiraOneValue {
         return id;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 

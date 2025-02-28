@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.communication.GiraOneEvent;
+import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

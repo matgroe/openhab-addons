@@ -10,36 +10,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.dto;
+package org.openhab.binding.giraone.internal.types;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * GiraOneItemSubType
+ * GiraOneItemReference
  *
  * @author Matthias Gröger - Initial contribution
  */
-public enum GiraOneItemSubType {
-    Root,
-    Collection,
-    SecurityArea,
-    Room,
-    Floor,
-    ControlCabinet,
-    Building,
-    DcsLine,
-    Lighting,
-    Switching,
-    Covering,
-    HVAC,
-    Scenes,
-    Timer,
-    Security,
-    Monitor,
-    Control,
-    Sequences,
-    Logic,
-    Cameras,
-    Multimedia,
-    Links,
-    User,
-    Unknown
+@NonNullByDefault()
+public interface GiraOneItemReference {
+    int getReferenceId();
 }

@@ -10,36 +10,35 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
+
 package org.openhab.binding.giraone.internal;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.openhab.core.thing.Bridge;
 
 /**
- * Test class for {@link GiraOneBridgeHandler}
- * 
+ * Test class for {@link GiraOneBridgeDiscoveryParticipant}.
+ *
  * @author Matthias Groeger - Initial contribution
  */
-@NonNullByDefault
-class GiraOneBridgeHandlerTest {
-    private Bridge bridge = Mockito.mock(Bridge.class);
-    // private GiraOneBridgeHandler bridgeHandler = new GiraOneBridgeHandler(bridge);
+@NonNullByDefault({ DefaultLocation.PARAMETER })
+class GiraOneBridgeDiscoveryParticipantTest {
 
     @BeforeEach
     void setUp() {
-        // bridge = Mockito.mock(Bridge.class);
-        // bridgeHandler = new GiraOneBridgeHandler(bridge);
     }
 
     @Test
-    void handleCommand() {
+    void getSupportedThingTypeUIDs() {
     }
 
     @Test
-    void initialize() {
-        // bridgeHandler.initialize();
+    void createResult() {
+    }
+
+    @Test
+    void getThingUID() {
     }
 }

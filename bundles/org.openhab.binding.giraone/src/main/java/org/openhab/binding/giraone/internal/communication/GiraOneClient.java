@@ -23,6 +23,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -38,9 +39,10 @@ import org.openhab.binding.giraone.internal.communication.commands.GiraOneComman
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
 import org.openhab.binding.giraone.internal.communication.commands.SetValue;
-import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneValue;
-import org.openhab.binding.giraone.internal.dto.GiraOneValueChange;
+import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
+import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.core.id.InstanceUUID;
 import org.slf4j.Logger;
@@ -61,6 +63,7 @@ import io.reactivex.rxjava3.subjects.Subject;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({})
 public class GiraOneClient implements WebSocketListener {
     private final static String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
     private final static int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * 1024);
