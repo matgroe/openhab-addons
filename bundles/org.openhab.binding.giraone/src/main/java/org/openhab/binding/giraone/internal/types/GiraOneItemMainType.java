@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * GiraOneItemMainType
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault
 public enum GiraOneItemMainType {
     Root,
     Zone,

@@ -54,7 +54,7 @@ public class GiraOneProjectItemDeserializer implements JsonDeserializer<GiraOneP
             throw new JsonParseException("JsonObject expected here.");
         }
         GiraOneProjectItem item = new GiraOneProjectItem();
-        ;
+
         try {
             JsonObject json = jsonElement.getAsJsonObject();
 
