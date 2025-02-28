@@ -31,7 +31,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 
 import com.google.gson.Gson;
@@ -121,13 +121,13 @@ public class GsonMapperTest {
         assertNotNull(g1Project);
     }
 
-    @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneChannelDataPoint")
+    @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneChannelValue")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneValue() {
         GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/2.GetValue/001-resp.json");
         assertNotNull(response);
         assertEquals(GiraOneCommand.GetValue, response.getRequestServerCommand().getCommand());
-        GiraOneChannelDataPoint state = response.getReply(GiraOneChannelDataPoint.class);
+        GiraOneChannelValue state = response.getReply(GiraOneChannelValue.class);
         assertNotNull(state);
     }
 }

@@ -13,20 +13,18 @@
 package org.openhab.binding.giraone.internal.dto;
 
 /**
- * The {@link GiraOneChannelDataPoint} represents a single {@link GiraOneDataPoint}
- * within a {@link GiraOneProjectChannel}.
+ * The {@link GiraOneChannelValue} represents a single {@link GiraOneDataPoint}
+ * within a {@link GiraOneChannel}.
  *
  * @author Matthias Gröger - Initial contribution
  */
-public class GiraOneChannelDataPoint  {
-
-    public GiraOneChannelDataPoint() {}
-
+public class GiraOneChannelValue {
 
     private int channelViewId;
     private String channelViewUrn;
+
     private GiraOneDataPoint giraOneDataPoint = new GiraOneDataPoint();
-    private String value;
+    private GiraOneValue giraOneValue;
 
     public GiraOneDataPoint getGiraOneDataPoint() {
         return giraOneDataPoint;
@@ -52,17 +50,18 @@ public class GiraOneChannelDataPoint  {
         this.channelViewUrn = channelViewUrn;
     }
 
-    public String getValue() {
-        return value;
+    public GiraOneValue getGiraOneValue() {
+        return giraOneValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setGiraOneValue(GiraOneValue giraOneValue) {
+        this.giraOneValue = giraOneValue;
     }
 
     @Override
     public String toString() {
         return String.format("{channelViewId=%d, channelViewUrn=%s datapointId=%d, dataPoint=%s, urn=%s, value=%s}",
-                getChannelViewId(), getChannelViewUrn(), giraOneDataPoint.getId(), giraOneDataPoint.getName(), giraOneDataPoint.getUrn(), getValue());
+                getChannelViewId(), getChannelViewUrn(), giraOneDataPoint.getId(), giraOneDataPoint.getName(),
+                giraOneDataPoint.getUrn(), getGiraOneValue());
     }
 }

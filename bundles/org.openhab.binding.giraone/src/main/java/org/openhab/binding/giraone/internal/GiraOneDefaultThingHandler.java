@@ -19,9 +19,9 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.library.types.DecimalType;
@@ -93,16 +93,17 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     /**
-     * Handler function for receiving {@link GiraOneChannelDataPoint} which contains
+     * Handler function for receiving {@link GiraOneChannelValue} which contains
      * the value for an item channel.
      * 
      * @param giraOneDataPointState
      */
-    protected void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
-        logger.debug("onDataPointState {}", giraOneDataPointState);
-        if (giraOneDataPointState.getValue() != null) {
-            String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getGiraOneDataPoint().getName());
-            updateState(channelId, ThingStateFactory.from(channelId, giraOneDataPointState.getValue()));
+    protected void onDataPointState(GiraOneChannelValue channelValue) {
+        logger.debug("onDataPointState {}", channelValue);
+        if (channelValue.getGiraOneValue() != null) {
+            String channelId = CaseFormatter.lowerCaseHyphen(channelValue.getGiraOneDataPoint().getName());
+            updateState(channelId,
+                    ThingStateFactory.from(channelId, channelValue.getGiraOneValue().getValue().toString()));
         }
     }
 
@@ -116,9 +117,9 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         if (connectionState == GiraOneBridgeConnectionState.Connected) {
             this.channelViewId = detectChannelViewId();
             if (this.channelViewId > 0 && giraOneBridge != null) {
-                this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneDataPointStates(this.channelViewId,
+                this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneChannelValue(this.channelViewId,
                         this::onDataPointState);
-                giraOneBridge.lookupGiraOneChannelDataPointValues(this.channelViewId);
+                giraOneBridge.lookupGiraOneChannelValues(this.channelViewId);
                 updateStatus(ThingStatus.ONLINE);
             } else {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
@@ -131,20 +132,20 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     /**
      *
-     * @return an {@link Optional<GiraOneProjectChannel>}
+     * @return an {@link Optional< GiraOneChannel >}
      */
-    protected Optional<GiraOneProjectChannel> lookupGiraOneProjectChannel() {
+    protected Optional<GiraOneChannel> lookupGiraOneProjectChannel() {
         String channelViewUrn = Objects.requireNonNull(getThing().getProperties().get(PROPERTY_CHANNELVIEW_URN));
         return Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
                 .lookupChannelByChannelViewUrn(channelViewUrn);
     }
 
     protected int detectChannelViewId() {
-        return lookupGiraOneProjectChannel().map(GiraOneProjectChannel::getChannelViewId).orElse(0);
+        return lookupGiraOneProjectChannel().map(GiraOneChannel::getChannelViewId).orElse(0);
     }
 
     protected Optional<GiraOneDataPoint> findGiraOneDataPoint(final String ohChannel) {
-        Optional<GiraOneProjectChannel> channel = Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
+        Optional<GiraOneChannel> channel = Objects.requireNonNull(this.giraOneBridge).lookupGiraOneProject()
                 .lookupChannelByChannelViewId(this.channelViewId);
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
                 .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(ohChannel)).findFirst());
@@ -171,7 +172,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     protected void handleRefreshTypeCommand(RefreshType command) {
         logger.trace("handleRefreshTypeCommand :: channelViewId={}, command={}", this.channelViewId, command);
-        Objects.requireNonNull(this.giraOneBridge).lookupGiraOneChannelDataPointValues(this.channelViewId);
+        Objects.requireNonNull(this.giraOneBridge).lookupGiraOneChannelValues(this.channelViewId);
     }
 
     protected void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {

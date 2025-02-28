@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.giraone.internal.dto;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * The GiraOneValue represents a value for a single source of data
@@ -19,6 +20,7 @@ package org.openhab.binding.giraone.internal.dto;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault
 public class GiraOneValue {
 
     /**
@@ -27,7 +29,6 @@ public class GiraOneValue {
      */
     private final int id;
     private final Object value;
-
 
     public GiraOneValue(int id, Object value) {
         this.id = id;

@@ -27,11 +27,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
 import org.openhab.binding.giraone.internal.dto.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.dto.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.dto.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 import org.openhab.core.thing.Bridge;
@@ -116,12 +116,12 @@ class GiraOneThingDiscoveryServiceTest {
                         GiraOneBindingConstants.GENERIC_TYPE_ID));
     }
 
-    @DisplayName("test the mapping from GiraOneProjectChannel to ThingTypeUID")
+    @DisplayName("test the mapping from GiraOneChannel to ThingTypeUID")
     @ParameterizedTest
     @MethodSource("provideForTestDetectThingTypeUid")
     void testDetectThingTypeUid(GiraOneFunctionType functionType, GiraOneChannelType channelType,
             GiraOneChannelTypeId channelTypeId, String expected) {
-        GiraOneProjectChannel channel = mock(GiraOneProjectChannel.class);
+        GiraOneChannel channel = mock(GiraOneChannel.class);
         when(channel.getChannelTypeId()).thenReturn(channelTypeId);
         when(channel.getChannelType()).thenReturn(channelType);
         when(channel.getFunctionType()).thenReturn(functionType);

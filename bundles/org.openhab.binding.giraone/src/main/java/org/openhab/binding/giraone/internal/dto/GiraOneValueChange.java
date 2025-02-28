@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.giraone.internal.dto;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * The GiraOneValue represents a changed value for a single source of data
@@ -20,7 +21,8 @@ package org.openhab.binding.giraone.internal.dto;
  *
  * @author Matthias Gröger - Initial contribution
  */
-public class GiraOneValueChange extends  GiraOneValue {
+@NonNullByDefault
+public class GiraOneValueChange extends GiraOneValue {
 
     /**
      * The previous value, the current value is available in super class

@@ -13,7 +13,7 @@
 package org.openhab.binding.giraone.internal;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
 
@@ -36,24 +36,6 @@ public interface GiraOneBridge {
     GiraOneProject lookupGiraOneProject();
 
     /**
-     * This function triggers the {@link GiraOneBridge} to lookup all datapoints
-     * for the given channelViewId. The concerning values are getting reported as
-     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneDataPointStates}.
-     *
-     * @param channelViewId
-     */
-    void lookupGiraOneChannelDataPointValues(int channelViewId);
-
-    /**
-     * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
-     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneDataPointStates}.
-     *
-     * @param dataPoint The {@link GiraOneDataPoint} to change.
-     * @param value The new value
-     */
-    void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value);
-
-    /**
      * Observes the {@link GiraOneBridgeConnectionState} of the {@link GiraOneBridge}
      *
      * @param consumer - The consumer method to receive GiraOneBridgeConnectionState Events.
@@ -62,11 +44,29 @@ public interface GiraOneBridge {
     Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeConnectionState> consumer);
 
     /**
-     * Observes all {@link GiraOneChannelDataPoint} for the given channel.
+     * This function triggers the {@link GiraOneBridge} to lookup all datapoints
+     * for the given channelViewId. The concerning values are getting reported as
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     *
+     * @param channelViewId
+     */
+    void lookupGiraOneChannelValues(int channelViewId);
+
+    /**
+     * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     *
+     * @param dataPoint The {@link GiraOneDataPoint} to change.
+     * @param value The new value
+     */
+    void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Object value);
+
+    /**
+     * Observes all {@link GiraOneChannelValue} for the given channel.
      *
      * @param channelViewId - The channelViewId to observe.
      * @param consumer - The consumer method to receive GiraOneBridgeConnectionState Events.
      * @return A {@link Disposable}
      */
-    Disposable subscribeOnGiraOneDataPointStates(int channelViewId, Consumer<GiraOneChannelDataPoint> consumer);
+    Disposable subscribeOnGiraOneChannelValue(int channelViewId, Consumer<GiraOneChannelValue> consumer);
 }

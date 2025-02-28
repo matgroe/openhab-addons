@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.core.config.discovery.AbstractThingHandlerDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
@@ -113,7 +113,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         }
     }
 
-    String formatThingTypeId(GiraOneProjectChannel channel) {
+    String formatThingTypeId(GiraOneChannel channel) {
         switch (channel.getFunctionType()) {
             case Status -> {
                 return CaseFormatter
@@ -126,7 +126,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         }
     }
 
-    ThingTypeUID detectThingTypeUID(GiraOneProjectChannel channel) {
+    ThingTypeUID detectThingTypeUID(GiraOneChannel channel) {
         String thingTypeId = formatThingTypeId(channel);
         Optional<ThingTypeUID> opt = GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID.stream()
                 .filter(t -> t.getId().equals(thingTypeId)).findFirst();
@@ -134,7 +134,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         return opt.isPresent() ? opt.get() : GiraOneBindingConstants.GENERIC_TYPE_UID;
     }
 
-    private DiscoveryResult createDiscoverResultFromChannel(GiraOneProjectChannel channel) {
+    private DiscoveryResult createDiscoverResultFromChannel(GiraOneChannel channel) {
         ThingTypeUID thingTypeUid = detectThingTypeUID(channel);
         logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
 

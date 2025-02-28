@@ -54,7 +54,7 @@ class GiraOneProjectTest {
     @Test
     void shouldFindChannelByChannelViewUrn() {
         String urn = "urn:gds:chv:KNXheating2Fcooling-Heating-Cooling-Switchable-9";
-        Optional<GiraOneProjectChannel> channel = project.lookupChannelByChannelViewUrn(urn);
+        Optional<GiraOneChannel> channel = project.lookupChannelByChannelViewUrn(urn);
         assertTrue(channel.isPresent());
         assertEquals(urn, channel.get().getChannelViewUrn());
     }
@@ -69,7 +69,7 @@ class GiraOneProjectTest {
     @DisplayName("message should deserialize to GiraOneChannelType")
     @ParameterizedTest
     @EnumSource(GiraOneChannelType.class)
-    void testLookupChannelsByGiraOneProjectChannel(GiraOneChannelType type) {
+    void testLookupChannelsByGiraOneChannel(GiraOneChannelType type) {
         project.lookupChannels(type).forEach(x -> assertEquals(type, x.getChannelType()));
     }
 
@@ -84,7 +84,7 @@ class GiraOneProjectTest {
     @Test
     void testFindLocationForChannel() {
         String urn = "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-23";
-        Optional<GiraOneProjectChannel> channel = project.lookupChannelByChannelUrn(urn);
+        Optional<GiraOneChannel> channel = project.lookupChannelByChannelUrn(urn);
         assertTrue(channel.isPresent());
 
         Optional<GiraOneProjectItem> item = project.findLocationForChannel(channel.get());
@@ -103,7 +103,7 @@ class GiraOneProjectTest {
     @Test
     void testFindReferencingGiraOneProjectItems() {
         String urn = "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-23";
-        Optional<GiraOneProjectChannel> channel = project.lookupChannelByChannelUrn(urn);
+        Optional<GiraOneChannel> channel = project.lookupChannelByChannelUrn(urn);
         assertTrue(channel.isPresent());
 
         Collection<GiraOneProjectItem> items = project.findReferencingGiraOneProjectItems(channel.get());
@@ -112,15 +112,15 @@ class GiraOneProjectTest {
         // assertTrue(i.getItemReferences().contains(project.makeGiraOneItemReference(channel.get().getChannelViewId()))));
     }
 
-    @DisplayName("should find de-reference referenced GiraOneProjectChannels for given GiraOneProjectItem")
+    @DisplayName("should find de-reference referenced GiraOneChannels for given GiraOneProjectItem")
     @Test
-    void testLookupProjectChannels() {
+    void testLookupChannels() {
         Collection<GiraOneProjectItem> items = project.lookupProjectItems(GiraOneItemMainType.Trade,
                 GiraOneItemSubType.Lighting);
         assertFalse(items.isEmpty());
 
         GiraOneProjectItem item = items.stream().findFirst().get();
-        Collection<GiraOneProjectChannel> channels = project.lookupProjectChannels(item);
+        Collection<GiraOneChannel> channels = project.lookupChannels(item);
         assertFalse(channels.isEmpty());
         assertEquals(item.getItemReferences().size(), channels.size());
     }

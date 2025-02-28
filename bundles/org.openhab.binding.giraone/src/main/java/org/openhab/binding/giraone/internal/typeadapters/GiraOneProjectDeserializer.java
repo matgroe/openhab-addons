@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannel;
 import org.openhab.binding.giraone.internal.dto.GiraOneProject;
-import org.openhab.binding.giraone.internal.dto.GiraOneProjectChannel;
 import org.openhab.binding.giraone.internal.dto.GiraOneProjectItem;
 
 import com.google.gson.JsonArray;
@@ -59,7 +59,7 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
         if (jsonRoot.isPresent()) {
             GiraOneProjectItem root = jsonDeserializationContext.deserialize(jsonRoot.get(), GiraOneProjectItem.class);
 
-            List<GiraOneProjectChannel> channels = content.asList().stream().filter(this::isProjectChannelObject)
+            List<GiraOneChannel> channels = content.asList().stream().filter(this::isProjectChannelObject)
                     .map(f -> makeChannel(f, jsonDeserializationContext)).collect(Collectors.toList());
 
             if (root != null) {
@@ -90,8 +90,7 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
         return false;
     }
 
-    private GiraOneProjectChannel makeChannel(JsonElement jsonElement,
-            JsonDeserializationContext jsonDeserializationContext) {
-        return jsonDeserializationContext.deserialize(jsonElement, GiraOneProjectChannel.class);
+    private GiraOneChannel makeChannel(JsonElement jsonElement, JsonDeserializationContext jsonDeserializationContext) {
+        return jsonDeserializationContext.deserialize(jsonElement, GiraOneChannel.class);
     }
 }

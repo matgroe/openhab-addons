@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.dto.GiraOneChannelDataPoint;
+import org.openhab.binding.giraone.internal.dto.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.dto.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.core.library.types.StopMoveType;
@@ -41,10 +41,10 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     }
 
     @Override
-    protected void onDataPointState(GiraOneChannelDataPoint giraOneDataPointState) {
+    protected void onDataPointState(GiraOneChannelValue giraOneDataPointState) {
         String channelId = CaseFormatter.lowerCaseHyphen(giraOneDataPointState.getGiraOneDataPoint().getName());
         this.isMoving = (GiraOneBindingConstants.CHANNEL_MOVEMENT.equals(channelId)
-                && "1".equals(giraOneDataPointState.getValue()));
+                && "1".equals(giraOneDataPointState.getGiraOneValue()));
         super.onDataPointState(giraOneDataPointState);
     }
 

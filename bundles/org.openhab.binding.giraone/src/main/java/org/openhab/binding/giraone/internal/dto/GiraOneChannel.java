@@ -19,11 +19,11 @@ import java.util.Optional;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * GiraOneProjectChannel
+ * GiraOneChannel
  *
  * @author Matthias Gröger - Initial contribution
  */
-public class GiraOneProjectChannel {
+public class GiraOneChannel {
 
     @SerializedName(value = "channelID")
     private int channelId;
