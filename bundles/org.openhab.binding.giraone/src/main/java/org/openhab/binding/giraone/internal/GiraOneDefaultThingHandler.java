@@ -95,7 +95,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     @Override
     protected void updateState(String channelID, State state) {
-        logger.debug("update channel state  :: {} --> {}", channelID, state.toString());
+        logger.debug("updateState ::  channelId='{}', state='{}'", channelID, state.toString());
         super.updateState(channelID, state);
     }
 
@@ -129,8 +129,8 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * 
      * @param channelValue The value to apply on a Openhab Thing
      */
-    protected void onDataPointState(GiraOneChannelValue channelValue) {
-        logger.debug("onDataPointState {}", channelValue);
+    protected void onGiraOneChannelValue(GiraOneChannelValue channelValue) {
+        logger.debug("onGiraOneChannelValue :: {}", channelValue);
         if (channelValue.getGiraOneValue() != null) {
             String thingChannelId = buildThingChannelId(channelValue);
             updateState(thingChannelId,
@@ -149,7 +149,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
             this.channelViewId = detectChannelViewId();
             if (this.channelViewId > 0 && giraOneBridge != null) {
                 this.disposableOnDataPointState = giraOneBridge.subscribeOnGiraOneChannelValue(this.channelViewId,
-                        this::onDataPointState);
+                        this::onGiraOneChannelValue);
                 giraOneBridge.lookupGiraOneChannelValues(this.channelViewId);
                 updateStatus(ThingStatus.ONLINE);
             } else {

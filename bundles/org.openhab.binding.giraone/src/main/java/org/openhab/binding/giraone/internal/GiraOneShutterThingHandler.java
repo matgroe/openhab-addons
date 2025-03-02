@@ -35,17 +35,16 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     private final static String CHANNEL_ID_SHUTTER_MOVEMENT = "internal-movement-state";
-    private final static String VALUE_SHUTTER_MOVEMENT_STOPPED = "STOPPED";
 
-    public enum MovingState {
-        STOPPED,
+    private enum MovingState {
+        HALTED,
         MOVING,
         MOVING_UP,
         MOVING_DOWN,
     };
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneShutterThingHandler.class);
-    MovingState movingState = MovingState.STOPPED;
+    private MovingState movingState = MovingState.HALTED;
 
     public GiraOneShutterThingHandler(Thing thing) {
         super(thing);
@@ -54,39 +53,35 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     @Override
     public void initialize() {
         super.initialize();
-        updateChannelShutterMovement();
+        updateChannelShutterMovingState(MovingState.HALTED);
     }
 
     private boolean isValueIncreasing(GiraOneValueChange valueChange) {
-        return Integer.parseInt(valueChange.getValue()) > Integer.parseInt(valueChange.getPreviousValue());
+        return Float.parseFloat(valueChange.getValue()) > Float.parseFloat(valueChange.getPreviousValue());
     }
 
     private void detectMovingState(GiraOneValue value) {
-        boolean isMoving = "1".equals(value.getValue());
-        if (isMoving && this.movingState == MovingState.STOPPED) {
-            this.movingState = MovingState.MOVING;
-        } else {
-            this.movingState = MovingState.STOPPED;
+        if ("0".equals(value.getValue())) {
+            updateChannelShutterMovingState(MovingState.HALTED);
         }
-        updateChannelShutterMovement();
     }
 
     private void detectMovingDirection(GiraOneValue value) {
         if (value instanceof GiraOneValueChange) {
-            this.movingState = isValueIncreasing((GiraOneValueChange) value) ? MovingState.MOVING_UP
-                    : MovingState.MOVING_DOWN;
-        } else {
-            this.movingState = MovingState.MOVING;
+            updateChannelShutterMovingState(
+                    isValueIncreasing((GiraOneValueChange) value) ? MovingState.MOVING_DOWN : MovingState.MOVING_UP);
         }
-        updateChannelShutterMovement();
     }
 
-    private void updateChannelShutterMovement() {
-        updateState(CHANNEL_ID_SHUTTER_MOVEMENT, StringType.valueOf(this.movingState.toString()));
+    private void updateChannelShutterMovingState(MovingState movingState) {
+        this.logger.debug("updateChannelShutterMovement :: {}", movingState.toString());
+        this.movingState = movingState;
+        updateState(CHANNEL_ID_SHUTTER_MOVEMENT, StringType.valueOf(movingState.toString()));
     }
 
     @Override
-    protected void onDataPointState(GiraOneChannelValue giraOneChannelValue) {
+    protected void onGiraOneChannelValue(GiraOneChannelValue giraOneChannelValue) {
+        logger.debug("onGiraOneChannelValue :: {}", giraOneChannelValue);
         switch (buildThingChannelId(giraOneChannelValue)) {
             case GiraOneBindingConstants.CHANNEL_MOVEMENT -> detectMovingState(giraOneChannelValue.getGiraOneValue());
 
@@ -94,7 +89,7 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
                     GiraOneBindingConstants.CHANNEL_SLAT_POSITION, GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN ->
                 detectMovingDirection(giraOneChannelValue.getGiraOneValue());
         }
-        super.onDataPointState(giraOneChannelValue);
+        super.onGiraOneChannelValue(giraOneChannelValue);
     }
 
     @Override
@@ -102,7 +97,7 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
         logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint.getId(), command.name());
         Optional<GiraOneDataPoint> stepUpDown = super.findGiraOneDataPointWithinChannelView(
                 GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN);
-        if (stepUpDown.isPresent() && this.movingState != MovingState.STOPPED) {
+        if (stepUpDown.isPresent() && this.movingState != MovingState.HALTED) {
             // we need to set value 0 on channel 'step-up-down' to stop moving curtain
             Objects.requireNonNull(this.getGiraOneBridge()).setGiraOneDataPointValue(stepUpDown.get(),
                     Integer.toString(0));

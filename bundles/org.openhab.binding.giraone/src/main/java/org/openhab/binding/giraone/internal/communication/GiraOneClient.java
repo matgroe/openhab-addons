@@ -137,7 +137,7 @@ public class GiraOneClient implements WebSocketListener {
         return "ui" + new String(Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8)));
     }
 
-    WebSocketClient createWebSocketClient(HttpClient httpClient) throws GiraOneException {
+    WebSocketClient createWebSocketClient(HttpClient httpClient) throws GiraOneClientException {
         jettyThreadPool = new QueuedThreadPool(THREAD_POOL_SIZE);
         jettyThreadPool.setName(getClass().getSimpleName());
         jettyThreadPool.setDaemon(true);
@@ -146,7 +146,7 @@ public class GiraOneClient implements WebSocketListener {
         try {
             jettyThreadPool.start();
         } catch (Exception e) {
-            throw new GiraOneException("Cannot start new ThreadPool.", e);
+            throw new GiraOneClientException("Cannot start new ThreadPool.", e);
         }
 
         WebSocketClient webSocketClient = new WebSocketClient(httpClient);
@@ -157,27 +157,27 @@ public class GiraOneClient implements WebSocketListener {
             webSocketClient.start();
             return webSocketClient;
         } catch (Exception e) {
-            throw new GiraOneException("Cannot start new WebSocketClient.", e);
+            throw new GiraOneClientException("Cannot start new WebSocketClient.", e);
         }
     }
 
-    void initiateWebsocketSession(WebSocketClient webSocketClient) throws GiraOneException {
+    void initiateWebsocketSession(WebSocketClient webSocketClient) throws GiraOneClientException {
         try {
             Future<Session> clientSessionPromise = webSocketClient.connect(this, URI.create(giraOneWssEndpoint));
             clientSessionPromise.get(timeoutSeconds, TimeUnit.SECONDS);
         } catch (IOException exp) {
-            throw new GiraOneException("Cannot initiate websocket session with " + giraOneWssEndpoint, exp);
+            throw new GiraOneClientException("Cannot initiate websocket session with " + giraOneWssEndpoint, exp);
         } catch (InterruptedException | TimeoutException | ExecutionException exp) {
-            throw new GiraOneException("Cannot resolve client session with given timeout.", exp);
+            throw new GiraOneClientException("Cannot resolve client session with given timeout.", exp);
         }
     }
 
     /**
      * Establish a new Websocket connection to the Gira One Server.
      *
-     * @throws GiraOneException
+     * @throws GiraOneClientException
      */
-    public void connect() throws GiraOneException {
+    public void connect() throws GiraOneClientException {
         logger.debug("Connecting to {}", this.giraOneWssEndpoint);
         this.connectionState.onNext(GiraOneBridgeConnectionState.Connecting);
 
@@ -273,7 +273,7 @@ public class GiraOneClient implements WebSocketListener {
             logger.trace("ServerCommand '{}' :: {}", command.getCommand(), message);
             Objects.requireNonNull(websocketSession).getRemote().sendString(message);
         } catch (IOException exp) {
-            throw new GiraOneException("Error on executing server command", exp);
+            throw new GiraOneClientException("Error on executing server command", exp);
         }
     }
 
@@ -293,7 +293,7 @@ public class GiraOneClient implements WebSocketListener {
             // and wait for response
             return promise.get(timeoutSeconds, TimeUnit.SECONDS);
         } catch (TimeoutException | ExecutionException | InterruptedException exp) {
-            throw new GiraOneException("Got exception on waiting for command response.", exp);
+            throw new GiraOneClientException("Got exception on waiting for command response.", exp);
         } finally {
             disposable.dispose();
         }

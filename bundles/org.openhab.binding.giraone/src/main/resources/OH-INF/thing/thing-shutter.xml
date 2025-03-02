@@ -62,14 +62,15 @@
 
 	<channel-type id="shutter-movement">
 		<item-type>String</item-type>
-		<label>Shutter Moving State</label>
-		<description>Gives informationa </description>
+		<label>Moving State</label>
+		<description>Gives information, if a shutter is currently moving up/down or halted.</description>
 		<category>Motion</category>
 		<state readOnly="true">
 			<options>
-				<option value="STOPPED">Stopped</option>
-				<option value="UP">Up</option>
-				<option value="DOWN">Down</option>
+				<option value="HALTED">Halted</option>
+				<option value="MOVING">Moving</option>
+				<option value="MOVING_UP">Moving Up</option>
+				<option value="MOVING_DOWN">Moving Down</option>
 			</options>
 		</state>
 		<autoUpdatePolicy>veto</autoUpdatePolicy>

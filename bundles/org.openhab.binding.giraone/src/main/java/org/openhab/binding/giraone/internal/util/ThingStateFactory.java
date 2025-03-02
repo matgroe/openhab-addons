@@ -31,7 +31,6 @@ public abstract class ThingStateFactory {
     public static State from(final String channelId, String value) {
         switch (channelId) {
             case GiraOneBindingConstants.CHANNEL_ON_OFF:
-            case GiraOneBindingConstants.CHANNEL_MOVEMENT:
                 return OnOffType.from(value);
 
             // case GiraOneBindingConstants.CHANNEL_SHIFT:
@@ -54,7 +53,7 @@ public abstract class ThingStateFactory {
 
             // case GiraOneBindingConstants.CHANNEL_EXECUTE:
             // case GiraOneBindingConstants.CHANNEL_TEACH:
-
+            // case GiraOneBindingConstants.CHANNEL_MOVEMENT:
             default:
                 return StringType.valueOf(value);
 

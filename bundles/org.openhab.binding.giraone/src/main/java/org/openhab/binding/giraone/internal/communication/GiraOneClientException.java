@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
+import java.io.Serial;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
@@ -20,14 +22,23 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneException extends RuntimeException {
+public class GiraOneClientException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    public GiraOneException(String message) {
+    public enum TreatAdvise {
+        Abort,
+        Reconnect,
+        LogAndContinue
+    }
+
+    private TreatAdvise treatAdvise = TreatAdvise.LogAndContinue;
+
+    public GiraOneClientException(String message) {
         super(message);
     }
 
-    public GiraOneException(String message, Throwable t) {
+    public GiraOneClientException(String message, Throwable t) {
         super(message, t);
     }
 }

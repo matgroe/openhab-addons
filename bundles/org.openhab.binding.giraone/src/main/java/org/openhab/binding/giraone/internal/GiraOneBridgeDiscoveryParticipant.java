@@ -65,7 +65,7 @@ public class GiraOneBridgeDiscoveryParticipant implements UpnpDiscoveryParticipa
             String udn = device.getIdentity().getUdn().getIdentifierString();
             String firmwareVersion = device.getDetails().getSerialNumber().split(",")[1];
             String host = device.getIdentity().getDescriptorURL().getHost();
-            String label = String.format("%s (%s)", model, firmwareVersion);
+            String label = String.format("%s (%s)", model, host);
 
             logger.debug("Found device {} -- {}@{} :: FW='{}', SN#='{}'", udn, model, host, firmwareVersion,
                     serialNumber);

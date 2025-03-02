@@ -20,7 +20,7 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConfiguration;
-import org.openhab.binding.giraone.internal.communication.GiraOneException;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -108,13 +108,12 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     @Override
     public void initialize() {
         logger.info("Initializing 'Gira One Bridge Handler'");
-
-        // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
-        updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
         this.scheduleBackgroundInitialization();
     }
 
     private void scheduleBackgroundInitialization() {
+        // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
+        updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
         scheduler.execute(() -> {
             try {
                 this.giraOneServerClient.connect();
@@ -122,7 +121,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
                         .subscribeOnConnectionState(this::onConnectionStateChanged);
 
                 disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneValues(this::onGiraOneValue);
-            } catch (GiraOneException exp) {
+            } catch (GiraOneClientException exp) {
                 // Note: When initialization can NOT be done set the status with more details for further
                 // analysis. See also class ThingStatusDetail for all available status details.
                 // Add a description to give user information to understand why thing does not work as expected. E.g.
@@ -171,7 +170,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     private void write2Log(GiraOneChannelValue giraOneChannelValue) {
-        this.logger.debug("emitting GiraOneChannelValue :: {}", giraOneChannelValue);
+        this.logger.trace("emitting GiraOneChannelValue :: {}", giraOneChannelValue);
     }
 
     @Override
