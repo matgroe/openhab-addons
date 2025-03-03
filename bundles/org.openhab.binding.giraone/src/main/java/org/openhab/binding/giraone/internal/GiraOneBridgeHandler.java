@@ -12,10 +12,13 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
@@ -24,11 +27,13 @@ import org.openhab.binding.giraone.internal.communication.GiraOneClientException
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.ThingStatusInfo;
@@ -55,10 +60,11 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     private final GiraOneClient giraOneServerClient;
     private final Subject<GiraOneChannelValue> channelValues = PublishSubject.create();
 
-    private GiraOneProject giraOneProject = GiraOneProject.empty();
+    private GiraOneProject giraOneProject = new GiraOneProject();
 
     private Disposable disposableConnectionState = Disposable.empty();
     private Disposable disposableDataPoint = Disposable.empty();
+    private Disposable disposableOnClientExceptions = Disposable.empty();
 
     public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
@@ -82,13 +88,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void dispose() {
+        disposableOnClientExceptions.dispose();
         disposableConnectionState.dispose();
         disposableDataPoint.dispose();
-
-        disposableConnectionState = Disposable.empty();
-        disposableDataPoint = Disposable.empty();
-
-        giraOneProject = GiraOneProject.empty();
 
         giraOneServerClient.disconnect();
         super.dispose();
@@ -108,38 +110,71 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     @Override
     public void initialize() {
         logger.info("Initializing 'Gira One Bridge Handler'");
-        this.scheduleBackgroundInitialization();
+        scheduler.execute(this::doBackgroundInitialization);
     }
 
-    private void scheduleBackgroundInitialization() {
+    private void doBackgroundInitialization() {
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
-        scheduler.execute(() -> {
-            try {
-                this.giraOneServerClient.connect();
-                disposableConnectionState = this.giraOneServerClient
-                        .subscribeOnConnectionState(this::onConnectionStateChanged);
+        try {
+            disposableConnectionState = this.giraOneServerClient
+                    .subscribeOnConnectionState(this::onConnectionStateChanged);
+            disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneValues(this::onGiraOneValue);
+            disposableOnClientExceptions = giraOneServerClient
+                    .subscribeOnGiraOneClientExceptions(this::onGiraOneClientException);
 
-                disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneValues(this::onGiraOneValue);
-            } catch (GiraOneClientException exp) {
-                // Note: When initialization can NOT be done set the status with more details for further
-                // analysis. See also class ThingStatusDetail for all available status details.
-                // Add a description to give user information to understand why thing does not work as expected. E.g.
-                // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-                // "Can not access device as username and/or password are invalid");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, exp.getMessage());
-            }
-        });
+            this.giraOneServerClient.connect();
+        } catch (GiraOneClientException exp) {
+            // Note: When initialization can NOT be done set the status with more details for further
+            // analysis. See also class ThingStatusDetail for all available status details.
+            // Add a description to give user information to understand why thing does not work as expected. E.g.
+            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
+            // "Can not access device as username and/or password are invalid");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, exp.getMessage());
+        }
     }
 
+    private void onGiraOneClientException(GiraOneClientException clientException) {
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, clientException.getMessage());
+    }
+
+    /**
+     *
+     * @param connectionState The {@link GiraOneClient}'s connection state.
+     */
     private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
         logger.debug("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneBridgeConnectionState.Connected) {
-            lookupGiraOneProject();
-            updateStatus(ThingStatus.ONLINE);
-        } else {
-            updateStatus(ThingStatus.OFFLINE);
+        switch (connectionState) {
+            case Connecting -> this.clientMovedToConnecting();
+            case Connected -> this.clientMovedToConnected();
+            case Disconnected -> this.clientMovedToDisconnected();
+            case Error -> this.clientMovedToError();
+            case TemporaryUnavailable -> this.clientMovedToTemporaryUnavailable();
         }
+    }
+
+    protected void clientMovedToConnecting() {
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.NOT_YET_READY, "@text/bridge.try-connect");
+    }
+
+    protected void clientMovedToConnected() {
+        lookupGiraOneProject();
+        this.lookupGiraOneConfiguration();
+        updateStatus(ThingStatus.ONLINE);
+    }
+
+    protected void clientMovedToTemporaryUnavailable() {
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "@text/bridge.temporary-unavailable");
+        GiraOneClientConfiguration cfg = getConfigAs(GiraOneClientConfiguration.class);
+        scheduler.schedule(this::doBackgroundInitialization, cfg.tryReconnectAfterSeconds, TimeUnit.SECONDS);
+    }
+
+    protected void clientMovedToDisconnected() {
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
+    }
+
+    protected void clientMovedToError() {
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
     }
 
     /**
@@ -171,6 +206,13 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     private void write2Log(GiraOneChannelValue giraOneChannelValue) {
         this.logger.trace("emitting GiraOneChannelValue :: {}", giraOneChannelValue);
+    }
+
+    private void lookupGiraOneConfiguration() {
+        GiraOneDeviceConfiguration deviceCfg = this.giraOneServerClient.lookupGiraOneDeviceConfiguration();
+        updateProperty("lastUpdate", Date.from(Instant.now()).toString());
+        updateProperty(Thing.PROPERTY_FIRMWARE_VERSION,
+                deviceCfg.get(GiraOneDeviceConfiguration.CURRENT_FIRMWARE_VERSION));
     }
 
     @Override

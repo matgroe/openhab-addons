@@ -33,8 +33,11 @@ public class GiraOneProject {
     private final GiraOneProjectItem root;
     private final Collection<GiraOneChannel> channels;
 
-    public static GiraOneProject empty() {
-        return new GiraOneProject(new GiraOneProjectItem(), new ArrayList<>());
+    /**
+     * Constructor.
+     */
+    public GiraOneProject() {
+        this(new GiraOneProjectItem(), new ArrayList<>());
     }
 
     /**

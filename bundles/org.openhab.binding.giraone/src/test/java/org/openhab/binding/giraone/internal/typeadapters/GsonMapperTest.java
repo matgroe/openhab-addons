@@ -31,6 +31,7 @@ import org.openhab.binding.giraone.internal.communication.commands.GiraOneComman
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
@@ -131,5 +132,22 @@ public class GsonMapperTest {
         assertEquals(GiraOneCommand.GetValue, response.getRequestServerCommand().getCommand());
         GiraOneChannelValue state = response.getReply(GiraOneChannelValue.class);
         assertNotNull(state);
+    }
+
+    @DisplayName("message should deserialize to GiraOneEvent")
+    @Test
+    void shouldDeserialize2GiraOneDeviceConfiguration() {
+        GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/4.GetDeviceConfig/001-resp.json");
+
+        assertNotNull(response);
+        assertEquals(GiraOneCommand.GetDeviceConfig, response.getRequestServerCommand().getCommand());
+        GiraOneDeviceConfiguration deviceCfg = response.getReply(GiraOneDeviceConfiguration.class);
+        assertNotNull(deviceCfg);
+
+        assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.CURRENT_APPLICATION_VERSION), "2.0.108.0");
+        assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.CURRENT_FIRMWARE_VERSION), "2.0.108.0");
+        assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.CURRENT_SYSTEM), "System B");
+        assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.DEVICE_ID), "OSRVKX03");
+        assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.DEVICE_NAME), "GiraOneServer");
     }
 }

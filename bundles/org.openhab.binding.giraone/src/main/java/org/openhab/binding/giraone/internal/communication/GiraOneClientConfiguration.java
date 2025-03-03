@@ -28,6 +28,7 @@ public class GiraOneClientConfiguration {
     public String password = EMPTY;
     public int defaultTimeoutSeconds = 10;
     public int maxTextMessageSize = 102400; // 100kB
+    public int tryReconnectAfterSeconds = 30;
 
     public String getHostname() {
         return hostname;

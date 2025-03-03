@@ -23,16 +23,11 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public class GiraOneClientException extends RuntimeException {
+    public final static String CONNECT_CONFIGURATION = "@text/giraone.client.initiate-websocket.configuration";
+    public final static String CONNECT_REFUSED = "@text/giraone.client.initiate-websocket.connect-refused";
+
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public enum TreatAdvise {
-        Abort,
-        Reconnect,
-        LogAndContinue
-    }
-
-    private TreatAdvise treatAdvise = TreatAdvise.LogAndContinue;
 
     public GiraOneClientException(String message) {
         super(message);

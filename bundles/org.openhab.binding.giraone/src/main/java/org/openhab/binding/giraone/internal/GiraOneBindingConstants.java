@@ -27,8 +27,6 @@ import org.openhab.core.thing.ThingTypeUID;
  */
 @NonNullByDefault
 public class GiraOneBindingConstants {
-    // server config properties
-    public static final String HOST = "hostname";
 
     // Thing Property Names
     public static final String PROPERTY_CHANNELVIEW_URN = "channelViewUrn";

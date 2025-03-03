@@ -26,5 +26,6 @@ public enum GiraOneBridgeConnectionState {
     Disconnected,
     Connecting,
     Connected,
-    Error
+    Error,
+    TemporaryUnavailable
 }

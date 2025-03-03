@@ -14,6 +14,7 @@ package org.openhab.binding.giraone.internal.typeadapters;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,15 +58,13 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
         JsonArray content = jsonElement.getAsJsonArray();
         Optional<JsonElement> jsonRoot = content.asList().stream().filter(this::isProjectContentRootObject).findFirst();
         if (jsonRoot.isPresent()) {
-            GiraOneProjectItem root = jsonDeserializationContext.deserialize(jsonRoot.get(), GiraOneProjectItem.class);
+            GiraOneProjectItem root = Objects
+                    .requireNonNull(jsonDeserializationContext.deserialize(jsonRoot.get(), GiraOneProjectItem.class));
 
             List<GiraOneChannel> channels = content.asList().stream().filter(this::isProjectChannelObject)
                     .map(f -> makeChannel(f, jsonDeserializationContext)).collect(Collectors.toList());
 
-            if (root != null) {
-                return new GiraOneProject(root, channels);
-            }
-            return GiraOneProject.empty();
+            return new GiraOneProject(root, channels);
         }
         throw new JsonParseException("Cannot parse received JsonArray.");
     }

@@ -1,9 +1,5 @@
 package org.openhab.binding.giraone.internal.communication;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +10,9 @@ public class GiraOneClientConnectionTest {
     private GiraOneClient giraClient = new GiraOneClient(configuration);
 
     @BeforeEach
-    void setUp() throws IOException, ExecutionException, InterruptedException, TimeoutException {
+    void setUp() {
         configuration.username = "User";
-        configuration.password = "!Ncc1701D";
+        configuration.password = "Ncc1701D";
         configuration.hostname = "192.168.178.38";
         configuration.maxTextMessageSize = 350000;
         configuration.defaultTimeoutSeconds = 45;
@@ -26,7 +22,20 @@ public class GiraOneClientConnectionTest {
     void testConnectWithInvalidCredentials() {
         configuration.password = "_invalid_";
         giraClient = new GiraOneClient(configuration);
+        giraClient.connect();
+    }
 
+    @Test
+    void testConnectWithInvalidHostname() {
+        configuration.hostname = "127.0.0.1";
+        giraClient = new GiraOneClient(configuration);
+        giraClient.connect();
+    }
+
+    @Test
+    void testConnectWithInvalidTextMessageSize() {
+        configuration.maxTextMessageSize = 20;
+        giraClient = new GiraOneClient(configuration);
         giraClient.connect();
     }
 }

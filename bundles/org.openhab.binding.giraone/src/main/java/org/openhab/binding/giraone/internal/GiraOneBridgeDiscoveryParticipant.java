@@ -15,8 +15,6 @@ package org.openhab.binding.giraone.internal;
 
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -71,9 +69,9 @@ public class GiraOneBridgeDiscoveryParticipant implements UpnpDiscoveryParticipa
                     serialNumber);
 
             return DiscoveryResultBuilder.create(Objects.requireNonNull(getThingUID(device)))
-                    .withProperties(Map.of("discovered", Date.from(Instant.now()), HOST, host, Thing.PROPERTY_MODEL_ID,
-                            model, Thing.PROPERTY_VENDOR, manufacturer, Thing.PROPERTY_FIRMWARE_VERSION,
-                            firmwareVersion, Thing.PROPERTY_SERIAL_NUMBER, serialNumber.toLowerCase()))
+                    .withProperties(Map.of("hostname", host, Thing.PROPERTY_MODEL_ID, model, Thing.PROPERTY_VENDOR,
+                            manufacturer, Thing.PROPERTY_FIRMWARE_VERSION, firmwareVersion,
+                            Thing.PROPERTY_SERIAL_NUMBER, serialNumber.toLowerCase()))
                     .withLabel(label).withRepresentationProperty(Thing.PROPERTY_SERIAL_NUMBER).build();
         }
         return null;

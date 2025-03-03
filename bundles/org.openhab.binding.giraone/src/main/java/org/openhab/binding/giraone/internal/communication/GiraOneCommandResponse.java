@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommandError;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 
@@ -30,6 +31,8 @@ import com.google.gson.JsonObject;
 @NonNullByDefault
 public class GiraOneCommandResponse {
     final static String PROPERTY_REQUEST = "request";
+    final static String PROPERTY_ERROR = "error";
+
     final JsonObject responseBody;
 
     public GiraOneCommandResponse(final JsonObject responseBody) {
@@ -47,6 +50,11 @@ public class GiraOneCommandResponse {
     @Nullable
     public <T> T getRequest(Class<T> classOfT) {
         return GsonMapperFactory.createGson().fromJson(responseBody.get(PROPERTY_REQUEST), classOfT);
+    }
+
+    @Nullable
+    public GiraOneCommandError getGiraOneCommandError() {
+        return GsonMapperFactory.createGson().fromJson(responseBody.get(PROPERTY_ERROR), GiraOneCommandError.class);
     }
 
     @Nullable

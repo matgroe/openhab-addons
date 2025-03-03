@@ -56,10 +56,6 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
         updateChannelShutterMovingState(MovingState.HALTED);
     }
 
-    private boolean isValueIncreasing(GiraOneValueChange valueChange) {
-        return Float.parseFloat(valueChange.getValue()) > Float.parseFloat(valueChange.getPreviousValue());
-    }
-
     private void detectMovingState(GiraOneValue value) {
         if ("0".equals(value.getValue())) {
             updateChannelShutterMovingState(MovingState.HALTED);
