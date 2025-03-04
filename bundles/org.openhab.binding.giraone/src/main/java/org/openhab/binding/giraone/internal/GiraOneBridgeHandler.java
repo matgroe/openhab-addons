@@ -225,6 +225,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void lookupGiraOneChannelValues(final int channelViewId) {
+        this.logger.trace("lookupGiraOneChannelValues for channelViewId={}", channelViewId);
         Optional<GiraOneChannel> channel = this.lookupGiraOneProject().lookupChannelByChannelViewId(channelViewId);
         channel.ifPresent(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
                 .map(GiraOneDataPoint::getId).forEach(giraOneServerClient::lookupGiraOneValue));

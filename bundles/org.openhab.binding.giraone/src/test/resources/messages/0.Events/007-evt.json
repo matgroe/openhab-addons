@@ -6,7 +6,7 @@
       "text": "OK"
     },
     "stateChanged": {
-      "eventType": "configurationChangeBegin"
+      "eventType": "configurationChangeEnd"
     },
     "type": "stateChanged",
     "version": {

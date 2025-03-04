@@ -160,7 +160,7 @@ class GiraOneClientTest {
         assertNotNull(event);
     }
 
-    @DisplayName("Received GiraEvents must be mapped to DataPoint and provided by 'dataPoints' Observable ")
+    @DisplayName("Received GiraEvents must be mapped to DataPoint and provided by 'values' Observable ")
     @Test
     void shoutEmitDatapointOnWebSocketTextWithValueEvent() {
         giraClient.observeAndEmitDataPointValues();

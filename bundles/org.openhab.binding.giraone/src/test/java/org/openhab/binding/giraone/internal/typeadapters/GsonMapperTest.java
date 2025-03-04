@@ -84,10 +84,30 @@ public class GsonMapperTest {
         assertEquals(request.getCommand(), registerApplication.getCommand());
     }
 
-    @DisplayName("message should deserialize to GiraOneEvent")
+    @DisplayName("message should deserialize a ValueEvent to GiraOneEvent")
     @Test
-    void shouldDeserialize2WebsocketEvent() {
+    void shouldDeserialize2WebsocketValueEvent() {
         String message = ResourceLoader.loadStringResource("/messages/0.Events/001-evt.json");
+
+        GiraOneEvent event = gson.fromJson(message, GiraOneEvent.class);
+        assertNotNull(event);
+
+        assertEquals(220940, event.getId());
+        assertEquals("2.3:false", event.getNewInternal());
+        assertEquals("2.3:true", event.getOldInternal());
+        assertEquals("0", event.getNewValue());
+        assertEquals("1", event.getOldValue());
+        assertEquals("k:12.0.31", event.getSource());
+        assertEquals(
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Movement",
+                event.getUrn());
+        assertEquals("Value", event.getState());
+    }
+
+    @DisplayName("message should deserialize a StateChanged to GiraOneEvent")
+    @Test
+    void shouldDeserialize2WebsocketStateChangedEvent() {
+        String message = ResourceLoader.loadStringResource("/messages/0.Events/005-evt.json");
 
         GiraOneEvent event = gson.fromJson(message, GiraOneEvent.class);
         assertNotNull(event);

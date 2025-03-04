@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -22,10 +23,9 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({})
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneEvent {
-    @Nullable
-    private Integer id;
+    private int id;
 
     @Nullable
     private String urn;
@@ -50,7 +50,7 @@ public class GiraOneEvent {
     @Nullable
     private String source;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

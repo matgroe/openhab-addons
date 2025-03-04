@@ -225,9 +225,17 @@ public class GiraOneClient implements WebSocketListener {
 
         // and create a new one
         dataPointDisposable = Observable
-                .merge(this.responses.filter(f -> f.getRequestServerCommand().getCommand() == GiraOneCommand.GetValue)
-                        .map(this::createGiraOneValue), this.events.map(this::createGiraOneValue))
-                .subscribe(this.values::onNext);
+                .merge(this.responses.filter(this::isGetValueResponse).map(this::createGiraOneValue),
+                        this.events.filter(e -> e.getId() > 0).map(this::createGiraOneValue))
+                .retry().subscribe(this.values::onNext, this::onSubscriptionError);
+    }
+
+    private boolean isGetValueResponse(GiraOneCommandResponse response) {
+        return response.getRequestServerCommand().getCommand() == GiraOneCommand.GetValue;
+    }
+
+    private void onSubscriptionError(Throwable throwable) {
+        logger.error("onSubscriptionError :: {}", throwable.getMessage(), throwable);
     }
 
     private GiraOneValue createGiraOneValue(GiraOneCommandResponse response) {
@@ -274,7 +282,7 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     public Disposable subscribeOnGiraOneValues(Consumer<GiraOneValue> onNext) {
-        return this.values.subscribe(onNext);
+        return this.values.retry().subscribe(onNext, this::onSubscriptionError);
     }
 
     public Disposable subscribeOnGiraOneClientExceptions(Consumer<GiraOneClientException> onNext) {
