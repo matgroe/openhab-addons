@@ -54,7 +54,7 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
     public GiraOneProject deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
-        if (jsonElement == null || !jsonElement.isJsonArray()) {
+        if (jsonElement == null || jsonDeserializationContext == null || !jsonElement.isJsonArray()) {
             throw new JsonParseException("JsonArray expected here.");
         }
 
@@ -65,7 +65,8 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
                     .requireNonNull(jsonDeserializationContext.deserialize(jsonRoot.get(), GiraOneProjectItem.class));
 
             List<GiraOneChannel> channels = content.asList().stream().filter(this::isProjectChannelObject)
-                    .map(f -> makeChannel(f, jsonDeserializationContext)).collect(Collectors.toList());
+                    .map(f -> makeChannel(f, Objects.requireNonNull(jsonDeserializationContext)))
+                    .collect(Collectors.toList());
 
             return new GiraOneProject(root, channels);
         }

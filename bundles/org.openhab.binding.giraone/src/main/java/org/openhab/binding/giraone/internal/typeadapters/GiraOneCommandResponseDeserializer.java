@@ -28,7 +28,7 @@ import com.google.gson.JsonParseException;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({})
+@NonNullByDefault
 public class GiraOneCommandResponseDeserializer extends GiraOneMessageJsonTypeAdapter
         implements JsonDeserializer<GiraOneCommandResponse> {
 

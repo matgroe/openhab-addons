@@ -187,7 +187,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     private void cancelSchedulerForValueLookup() {
         if (lookupValuesScheduler != null) {
-            lookupValuesScheduler.cancel(true);
+            Objects.requireNonNull(lookupValuesScheduler).cancel(true);
         }
         lookupValuesScheduler = null;
     }
@@ -238,7 +238,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     protected int detectChannelViewId() {
         int channelViewId = lookupGiraOneProjectChannel().map(GiraOneChannel::getChannelViewId).orElse(0);
-        this.updateProperty("channelViewId", Integer.valueOf(channelViewId).toString());
+        this.updateProperty("channelViewId", String.format("%d", channelViewId));
         return channelViewId;
     }
 

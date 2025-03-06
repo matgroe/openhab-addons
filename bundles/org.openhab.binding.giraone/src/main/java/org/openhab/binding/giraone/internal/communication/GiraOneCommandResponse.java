@@ -14,6 +14,7 @@ package org.openhab.binding.giraone.internal.communication;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommandError;
 import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
@@ -27,7 +28,7 @@ import com.google.gson.JsonObject;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneCommandResponse {
     final static String PROPERTY_REQUEST = "request";
     final static String PROPERTY_ERROR = "error";

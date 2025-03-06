@@ -4,7 +4,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.gson.annotations.SerializedName;
 
-@NonNullByDefault({})
+@NonNullByDefault
 public class GiraOneCommandError {
 
     @SerializedName("text")

@@ -162,7 +162,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     protected synchronized void stopBackgroundScanning() {
         if (backgroundDiscoveryJob != null) {
-            backgroundDiscoveryJob.cancel(true);
+            Objects.requireNonNull(backgroundDiscoveryJob).cancel(true);
         }
         backgroundDiscoveryJob = null;
         removeOlderResults(Instant.now().toEpochMilli());

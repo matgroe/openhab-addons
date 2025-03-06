@@ -48,7 +48,7 @@ import com.google.gson.Gson;
  *
  * @author Matthias Groeger - Initial contribution
  */
-@NonNullByDefault({ DefaultLocation.PARAMETER })
+@NonNullByDefault({ })
 class GiraOneThingDiscoveryServiceTest {
     private GiraOneThingDiscoveryService discoveryService = spy(GiraOneThingDiscoveryService.class);
 

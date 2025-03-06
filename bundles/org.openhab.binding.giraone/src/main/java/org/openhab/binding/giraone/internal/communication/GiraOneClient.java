@@ -202,7 +202,7 @@ public class GiraOneClient implements WebSocketListener {
         logger.debug("Disconnecting with {}/{}", closeStatus.getCode(), closeStatus.getPhrase());
         try {
             if (this.websocketSession != null) {
-                this.websocketSession.close(closeStatus);
+                Objects.requireNonNull(this.websocketSession).close(closeStatus);
             }
             this.jettyThreadPool.stop();
         } catch (Exception e) {
