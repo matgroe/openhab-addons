@@ -15,13 +15,4 @@
 			<channel id="float" typeId="system.indoor-temperature"/>
 		</channels>
 	</thing-type>
-
-	<channel-type id="temperature">
-		<item-type unitHint="C">Number:Dimensionless</item-type>
-		<label>Temperature</label>
-		<category>TemperatureHot</category>
-		<state readOnly="true" pattern="%.1f °C"/>
-	</channel-type>
-
-
 </thing:thing-descriptions>

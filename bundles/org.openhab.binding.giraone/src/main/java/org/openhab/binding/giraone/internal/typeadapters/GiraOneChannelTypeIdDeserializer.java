@@ -14,6 +14,7 @@ package org.openhab.binding.giraone.internal.typeadapters;
 
 import java.lang.reflect.Type;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
@@ -30,20 +31,22 @@ import com.google.gson.JsonParseException;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneChannelTypeIdDeserializer implements JsonDeserializer<GiraOneChannelTypeId> {
     private final Logger logger = LoggerFactory.getLogger(GiraOneChannelTypeIdDeserializer.class);
 
     @Override
     @Nullable
-    public GiraOneChannelTypeId deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        try {
-            return GiraOneChannelTypeId.fromName(jsonElement.getAsString());
-        } catch (IllegalArgumentException exp) {
-            logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
-                    GiraOneChannelTypeId.class.getName());
-            return GiraOneChannelTypeId.Unknown;
+    public GiraOneChannelTypeId deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (jsonElement != null) {
+            try {
+                return GiraOneChannelTypeId.fromName(jsonElement.getAsString());
+            } catch (IllegalArgumentException exp) {
+                logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
+                        GiraOneChannelTypeId.class.getName());
+            }
         }
+        return GiraOneChannelTypeId.Unknown;
     }
 }

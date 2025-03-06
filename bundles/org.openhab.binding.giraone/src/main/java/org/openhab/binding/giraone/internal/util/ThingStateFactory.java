@@ -14,14 +14,13 @@ package org.openhab.binding.giraone.internal.util;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.GiraOneBindingConstants;
-import org.openhab.binding.giraone.internal.GiraOneThingDiscoveryService;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.types.State;
 
 /**
- * Test class for {@link GiraOneThingDiscoveryService}.
+ * Test class for {@link ThingStateFactory}.
  *
  * @author Matthias Groeger - Initial contribution
  */

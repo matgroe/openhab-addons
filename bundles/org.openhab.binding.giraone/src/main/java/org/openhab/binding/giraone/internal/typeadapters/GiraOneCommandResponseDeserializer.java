@@ -28,17 +28,17 @@ import com.google.gson.JsonParseException;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
+@NonNullByDefault({})
 public class GiraOneCommandResponseDeserializer extends GiraOneMessageJsonTypeAdapter
         implements JsonDeserializer<GiraOneCommandResponse> {
 
     @Override
     @Nullable
-    public GiraOneCommandResponse deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (isResponse(jsonElement)) {
+    public GiraOneCommandResponse deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (jsonElement != null && isResponse(jsonElement)) {
             return new GiraOneCommandResponse(getResponse(jsonElement));
         }
-        return null;
+        throw new JsonParseException("The JsonElement is not parseable as GiraOneCommandResponse.");
     }
 }

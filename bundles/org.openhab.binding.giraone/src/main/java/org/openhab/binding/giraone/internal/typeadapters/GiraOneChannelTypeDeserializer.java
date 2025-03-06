@@ -13,8 +13,8 @@
 package org.openhab.binding.giraone.internal.typeadapters;
 
 import java.lang.reflect.Type;
-import java.util.Objects;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
@@ -31,24 +31,23 @@ import com.google.gson.JsonParseException;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneChannelTypeDeserializer implements JsonDeserializer<GiraOneChannelType> {
     private final Logger logger = LoggerFactory.getLogger(GiraOneChannelTypeDeserializer.class);
 
     @Override
     @Nullable
-    public GiraOneChannelType deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        Objects.requireNonNull(jsonElement, "Argument 'jsonElement' must not be null");
-        Objects.requireNonNull(jsonDeserializationContext, "Argument 'jsonDeserializationContext' must not be null");
-        Objects.requireNonNull(type, "Argument 'type' must not be null");
-        try {
+    public GiraOneChannelType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
-            return GiraOneChannelType.fromName(jsonElement.getAsString());
-        } catch (IllegalArgumentException exp) {
-            logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
-                    GiraOneChannelType.class.getName());
-            return GiraOneChannelType.Unknown;
+        if (jsonElement != null) {
+            try {
+                return GiraOneChannelType.fromName(jsonElement.getAsString());
+            } catch (IllegalArgumentException exp) {
+                logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
+                        GiraOneChannelType.class.getName());
+            }
         }
+        return GiraOneChannelType.Unknown;
     }
 }

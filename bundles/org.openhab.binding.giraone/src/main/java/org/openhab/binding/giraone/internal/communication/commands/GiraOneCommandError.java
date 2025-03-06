@@ -1,17 +1,20 @@
 package org.openhab.binding.giraone.internal.communication.commands;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.google.gson.annotations.SerializedName;
 
+@NonNullByDefault({})
 public class GiraOneCommandError {
 
     @SerializedName("text")
-    private String error;
+    private String error = "OK";
 
     @SerializedName("hint")
-    private String hint;
+    private String hint = "";
 
     @SerializedName("code")
-    private int code;
+    private int code = 0;
 
     public String getHint() {
         return hint;

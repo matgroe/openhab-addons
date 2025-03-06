@@ -29,6 +29,7 @@ import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.library.types.StopMoveType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.library.types.UpDownType;
@@ -265,7 +266,9 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                 case UpDownType cmd -> handleUpDownType(datapoint.get(), cmd);
                 case StopMoveType cmd -> handleStopMoveType(datapoint.get(), cmd);
                 case StringType cmd -> handleStringType(datapoint.get(), cmd);
-                default -> throw new IllegalStateException("Unsupported value: " + (Object) command);
+                case QuantityType<?> cmd -> handleQuantityType(datapoint.get(), cmd);
+                default -> throw new IllegalStateException("Unsupported Command '" + command.getClass().getSimpleName()
+                        + "' with value of +" + command.toString());
             }
         } else {
             logger.debug("not responsible for handling handleCommand {}, {}", channelUID, command);
@@ -284,15 +287,14 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     protected void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
         logger.trace("handleOnOffTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.name());
-        String value = command == OnOffType.ON ? "1" : "0";
-        getGiraOneBridge().setGiraOneDataPointValue(datapoint, value);
+        getGiraOneBridge().setGiraOneDataPointValue(datapoint, (command == OnOffType.ON ? 1 : 0));
     }
 
     protected void handleUpDownType(GiraOneDataPoint datapoint, UpDownType command) {
         logger.trace("handleUpDownType :: datapoint={}, command={}", datapoint.getId(), command.name());
         switch (command) {
-            case DOWN -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, Integer.toString(100));
-            case UP -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, Integer.toString(0));
+            case DOWN -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, 100);
+            case UP -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, 0);
         }
     }
 
@@ -302,7 +304,12 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     protected void handleStringType(GiraOneDataPoint datapoint, StringType command) {
-        logger.warn("handleStringType is not implemented :: datapoint={}, command={}", datapoint.getId(),
-                command.toString());
+        logger.warn("handleStringType :: datapoint={}, command={}", datapoint.getId(), command);
+        getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.toString());
+    }
+
+    protected void handleQuantityType(GiraOneDataPoint datapoint, QuantityType<?> command) {
+        logger.warn("handleQuantityType is not implemented :: datapoint={}, command={}", datapoint.getId(), command);
+        getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.floatValue());
     }
 }

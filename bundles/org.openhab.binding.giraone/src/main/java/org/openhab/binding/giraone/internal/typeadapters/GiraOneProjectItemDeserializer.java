@@ -81,7 +81,7 @@ public class GiraOneProjectItemDeserializer implements JsonDeserializer<GiraOneP
                 }
             }
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new JsonParseException("The JsonElement is not parseable as GiraOneProjectItem.", e);
         }
         return item;
     }

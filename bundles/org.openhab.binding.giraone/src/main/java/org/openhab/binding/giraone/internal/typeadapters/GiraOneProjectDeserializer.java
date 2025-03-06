@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
@@ -36,7 +37,7 @@ import com.google.gson.JsonParseException;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProject> {
     private final static String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
     private final static String PROPERTY_CHANNEL_VIEW_URN = "channelViewUrn";
@@ -50,11 +51,13 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
 
     @Override
     @Nullable
-    public GiraOneProject deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (!jsonElement.isJsonArray()) {
+    public GiraOneProject deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+
+        if (jsonElement == null || !jsonElement.isJsonArray()) {
             throw new JsonParseException("JsonArray expected here.");
         }
+
         JsonArray content = jsonElement.getAsJsonArray();
         Optional<JsonElement> jsonRoot = content.asList().stream().filter(this::isProjectContentRootObject).findFirst();
         if (jsonRoot.isPresent()) {
@@ -66,7 +69,7 @@ public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProje
 
             return new GiraOneProject(root, channels);
         }
-        throw new JsonParseException("Cannot parse received JsonArray.");
+        throw new JsonParseException("Cannot parse received JsonArray to GiraOneProject.");
     }
 
     private boolean isProjectContentRootObject(JsonElement jsonElement) {

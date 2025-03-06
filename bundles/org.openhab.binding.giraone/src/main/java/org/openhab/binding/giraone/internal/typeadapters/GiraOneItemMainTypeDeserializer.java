@@ -36,14 +36,16 @@ public class GiraOneItemMainTypeDeserializer implements JsonDeserializer<GiraOne
 
     @Override
     @Nullable
-    public GiraOneItemMainType deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        try {
-            return GiraOneItemMainType.valueOf(jsonElement.getAsString());
-        } catch (IllegalArgumentException exp) {
-            logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
-                    GiraOneItemMainType.class.getName());
-            return GiraOneItemMainType.Unknown;
+    public GiraOneItemMainType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (jsonElement != null) {
+            try {
+                return GiraOneItemMainType.valueOf(jsonElement.getAsString());
+            } catch (IllegalArgumentException exp) {
+                logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
+                        GiraOneItemMainType.class.getName());
+            }
         }
+        return GiraOneItemMainType.Unknown;
     }
 }

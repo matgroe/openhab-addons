@@ -62,6 +62,24 @@ public interface GiraOneBridge {
     void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, String value);
 
     /**
+     * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     *
+     * @param dataPoint The {@link GiraOneDataPoint} to change.
+     * @param value The new value
+     */
+    void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Float value);
+
+    /**
+     * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     *
+     * @param dataPoint The {@link GiraOneDataPoint} to change.
+     * @param value The new value
+     */
+    void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Integer value);
+
+    /**
      * Observes all {@link GiraOneChannelValue} for the given channel.
      *
      * @param channelViewId - The channelViewId to observe.

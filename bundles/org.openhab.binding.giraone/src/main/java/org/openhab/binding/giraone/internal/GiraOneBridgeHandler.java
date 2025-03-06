@@ -116,6 +116,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     private void doBackgroundInitialization() {
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
+        this.giraOneServerClient.disconnect();
         try {
             disposableConnectionState = this.giraOneServerClient
                     .subscribeOnConnectionState(this::onConnectionStateChanged);
@@ -234,6 +235,16 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     @Override
     public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, String value) {
         this.giraOneServerClient.setGiraOneValue(new GiraOneValue(dataPoint.getId(), value));
+    }
+
+    @Override
+    public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Integer value) {
+        this.setGiraOneDataPointValue(dataPoint, value.toString());
+    }
+
+    @Override
+    public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Float value) {
+        this.setGiraOneDataPointValue(dataPoint, value.toString());
     }
 
     @Override

@@ -43,12 +43,12 @@ public class GiraOneEventDeserializer extends GiraOneMessageJsonTypeAdapter impl
 
     @Override
     @Nullable
-    public GiraOneEvent deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (isEvent(jsonElement)) {
+    public GiraOneEvent deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (jsonElement != null && isEvent(jsonElement)) {
             JsonObject value = getValue(jsonElement);
             return new Gson().fromJson(value, GiraOneEvent.class);
         }
-        return null;
+        throw new JsonParseException("Cannot parse JsonElement as GiraOneEvent.");
     }
 }

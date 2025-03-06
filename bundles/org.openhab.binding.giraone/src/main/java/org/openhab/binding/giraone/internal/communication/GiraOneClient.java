@@ -66,10 +66,12 @@ import io.reactivex.rxjava3.subjects.Subject;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({})
+@NonNullByDefault
 public class GiraOneClient implements WebSocketListener {
+
     private final static String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
-    private final static int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * 1024);
+    private final static int FACTOR_BYTES_2_KILO_BYTES = 1024;
+    private final static int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * FACTOR_BYTES_2_KILO_BYTES);
     private final static int DEFAULT_TIMEOUT_SECONDS = 10;
     private final static int THREAD_POOL_SIZE = 4;
 
@@ -110,30 +112,19 @@ public class GiraOneClient implements WebSocketListener {
     /**
      * Constructor
      *
-     * @param host Gira One Server's hostname or IP
-     * @param username The username for accessing the Gira functionality
-     * @param password The username's password
-     */
-    public GiraOneClient(final String host, final String username, final String password) {
-        Objects.requireNonNull(host, "Argument 'host' must not be null");
-        Objects.requireNonNull(username, "Argument 'username' must not be null");
-        Objects.requireNonNull(password, "Argument 'password' must not be null");
-
-        this.gson = GsonMapperFactory.createGson();
-        this.giraOneWssEndpoint = String.format(TEMPLATE_WEBSOCKET_URL, host,
-                computeWebsocketAuthToken(username, password));
-        this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
-    }
-
-    /**
-     * Constructor
-     *
      * @param config A {@link GiraOneClientConfiguration} object
      */
     public GiraOneClient(final GiraOneClientConfiguration config) {
-        this(config.getHostname(), config.getUsername(), config.getPassword());
-        this.timeoutSeconds = config.getDefaultTimeoutSeconds();
-        this.maxTextMessageSize = config.getMaxTextMessageSize();
+        Objects.requireNonNull(config.hostname, "GiraOneClientConfiguration 'hostname' must not be null");
+        Objects.requireNonNull(config.username, "GiraOneClientConfiguration 'username' must not be null");
+        Objects.requireNonNull(config.password, "GiraOneClientConfiguration 'password' must not be null");
+
+        this.gson = GsonMapperFactory.createGson();
+        this.giraOneWssEndpoint = String.format(TEMPLATE_WEBSOCKET_URL, config.hostname,
+                computeWebsocketAuthToken(config.username, config.password));
+        this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
+        this.timeoutSeconds = config.defaultTimeoutSeconds;
+        this.maxTextMessageSize = config.maxTextMessageSize * FACTOR_BYTES_2_KILO_BYTES;
     }
 
     String computeWebsocketAuthToken(String username, String password) {
@@ -188,6 +179,10 @@ public class GiraOneClient implements WebSocketListener {
      * @throws GiraOneClientException
      */
     public void connect() {
+        if (connectionState.getValue() != GiraOneBridgeConnectionState.Disconnected) {
+            this.disconnect();
+        }
+
         logger.debug("Connecting to {}", this.giraOneWssEndpoint);
         this.connectionState.onNext(GiraOneBridgeConnectionState.Connecting);
         observeAndEmitDataPointValues();
@@ -204,6 +199,7 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     private void disconnect(CloseStatus closeStatus) {
+        logger.debug("Disconnecting with {}/{}", closeStatus.getCode(), closeStatus.getPhrase());
         try {
             if (this.websocketSession != null) {
                 this.websocketSession.close(closeStatus);
@@ -213,7 +209,6 @@ public class GiraOneClient implements WebSocketListener {
             throw new RuntimeException(e);
         } finally {
             this.websocketSession = null;
-            this.jettyThreadPool = null;
             this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
             this.dataPointDisposable.dispose();
         }
@@ -315,7 +310,7 @@ public class GiraOneClient implements WebSocketListener {
         final CompletableFuture<GiraOneCommandResponse> promise = new CompletableFuture<>();
         Disposable disposable = Disposable.empty();
         try {
-            disposable = this.responses.filter(f -> f.isInitatedBy(command)).take(1).subscribe(promise::complete);
+            disposable = this.responses.filter(f -> f.isInitiatedBy(command)).take(1).subscribe(promise::complete);
             // send out command
             send(command);
             // and wait for response
@@ -328,19 +323,24 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     @Override
+    @NonNullByDefault({})
     public void onWebSocketBinary(byte[] bytes, int i, int i1) {
         logger.error("unsupported binary data received");
     }
 
     @Override
+    @NonNullByDefault({})
     public void onWebSocketText(String message) {
         logger.trace("Received Message :: {}", message);
-        GiraOneMessageType type = Objects.requireNonNull(gson.fromJson(message, GiraOneMessageType.class));
+        GiraOneMessageType type = Objects.requireNonNullElse(gson.fromJson(message, GiraOneMessageType.class),
+                GiraOneMessageType.Invalid);
         switch (type) {
-            case Event -> this.events.onNext(gson.fromJson(message, GiraOneEvent.class));
-            case Response -> this.responses.onNext(gson.fromJson(message, GiraOneCommandResponse.class));
+            case Event -> this.events.onNext(Objects.requireNonNull(gson.fromJson(message, GiraOneEvent.class)));
+            case Response ->
+                this.responses.onNext(Objects.requireNonNull(gson.fromJson(message, GiraOneCommandResponse.class)));
             case Invalid -> this.logger.warn("invalid message received :: {}", message);
-            case Error -> this.handleErroneousMessage(gson.fromJson(message, GiraOneCommandResponse.class));
+            case Error -> this.handleErroneousMessage(
+                    Objects.requireNonNull(gson.fromJson(message, GiraOneCommandResponse.class)));
         }
     }
 
@@ -350,6 +350,7 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     @Override
+    @NonNullByDefault({})
     public void onWebSocketClose(int code, String reason) {
         logger.info("WebSocket is closed with code={} and reason={}", code, reason);
         if (code == WS_GOING_AWAY.getCode()) {
@@ -359,12 +360,15 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     @Override
+    @NonNullByDefault({})
     public void onWebSocketError(Throwable throwable) {
         logger.error("Received WebSocketError :: ", throwable);
+
         this.connectionState.onNext(GiraOneBridgeConnectionState.Error);
     }
 
     @Override
+    @NonNullByDefault({})
     public void onWebSocketConnect(Session session) {
         logger.debug("Received WebSocket Session :: {}", session);
         this.websocketSession = session;

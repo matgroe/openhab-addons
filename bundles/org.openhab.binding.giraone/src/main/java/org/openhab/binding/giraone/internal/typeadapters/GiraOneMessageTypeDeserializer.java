@@ -34,12 +34,14 @@ public class GiraOneMessageTypeDeserializer extends GiraOneMessageJsonTypeAdapte
 
     @Override
     @Nullable
-    public GiraOneMessageType deserialize(JsonElement jsonElement, Type type,
-            JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (isResponse(jsonElement)) {
-            return hasError(getResponse(jsonElement)) ? GiraOneMessageType.Error : GiraOneMessageType.Response;
-        } else if (isEvent(jsonElement)) {
-            return hasError(getEvent(jsonElement)) ? GiraOneMessageType.Error : GiraOneMessageType.Event;
+    public GiraOneMessageType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (jsonElement != null) {
+            if (isResponse(jsonElement)) {
+                return hasError(getResponse(jsonElement)) ? GiraOneMessageType.Error : GiraOneMessageType.Response;
+            } else if (isEvent(jsonElement)) {
+                return hasError(getEvent(jsonElement)) ? GiraOneMessageType.Error : GiraOneMessageType.Event;
+            }
         }
         return GiraOneMessageType.Invalid;
     }
