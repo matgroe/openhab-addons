@@ -13,14 +13,17 @@
 package org.openhab.binding.giraone.internal.typeadapters;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
+import org.openhab.binding.giraone.internal.types.GiraOneMessageError;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 /**
@@ -36,13 +39,21 @@ public class GiraOneMessageTypeDeserializer extends GiraOneMessageJsonTypeAdapte
     @Nullable
     public GiraOneMessageType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (jsonElement != null) {
+        if (jsonElement != null && jsonDeserializationContext != null) {
             if (isResponse(jsonElement)) {
-                return hasError(getResponse(jsonElement)) ? GiraOneMessageType.Error : GiraOneMessageType.Response;
+                return isError(getResponse(jsonElement), jsonDeserializationContext) ? GiraOneMessageType.Error
+                        : GiraOneMessageType.Response;
             } else if (isEvent(jsonElement)) {
-                return hasError(getEvent(jsonElement)) ? GiraOneMessageType.Error : GiraOneMessageType.Event;
+                return isError(getEvent(jsonElement), jsonDeserializationContext) ? GiraOneMessageType.Error
+                        : GiraOneMessageType.Event;
             }
         }
         return GiraOneMessageType.Invalid;
+    }
+
+    private boolean isError(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
+        GiraOneMessageError error = jsonDeserializationContext.deserialize(jsonObject.getAsJsonObject(PROPERTY_ERROR),
+                GiraOneMessageError.class);
+        return Objects.requireNonNull(error).isErrorState();
     }
 }

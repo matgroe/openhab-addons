@@ -30,6 +30,7 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.CloseStatus;
+import org.eclipse.jetty.websocket.api.MessageTooLargeException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
@@ -206,7 +207,7 @@ public class GiraOneClient implements WebSocketListener {
             }
             this.jettyThreadPool.stop();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new GiraOneClientException(GiraOneClientException.DISCONNECT_FAILED, e);
         } finally {
             this.websocketSession = null;
             this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
@@ -241,25 +242,32 @@ public class GiraOneClient implements WebSocketListener {
         return new GiraOneValueChange(event.getId(), event.getNewValue(), event.getOldValue());
     }
 
+    private void emitConnectionStateException(GiraOneBridgeConnectionState expected) {
+        this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
+                expected.toString(), connectionState.getValue().toString()));
+    }
+
     public GiraOneDeviceConfiguration lookupGiraOneDeviceConfiguration() {
         if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
             return execute(GetDeviceConfig.builder().build()).getReply(GiraOneDeviceConfiguration.class);
         }
-        throw new IllegalStateException("Must be in ConnectionState.Connected");
+        throw new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
+                GiraOneBridgeConnectionState.Connected.toString(), connectionState.getValue().toString());
     }
 
     public GiraOneProject lookupGiraOneProject() {
         if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
             return execute(GetUIConfiguration.builder().build()).getReply(GiraOneProject.class);
         }
-        throw new IllegalStateException("Must be in ConnectionState.Connected");
+        throw new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
+                GiraOneBridgeConnectionState.Connected.toString(), connectionState.getValue().toString());
     }
 
     public void lookupGiraOneValue(final int datapointId) {
         if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
             send(GetValue.builder().with(GetValue::setId, datapointId).build());
         } else {
-            throw new IllegalStateException("Must be in ConnectionState.Connected");
+            emitConnectionStateException(GiraOneBridgeConnectionState.Connected);
         }
     }
 
@@ -268,7 +276,7 @@ public class GiraOneClient implements WebSocketListener {
             send(SetValue.builder().with(SetValue::setId, value.getId()).with(SetValue::setValue, value.getValue())
                     .build());
         } else {
-            throw new IllegalStateException("Must be in ConnectionState.Connected");
+            emitConnectionStateException(GiraOneBridgeConnectionState.Connected);
         }
     }
 
@@ -345,7 +353,7 @@ public class GiraOneClient implements WebSocketListener {
     }
 
     private void handleErroneousMessage(GiraOneCommandResponse giraOneCommandResponse) {
-        this.logger.error("{} :: {}", giraOneCommandResponse.getGiraOneCommandError(),
+        this.logger.error("{} :: {}", giraOneCommandResponse.getGiraMessageError(),
                 giraOneCommandResponse.responseBody);
     }
 
@@ -363,7 +371,13 @@ public class GiraOneClient implements WebSocketListener {
     @NonNullByDefault({})
     public void onWebSocketError(Throwable throwable) {
         logger.error("Received WebSocketError :: ", throwable);
-
+        if (throwable instanceof MessageTooLargeException) {
+            this.clientExceptions
+                    .onNext(new GiraOneClientException(GiraOneClientException.MESSAGE_TOO_LARGE, throwable));
+        } else {
+            this.clientExceptions
+                    .onNext(new GiraOneClientException(GiraOneClientException.WEBSOCKET_COMMUNICATION, throwable));
+        }
         this.connectionState.onNext(GiraOneBridgeConnectionState.Error);
     }
 

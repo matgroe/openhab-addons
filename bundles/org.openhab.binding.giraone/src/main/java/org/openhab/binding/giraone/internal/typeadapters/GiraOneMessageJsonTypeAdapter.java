@@ -30,13 +30,6 @@ class GiraOneMessageJsonTypeAdapter {
     protected static final String PROPERTY_EVENT = "event";
     protected static final String PROPERTY_ERROR = "error";
 
-    boolean hasError(JsonObject jsonObject) {
-        if (jsonObject.has(PROPERTY_ERROR)) {
-            return !"OK".equalsIgnoreCase(jsonObject.getAsJsonObject(PROPERTY_ERROR).get("text").getAsString());
-        }
-        return false;
-    }
-
     boolean isResponse(JsonElement jsonElement) {
         return isResponse(jsonElement.getAsJsonObject());
     }

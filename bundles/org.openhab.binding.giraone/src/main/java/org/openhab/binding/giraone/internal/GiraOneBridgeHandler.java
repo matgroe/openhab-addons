@@ -31,6 +31,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
+import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -64,11 +65,11 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     private Disposable disposableConnectionState = Disposable.empty();
     private Disposable disposableDataPoint = Disposable.empty();
-    private Disposable disposableOnClientExceptions = Disposable.empty();
 
     public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
         this.giraOneServerClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
+        giraOneServerClient.subscribeOnGiraOneClientExceptions(this::onGiraOneClientException);
     }
 
     @Override
@@ -88,7 +89,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void dispose() {
-        disposableOnClientExceptions.dispose();
         disposableConnectionState.dispose();
         disposableDataPoint.dispose();
 
@@ -121,8 +121,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
             disposableConnectionState = this.giraOneServerClient
                     .subscribeOnConnectionState(this::onConnectionStateChanged);
             disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneValues(this::onGiraOneValue);
-            disposableOnClientExceptions = giraOneServerClient
-                    .subscribeOnGiraOneClientExceptions(this::onGiraOneClientException);
 
             this.giraOneServerClient.connect();
         } catch (GiraOneClientException exp) {
@@ -137,6 +135,12 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     private void onGiraOneClientException(GiraOneClientException clientException) {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, clientException.getMessage());
+    }
+
+    @Override
+    protected void updateConfiguration(Configuration configuration) {
+        super.updateConfiguration(configuration);
+        this.doBackgroundInitialization();
     }
 
     /**

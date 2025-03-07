@@ -78,7 +78,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         logger.debug("initialize {}", getThing().getUID());
         try {
             this.disposableOnConnectionState = getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState);
-        } catch (NullPointerException exp) {
+        } catch (Exception exp) {
             updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
         }
     }
@@ -255,7 +255,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+    public final void handleCommand(ChannelUID channelUID, Command command) {
         Optional<GiraOneDataPoint> datapoint = findGiraOneDataPointWithinChannelView(channelUID.getId());
         if (datapoint.isPresent()) {
             logger.debug("handleCommand :: channelUID={}, command={}", channelUID, command);
@@ -263,10 +263,10 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                 case RefreshType cmd -> handleRefreshTypeCommand(cmd);
                 case DecimalType cmd -> handleDecimalTypeCommand(datapoint.get(), cmd);
                 case OnOffType cmd -> handleOnOffTypeCommand(datapoint.get(), cmd);
-                case UpDownType cmd -> handleUpDownType(datapoint.get(), cmd);
-                case StopMoveType cmd -> handleStopMoveType(datapoint.get(), cmd);
-                case StringType cmd -> handleStringType(datapoint.get(), cmd);
-                case QuantityType<?> cmd -> handleQuantityType(datapoint.get(), cmd);
+                case UpDownType cmd -> handleUpDownTypeCommand(datapoint.get(), cmd);
+                case StopMoveType cmd -> handleStopMoveTypeCommand(datapoint.get(), cmd);
+                case StringType cmd -> handleStringTypeCommand(datapoint.get(), cmd);
+                case QuantityType<?> cmd -> handleQuantityTypeCommand(datapoint.get(), cmd);
                 default -> throw new IllegalStateException("Unsupported Command '" + command.getClass().getSimpleName()
                         + "' with value of +" + command.toString());
             }
@@ -275,22 +275,45 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         }
     }
 
+    /**
+     * Override this method for special tasks on receiving a {@link RefreshType} command from openhab.
+     * 
+     * @param command The {@link RefreshType} command.
+     */
     protected void handleRefreshTypeCommand(RefreshType command) {
         logger.trace("handleRefreshTypeCommand :: channelViewId={}, command={}", this.channelViewId, command);
         getGiraOneBridge().lookupGiraOneChannelValues(this.channelViewId);
     }
 
+    /**
+     * Override this method for special tasks on receiving a {@link DecimalType} command from openhab.
+     *
+     * @param datapoint The {@link GiraOneDataPoint}, the command should be applied on.
+     * @param command The {@link DecimalType} command.
+     */
     protected void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {
         logger.trace("handleDecimalTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.intValue());
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.toString());
     }
 
+    /**
+     * Override this method for special tasks on receiving a {@link OnOffType} command from openhab.
+     *
+     * @param datapoint The {@link GiraOneDataPoint}, the command should be applied on.
+     * @param command The {@link OnOffType} command.
+     */
     protected void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
         logger.trace("handleOnOffTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.name());
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, (command == OnOffType.ON ? 1 : 0));
     }
 
-    protected void handleUpDownType(GiraOneDataPoint datapoint, UpDownType command) {
+    /**
+     * Override this method for special tasks on receiving a {@link UpDownType} command from openhab.
+     *
+     * @param datapoint The {@link GiraOneDataPoint}, the command should be applied on.
+     * @param command The {@link UpDownType} command.
+     */
+    protected void handleUpDownTypeCommand(GiraOneDataPoint datapoint, UpDownType command) {
         logger.trace("handleUpDownType :: datapoint={}, command={}", datapoint.getId(), command.name());
         switch (command) {
             case DOWN -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, 100);
@@ -298,17 +321,35 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         }
     }
 
-    protected void handleStopMoveType(GiraOneDataPoint datapoint, StopMoveType command) {
+    /**
+     * Override this method for special tasks on receiving a {@link StopMoveType} command from openhab.
+     *
+     * @param datapoint The {@link GiraOneDataPoint}, the command should be applied on.
+     * @param command The {@link StopMoveType} command.
+     */
+    protected void handleStopMoveTypeCommand(GiraOneDataPoint datapoint, StopMoveType command) {
         logger.warn("handleStopMoveType is not implemented :: datapoint={}, command={}", datapoint.getId(),
                 command.name());
     }
 
-    protected void handleStringType(GiraOneDataPoint datapoint, StringType command) {
+    /**
+     * Override this method for special tasks on receiving a {@link StringType} command from openhab.
+     *
+     * @param datapoint The {@link GiraOneDataPoint}, the command should be applied on.
+     * @param command The {@link StringType} command.
+     */
+    protected void handleStringTypeCommand(GiraOneDataPoint datapoint, StringType command) {
         logger.warn("handleStringType :: datapoint={}, command={}", datapoint.getId(), command);
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.toString());
     }
 
-    protected void handleQuantityType(GiraOneDataPoint datapoint, QuantityType<?> command) {
+    /**
+     * Override this method for special tasks on receiving a {@link QuantityType} command from openhab.
+     *
+     * @param datapoint The {@link GiraOneDataPoint}, the command should be applied on.
+     * @param command The {@link QuantityType} command.
+     */
+    protected void handleQuantityTypeCommand(GiraOneDataPoint datapoint, QuantityType<?> command) {
         logger.warn("handleQuantityType is not implemented :: datapoint={}, command={}", datapoint.getId(), command);
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.floatValue());
     }

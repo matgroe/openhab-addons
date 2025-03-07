@@ -14,6 +14,7 @@
 				<label>Gira One Server's Hostname or IP</label>
 				<description>Hostname or IP address of GiraOne Server</description>
 			</parameter>
+
 			<parameter name="username" type="text" required="true">
 				<context>username</context>
 				<label>Username</label>
@@ -26,9 +27,10 @@
 				<description>Password to access the Gira One Server</description>
 			</parameter>
 
-			<parameter name="tryReconnectAfterSeconds" type="integer" unit="s" min="30">
+			<parameter name="tryReconnectAfterSeconds" type="integer" min="30">
 				<label>Try Reconnect After</label>
-				<description>How long should be waited before trying a reconnect on as serverside closed connection (e.g. reboot)</description>
+				<description>How many seconds should be waited before trying a reconnect on as serverside closed connection (e.g.
+					reboot)</description>
 				<default>60</default>
 				<advanced>true</advanced>
 			</parameter>
@@ -40,7 +42,7 @@
 				<advanced>true</advanced>
 			</parameter>
 
-			<parameter name="maxTextMessageSize" type="integer" min="200">
+			<parameter name="maxTextMessageSize" type="integer" min="50">
 				<label>Maximum number of kBytes to accept from Gira One Server as single message.</label>
 				<description>Increase this value for large GiraOne Project installations.</description>
 				<default>350</default>

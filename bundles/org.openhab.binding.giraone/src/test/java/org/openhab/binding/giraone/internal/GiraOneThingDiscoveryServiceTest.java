@@ -18,7 +18,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.stream.Stream;
 
-import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,7 +47,7 @@ import com.google.gson.Gson;
  *
  * @author Matthias Groeger - Initial contribution
  */
-@NonNullByDefault({ })
+@NonNullByDefault({})
 class GiraOneThingDiscoveryServiceTest {
     private GiraOneThingDiscoveryService discoveryService = spy(GiraOneThingDiscoveryService.class);
 

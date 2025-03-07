@@ -59,6 +59,8 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     private void detectMovingState(GiraOneValue value) {
         if ("0".equals(value.getValue())) {
             updateChannelShutterMovingState(MovingState.HALTED);
+        } else if (this.movingState == MovingState.HALTED) {
+            updateChannelShutterMovingState(MovingState.MOVING);
         }
     }
 
@@ -89,7 +91,7 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     }
 
     @Override
-    protected void handleStopMoveType(GiraOneDataPoint datapoint, StopMoveType command) {
+    protected void handleStopMoveTypeCommand(GiraOneDataPoint datapoint, StopMoveType command) {
         logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint.getId(), command.name());
         Optional<GiraOneDataPoint> stepUpDown = super.findGiraOneDataPointWithinChannelView(
                 GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN);
