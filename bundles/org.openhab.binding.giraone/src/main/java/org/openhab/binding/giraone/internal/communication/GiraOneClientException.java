@@ -25,13 +25,13 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault({})
 public class GiraOneClientException extends RuntimeException {
-    public final static String UNKNOWN_ERROR = "@text/giraone.client.unkown-error";
-    public final static String UNEXPECTED_CONNECTION_STATE = "@text/giraone.client.unexpected-connection-state";
-    public final static String CONNECT_CONFIGURATION = "@text/giraone.client.websocket.configuration";
-    public final static String CONNECT_REFUSED = "@text/giraone.client.websocket.connect-refused";
-    public final static String WEBSOCKET_COMMUNICATION = "@text/giraone.client.websocket.communication";
-    public final static String MESSAGE_TOO_LARGE = "@text/giraone.client.websocket.message-too-large";
-    public final static String DISCONNECT_FAILED = "@text/giraone.client.websocket.disconnect";
+    public static final String UNKNOWN_ERROR = "@text/giraone.client.unkown-error";
+    public static final String UNEXPECTED_CONNECTION_STATE = "@text/giraone.client.unexpected-connection-state";
+    public static final String CONNECT_CONFIGURATION = "@text/giraone.client.websocket.configuration";
+    public static final String CONNECT_REFUSED = "@text/giraone.client.websocket.connect-refused";
+    public static final String WEBSOCKET_COMMUNICATION = "@text/giraone.client.websocket.communication";
+    public static final String MESSAGE_TOO_LARGE = "@text/giraone.client.websocket.message-too-large";
+    public static final String DISCONNECT_FAILED = "@text/giraone.client.websocket.disconnect";
 
     @Serial
     private static final long serialVersionUID = 1L;

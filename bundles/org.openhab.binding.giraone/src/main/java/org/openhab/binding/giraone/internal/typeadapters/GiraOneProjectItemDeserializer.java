@@ -37,14 +37,14 @@ import com.google.gson.JsonParseException;
  */
 @NonNullByDefault
 public class GiraOneProjectItemDeserializer implements JsonDeserializer<GiraOneProjectItem> {
-    private final static String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
-    private final static String PROPERTY_MAIN_TYPE = "mainType";
-    private final static String PROPERTY_SUB_TYPE = "subType";
-    private final static String PROPERTY_NAME = "name";
-    private final static String PROPERTY_URN = "urn";
-    private final static String PROPERTY_CONTENT = "content";
-    private final static String PROPERTY_CHILDREN = "children";
-    private final static String PROPERTY_ITEM_REFERENCES = "itemReferences";
+    private static final String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
+    private static final String PROPERTY_MAIN_TYPE = "mainType";
+    private static final String PROPERTY_SUB_TYPE = "subType";
+    private static final String PROPERTY_NAME = "name";
+    private static final String PROPERTY_URN = "urn";
+    private static final String PROPERTY_CONTENT = "content";
+    private static final String PROPERTY_CHILDREN = "children";
+    private static final String PROPERTY_ITEM_REFERENCES = "itemReferences";
 
     @Override
     @Nullable

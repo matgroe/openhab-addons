@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
 @Component(service = { UpnpDiscoveryParticipant.class })
 public class GiraOneBridgeDiscoveryParticipant implements UpnpDiscoveryParticipant {
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeDiscoveryParticipant.class);
-    private final static String DEVICE_NAMESPACE = "gira-de";
-    private final static String DEVICE_TYPE = "Device";
+    private static final String DEVICE_NAMESPACE = "gira-de";
+    private static final String DEVICE_TYPE = "Device";
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypeUIDs() {

@@ -39,21 +39,20 @@ import com.google.gson.JsonParseException;
  */
 @NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneProjectDeserializer implements JsonDeserializer<GiraOneProject> {
-    private final static String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
-    private final static String PROPERTY_CHANNEL_VIEW_URN = "channelViewUrn";
-    private final static String PROPERTY_CHANNEL_TYPE = "channelType";
-    private final static String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";
+    private static final String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
+    private static final String PROPERTY_CHANNEL_VIEW_URN = "channelViewUrn";
+    private static final String PROPERTY_CHANNEL_TYPE = "channelType";
+    private static final String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";
 
-    private final static String CONTENT_ROOT_MAIN_TYPE = "Root";
-    private final static String CONTENT_ROOT_SUB_TYPE = CONTENT_ROOT_MAIN_TYPE;
-    private final static String PROPERTY_CONTENT_MAIN_TYPE = "mainType";
-    private final static String PROPERTY_CONTENT_SUB_TYPE = "subType";
+    private static final String CONTENT_ROOT_MAIN_TYPE = "Root";
+    private static final String CONTENT_ROOT_SUB_TYPE = CONTENT_ROOT_MAIN_TYPE;
+    private static final String PROPERTY_CONTENT_MAIN_TYPE = "mainType";
+    private static final String PROPERTY_CONTENT_SUB_TYPE = "subType";
 
     @Override
     @Nullable
     public GiraOneProject deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
         if (jsonElement == null || jsonDeserializationContext == null || !jsonElement.isJsonArray()) {
             throw new JsonParseException("JsonArray expected here.");
         }

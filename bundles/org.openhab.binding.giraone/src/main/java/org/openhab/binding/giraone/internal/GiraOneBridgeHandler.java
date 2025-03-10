@@ -193,7 +193,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
      * @return the {@link GiraOneChannelValue}
      */
     private GiraOneChannelValue createGiraOneChannelValue(GiraOneChannel projectChannel, GiraOneDataPoint dataPoint) {
-
         GenericBuilder<GiraOneChannelValue> builder = GenericBuilder.of(GiraOneChannelValue::new);
 
         return builder.with(GiraOneChannelValue::setChannelViewId, projectChannel.getChannelViewId())

@@ -39,7 +39,6 @@ public class GiraOneChannelTypeDeserializer implements JsonDeserializer<GiraOneC
     @Nullable
     public GiraOneChannelType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
         if (jsonElement != null) {
             try {
                 return GiraOneChannelType.fromName(jsonElement.getAsString());

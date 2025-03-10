@@ -59,7 +59,7 @@ import org.openhab.binding.giraone.internal.util.ResourceLoader;
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 class GiraOneClientTest {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final static int RCV_TIMEOUT = 2;
+    private static final int RCV_TIMEOUT = 2;
 
     private GiraOneClient giraClient;
     private Session websocketSession = Mockito.mock(Session.class);

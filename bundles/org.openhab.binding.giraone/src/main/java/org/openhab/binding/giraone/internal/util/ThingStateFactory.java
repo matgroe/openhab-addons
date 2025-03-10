@@ -55,7 +55,6 @@ public abstract class ThingStateFactory {
             // case GiraOneBindingConstants.CHANNEL_MOVEMENT:
             default:
                 return StringType.valueOf(value);
-
         }
     }
 }

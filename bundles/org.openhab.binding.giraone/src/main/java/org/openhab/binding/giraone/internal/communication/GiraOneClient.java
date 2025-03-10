@@ -70,15 +70,15 @@ import io.reactivex.rxjava3.subjects.Subject;
 @NonNullByDefault
 public class GiraOneClient implements WebSocketListener {
 
-    private final static String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
-    private final static int FACTOR_BYTES_2_KILO_BYTES = 1024;
-    private final static int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * FACTOR_BYTES_2_KILO_BYTES);
-    private final static int DEFAULT_TIMEOUT_SECONDS = 10;
-    private final static int THREAD_POOL_SIZE = 4;
+    private static final String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
+    private static final int FACTOR_BYTES_2_KILO_BYTES = 1024;
+    private static final int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * FACTOR_BYTES_2_KILO_BYTES);
+    private static final int DEFAULT_TIMEOUT_SECONDS = 10;
+    private static final int THREAD_POOL_SIZE = 4;
 
     // websocket close codes : https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
-    private final static CloseStatus WS_CLOSURE_NORMAL = new CloseStatus(1000, "Normal Closure");
-    private final static CloseStatus WS_GOING_AWAY = new CloseStatus(1001, "Going Away");
+    private static final CloseStatus WS_CLOSURE_NORMAL = new CloseStatus(1000, "Normal Closure");
+    private static final CloseStatus WS_GOING_AWAY = new CloseStatus(1001, "Going Away");
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneClient.class);
     private final Gson gson;

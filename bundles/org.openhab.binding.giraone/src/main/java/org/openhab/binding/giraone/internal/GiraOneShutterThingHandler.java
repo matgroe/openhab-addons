@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
-    private final static String CHANNEL_ID_SHUTTER_MOVEMENT = "internal-movement-state";
+    private static final String CHANNEL_ID_SHUTTER_MOVEMENT = "internal-movement-state";
 
     private enum MovingState {
         HALTED,
@@ -82,7 +82,6 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
         logger.debug("onGiraOneChannelValue :: {}", giraOneChannelValue);
         switch (buildThingChannelId(giraOneChannelValue)) {
             case GiraOneBindingConstants.CHANNEL_MOVEMENT -> detectMovingState(giraOneChannelValue.getGiraOneValue());
-
             case GiraOneBindingConstants.CHANNEL_POSITION, GiraOneBindingConstants.CHANNEL_UP_DOWN,
                     GiraOneBindingConstants.CHANNEL_SLAT_POSITION, GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN ->
                 detectMovingDirection(giraOneChannelValue.getGiraOneValue());

@@ -30,8 +30,8 @@ import com.google.gson.JsonObject;
  */
 @NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneCommandResponse {
-    final static String PROPERTY_REQUEST = "request";
-    final static String PROPERTY_ERROR = "error";
+    static final String PROPERTY_REQUEST = "request";
+    static final String PROPERTY_ERROR = "error";
 
     final JsonObject responseBody;
 

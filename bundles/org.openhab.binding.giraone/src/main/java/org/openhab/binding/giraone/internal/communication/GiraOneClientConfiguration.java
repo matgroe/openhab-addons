@@ -21,7 +21,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public class GiraOneClientConfiguration {
-    private final static String EMPTY = "";
+    private static final String EMPTY = "";
 
     public String hostname = EMPTY;
     public String username = EMPTY;

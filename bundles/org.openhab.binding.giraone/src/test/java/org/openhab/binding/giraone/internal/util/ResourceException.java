@@ -13,11 +13,14 @@
 
 package org.openhab.binding.giraone.internal.util;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Test utility class on loading local resources.
  *
  * @author Matthias Groeger - Initial contribution
  */
+@NonNullByDefault
 public class ResourceException extends RuntimeException {
     public ResourceException(String message) {
         super(message);

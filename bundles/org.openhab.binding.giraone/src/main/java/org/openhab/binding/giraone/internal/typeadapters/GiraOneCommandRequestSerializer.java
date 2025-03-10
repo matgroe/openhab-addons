@@ -32,7 +32,7 @@ import com.google.gson.JsonSerializer;
  */
 @NonNullByDefault
 public class GiraOneCommandRequestSerializer implements JsonSerializer<ServerCommand> {
-    final static String PROPERTY_REQUEST = "request";
+    static final String PROPERTY_REQUEST = "request";
 
     @Override
     public JsonElement serialize(@Nullable ServerCommand serverCommand, @Nullable Type type,

@@ -54,8 +54,9 @@ public class ServerCommand {
             return true;
         }
 
-        if (!(o instanceof ServerCommand that))
+        if (!(o instanceof ServerCommand that)) {
             return false;
+        }
         return Objects.equals(commandId, that.commandId) && command == that.command;
     }
 

@@ -26,7 +26,7 @@ import com.google.gson.annotations.SerializedName;
 public class GetDeviceConfig extends ServerCommand {
 
     @SerializedName("ipc")
-    private static final String ipc = "true";
+    private final String ipc = "true";
 
     public static GenericBuilder<GetDeviceConfig> builder() {
         return GenericBuilder.of(GetDeviceConfig::new);

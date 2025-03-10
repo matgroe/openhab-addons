@@ -17,7 +17,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -173,16 +172,10 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         if (this.channelViewId > 0) {
             this.disposableOnDataPointState = getGiraOneBridge().subscribeOnGiraOneChannelValue(this.channelViewId,
                     this::onGiraOneChannelValue);
-            startSchedulerForValueLookup();
             updateStatus(ThingStatus.ONLINE);
         } else {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
         }
-    }
-
-    private void startSchedulerForValueLookup() {
-        lookupValuesScheduler = this.scheduler.scheduleAtFixedRate(
-                () -> getGiraOneBridge().lookupGiraOneChannelValues(this.channelViewId), 1, 3600, TimeUnit.SECONDS);
     }
 
     private void cancelSchedulerForValueLookup() {
