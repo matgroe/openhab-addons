@@ -15,11 +15,11 @@ package org.openhab.binding.giraone.internal.typeadapters;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelViewRef;
 import org.openhab.binding.giraone.internal.types.GiraOneItemMainType;
+import org.openhab.binding.giraone.internal.types.GiraOneItemReference;
 import org.openhab.binding.giraone.internal.types.GiraOneItemSubType;
 import org.openhab.binding.giraone.internal.types.GiraOneProjectItem;
 
@@ -43,8 +43,6 @@ public class GiraOneProjectItemDeserializer implements JsonDeserializer<GiraOneP
     private static final String PROPERTY_NAME = "name";
     private static final String PROPERTY_URN = "urn";
     private static final String PROPERTY_CONTENT = "content";
-    private static final String PROPERTY_CHILDREN = "children";
-    private static final String PROPERTY_ITEM_REFERENCES = "itemReferences";
 
     @Override
     @Nullable
@@ -53,37 +51,32 @@ public class GiraOneProjectItemDeserializer implements JsonDeserializer<GiraOneP
         if (!jsonElement.isJsonObject()) {
             throw new JsonParseException("JsonObject expected here.");
         }
-        GiraOneProjectItem item = new GiraOneProjectItem();
+        JsonObject json = jsonElement.getAsJsonObject();
+        if (isProjectItem(json)) {
+            GiraOneProjectItem item = new GiraOneProjectItem();
 
-        try {
-            JsonObject json = jsonElement.getAsJsonObject();
+            item.setMainType(
+                    jsonDeserializationContext.deserialize(json.get(PROPERTY_MAIN_TYPE), GiraOneItemMainType.class));
+            item.setSubType(
+                    jsonDeserializationContext.deserialize(json.get(PROPERTY_SUB_TYPE), GiraOneItemSubType.class));
+            item.setName(json.get(PROPERTY_NAME).getAsString());
+            item.setUrn(json.get(PROPERTY_URN).getAsString());
 
-            if (isProjectItem(json)) {
-                FieldUtils.writeField(item, PROPERTY_MAIN_TYPE,
-                        jsonDeserializationContext.deserialize(json.get(PROPERTY_MAIN_TYPE), GiraOneItemMainType.class),
-                        true);
-                FieldUtils.writeField(item, PROPERTY_SUB_TYPE,
-                        jsonDeserializationContext.deserialize(json.get(PROPERTY_SUB_TYPE), GiraOneItemSubType.class),
-                        true);
-                FieldUtils.writeField(item, PROPERTY_NAME, json.get(PROPERTY_NAME).getAsString(), true);
-                FieldUtils.writeField(item, PROPERTY_URN, json.get(PROPERTY_URN).getAsString(), true);
-
-                if (hasProjectItemContentArray(json)) {
-                    JsonArray contentArray = json.get(PROPERTY_CONTENT).getAsJsonArray();
-                    GiraOneProjectItem[] items = jsonDeserializationContext.deserialize(contentArray,
-                            GiraOneProjectItem[].class);
-                    FieldUtils.writeField(item, PROPERTY_CHILDREN, Arrays.stream(items).toList(), true);
-                } else if (hasChannelRefContentArray(json)) {
-                    JsonArray contentArray = json.get(PROPERTY_CONTENT).getAsJsonArray();
-                    GiraOneChannelViewRef[] items = jsonDeserializationContext.deserialize(contentArray,
-                            GiraOneChannelViewRef[].class);
-                    FieldUtils.writeField(item, PROPERTY_ITEM_REFERENCES, Arrays.stream(items).toList(), true);
-                }
+            if (hasProjectItemContentArray(json)) {
+                JsonArray contentArray = json.get(PROPERTY_CONTENT).getAsJsonArray();
+                GiraOneProjectItem[] items = jsonDeserializationContext.deserialize(contentArray,
+                        GiraOneProjectItem[].class);
+                item.setChildren(Arrays.stream(items).toList());
+            } else if (hasChannelRefContentArray(json)) {
+                JsonArray contentArray = json.get(PROPERTY_CONTENT).getAsJsonArray();
+                GiraOneItemReference[] items = jsonDeserializationContext.deserialize(contentArray,
+                        GiraOneChannelViewRef[].class);
+                item.setItemReferences(Arrays.stream(items).toList());
             }
-        } catch (IllegalAccessException e) {
-            throw new JsonParseException("The JsonElement is not parseable as GiraOneProjectItem.", e);
+            return item;
         }
-        return item;
+
+        throw new JsonParseException("The JsonElement is not parseable as GiraOneProjectItem.");
     }
 
     private boolean isProjectItem(JsonObject json) {

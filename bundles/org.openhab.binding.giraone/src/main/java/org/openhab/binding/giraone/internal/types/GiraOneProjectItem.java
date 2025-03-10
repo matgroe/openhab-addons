@@ -58,6 +58,30 @@ public class GiraOneProjectItem {
         return this.itemReferences.stream().anyMatch(f -> f.getReferenceId() == ref.getReferenceId());
     }
 
+    public void setMainType(GiraOneItemMainType mainType) {
+        this.mainType = mainType;
+    }
+
+    public void setSubType(GiraOneItemSubType subType) {
+        this.subType = subType;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUrn(String urn) {
+        this.urn = urn;
+    }
+
+    public void setChildren(Collection<GiraOneProjectItem> children) {
+        this.children = children;
+    }
+
+    public void setItemReferences(Collection<GiraOneItemReference> itemReferences) {
+        this.itemReferences = itemReferences;
+    }
+
     public Collection<GiraOneItemReference> getItemReferences() {
         return itemReferences;
     }
