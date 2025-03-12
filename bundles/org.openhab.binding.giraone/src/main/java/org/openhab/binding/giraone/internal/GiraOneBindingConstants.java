@@ -63,11 +63,14 @@ public class GiraOneBindingConstants {
     public static final Set<ThingTypeUID> SUPPORTED_GENERIC_TYPE_UID = Set.of(BRIDGE_TYPE_UID, GENERIC_TYPE_UID,
             new ThingTypeUID(BINDING_ID, DIMMER_TYPE_ID), new ThingTypeUID(BINDING_ID, HEATING_COOLING_TYPE_ID),
             new ThingTypeUID(BINDING_ID, HUMIDITY_TYPE_ID), new ThingTypeUID(BINDING_ID, TEMPERATURE_TYPE_ID),
-            new ThingTypeUID(BINDING_ID, SCENE_TYPE_ID), new ThingTypeUID(BINDING_ID, SWITCH_LAMP_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, SWITCH_LAMP_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SWITCH_POWER_OUTLET_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SHUTTER_VENETIAN_BLIND_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SHUTTER_AWNING_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SHUTTER_ROOF_WINDOW_TYPE_ID));
+
+    public static final Set<ThingTypeUID> SUPPORTED_FUNCTION_SCENE_TYPE_UID = Set
+            .of(new ThingTypeUID(BINDING_ID, SCENE_TYPE_ID));
 
     /**
      * List of all supported {@link ThingTypeUID} within this binding.

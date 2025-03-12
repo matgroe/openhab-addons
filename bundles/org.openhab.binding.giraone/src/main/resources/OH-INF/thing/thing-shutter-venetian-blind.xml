@@ -9,20 +9,19 @@
 		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
 	-->
 
-	<thing-type id="shutter-venetian-blind">
+	<thing-type id="shutter-venetian-blind-venetian-blind">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 		<label>Shutter</label>
-		<description>Venetianblind Roller- or Covering Shutter </description>
-		<category>Blinds</category>
-
+		<description>Venetian-Blind or Covering-Shutter</description>
+		<category>Rollershutter</category>
 		<channels>
-			<channel id="step-up-down" typeId="shutter-step-up-down"/>
-			<channel id="up-down" typeId="shutter-up-down"/>
-			<channel id="internal-movement-state" typeId="shutter-movement"/>
-			<channel id="position" typeId="shutter-position"/>
-			<channel id="slat-position" typeId="shutter-slat-position"/>
+			<channel id="step-up-down" typeId="shutter-venetian-blind-step-up-down"/>
+			<channel id="up-down" typeId="shutter-venetian-blind-up-down"/>
+			<channel id="motion" typeId="shutter-venetian-blind-motion"/>
+			<channel id="position" typeId="shutter-venetian-blind-position"/>
+			<channel id="slat-position" typeId="shutter-venetian-blind-slat-position"/>
 		</channels>
 
 		<properties>
@@ -32,38 +31,38 @@
 			<property name="channelTypeId">Channel Type ID</property>
 		</properties>
 		<representation-property>channelViewUrn</representation-property>
-
 	</thing-type>
 
-	<channel-type id="shutter-position">
+	<channel-type id="shutter-venetian-blind-position">
 		<item-type>Rollershutter</item-type>
-		<label>Position</label>
-		<description>Raise/lower the blind level</description>
+		<label>Blind Position</label>
+		<description>Set Blind Level to Position</description>
 		<category>Rollershutter</category>
 		<tags>
 			<tag>Setpoint</tag>
-			<tag>Level</tag>
+			<tag>OpenLevel</tag>
 		</tags>
 		<state min="0" step="5" max="100" pattern="%.0f %%"/>
 	</channel-type>
 
-	<channel-type id="shutter-slat-position">
+	<channel-type id="shutter-venetian-blind-slat-position">
 		<item-type>Number:Dimensionless</item-type>
-		<label>Shutter Slat Position</label>
-		<description>Change Venetian Blind Slat Position</description>
-		<category>Rollershutter</category>
+		<label>Slat Position</label>
+		<description>Change or View Slat Position</description>
 		<tags>
 			<tag>Setpoint</tag>
-			<tag>Level</tag>
+			<tag>OpenLevel</tag>
 		</tags>
 		<state min="0" step="5" max="100" pattern="%.0f %%"/>
 	</channel-type>
 
-	<channel-type id="shutter-movement">
+	<channel-type id="shutter-venetian-blind-motion">
 		<item-type>String</item-type>
-		<label>Moving State</label>
-		<description>Gives information, if a shutter is currently moving up/down or halted.</description>
-		<category>Motion</category>
+		<label>Motion State</label>
+		<description>Is currently in motion or stopped.</description>
+		<tags>
+			<tag>Status</tag>
+		</tags>
 		<state readOnly="true">
 			<options>
 				<option value="HALTED">Halted</option>
@@ -72,21 +71,26 @@
 				<option value="MOVING_DOWN">Moving Down</option>
 			</options>
 		</state>
-		<autoUpdatePolicy>veto</autoUpdatePolicy>
 	</channel-type>
 
-	<channel-type id="shutter-up-down">
+	<channel-type id="shutter-venetian-blind-up-down">
 		<item-type>Rollershutter</item-type>
-		<label>Move Up/Down</label>
-		<description>Raise/lower the blind level to position</description>
+		<label>Move Up or Down</label>
+		<description>Move the Blind Level Up or Down</description>
 		<category>Rollershutter</category>
-		<state/>
+		<state>
+			<options>
+				<option value="0">Up</option>
+				<option value="1">Down</option>
+				<option value="100">Down</option>
+			</options>
+		</state>
 	</channel-type>
 
-	<channel-type id="shutter-step-up-down">
+	<channel-type id="shutter-venetian-blind-step-up-down">
 		<item-type>Rollershutter</item-type>
-		<label>Step Up/Down</label>
-		<description>Raise/lower the blind level by single step</description>
+		<label>Step Up or Down</label>
+		<description>Raise or Lower the Blind Level by Single Step</description>
 		<category>Rollershutter</category>
 		<state/>
 	</channel-type>

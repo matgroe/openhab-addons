@@ -20,14 +20,13 @@
 			<channel id="current" typeId="current-temperature"/>
 			<channel id="set-point" typeId="set-point-temperature"/>
 			<channel id="mode" typeId="mode-temperature"/>
-			<!-- channel id="status" typeId="status-temperature"/ -->
 			<channel id="heating" typeId="heater-is-warming"/>
 		</channels>
 	</thing-type>
 
 	<channel-type id="current-temperature">
 		<item-type>Number:Temperature</item-type>
-		<label>Current Temperature</label>
+		<label>Temperature</label>
 		<description>The current and measured temperature.</description>
 		<category>TemperatureHot</category>
 		<tags>
@@ -69,7 +68,7 @@
 
 	<channel-type id="mode-temperature">
 		<item-type>Number</item-type>
-		<label>Working Profile</label>
+		<label>Heating Profile</label>
 		<description>Heater Working Profile</description>
 		<category>Heating</category>
 		<tags>
@@ -79,10 +78,10 @@
 		</tags>
 		<state>
 			<options>
-				<option value="1">Komfort</option>
+				<option value="1">Comfort</option>
 				<option value="2">Standby</option>
-				<option value="3">Nacht</option>
-				<option value="4">Frostschutz</option>
+				<option value="3">Night</option>
+				<option value="4">Freeze Protection</option>
 			</options>
 		</state>
 	</channel-type>

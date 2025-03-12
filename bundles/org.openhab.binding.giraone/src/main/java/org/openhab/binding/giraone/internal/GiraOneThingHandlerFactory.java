@@ -46,6 +46,8 @@ public class GiraOneThingHandlerFactory extends BaseThingHandlerFactory {
             return new GiraOneBridgeHandler((Bridge) thing);
         } else if (SUPPORTED_SHUTTER_THING_TYPE_UID.contains(thingTypeUID)) {
             return new GiraOneShutterThingHandler(thing);
+        } else if (SUPPORTED_FUNCTION_SCENE_TYPE_UID.contains(thingTypeUID)) {
+            return new GiraOneFunctionSceneThingHandler(thing);
         } else {
             return new GiraOneDefaultThingHandler(thing);
         }
