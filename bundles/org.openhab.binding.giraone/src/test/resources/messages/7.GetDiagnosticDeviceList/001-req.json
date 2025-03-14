@@ -1,0 +1,4 @@
+{
+  "command": "GetDiagnosticDeviceList",
+  "keepAlive": true
+}

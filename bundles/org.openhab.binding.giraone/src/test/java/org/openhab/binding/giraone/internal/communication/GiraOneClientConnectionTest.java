@@ -13,9 +13,15 @@
 
 package org.openhab.binding.giraone.internal.communication;
 
+import static org.awaitility.Awaitility.await;
+import static org.awaitility.Duration.TEN_SECONDS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
+import org.openhab.binding.giraone.internal.communication.commands.GetConfiguration;
 
 /**
  * Test class for {@link GiraOneClient}
@@ -30,7 +36,7 @@ public class GiraOneClientConnectionTest {
     @BeforeEach
     void setUp() {
         configuration.username = "User";
-        configuration.password = "Ncc1701D";
+        configuration.password = "!Ncc1701D";
         configuration.hostname = "192.168.178.38";
         configuration.maxTextMessageSize = 350000;
         configuration.defaultTimeoutSeconds = 45;
@@ -55,5 +61,29 @@ public class GiraOneClientConnectionTest {
         configuration.maxTextMessageSize = 20;
         giraClient = new GiraOneClient(configuration);
         giraClient.connect();
+    }
+
+    @Test
+    void testConnectWithInvalidTextMessageSizeXXX() throws InterruptedException {
+        giraClient = new GiraOneClient(configuration);
+        giraClient.connect();
+        await().atMost(TEN_SECONDS).untilAsserted(() -> {
+            assertEquals(GiraOneBridgeConnectionState.Connected, giraClient.connectionState.getValue());
+            // GiraOneCommandResponse response = giraClient.execute(GetUIConfiguration.builder().build());
+            // GiraOneCommandResponse response = giraClient.execute(GetGiraOneDevices.builder().build());
+            // GiraOneCommandResponse response = giraClient.execute(GetGiraOneDevices.builder().build());
+            GiraOneCommandResponse response2 = giraClient
+                    .execute(GetConfiguration.builder().with(GetConfiguration::setId, 216302).build());
+
+            // GiraOneCommandResponse response2 =
+            // giraClient.execute(GetConfiguration.builder().with(GetConfiguration::setUrn,
+            // "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10").build());
+            // response.getRequestServerCommand();
+        });
+
+        for (int i = 0; i < 1000; i++) {
+            System.out.println("sleeping");
+            Thread.sleep(200);
+        }
     }
 }

@@ -34,8 +34,8 @@
 
 	<channel-type id="shutter-roof-window-position">
 		<item-type>Rollershutter</item-type>
-		<label>Blind Position</label>
-		<description>Set Window Open Level to Position</description>
+		<label>Window Position</label>
+		<description>Set Window Level to Position</description>
 		<category>Window</category>
 		<tags>
 			<tag>Setpoint</tag>
@@ -64,7 +64,7 @@
 	<channel-type id="shutter-roof-window-up-down">
 		<item-type>Rollershutter</item-type>
 		<label>Move Up or Down</label>
-		<description>Move Window Open Level Up or Down</description>
+		<description>Move Window Level Up or Down</description>
 		<category>Window</category>
 		<state>
 			<options>

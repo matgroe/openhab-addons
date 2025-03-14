@@ -17,8 +17,8 @@ working as expected.*
 This binding offers a bridge and let the things communicate with the gira one server via your local IP network.   
 
 - `giraone:server`: The bridge between openhab and Gira One Smart Home. The Gira One Server must have a Firmware Version of _2.0.108.0_
-- `giraone:status-humidity`: Gives information about a room's humidity. 
-- `giraone:status-temperature`: Gives information about a room's temperature.
+- `giraone:status-humidity`: Measures a room's humidity . 
+- `giraone:status-temperature`: Measures a room's temperature.
 - `giraone:dimmer-light`: Controls Light On/Off and dimming with status information.
 - `giraone:switch-lamp`: Switches a lamp On/Off and offers status information.
 - `giraone:switch-power-outlet`: Switches a power outlet and offers status information.
@@ -47,17 +47,104 @@ It's only needed to configure the binding `giraone:server` itself. After the pro
 
 ## Things
 
-### _device_ Things
+### Thing `giraone:status-humidity`
+Gives information about a room's humidity.
 
 #### Channels
 
-_Here you should provide information about available channel types, what their meaning is and how they can be used._
+| Channel | Type                  | Read/Write | Description               |
+|---------|-----------------------|------------|---------------------------|
+| float   | Number:Dimensionless  | R          | Atmospheric humidity in % |
 
-_Note that it is planned to generate some part of this based on the XML files within ```src/main/resources/OH-INF/thing``` of your binding._
 
-| Channel | Type   | Read/Write | Description                 |
-|---------|--------|------------|-----------------------------|
-| control | Switch | RW         | This is the control channel |
+### Thing `giraone:status-temperature`
+Gives information about a room's temperature.
+#### Channels
+
+| Channel | Type                 | Read/Write | Description                |
+|---------|----------------------|------------|----------------------------|
+| float   | Number:Temperature   | R          | Measured temperature in °C |
+
+### Thing `giraone:dimmer-light`
+Controls Light On/Off and dimming with status information.
+#### Channels
+
+| Channel     | Type   | Read/Write | Description                                                                                                                                         |
+|-------------|--------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| on-off      | Switch | RW         | Controls the switch's On/Off state. This channel depends on channel `brightness`.                                                                   |
+| brightness  | XXXXX  | RW         | Sets the light's brightness value between 0% and 100%. A brightness value of 0 means switch to Off state. A value greater than 0 triggers On state. |
+
+### Thing `giraone:switch-lamp`
+Switches a lamp On/Off and offers status information.
+#### Channels
+
+| Channel  | Type   | Read/Write | Description                          |
+|----------|--------|------------|--------------------------------------|
+| on-off   | Switch | RW         | Controls the switch's On/Off state   |
+
+### Thing `giraone:switch-power-outlet`
+Switches a power outlet and offers status information.
+#### Channels
+
+| Channel | Type   | Read/Write | Description                               |
+|---------|--------|------------|-------------------------------------------|
+| on-off   | Switch | RW         | Controls the power outlet's On/Off state |
+
+### Thing `giraone:shutter-venetian-blind`
+Controls a venetian bind shutter.
+#### Channels
+
+| Channel       | Type                 | Read/Write | Description                                                                                             |
+|---------------|----------------------|------------|---------------------------------------------------------------------------------------------------------|
+| step-up-down  | Rollershutter        | RW         | Raise or Lower the Blind Level by Single Step                                                           |
+| up-down       | Rollershutter        | RW         | Move the Blind Level Up or Down                                                                         |
+| motion        | String               | RW         | Is currently in motion or stopped. Possible values are `HALTED`, `MOVING`, `MOVING_UP` or `MOVING_DOWN` |
+| position      | Rollershutter        | RW         | Set Blind Level to Position                                                                             |
+| slat-position | Number:Dimensionless | RW         | Change or View Slat Position                                                                            |
+
+
+### Thing `giraone:heating-cooling-underfloor`
+Sets the temperature for your underfloor heater and gives some status information.
+#### Channels
+
+| Channel   | Type               | Read/Write | Description                                                                                                                              |
+|-----------|--------------------|------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| current   | Number:Temperature | R          | The current measured temperature                                                                                                         |
+| set-point | Number:Temperature | RW         | Change this value to the desired temperature between 5°C and 35°C                                                                        |
+| heating   | Number             | RW         | Shows up, if the heater is warming. 0 means Standby (no heating), 1 heater is feeding.                                                   |
+| mode      | Number             | R          | The Heater Working Profile. One of Comfort(1), Standby(2), Night(3), Freeze Protection(4). The values are given by the Gira One System.  | 
+
+### Thing `giraone:shutter-roof-window`
+Offers information about roof window position and open/closes the window.
+
+#### Channels
+
+| Channel       | Type          | Read/Write | Description                                                                                             |
+|---------------|---------------|------------|---------------------------------------------------------------------------------------------------------|
+| step-up-down  | Rollershutter | RW         | Raise or Lower the Window Level by Single Step                                                          |
+| up-down       | Rollershutter | RW         | Move Window Level Up or Down                                                                            |
+| motion        | String        | R          | Is currently in motion or stopped. Possible values are `HALTED`, `MOVING`, `MOVING_UP` or `MOVING_DOWN` |
+| position      | Rollershutter | RW         | Set Window Level to Position                                                                            |
+
+### Thing `giraone:shutter-awning`
+open/closes the awning.
+#### Channels
+
+| Channel       | Type          | Read/Write | Description                                                                                            |
+|---------------|---------------|------------|--------------------------------------------------------------------------------------------------------|
+| step-up-down  | Rollershutter | RW         | Moves the Awning In or Out by Single Step                                                              |
+| up-down       | Rollershutter | RW         | Move Awning Level In or Out                                                                            |
+| motion        | String        | R          | Is currently in motion or stopped. Possible values are `HALTED`, `MOVING`, `MOVING_IN` or `MOVING_OUT` |
+| position      | Rollershutter | RW         | Set Awning Level to Position                                                                           |
+
+### Thing `giraone:function-scene`
+executes a function scene as configured within the Gira Smart Home
+#### Channels
+
+| Channel | Type   | Read/Write | Description                                                                                                                                                     |
+|---------|--------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| execute | Number | W          | Triggers the execution of a Configured Gira One Scene with. The Default Value is 0. Set to 1 for triggering scene variant 1. Set to 2 for variant 2 and so on   |
+
 
 ## Full Example
 

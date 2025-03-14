@@ -4,17 +4,13 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="status-humidity">
+	<thing-type id="generic">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 
-		<label>Humidity</label>
-		<description>Atmospheric humidity in percent</description>
-		<channels>
-			<channel id="float" typeId="system.atmospheric-humidity"/>
-		</channels>
+		<label>Generic Gira One Device</label>
+		<description>Configure this device manually.</description>
 		<representation-property>channelViewUrn</representation-property>
 	</thing-type>
-
 </thing:thing-descriptions>

@@ -16,7 +16,10 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -51,18 +56,19 @@ import io.reactivex.rxjava3.disposables.Disposable;
 @NonNullByDefault
 public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryService<GiraOneBridgeHandler> {
     private static final int TIMEOUT = 60;
-    private static final int BACKGROUND_DISCOVERY_DELAY = 15;
+    private static final int BACKGROUND_DISCOVERY_DELAY = 10;
+    private static final int BACKGROUND_DISCOVERY_PERIOD = 1800;
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneThingDiscoveryService.class);
 
     private ThingUID bridgeUID = new ThingUID(GiraOneBindingConstants.BRIDGE_TYPE_UID, "unknown");
     private @Nullable ScheduledFuture<?> backgroundDiscoveryJob = null;
     private @Nullable GiraOneBridge giraOneBridge;
-    private long timestampLastDiscovery = Instant.now().toEpochMilli();
+
     private Disposable disposableOnConnectionState = Disposable.empty();
 
     public GiraOneThingDiscoveryService() throws IllegalArgumentException {
-        super(GiraOneBridgeHandler.class, TIMEOUT);
+        super(GiraOneBridgeHandler.class, SUPPORTED_THING_TYPE_UID, TIMEOUT, false);
     }
 
     @Override
@@ -73,32 +79,19 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
             disposableOnConnectionState = Objects.requireNonNull(giraOneBridge)
                     .subscribeOnConnectionState(this::onConnectionStateChanged);
         }
-
         super.initialize();
     }
 
     @Override
     public void dispose() {
-        removeOlderResults(Instant.now().toEpochMilli(), bridgeUID);
-        disposableOnConnectionState.dispose();
-        disposableOnConnectionState = Disposable.empty();
         super.dispose();
-    }
-
-    @Override
-    protected void startBackgroundDiscovery() {
-        startScan();
-    }
-
-    @Override
-    protected void stopBackgroundDiscovery() {
-        stopBackgroundScanning();
+        this.stopBackgroundDiscovery();
+        disposableOnConnectionState.dispose();
     }
 
     @Override
     protected void startScan() {
-        backgroundDiscoveryJob = this.scheduler.schedule(this::discoverDevices, BACKGROUND_DISCOVERY_DELAY,
-                TimeUnit.SECONDS);
+        this.discoverDevices();
     }
 
     private void discoverDevices() {
@@ -107,9 +100,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
             project.lookupChannels().stream().map(this::createDiscoverResultFromChannel).forEach(this::thingDiscovered);
         } catch (IllegalStateException exp) {
             logger.warn("Discovery of Devices failed :: {}", exp.getMessage());
-        } finally {
-            removeOlderResults(this.timestampLastDiscovery, bridgeUID);
-            this.timestampLastDiscovery = Instant.now().toEpochMilli();
         }
     }
 
@@ -134,6 +124,20 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         return opt.isPresent() ? opt.get() : GiraOneBindingConstants.GENERIC_TYPE_UID;
     }
 
+    private String generateIdentifier(GiraOneChannel channel) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(channel.getChannelViewUrn().getBytes());
+
+            byte[] digest = md5.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            return myHash.toLowerCase().substring(0, Math.min(myHash.length(), 10));
+        } catch (NoSuchAlgorithmException e) {
+            logger.warn("Cannot generate identifier.", e);
+            return String.format("%d", channel.getChannelViewId());
+        }
+    }
+
     private DiscoveryResult createDiscoverResultFromChannel(GiraOneChannel channel) {
         ThingTypeUID thingTypeUid = detectThingTypeUID(channel);
         logger.debug("{} maps to ThingTypeUID {}", channel, thingTypeUid);
@@ -144,21 +148,18 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         properties.put(PROPERTY_CHANNELVIEW_URN, channel.getChannelViewUrn());
         properties.put(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
 
-        String label = channel.getName();
-        String thingId = String.format("%d", channel.getChannelViewId());
-
-        return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId)).withLabel(label)
-                .withBridge(bridgeUID).withProperties(properties).withRepresentationProperty(PROPERTY_CHANNELVIEW_URN)
-                .build();
+        String thingId = generateIdentifier(channel);
+        return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId))
+                .withLabel(channel.getName()).withBridge(bridgeUID).withProperties(properties)
+                .withTTL(2 * BACKGROUND_DISCOVERY_PERIOD).withRepresentationProperty(PROPERTY_CHANNELVIEW_URN).build();
     }
 
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            logger.debug("Running DeviceDiscovery ....");
-            discoverDevices();
-        }
-    };
+    protected synchronized void startBackgroundScanning() {
+        // just for getting sure
+        stopBackgroundScanning();
+        backgroundDiscoveryJob = this.scheduler.scheduleAtFixedRate(this::discoverDevices, BACKGROUND_DISCOVERY_DELAY,
+                BACKGROUND_DISCOVERY_PERIOD, TimeUnit.SECONDS);
+    }
 
     protected synchronized void stopBackgroundScanning() {
         if (backgroundDiscoveryJob != null) {
@@ -177,8 +178,9 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
         logger.info("ConnectionStateChanged to {}", connectionState);
         if (connectionState == GiraOneBridgeConnectionState.Connected) {
-            discoverDevices();
-        } else {
+            startBackgroundScanning();
+        } else if (connectionState == GiraOneBridgeConnectionState.Disconnected
+                || connectionState == GiraOneBridgeConnectionState.Error) {
             stopBackgroundDiscovery();
         }
     }

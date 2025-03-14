@@ -22,12 +22,13 @@
 			<channel id="mode" typeId="mode-temperature"/>
 			<channel id="heating" typeId="heater-is-warming"/>
 		</channels>
+		<representation-property>channelViewUrn</representation-property>
 	</thing-type>
 
 	<channel-type id="current-temperature">
 		<item-type>Number:Temperature</item-type>
 		<label>Temperature</label>
-		<description>The current and measured temperature.</description>
+		<description>The current measured temperature.</description>
 		<category>TemperatureHot</category>
 		<tags>
 			<tag>Measurement</tag>
@@ -46,7 +47,7 @@
 			<tag>Level</tag>
 			<tag>Temperature</tag>
 		</tags>
-		<state min="10" max="35" step="0.1" pattern="%.1f °C"/>
+		<state min="5" max="35" step="0.1" pattern="%.1f °C"/>
 	</channel-type>
 
 	<channel-type id="heater-is-warming">
@@ -60,7 +61,7 @@
 		</tags>
 		<state readOnly="true">
 			<options>
-				<option value="0">Stand By</option>
+				<option value="0">Standby</option>
 				<option value="1">Feeding</option>
 			</options>
 		</state>

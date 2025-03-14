@@ -265,7 +265,11 @@ public class GiraOneClient implements WebSocketListener {
 
     public void lookupGiraOneValue(final int datapointId) {
         if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
-            send(GetValue.builder().with(GetValue::setId, datapointId).build());
+            if (datapointId > 0) {
+                send(GetValue.builder().with(GetValue::setId, datapointId).build());
+            } else {
+                logger.debug("lookupGiraOneValue :: ignoring request for datapointId=0");
+            }
         } else {
             emitConnectionStateException(GiraOneBridgeConnectionState.Connected);
         }
@@ -392,7 +396,7 @@ public class GiraOneClient implements WebSocketListener {
     private void registerApplication() {
         CompletableFuture.runAsync(() -> {
             execute(RegisterApplication.builder().with(RegisterApplication::setApplicationId, InstanceUUID.get())
-                    .build());
+                    .with(RegisterApplication::setApplicationType, "api").build());
             this.connectionState.onNext(GiraOneBridgeConnectionState.Connected);
         });
     }

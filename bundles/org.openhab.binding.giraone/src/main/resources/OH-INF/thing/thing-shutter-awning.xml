@@ -68,9 +68,9 @@
 		<category>Awning</category>
 		<state>
 			<options>
-				<option value="0">Up</option>
-				<option value="1">Down</option>
-				<option value="100">Down</option>
+				<option value="0">In</option>
+				<option value="1">Out</option>
+				<option value="100">Out</option>
 			</options>
 		</state>
 	</channel-type>

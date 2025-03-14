@@ -76,7 +76,8 @@ public class GiraOneBindingConstants {
      * List of all supported {@link ThingTypeUID} within this binding.
      */
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPE_UID = Stream
-            .concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream())
+            .concat(Stream.concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream()),
+                    SUPPORTED_FUNCTION_SCENE_TYPE_UID.stream())
             .collect(Collectors.toUnmodifiableSet());
 
     // List of all Channel ids

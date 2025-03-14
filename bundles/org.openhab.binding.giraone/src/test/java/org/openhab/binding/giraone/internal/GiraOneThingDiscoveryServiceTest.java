@@ -14,9 +14,23 @@ package org.openhab.binding.giraone.internal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.stream.Stream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,11 +49,15 @@ import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
+import org.openhab.binding.giraone.internal.util.ThingDescriptionSchemaValidationTest;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
+import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
 import com.google.gson.Gson;
 
 /**
@@ -131,5 +149,50 @@ class GiraOneThingDiscoveryServiceTest {
         ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
 
         assertEquals(expected, thingTypeUID.getId());
+    }
+
+    private static ArrayList<File> provideThingDescriptionFiles() throws IOException {
+        String path = Objects.requireNonNull(ThingDescriptionSchemaValidationTest.class.getResource("/OH-INF/thing"))
+                .getPath();
+        ArrayList<File> files = new ArrayList<>();
+        try (Stream<Path> stream = Files.walk(Paths.get(path))) {
+            stream.filter(Files::isRegularFile).map(Path::toFile).forEach(files::add);
+        }
+        return files;
+    }
+
+    private boolean checkThingTypeIdDefinitionExists(String expectedThingTypeId) throws IOException {
+        boolean thingTypeIdExists = false;
+        for (File file : provideThingDescriptionFiles()) {
+            try {
+                DocumentBuilderFactory builderFactory = new DocumentBuilderFactoryImpl();
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                Document xmlDocument = builder.parse(file);
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                String expression = String.format(".//thing-type[@id=\"%s\"]", expectedThingTypeId);
+                NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+                thingTypeIdExists = thingTypeIdExists || (nodeList.getLength() > 0);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return thingTypeIdExists;
+    }
+
+    @DisplayName("There must be a thing-type definition for each determined thingTypeId")
+    @ParameterizedTest
+    @MethodSource("provideForTestDetectThingTypeUid")
+    void testForExistingThingTypeDefinition(GiraOneFunctionType functionType, GiraOneChannelType channelType,
+            GiraOneChannelTypeId channelTypeId, String expected) throws IOException {
+
+        GiraOneChannel channel = mock(GiraOneChannel.class);
+        when(channel.getChannelTypeId()).thenReturn(channelTypeId);
+        when(channel.getChannelType()).thenReturn(channelType);
+        when(channel.getFunctionType()).thenReturn(functionType);
+
+        ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
+
+        assertTrue(this.checkThingTypeIdDefinitionExists(thingTypeUID.getId()),
+                "There must be thing-type definition for " + thingTypeUID.getId());
     }
 }

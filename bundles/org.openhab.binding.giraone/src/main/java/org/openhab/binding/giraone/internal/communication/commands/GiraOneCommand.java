@@ -41,7 +41,13 @@ public enum GiraOneCommand {
     GetDeviceConfig("deviceConfig"),
 
     /** Read the trigger times from server */
-    GetNextTriggerTimes("triggerTimes");
+    GetNextTriggerTimes("triggerTimes"),
+
+    GetConfiguration("object"),
+
+    GetGiraOneDevices("devices"),
+
+    GetDiagnosticDeviceList("data");
 
     private final String responsePropertyName;
 
