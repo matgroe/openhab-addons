@@ -47,6 +47,7 @@
 			<tag>Level</tag>
 			<tag>Temperature</tag>
 		</tags>
+
 		<state min="5" max="35" step="0.1" pattern="%.1f °C"/>
 	</channel-type>
 
@@ -86,5 +87,4 @@
 			</options>
 		</state>
 	</channel-type>
-
 </thing:thing-descriptions>

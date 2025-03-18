@@ -48,6 +48,8 @@ public class GiraOneThingHandlerFactory extends BaseThingHandlerFactory {
             return new GiraOneShutterThingHandler(thing);
         } else if (SUPPORTED_FUNCTION_SCENE_TYPE_UID.contains(thingTypeUID)) {
             return new GiraOneFunctionSceneThingHandler(thing);
+        } else if (HEATING_COOLING_TYPE_ID.equals(thingTypeUID.getId())) {
+            return new GiraOneHeatingCoolingThingHandler(thing);
         } else {
             return new GiraOneDefaultThingHandler(thing);
         }
