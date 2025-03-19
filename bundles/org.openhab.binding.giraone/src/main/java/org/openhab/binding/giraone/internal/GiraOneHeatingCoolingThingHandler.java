@@ -20,8 +20,8 @@ import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.core.thing.Thing;
 
 /**
- * The {@link GiraOneHeatingCoolingThingHandler} is responsible for handling commands, which are
- * sent to one of the function/scene channels.
+ * The {@link GiraOneHeatingCoolingThingHandler} is responsible for handling special
+ * things concerning the heating/cooling channels.
  *
  * @author matthias - Initial contribution
  */
@@ -33,10 +33,15 @@ public class GiraOneHeatingCoolingThingHandler extends GiraOneDefaultThingHandle
 
     @Override
     protected String buildThingChannelId(GiraOneDataPoint dataPoint) {
-        // For Heater Mode: Use channel 'status' to read value, channel 'mode' to set value
+        // we need to deal with the heater mode in a special way.
+        // Gira One uses the channel "status" for providing the
+        // current heater mode, but uses the channel "mode" for
+        // changing the concerning value. At this point, we're mapping
+        // the received value from "status" to the internal channel "mode"
         if (CHANNEL_STATUS.equals(dataPoint.getName())) {
             return CHANNEL_MODE;
         }
+        // otherwise, process as usual
         return super.buildThingChannelId(dataPoint);
     }
 }
