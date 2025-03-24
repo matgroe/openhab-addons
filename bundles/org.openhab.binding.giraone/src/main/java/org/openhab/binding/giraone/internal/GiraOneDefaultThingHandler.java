@@ -12,7 +12,12 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -21,8 +26,11 @@ import java.util.concurrent.ScheduledFuture;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
@@ -220,19 +228,63 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         return Float.parseFloat(valueChange.getValue()) > Float.parseFloat(valueChange.getPreviousValue());
     }
 
+    private void updateThingProperties(GiraOneChannel channel) {
+    }
+
+    private Optional<String> detectChannelViewUrn() {
+        String propChannelViewUrn = getThing().getProperties().get(PROPERTY_CHANNELVIEW_URN);
+        if (propChannelViewUrn == null) {
+            logger.trace("detectChannelViewUrn by property failed, try with configuration");
+            Object confChannelViewUrn = getThing().getConfiguration().getProperties().get(PROPERTY_CHANNELVIEW_URN);
+            if (confChannelViewUrn != null) {
+                logger.trace("detectChannelViewUrn property and configuration failed");
+                return Optional.of(confChannelViewUrn.toString());
+            }
+            return Optional.empty();
+        }
+        return Optional.of(propChannelViewUrn);
+    }
+
     /**
      *
      * @return an {@link Optional< GiraOneChannel >}
      */
-    protected Optional<GiraOneChannel> lookupGiraOneProjectChannel() {
-        String channelViewUrn = Objects.requireNonNull(getThing().getProperties().get(PROPERTY_CHANNELVIEW_URN));
-        return getGiraOneBridge().lookupGiraOneProject().lookupChannelByChannelViewUrn(channelViewUrn);
+    private Optional<GiraOneChannel> lookupGiraOneProjectChannel() {
+        Optional<GiraOneChannel> channel = Optional.empty();
+        Optional<String> channelViewUrn = detectChannelViewUrn();
+        if (channelViewUrn.isPresent()) {
+            channel = getGiraOneBridge().lookupGiraOneProject().lookupChannelByChannelViewUrn(channelViewUrn.get());
+        } else {
+            if (getThing().getLabel() != null) {
+                channel = getGiraOneBridge().lookupGiraOneProject()
+                        .lookupChannelByName(Objects.requireNonNull(getThing().getLabel()));
+            }
+            if (channel.isEmpty() && getThing().getConfiguration().getProperties().get(PROPERTY_CHANNEL_NAME) != null) {
+                channel = getGiraOneBridge().lookupGiraOneProject().lookupChannelByName(
+                        getThing().getConfiguration().getProperties().get(PROPERTY_CHANNEL_NAME).toString());
+            }
+        }
+
+        updateProperty(PROPERTY_FUNCTION_TYPE,
+                channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
+        updateProperty(PROPERTY_CHANNEL_TYPE,
+                channel.map(GiraOneChannel::getChannelType).orElse(GiraOneChannelType.Unknown).getName());
+        updateProperty(PROPERTY_CHANNELVIEW_URN, channel.map(GiraOneChannel::getChannelViewUrn).orElse(""));
+        updateProperty(PROPERTY_CHANNEL_TYPE_ID,
+                channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
+        updateProperty(PROPERTY_CHANNELVIEW_ID,
+                String.format("%d", channel.map(GiraOneChannel::getChannelViewId).orElse(0)));
+
+        return channel;
     }
 
     protected int detectChannelViewId() {
-        int channelViewId = lookupGiraOneProjectChannel().map(GiraOneChannel::getChannelViewId).orElse(0);
-        this.updateProperty("channelViewId", String.format("%d", channelViewId));
-        return channelViewId;
+        Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
+        if (channel.isEmpty()) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
+                    "Cannot detect GiraOneChannel by channelViewUrn, label or name");
+        }
+        return channel.map(GiraOneChannel::getChannelViewId).orElse(0);
     }
 
     /**

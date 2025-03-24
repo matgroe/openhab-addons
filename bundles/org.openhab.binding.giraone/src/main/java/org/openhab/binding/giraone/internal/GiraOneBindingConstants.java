@@ -30,9 +30,11 @@ public class GiraOneBindingConstants {
 
     // Thing Property Names
     public static final String PROPERTY_CHANNELVIEW_URN = "channelViewUrn";
+    public static final String PROPERTY_CHANNELVIEW_ID = "channelViewId";
     public static final String PROPERTY_FUNCTION_TYPE = "functionType";
     public static final String PROPERTY_CHANNEL_TYPE = "channelType";
     public static final String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";
+    public static final String PROPERTY_CHANNEL_NAME = "channelName";
 
     // List of all ThingTypeIDs
     public static final String BINDING_ID = "giraone";

@@ -14,6 +14,9 @@
 		<channels>
 			<channel id="float" typeId="system.indoor-temperature"/>
 		</channels>
+		<properties>
+			<property name="thingTypeVersion">1</property>
+		</properties>
 		<representation-property>channelViewUrn</representation-property>
 	</thing-type>
 </thing:thing-descriptions>

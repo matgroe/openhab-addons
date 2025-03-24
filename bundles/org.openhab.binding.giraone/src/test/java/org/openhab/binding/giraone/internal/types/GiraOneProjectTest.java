@@ -24,6 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
@@ -111,8 +112,6 @@ class GiraOneProjectTest {
 
         Collection<GiraOneProjectItem> items = project.findReferencingGiraOneProjectItems(channel.get());
         assertFalse(items.isEmpty());
-        // items.forEach(i ->
-        // assertTrue(i.getItemReferences().contains(project.makeGiraOneItemReference(channel.get().getChannelViewId()))));
     }
 
     @DisplayName("should find de-reference referenced GiraOneChannels for given GiraOneProjectItem")
@@ -126,6 +125,15 @@ class GiraOneProjectTest {
         Collection<GiraOneChannel> channels = project.lookupChannels(item);
         assertFalse(channels.isEmpty());
         assertEquals(item.getItemReferences().size(), channels.size());
+    }
+
+    @DisplayName("should find a channel by it's name")
+    @ParameterizedTest
+    @ValueSource(strings = { "WC Deckenlicht", "Eckfenster Bad Links" })
+    void testLookupChannelByName(String name) {
+        Optional<GiraOneChannel> channel = project.lookupChannelByName(name.toLowerCase());
+        assertFalse(channel.isEmpty());
+        assertEquals(name, channel.get().getName());
     }
 
     @Test

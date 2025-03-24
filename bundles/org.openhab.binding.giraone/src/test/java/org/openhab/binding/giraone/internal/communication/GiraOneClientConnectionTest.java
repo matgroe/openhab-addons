@@ -74,25 +74,28 @@ public class GiraOneClientConnectionTest {
             // GiraOneCommandResponse response = giraClient.execute(GetGiraOneDevices.builder().build());
 
             GetConfiguration getCfg = GetConfiguration.builder()
-                    //.with(GetConfiguration::setId, 206446)
-                   // .with(GetConfiguration::setUrn, "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Step-Up-Down")
-                    //.with(GetConfiguration::setUrn, "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang")
-                    .with(GetConfiguration::setUrn, "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang")
+                    // .with(GetConfiguration::setId, 206446)
+                    // .with(GetConfiguration::setUrn,
+                    // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Step-Up-Down")
+                    // .with(GetConfiguration::setUrn,
+                    // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang")
+                    .with(GetConfiguration::setUrn,
+                            "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang")
 
                     .build();
 
             GiraOneCommandResponse response2 = giraClient.execute(getCfg);
 
-            //GiraOneCommandResponse response2 =
+            // GiraOneCommandResponse response2 =
             // giraClient.execute(GetConfiguration.builder().with(GetConfiguration::setUrn,
             // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang").build());
 
-             response2.getRequestServerCommand();
+            response2.getRequestServerCommand();
         });
 
-        //for (int i = 0; i < 1000; i++) {
-        //    System.out.println("sleeping");
-        //    Thread.sleep(200);
-        //}
+        // for (int i = 0; i < 1000; i++) {
+        // System.out.println("sleeping");
+        // Thread.sleep(200);
+        // }
     }
 }

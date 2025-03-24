@@ -4,10 +4,12 @@
 	xmlns:config-description="https://openhab.org/schemas/config-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/config-description/v1.0.0
 		https://openhab.org/schemas/config-description-1.0.0.xsd">
-	<config-description>
+
+	<config-description uri="giraone:channel:id">
 		<parameter name="channelViewUrn" type="text">
 			<label>Unique Device Name</label>
 			<description>The Unique Device Name Representation Property</description>
 		</parameter>
 	</config-description>
+
 </config-description:config-descriptions>

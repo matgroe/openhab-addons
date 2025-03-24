@@ -191,6 +191,17 @@ public class GiraOneProject {
 
     /**
      * Performs a lookup within the internal {@link Collection} of {@link GiraOneChannel}
+     * by the given channel name.
+     *
+     * @param name The channel name
+     * @return The optional {@link GiraOneChannel}, if there is any
+     */
+    public Optional<GiraOneChannel> lookupChannelByName(final String name) {
+        return this.channels.stream().filter(f -> name.equalsIgnoreCase(f.getName())).findFirst();
+    }
+
+    /**
+     * Performs a lookup within the internal {@link Collection} of {@link GiraOneChannel}
      * by the given channelViewId.
      *
      * @param channelViewId The channelViewId

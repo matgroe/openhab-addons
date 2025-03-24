@@ -72,7 +72,7 @@ Controls Light On/Off and dimming with status information.
 | Channel     | Type   | Read/Write | Description                                                                                                                                         |
 |-------------|--------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | on-off      | Switch | RW         | Controls the switch's On/Off state. This channel depends on channel `brightness`.                                                                   |
-| brightness  | XXXXX  | RW         | Sets the light's brightness value between 0% and 100%. A brightness value of 0 means switch to Off state. A value greater than 0 triggers On state. |
+| brightness  | Dimmer | RW         | Sets the light's brightness value between 0% and 100%. A brightness value of 0 means switch to Off state. A value greater than 0 triggers On state. |
 
 ### Thing `giraone:switch-lamp`
 Switches a lamp On/Off and offers status information.
@@ -155,12 +155,16 @@ _*.sitemap examples are optional._
 ### Thing Configuration
 
 ```java
-Example thing configuration goes here.
+Bridge giraone:server:123456789 "Gira One Server" @ "Schaltschrank" [ hostname="192.168.178.38", username="User", password="!Ncc1701D" ] {
+    Thing status-temperature Wohnen_Temperatur_1    "Temperatur Wohnen by channelViewUrn "    [ channelViewUrn="urn:gds:chv:NumericFloatingPointStatus-Float-18" ]
+    Thing status-temperature Wohnen_Temperatur_2    "Temperatur Wohnen by channelName"    [ channelName="Wohnen Temperatur" ]
+    Thing status-temperature Wohnen_Temperatur_3    "Wohnen Temperatur"    [  ]
+}
 ```
-### Item Configuration
 
+### Item Configuration
 ```java
-Example item configuration goes here.
+Number:Temperature    T_Wohnen_Temperatur_2    "Wohnen Temperatur  [%.1f %unit%]"   ( WOHNEN )  [ "Point" ]    { channel="giraone:status-temperature:123456789:Wohnen_Temperatur_2:float" [  ] }  
 ```
 
 ### Sitemap Configuration

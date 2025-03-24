@@ -4,13 +4,17 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="generic">
+	<thing-type id="generic" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 
 		<label>Generic Gira One Device</label>
 		<description>Configure this device manually.</description>
+		<properties>
+			<property name="thingTypeVersion">1</property>
+		</properties>
 		<representation-property>channelViewUrn</representation-property>
+		<config-description-ref uri="giraone:channel:id"/>
 	</thing-type>
 </thing:thing-descriptions>

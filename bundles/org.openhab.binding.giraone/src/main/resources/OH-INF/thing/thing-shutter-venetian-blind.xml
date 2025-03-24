@@ -25,10 +25,7 @@
 		</channels>
 
 		<properties>
-			<property name="channelViewUrn">Unique ChannelView URN</property>
-			<property name="functionType">Channel Function Type</property>
-			<property name="channelType">Channel Type</property>
-			<property name="channelTypeId">Channel Type ID</property>
+			<property name="thingTypeVersion">1</property>
 		</properties>
 		<representation-property>channelViewUrn</representation-property>
 	</thing-type>
@@ -39,10 +36,10 @@
 		<description>Set Blind Level to Position</description>
 		<category>Rollershutter</category>
 		<tags>
-			<tag>Setpoint</tag>
-			<tag>OpenLevel</tag>
+			<tag>Control</tag>
+			<tag>Level</tag>
 		</tags>
-		<state min="0" step="5" max="100" pattern="%.0f %%"/>
+		<state min="0" step="1" max="100" pattern="%.0f %%"/>
 	</channel-type>
 
 	<channel-type id="shutter-venetian-blind-slat-position">
@@ -50,10 +47,10 @@
 		<label>Slat Position</label>
 		<description>Change or View Slat Position</description>
 		<tags>
-			<tag>Setpoint</tag>
-			<tag>OpenLevel</tag>
+			<tag>Control</tag>
+			<tag>Level</tag>
 		</tags>
-		<state min="0" step="5" max="100" pattern="%.0f %%"/>
+		<state min="0" step="1" max="100" pattern="%.0f %%"/>
 	</channel-type>
 
 	<channel-type id="shutter-venetian-blind-motion">
@@ -88,7 +85,7 @@
 	</channel-type>
 
 	<channel-type id="shutter-venetian-blind-step-up-down">
-		<item-type>Rollershutter</item-type>
+		<item-type>Number</item-type>
 		<label>Step Up or Down</label>
 		<description>Raise or Lower the Blind Level by Single Step</description>
 		<category>Rollershutter</category>

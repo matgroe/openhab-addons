@@ -14,13 +14,6 @@
 		<channels>
 			<channel id="execute" typeId="scene-execute"/>
 		</channels>
-
-		<properties>
-			<property name="channelViewUrn">Unique ChannelView URN</property>
-			<property name="functionType">Channel Function Type</property>
-			<property name="channelType">Channel Type</property>
-			<property name="channelTypeId">Channel Type ID</property>
-		</properties>
 		<representation-property>channelViewUrn</representation-property>
 	</thing-type>
 
