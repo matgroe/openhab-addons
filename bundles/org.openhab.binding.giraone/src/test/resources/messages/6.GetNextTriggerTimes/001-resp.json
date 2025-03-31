@@ -1,0 +1,83 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "request": {
+      "command": "GetNextTriggerTimes",
+      "_gdsqueryId": "11"
+    },
+    "triggerTimes": [
+      {
+        "channelViewId": "216279",
+        "channelViewUrn": "urn:gds:chv:Switch-Switch-21",
+        "id": "30348",
+        "name": "Haustür Steckdose",
+        "time": "2024-12-20 16:11:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-59"
+      },
+      {
+        "channelViewId": "216294",
+        "channelViewUrn": "urn:gds:chv:Covering-Blind-With-Position-10",
+        "id": "30216",
+        "name": "Schlafen kl. Fenster",
+        "time": "2024-12-20 16:26:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-37"
+      },
+      {
+        "channelViewId": "216158",
+        "channelViewUrn": "urn:gds:chv:Covering-Blind-With-Position-11",
+        "id": "30222",
+        "name": "Schlafen gr. Fenster",
+        "time": "2024-12-20 16:26:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-38"
+      },
+      {
+        "channelViewId": "216029",
+        "channelViewUrn": "urn:gds:chv:FunctionScene-Function-Scene-1",
+        "id": "30300",
+        "name": "Raffstore Wohnbereich",
+        "time": "2024-12-20 16:31:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-51"
+      },
+      {
+        "channelViewId": "216306",
+        "channelViewUrn": "urn:gds:chv:FunctionScene-Function-Scene-4",
+        "id": "30378",
+        "name": "Raffstore Strasse",
+        "time": "2024-12-20 16:31:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-64"
+      },
+      {
+        "channelViewId": "216146",
+        "channelViewUrn": "urn:gds:chv:KNXheating2Fcooling-Heating-Cooling-Switchable-8",
+        "id": "30150",
+        "name": "Bad Heizung",
+        "time": "2024-12-20 18:00:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-26"
+      },
+      {
+        "channelViewId": "216321",
+        "channelViewUrn": "urn:gds:chv:Switch-Switch-10",
+        "id": "30234",
+        "name": "Steckdose - Handtuchheizung",
+        "time": "2024-12-21 06:15:00",
+        "type": "FunctionTimer",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Timer-40"
+      }
+    ],
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

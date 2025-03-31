@@ -1,0 +1,7 @@
+{
+    "request": {
+        "command": "GetDeviceConfig",
+        "ipc": "true",
+        "_gdsqueryId": 5
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "request": {
+    "command": "RegisterApplication",
+    "applicationId": "Gira.UniversalApp",
+    "applicationType": "ui",
+    "pretty": "true",
+    "instanceId": "6f86028b-01d3-8ae4-a776-55261a7c4f57",
+    "_gdsqueryId": 1
+  }
+}

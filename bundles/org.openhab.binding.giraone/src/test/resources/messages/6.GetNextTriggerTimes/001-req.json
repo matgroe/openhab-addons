@@ -1,0 +1,6 @@
+{
+    "request": {
+        "command": "GetNextTriggerTimes",
+        "_gdsqueryId": 11
+    }
+}

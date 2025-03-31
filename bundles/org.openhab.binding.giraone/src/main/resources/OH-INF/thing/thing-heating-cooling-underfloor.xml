@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<!--
+		All Non-Known Devices are getting mapped to the unkown thing
+		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
+	-->
+	<thing-type id="heating-cooling-underfloor">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+
+		<label>Heating/Cooling</label>
+		<description>Underfloor Heating or Cooling</description>
+
+		<channels>
+			<channel id="current" typeId="current-temperature"/>
+			<channel id="set-point" typeId="set-point-temperature"/>
+			<channel id="mode" typeId="mode-temperature"/>
+			<channel id="heating" typeId="heater-is-warming"/>
+		</channels>
+		<representation-property>channelViewUrn</representation-property>
+	</thing-type>
+
+	<channel-type id="current-temperature">
+		<item-type>Number:Temperature</item-type>
+		<label>Temperature</label>
+		<description>The current measured temperature.</description>
+		<category>TemperatureHot</category>
+		<tags>
+			<tag>Measurement</tag>
+			<tag>Temperature</tag>
+		</tags>
+		<state readOnly="true" pattern="%.1f °C"/>
+	</channel-type>
+
+	<channel-type id="set-point-temperature">
+		<item-type>Number:Temperature</item-type>
+		<label>Specified Temperature</label>
+		<description>Change this value to the desired temperature.</description>
+		<category>HVAC</category>
+		<tags>
+			<tag>Setpoint</tag>
+			<tag>Level</tag>
+			<tag>Temperature</tag>
+		</tags>
+
+		<state min="5" max="35" step="0.1" pattern="%.1f °C"/>
+	</channel-type>
+
+	<channel-type id="heater-is-warming">
+		<item-type>Number</item-type>
+		<label>Heater Status</label>
+		<description>Shows up, if the heater is warming</description>
+		<category>TemperatureHot</category>
+		<tags>
+			<tag>Measurement</tag>
+			<tag>HVAC</tag>
+		</tags>
+		<state readOnly="true">
+			<options>
+				<option value="0">Standby</option>
+				<option value="1">Feeding</option>
+			</options>
+		</state>
+	</channel-type>
+
+	<channel-type id="mode-temperature">
+		<item-type>Number</item-type>
+		<label>Heating Profile</label>
+		<description>Heater Working Profile</description>
+		<category>Heating</category>
+		<tags>
+			<tag>OpenState</tag>
+			<tag>HVAC</tag>
+			<tag>Temperature</tag>
+		</tags>
+		<state>
+			<options>
+				<option value="1">Comfort</option>
+				<option value="2">Standby</option>
+				<option value="3">Night</option>
+				<option value="4">Freeze Protection</option>
+			</options>
+		</state>
+	</channel-type>
+</thing:thing-descriptions>

@@ -1,0 +1,24 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "id": "1002",
+    "request": {
+      "command": "GetValue",
+      "id": "1002",
+      "internal": "true",
+      "_gdsqueryId": "78"
+    },
+    "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready",
+    "value": "1",
+    "valueState": "Value",
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

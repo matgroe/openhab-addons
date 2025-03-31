@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<bridge-type id="server">
+		<label>Gira One Server</label>
+		<description>The Gateway to your Gira One Smart-Home installation.</description>
+
+		<config-description>
+			<parameter name="hostname" type="text" required="true">
+				<context>network-address</context>
+				<label>Gira One Server's Hostname or IP</label>
+				<description>Hostname or IP address of GiraOne Server</description>
+			</parameter>
+
+			<parameter name="username" type="text" required="true">
+				<context>username</context>
+				<label>Username</label>
+				<description>Username to access the Gira One Server</description>
+			</parameter>
+
+			<parameter name="password" type="text" required="true">
+				<context>password</context>
+				<label>Password</label>
+				<description>Password to access the Gira One Server</description>
+			</parameter>
+
+			<parameter name="tryReconnectAfterSeconds" type="integer" min="30">
+				<label>Try Reconnect After</label>
+				<description>How many seconds should be waited before trying a reconnect on as serverside closed connection (e.g.
+					reboot)</description>
+				<default>60</default>
+				<advanced>true</advanced>
+			</parameter>
+
+			<parameter name="defaultTimeoutSeconds" type="integer" unit="s" min="5">
+				<label>Default Timeout</label>
+				<description>How long should be waited on any answer before failing?</description>
+				<default>60</default>
+				<advanced>true</advanced>
+			</parameter>
+
+			<parameter name="maxTextMessageSize" type="integer" min="100">
+				<label>Maximum number of kBytes to accept from Gira One Server as single message.</label>
+				<description>Increase this value for large GiraOne Project installations.</description>
+				<default>350</default>
+				<advanced>true</advanced>
+			</parameter>
+
+			<parameter name="discoverDevices" type="boolean">
+				<label>Discover Gira One Devices</label>
+				<description>Should the Bridge Auto Discover Devices and attach them to the Inbox.</description>
+				<default>true</default>
+				<advanced>true</advanced>
+			</parameter>
+
+		</config-description>
+	</bridge-type>
+</thing:thing-descriptions>

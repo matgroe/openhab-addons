@@ -1,0 +1,181 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "object": {
+      "channelType": "General GDS Channel",
+      "displayName": "Raffstores Ab, 50%",
+      "enabled": "true",
+      "extendedType": "de.gira.schema.channels.FunctionScene",
+      "fieldHandler": "",
+      "id": "40006",
+      "metadata": [
+        {
+          "key": "ChannelViewId",
+          "value": "216291"
+        },
+        {
+          "key": "ResetOnGpaCommisioning",
+          "value": "true"
+        },
+        {
+          "key": "conf:EntityId",
+          "value": "c1a79dfc-53d0-4467-acfe-7ba03ea9e281"
+        }
+      ],
+      "name": "Function-Scene-3",
+      "outputDatapoints": [
+        {
+          "id": "1000505",
+          "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:Function-Scene-3:Scene-Set"
+        }
+      ],
+      "sceneSet": {
+        "datapoints": [
+          {
+            "id": "216124",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Position"
+          },
+          {
+            "id": "216126",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Slat-Position"
+          },
+          {
+            "id": "216183",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Position"
+          },
+          {
+            "id": "216182",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Slat-Position"
+          },
+          {
+            "id": "216325",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Position"
+          },
+          {
+            "id": "216326",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Slat-Position"
+          }
+        ],
+        "enabled": "true",
+        "name": "Scene-Set",
+        "scenes": [
+          {
+            "datapoints": [
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216124",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216126",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216183",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216182",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216325",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216326",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Slat-Position",
+                "value": "50"
+              }
+            ],
+            "name": "Lamellen 50%",
+            "number": "1"
+          },
+          {
+            "datapoints": [
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216124",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216126",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216183",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216182",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216325",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216326",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Slat-Position",
+                "value": "100"
+              }
+            ],
+            "name": "Lamellen 100%",
+            "number": "2"
+          }
+        ]
+      },
+      "type": "CHANNEL",
+      "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Scene-3",
+      "visible": "true"
+    },
+    "request": {
+      "command": "GetConfiguration",
+      "object": {
+        "id": "40006"
+      },
+      "_gdsqueryId": "7"
+    },
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}

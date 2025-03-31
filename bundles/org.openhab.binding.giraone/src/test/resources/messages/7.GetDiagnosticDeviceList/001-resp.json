@@ -1,0 +1,3314 @@
+{
+  "data": {
+    "name": "",
+    "components": [],
+    "consumers": [],
+    "subLocations": [
+      {
+        "name": "Erdgeschoss",
+        "components": [],
+        "consumers": [],
+        "subLocations": [
+          {
+            "name": "Essen / Wohnen",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10",
+                "name": "Schiebetür unten W3",
+                "channels": [
+                  {
+                    "name": "Dimmen 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Dimming-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-3",
+                "name": "Schiebetür oben W1",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-3.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-3.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-3.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-3.Dimming-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4",
+                "name": "Schiebetür mitte W2",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4.Curtain-1:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4.Curtain-1:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-4.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-7",
+                "name": "Wohnen Diele W5",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-7.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-7.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-7.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-7.Dimming-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Wohnen / Essen 1",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-2:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-2:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Wohnen / Essen 2",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-3:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-3:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Wohnen",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Essen",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Terrasse",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Schiebetür",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Wohnen / Essen Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-4:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Küche",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-9",
+                "name": "Fenster unten K3",
+                "channels": [
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-9.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-9.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-1",
+                "name": "Küche Fenster Oben",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-1.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-1.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-1.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-1.Dimming-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-2",
+                "name": "Küchenzeile K2",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-2.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-2.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-2.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-2.Dimming-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Küche Gerätewand",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-4:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-4:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Küche Tresen",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-5:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-5:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Küche",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Küche Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-5:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Büro",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang",
+                "name": "Büro Taster Unten",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Szene 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Scene-2:Scene",
+                        "name": "Scene",
+                        "type": "SCENEEXECUTE",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3",
+                "name": "Büro Taster Oben",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Büro Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-1:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-1:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Büro Eckfenster Links",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-2:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Büro Eckfenster Vorne",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-3:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Büro Garten",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-4:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Büro Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-3:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "WC",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-8",
+                "name": "WC - Taster",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-8.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-8.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-8.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-8.Switching-3:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "WC Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-1:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "WC Laibung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-4:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "WC Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-2:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              },
+              {
+                "name": "WC - Raffstore",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-1:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-1:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-1:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-1:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "HWR",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-4",
+                "name": "Taster Seiteneingang",
+                "channels": [
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-4.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "HWR Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-6:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": [
+              {
+                "name": "Schaltschrank",
+                "components": [
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1",
+                    "name": "Dimmaktor 4fach links",
+                    "channels": [
+                      {
+                        "name": "Dimmaktor 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-1:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-1:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dimmaktor 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-2:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-2:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dimmaktor 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-3:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-3:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dimmaktor 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-4:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-1.DimmingActuator-4:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2",
+                    "name": "Dimmaktor 4fach rechts",
+                    "channels": [
+                      {
+                        "name": "Dimmaktor 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-1:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-1:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dimmaktor 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-2:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-2:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dimmaktor 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-3:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-3:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dimmaktor 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-4:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2.DimmingActuator-4:Brightness",
+                            "name": "Brightness",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1",
+                    "name": "Heizungsaktor 6fach mit Regler links",
+                    "channels": [
+                      {
+                        "name": "Heizaktor 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-2:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-3:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-4:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 5",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-5:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 6",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-6:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2",
+                    "name": "Heizungsaktor 6fach mit Regler rechts",
+                    "channels": [
+                      {
+                        "name": "Heizaktor 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-1:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-2:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-3:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-4:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 5",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-5:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Heizaktor 6",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2.Heatingactuator-6:Mode",
+                            "name": "Mode",
+                            "type": "HEATINGMODE",
+                            "operations": "w"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1",
+                    "name": "Schaltaktor 16fach 16 A / Jalousieaktor 8fach",
+                    "channels": [
+                      {
+                        "name": "Beschattung und Lüftung 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-1:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-1:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-1:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-1:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-2:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-2:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-2:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-2:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-3:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-3:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-3:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-3:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-4:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-4:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-4:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 5",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-5:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-5:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-5:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 6",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-6:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-6:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-6:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 8",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-8:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-8:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Curtain-8:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 13",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Switching-13:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 14",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1.Switching-14:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1",
+                    "name": "Schaltaktor 24fach 16 A / Jalousieaktor 12fach oben",
+                    "channels": [
+                      {
+                        "name": "Beschattung und Lüftung 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-1:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-1:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-1:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-1:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-2:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-3:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-3:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-3:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-3:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-4:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-4:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-4:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-4:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 5",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 6",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-6:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-6:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-6:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-6:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 7",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-7:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-7:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-7:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-7:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 8",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-8:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-8:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-8:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-8:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 9",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-9:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-9:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-9:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-9:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 19",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-19:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 20",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-20:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 21",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-21:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 22",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-22:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 23",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-23:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 24",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Switching-24:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2",
+                    "name": "Schaltaktor 24fach 16 A / Jalousieaktor 12fach unten",
+                    "channels": [
+                      {
+                        "name": "Beschattung und Lüftung 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-4:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-4:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-4:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-4:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 5",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-5:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-5:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-5:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-5:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 7",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-7:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-7:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-7:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-7:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 8",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-8:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-8:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-8:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-8:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Beschattung und Lüftung 9",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-9:Step-Up-Down",
+                            "name": "Step-Up-Down",
+                            "type": "STEPUPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-9:Up-Down",
+                            "name": "Up-Down",
+                            "type": "UPDOWN",
+                            "operations": "w"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-9:Position",
+                            "name": "Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          },
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Curtain-9:Slat-Position",
+                            "name": "Slat-Position",
+                            "type": "PERCENT",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 1",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-1:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 11",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-11:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 19",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-19:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 2",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-2:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 20",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-20:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 21",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-21:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 22",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-22:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 23",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-23:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 24",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-24:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 3",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-3:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 4",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-4:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Schalten 5",
+                        "datapoints": [
+                          {
+                            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2.Switching-5:OnOff",
+                            "name": "OnOff",
+                            "type": "ONOFF",
+                            "operations": "rw"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "consumers": [],
+                "subLocations": []
+              }
+            ]
+          },
+          {
+            "name": "Diele",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14",
+                "name": "Eingang Taster",
+                "channels": [
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14.Switching-3:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-6",
+                "name": "Treppe Taster",
+                "channels": [
+                  {
+                    "name": "Szene 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-6.Scene-3:Scene",
+                        "name": "Scene",
+                        "type": "SCENEEXECUTE",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-6.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-6.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Treppe Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-2:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Treppe Wand",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-14:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Handlauf",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-3:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Diele Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-1:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          }
+        ]
+      },
+      {
+        "name": "Obergeschoss",
+        "components": [],
+        "consumers": [],
+        "subLocations": [
+          {
+            "name": "Ankleide",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-13",
+                "name": "Ankleide Taster",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-13.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-13.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-13.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-13.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-13.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Ankleide",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-8:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Ankleide Dachfenster Rolladen",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-19:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-19:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-19:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-19:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Ankleide Dachfenster",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-16:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-16:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-16:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Ankleide Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-10:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              },
+              {
+                "name": "Ankleide Dimmen",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-8:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-8:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Schlafen",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5",
+                "name": "Schlafen Taster Bett",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-9",
+                "name": "Schlafen Taster Tür",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-9.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-9.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-9.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-9.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-9.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Schlafen kl. Fenster",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-10:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-10:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-10:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-10:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Schlafen gr. Fenster",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-11:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-11:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-11:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-11:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Schlafen Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-12:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              },
+              {
+                "name": "Schlafen -Dimmen Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-6:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-6:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Bad",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-6",
+                "name": "Tür oben B1",
+                "channels": [
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-6.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-6.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-11",
+                "name": "Tür unten B2",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-11.Curtain-1:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-11.Curtain-1:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-11.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-11.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-11.Switching-3:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-12",
+                "name": "Waschbecken B3",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-12.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-12.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Dimmen 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-12.Dimming-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-12.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Waschtisch",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-11:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Eckfenster Bad Links",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-12:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Eckfenster Bad Vorne",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-13:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Fenster Badewanne",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-14:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Bad Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-8:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              },
+              {
+                "name": "Bad - Dimmen Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-7:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:KNXlight-KNX-Dimmer-7:Brightness",
+                    "name": "Brightness",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Steckdose - Handtuchheizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-10:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Gast",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang",
+                "name": "Gast Taster Tür",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Gast Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-5:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Gast Dachfenster",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Gast Dachfenster",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-15:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-15:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-15:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Gast Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-11:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Flur",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-5",
+                "name": "Treppe F1",
+                "channels": [
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-5.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-5.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-10",
+                "name": "Tür Gast F2",
+                "channels": [
+                  {
+                    "name": "Beschattung und Lüftung 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-10.Curtain-2:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-10.Curtain-2:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Beschattung und Lüftung 3",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-10.Curtain-3:Step-Up-Down",
+                        "name": "Step-Up-Down",
+                        "type": "STEPUPDOWN",
+                        "operations": "w"
+                      },
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-10.Curtain-3:Up-Down",
+                        "name": "Up-Down",
+                        "type": "UPDOWN",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-10.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Flur OG Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-13:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Flur OG Dachfenster Rolladen",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-20:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-20:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-20:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-20:Slat-Position",
+                    "name": "Slat-Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Flur OG Dachfenster",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-17:Step-Up-Down",
+                    "name": "Step-Up-Down",
+                    "type": "STEPUPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-17:Up-Down",
+                    "name": "Up-Down",
+                    "type": "UPDOWN",
+                    "operations": "w"
+                  },
+                  {
+                    "urn": "urn:gds:dpv:Covering-Blind-With-Position-17:Position",
+                    "name": "Position",
+                    "type": "PERCENT",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Flur Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-9:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          },
+          {
+            "name": "Abstellraum",
+            "components": [
+              {
+                "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-8",
+                "name": "Abstellraum Taster",
+                "channels": [
+                  {
+                    "name": "Schalten 1",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-8.Switching-1:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Schalten 2",
+                    "datapoints": [
+                      {
+                        "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-8.Switching-2:OnOff",
+                        "name": "OnOff",
+                        "type": "ONOFF",
+                        "operations": "w"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "consumers": [
+              {
+                "name": "Abstellraum Deckenlicht",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-7:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Abstellraum",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:Switch-Switch-6:OnOff",
+                    "name": "OnOff",
+                    "type": "ONOFF",
+                    "operations": "rw"
+                  }
+                ]
+              },
+              {
+                "name": "Abstellraum Heizung",
+                "datapoints": [
+                  {
+                    "urn": "urn:gds:dpv:KNXheating2Fcooling-Heating-Cooling-Switchable-7:Mode",
+                    "name": "Mode",
+                    "type": "HEATINGMODE",
+                    "operations": "w"
+                  }
+                ]
+              }
+            ],
+            "subLocations": []
+          }
+        ]
+      },
+      {
+        "name": "Außenbereich",
+        "components": [],
+        "consumers": [
+          {
+            "name": "Terrasse Markise",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-18:Step-Up-Down",
+                "name": "Step-Up-Down",
+                "type": "STEPUPDOWN",
+                "operations": "w"
+              },
+              {
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-18:Up-Down",
+                "name": "Up-Down",
+                "type": "UPDOWN",
+                "operations": "w"
+              },
+              {
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-18:Position",
+                "name": "Position",
+                "type": "PERCENT",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Terrasse Licht",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-15:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Abstellraum außen",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-16:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Garten Licht",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-18:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Haustür Beleuchtung",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-19:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Terrasse Steckdose",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-17:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Carport Steckdose",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-20:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Haustür Steckdose",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-21:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          },
+          {
+            "name": "Steckdose - Vorgarten",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Switch-Switch-9:OnOff",
+                "name": "OnOff",
+                "type": "ONOFF",
+                "operations": "rw"
+              }
+            ]
+          }
+        ],
+        "subLocations": []
+      },
+      {
+        "name": "Szenen",
+        "components": [],
+        "consumers": [
+          {
+            "name": "Raffstore Wohnbereich",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:FunctionScene-Function-Scene-1:Execute",
+                "name": "Execute",
+                "type": "SCENEEXECUTE",
+                "operations": "w"
+              }
+            ]
+          },
+          {
+            "name": "Raffstore Strasse",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:FunctionScene-Function-Scene-4:Execute",
+                "name": "Execute",
+                "type": "SCENEEXECUTE",
+                "operations": "w"
+              }
+            ]
+          },
+          {
+            "name": "Raffstores Büro",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:FunctionScene-Function-Scene-3:Execute",
+                "name": "Execute",
+                "type": "SCENEEXECUTE",
+                "operations": "w"
+              }
+            ]
+          },
+          {
+            "name": "Raffstores Bad",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:FunctionScene-Function-Scene-2:Execute",
+                "name": "Execute",
+                "type": "SCENEEXECUTE",
+                "operations": "w"
+              }
+            ]
+          },
+          {
+            "name": "Rolladen Schlafen",
+            "datapoints": [
+              {
+                "urn": "urn:gds:dpv:Function-Scene-5:Execute",
+                "name": "Execute",
+                "type": "SCENEEXECUTE",
+                "operations": "w"
+              }
+            ]
+          }
+        ],
+        "subLocations": []
+      }
+    ]
+  }
+}

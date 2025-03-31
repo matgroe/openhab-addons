@@ -1,0 +1,25 @@
+{
+  "event": {
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    },
+    "error": {
+      "code": "123",
+      "hint": "Some Error Description",
+      "text": "NOK"
+    },
+    "type": "Value",
+    "value": {
+      "id": "220342",
+      "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Curtain-2:Step-Up-Down",
+      "new": "1",
+      "old": "1",
+      "newInternal": "2.3:true",
+      "oldInternal": "2.3:true",
+      "state": "Value",
+      "source": "k:12.0.7"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "event": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "stateChanged": {
+      "eventType": "configurationChangeEnd"
+    },
+    "type": "stateChanged",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "text": "1.0"
+    }
+  }
+}

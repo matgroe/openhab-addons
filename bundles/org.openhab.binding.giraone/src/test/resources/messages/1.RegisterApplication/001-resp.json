@@ -1,0 +1,22 @@
+{
+    "response": {
+      "error": {
+        "code": "0",
+        "hint": "",
+        "text": "OK"
+      },
+      "request": {
+        "applicationId": "Gira.UniversalApp",
+        "applicationType": "ui",
+        "command": "RegisterApplication",
+        "instanceId": "6f86028b-01d3-8ae4-a776-55261a7c4f57",
+        "pretty": "true",
+        "_gdsqueryId": 2
+      },
+      "version": {
+        "major": "1",
+        "minor": "0",
+        "text": "1.0"
+      }
+    }
+  }

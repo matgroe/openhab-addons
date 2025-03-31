@@ -1,0 +1,9 @@
+{
+    "request": {
+        "command": "GetConfiguration",
+        "object": {
+            "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10"
+        },
+        "_gdsqueryId": 19
+    }
+}

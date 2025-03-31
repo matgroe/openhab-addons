@@ -1,0 +1,704 @@
+{
+  "error": {
+    "code": "0",
+    "hint": "",
+    "text": "OK"
+  },
+  "object": {
+    "channelCount": "6",
+    "channels": [
+      {
+        "channelType": "KNX GA Channel",
+        "datapointCount": "3",
+        "datapoints": [
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "None",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Switch",
+            "id": "206459",
+            "internalDefaultValue": "2.3:false",
+            "internalValue": "1.1:",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "true"
+              },
+              {
+                "key": "MIN",
+                "value": "false"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": ""
+              },
+              {
+                "key": "UNIT",
+                "value": ""
+              }
+            ],
+            "name": "OnOff",
+            "operations": "-/WRITE/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "16/0/64",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Dimming-2:OnOff",
+            "value": "",
+            "valueState": "Missing",
+            "valueSubtype": "Switch",
+            "valueType": "Binary",
+            "visible": "true",
+            "writeGroupAddress": "16/0/64"
+          },
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "ReadOnStart",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Bool",
+            "id": "206460",
+            "internalDefaultValue": "2.3:false",
+            "internalValue": "2.3:false",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "true"
+              },
+              {
+                "key": "MIN",
+                "value": "false"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": ""
+              },
+              {
+                "key": "UNIT",
+                "value": ""
+              }
+            ],
+            "name": "Feedback",
+            "operations": "READ/-/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "16/0/90",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Dimming-2:Feedback",
+            "value": "0",
+            "valueState": "Value",
+            "valueSubtype": "Bool",
+            "valueType": "Binary",
+            "visible": "true",
+            "writeGroupAddress": ""
+          },
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "None",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Percentage",
+            "id": "206461",
+            "internalDefaultValue": "3.7:       0",
+            "internalValue": "1.1:",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "100"
+              },
+              {
+                "key": "MIN",
+                "value": "-100"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": "1"
+              },
+              {
+                "key": "UNIT",
+                "value": ""
+              }
+            ],
+            "name": "Shift",
+            "operations": "-/WRITE/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "16/0/131",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Dimming-2:Shift",
+            "value": "",
+            "valueState": "Missing",
+            "valueSubtype": "Percentage",
+            "valueType": "Float",
+            "visible": "true",
+            "writeGroupAddress": "16/0/131"
+          }
+        ],
+        "displayName": "Dimmen 2",
+        "enabled": "true",
+        "extendedType": "de.gira.schema.channels.GiraOne.Sensor.Dimming",
+        "id": "206458",
+        "name": "Dimming-2",
+        "parameters": [
+          {
+            "key": "CommandTypeLeft",
+            "set": "Channel",
+            "value": "DarkerToggle"
+          },
+          {
+            "key": "CommandTypeRight",
+            "set": "Channel",
+            "value": "BrighterToggle"
+          },
+          {
+            "key": "LedColor",
+            "set": "Channel",
+            "value": "Green"
+          },
+          {
+            "key": "LedFunction",
+            "set": "Channel",
+            "value": "ButtonPressDisplay"
+          },
+          {
+            "key": "ChannelUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:GiraSensorDimmingCtrlRockerTwoLedV1"
+          },
+          {
+            "key": "ConfigUrn",
+            "set": "DTController",
+            "value": "urn:dt:controllerPlugin:channel:sensor.dimmingRockerTwoLed"
+          },
+          {
+            "key": "StyleUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:GiraSensorDimmingCtrlRockerTwoLedV1.style.Dimming"
+          }
+        ],
+        "type": "CHANNEL",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Dimming-2",
+        "visible": "true"
+      },
+      {
+        "channelType": "KNX GA Channel",
+        "datapointCount": "1",
+        "datapoints": [
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "ReadOnStart",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Percent",
+            "id": "206463",
+            "internalDefaultValue": "3.7:       0",
+            "internalValue": "1.1:",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "670760"
+              },
+              {
+                "key": "MIN",
+                "value": "-273"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": "0.01"
+              },
+              {
+                "key": "UNIT",
+                "value": "°C"
+              }
+            ],
+            "name": "HumidityStatus",
+            "operations": "ALL",
+            "pollingInterval": "0",
+            "readGroupAddress": "",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Humidity-1:HumidityStatus",
+            "value": "",
+            "valueState": "Missing",
+            "valueSubtype": "Percent",
+            "valueType": "Float",
+            "visible": "true",
+            "writeGroupAddress": ""
+          }
+        ],
+        "displayName": "Raumfeuchte",
+        "enabled": "true",
+        "extendedType": "de.gira.schema.channels.GiraOne.Sensor.Humidity",
+        "id": "206462",
+        "name": "Humidity-1",
+        "parameters": [
+          {
+            "key": "ChannelUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:SensorHumidityV1"
+          },
+          {
+            "key": "ConfigUrn",
+            "set": "DTController",
+            "value": "urn:dt:controllerPlugin:channel:sensor.humidity"
+          },
+          {
+            "key": "StyleUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:SensorHumidityV1.style.Humidity"
+          }
+        ],
+        "type": "CHANNEL",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Humidity-1",
+        "visible": "true"
+      },
+      {
+        "channelType": "KNX GA Channel",
+        "displayName": "Status-LED",
+        "enabled": "true",
+        "extendedType": "de.gira.schema.channels.GiraOne.Sensor.OneLedControl",
+        "id": "206464",
+        "name": "Oneledcontrol-1",
+        "parameters": [
+          {
+            "key": "StatusLedDayBrightness",
+            "set": "Channel",
+            "value": "Bright"
+          },
+          {
+            "key": "ChannelUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:GiraActuatorCommonLedV1"
+          },
+          {
+            "key": "ConfigUrn",
+            "set": "DTController",
+            "value": "urn:dt:controllerPlugin:channel:sensor.actuatorCommonLedV1"
+          },
+          {
+            "key": "StyleUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:GiraActuatorCommonLedV1.style.OnlyDayStatusBrightness"
+          }
+        ],
+        "type": "CHANNEL",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Oneledcontrol-1",
+        "visible": "true"
+      },
+      {
+        "channelType": "KNX GA Channel",
+        "datapointCount": "1",
+        "datapoints": [
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "ReadOnStart",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Temperature",
+            "id": "206466",
+            "internalDefaultValue": "3.7:       0",
+            "internalValue": "1.1:",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "670760"
+              },
+              {
+                "key": "MIN",
+                "value": "-273"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": "0.01"
+              },
+              {
+                "key": "UNIT",
+                "value": "°C"
+              }
+            ],
+            "name": "Temperature",
+            "operations": "READ/-/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Roomtemperature-1:Temperature",
+            "value": "",
+            "valueState": "Missing",
+            "valueSubtype": "Temperature",
+            "valueType": "Float",
+            "visible": "true",
+            "writeGroupAddress": ""
+          }
+        ],
+        "displayName": "Raumtemperatur 1",
+        "enabled": "true",
+        "extendedType": "de.gira.schema.channels.GiraOne.Sensor.RoomTemperature",
+        "id": "206465",
+        "name": "Roomtemperature-1",
+        "parameters": [
+          {
+            "key": "TemperatureAdjustment",
+            "set": "Channel",
+            "value": "0"
+          },
+          {
+            "key": "ChannelUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:SensorGenericTemperatureV1"
+          },
+          {
+            "key": "ConfigUrn",
+            "set": "DTController",
+            "value": "urn:dt:controllerPlugin:channel:sensor.gernericTemperature"
+          },
+          {
+            "key": "StyleUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:SensorGenericTemperatureV1.style.RoomTemperatureMeasurement"
+          }
+        ],
+        "type": "CHANNEL",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Roomtemperature-1",
+        "visible": "true"
+      },
+      {
+        "channelType": "KNX GA Channel",
+        "datapointCount": "1",
+        "datapoints": [
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "ReadOnStart",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Temperature",
+            "id": "206468",
+            "internalDefaultValue": "3.7:       0",
+            "internalValue": "1.1:",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "670760"
+              },
+              {
+                "key": "MIN",
+                "value": "-273"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": "0.01"
+              },
+              {
+                "key": "UNIT",
+                "value": "°C"
+              }
+            ],
+            "name": "Temperature",
+            "operations": "READ/-/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Roomtemperature-2:Temperature",
+            "value": "",
+            "valueState": "Missing",
+            "valueSubtype": "Temperature",
+            "valueType": "Float",
+            "visible": "true",
+            "writeGroupAddress": ""
+          }
+        ],
+        "displayName": "Raumtemperatur 2",
+        "enabled": "true",
+        "extendedType": "de.gira.schema.channels.GiraOne.Sensor.RoomTemperature",
+        "id": "206467",
+        "name": "Roomtemperature-2",
+        "parameters": [
+          {
+            "key": "TemperatureAdjustment",
+            "set": "Channel",
+            "value": "0"
+          },
+          {
+            "key": "ChannelUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:SensorGenericTemperatureV1"
+          },
+          {
+            "key": "ConfigUrn",
+            "set": "DTController",
+            "value": "urn:dt:controllerPlugin:channel:sensor.gernericTemperature"
+          },
+          {
+            "key": "StyleUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:SensorGenericTemperatureV1.style.RoomTemperatureMeasurement"
+          }
+        ],
+        "type": "CHANNEL",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Roomtemperature-2",
+        "visible": "true"
+      },
+      {
+        "channelType": "KNX GA Channel",
+        "datapointCount": "2",
+        "datapoints": [
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "None",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Switch",
+            "id": "206470",
+            "internalDefaultValue": "2.3:false",
+            "internalValue": "1.1:",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "true"
+              },
+              {
+                "key": "MIN",
+                "value": "false"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": ""
+              },
+              {
+                "key": "UNIT",
+                "value": ""
+              }
+            ],
+            "name": "OnOff",
+            "operations": "-/WRITE/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "16/1/13",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Switching-1:OnOff",
+            "value": "",
+            "valueState": "Missing",
+            "valueSubtype": "Switch",
+            "valueType": "Binary",
+            "visible": "true",
+            "writeGroupAddress": "16/1/13"
+          },
+          {
+            "cacheTimeout": "0",
+            "changedOnly": "false",
+            "defaultValue": "0",
+            "defaultValueInit": "ReadOnStart",
+            "enabled": "true",
+            "eventAlways": "true",
+            "extendedType": "de.gira.schema.datapoints.Bool",
+            "id": "206471",
+            "internalDefaultValue": "2.3:false",
+            "internalValue": "2.3:false",
+            "metadata": [
+              {
+                "key": "MAX",
+                "value": "true"
+              },
+              {
+                "key": "MIN",
+                "value": "false"
+              },
+              {
+                "key": "RANGE",
+                "value": ""
+              },
+              {
+                "key": "RESOLUTION",
+                "value": ""
+              },
+              {
+                "key": "UNIT",
+                "value": ""
+              }
+            ],
+            "name": "Feedback",
+            "operations": "READ/-/EVENT",
+            "pollingInterval": "0",
+            "readGroupAddress": "16/0/97",
+            "type": "KNXDP",
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Switching-1:Feedback",
+            "value": "0",
+            "valueState": "Value",
+            "valueSubtype": "Bool",
+            "valueType": "Binary",
+            "visible": "true",
+            "writeGroupAddress": ""
+          }
+        ],
+        "displayName": "Schalten 1",
+        "enabled": "true",
+        "extendedType": "de.gira.schema.channels.GiraOne.Sensor.Switch",
+        "id": "206469",
+        "name": "Switching-1",
+        "parameters": [
+          {
+            "key": "CommandTypeLeft",
+            "set": "Channel",
+            "value": "Toggle"
+          },
+          {
+            "key": "CommandTypeRight",
+            "set": "Channel",
+            "value": "Toggle"
+          },
+          {
+            "key": "LedColor",
+            "set": "Channel",
+            "value": "Green"
+          },
+          {
+            "key": "LedFunction",
+            "set": "Channel",
+            "value": "ButtonPressDisplay"
+          },
+          {
+            "key": "ChannelUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:GiraSensorSwitchOnOffRockerTwoLedV1"
+          },
+          {
+            "key": "ConfigUrn",
+            "set": "DTController",
+            "value": "urn:dt:controllerPlugin:channel:sensor.switchingRockerTwoLed"
+          },
+          {
+            "key": "StyleUrn",
+            "set": "DTController",
+            "value": "urn:dt:base:channel:GiraSensorSwitchOnOffRockerTwoLedV1.style.BinarySwitch"
+          }
+        ],
+        "type": "CHANNEL",
+        "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10.Switching-1",
+        "visible": "true"
+      }
+    ],
+    "configurationChangeTracking": {
+      "changeId": "b0105729-beb3-4469-908b-4f70344267a3",
+      "state": "",
+      "successChangeId": "",
+      "timestamp": ""
+    },
+    "deviceId": "1000",
+    "enabled": "true",
+    "extendedType": "de.gira.schema.components.GiraOne.Device.Sensor.FlushMounted.KNXButton4_Comfort_System55_2gang",
+    "fieldHandler": "",
+    "id": "206457",
+    "metadata": [
+      {
+        "key": "DeleteOnGpaCommisioning",
+        "value": "true"
+      }
+    ],
+    "name": "KnxButton4Comfort2CSystem55Rocker2-gang-10",
+    "parameters": [
+      {
+        "key": "DeviceCertificate",
+        "set": "DTController",
+        "value": "AAFA5B-Q2DB3Q-HLQ2WO-OGCXST-OUCWC6-GHYE3Z"
+      },
+      {
+        "key": "DualTecId",
+        "set": "DTController",
+        "value": "10"
+      },
+      {
+        "key": "KnxManufacturerId",
+        "set": "DTController",
+        "value": "0008"
+      },
+      {
+        "key": "ModelVersion",
+        "set": "DTController",
+        "value": "1.0"
+      },
+      {
+        "key": "ExternTemperature",
+        "set": "GiraOneDevice",
+        "value": "RoomTemperature2"
+      },
+      {
+        "key": "Humidity",
+        "set": "GiraOneDevice",
+        "value": "Humidity"
+      },
+      {
+        "key": "Rocker1",
+        "set": "GiraOneDevice",
+        "value": "Switching1"
+      },
+      {
+        "key": "Rocker2",
+        "set": "GiraOneDevice",
+        "value": "Dimming2"
+      },
+      {
+        "key": "RoomTemperature",
+        "set": "GiraOneDevice",
+        "value": "RoomTemperature1"
+      },
+      {
+        "key": "MaxPowerConsumption",
+        "set": "KNXPowerSupply",
+        "value": "12"
+      }
+    ],
+    "parentComponentId": "0",
+    "type": "COMPONENT",
+    "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10",
+    "visible": "true"
+  },
+  "request": {
+    "command": "GetConfiguration",
+    "object": {
+      "urn": "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-10"
+    },
+    "_gdsqueryId": "3"
+  },
+  "version": {
+    "major": "1",
+    "minor": "0",
+    "text": "1.0"
+  }
+}

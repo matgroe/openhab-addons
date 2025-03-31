@@ -1,0 +1,8 @@
+{
+  "request": {
+    "command": "GetValue",
+    "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Local-Time",
+    "internal": "true",
+    "_gdsqueryId": 80
+  }
+}

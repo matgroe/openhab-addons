@@ -1,0 +1,9 @@
+{
+    "request": {
+        "command": "GetConfiguration",
+        "object": {
+            "id": 40000
+        },
+        "_gdsqueryId": 9
+    }
+}

@@ -1,0 +1,253 @@
+{
+  "response": {
+    "error": {
+      "code": "0",
+      "hint": "",
+      "text": "OK"
+    },
+    "object": {
+      "channelType": "General GDS Channel",
+      "displayName": "Raffstore Wohnbereich",
+      "enabled": "true",
+      "extendedType": "de.gira.schema.channels.FunctionScene",
+      "fieldHandler": "",
+      "id": "40000",
+      "metadata": [
+        {
+          "key": "ChannelViewId",
+          "value": "216029"
+        },
+        {
+          "key": "ResetOnGpaCommisioning",
+          "value": "true"
+        },
+        {
+          "key": "conf:EntityId",
+          "value": "49b67814-47b3-4fa4-b860-60d4730b6f1c"
+        }
+      ],
+      "name": "Function-Scene-1",
+      "outputDatapoints": [
+        {
+          "id": "1000501",
+          "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:Function-Scene-1:Scene-Set"
+        }
+      ],
+      "sceneSet": {
+        "datapoints": [
+          {
+            "id": "216045",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Position"
+          },
+          {
+            "id": "216047",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Slat-Position"
+          },
+          {
+            "id": "216089",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Position"
+          },
+          {
+            "id": "216085",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Slat-Position"
+          },
+          {
+            "id": "216139",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Position"
+          },
+          {
+            "id": "216143",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Slat-Position"
+          },
+          {
+            "id": "216166",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Position"
+          },
+          {
+            "id": "216169",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Slat-Position"
+          },
+          {
+            "id": "216171",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Position"
+          },
+          {
+            "id": "216174",
+            "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Slat-Position"
+          }
+        ],
+        "enabled": "true",
+        "name": "Scene-Set",
+        "scenes": [
+          {
+            "datapoints": [
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216045",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216047",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216089",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216085",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216139",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216143",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216166",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216169",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Slat-Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216171",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216174",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Slat-Position",
+                "value": "100"
+              }
+            ],
+            "name": "Raffstore Wohnbereich 100%",
+            "number": "1"
+          },
+          {
+            "datapoints": [
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216045",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216047",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-9:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216089",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216085",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-5:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216139",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216143",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-8:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216166",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216169",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-7:Slat-Position",
+                "value": "50"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216171",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Position",
+                "value": "100"
+              },
+              {
+                "active": "true",
+                "delay": "0",
+                "id": "216174",
+                "urn": "urn:gds:dpv:Covering-Blind-With-Position-6:Slat-Position",
+                "value": "50"
+              }
+            ],
+            "name": "Raffstore Wohnbereich 50%",
+            "number": "2"
+          }
+        ]
+      },
+      "type": "CHANNEL",
+      "urn": "urn:gds:chn:GiraOneServer.GIOSRVKX03:Function-Scene-1",
+      "visible": "true"
+    },
+    "request": {
+      "command": "GetConfiguration",
+      "object": {
+        "id": "40000"
+      },
+      "_gdsqueryId": "9"
+    },
+    "version": {
+      "major": "1",
+      "minor": "0",
+      "text": "1.0"
+    }
+  }
+}
