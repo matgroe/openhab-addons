@@ -112,7 +112,7 @@ Sets the temperature for your underfloor heater and gives some status informatio
 | current   | Number:Temperature | R          | The current measured temperature                                                                                                         |
 | set-point | Number:Temperature | RW         | Change this value to the desired temperature between 5°C and 35°C                                                                        |
 | heating   | Number             | RW         | Shows up, if the heater is warming. 0 means Standby (no heating), 1 heater is feeding.                                                   |
-| mode      | Number             | R          | The Heater Working Profile. One of Comfort(1), Standby(2), Night(3), Freeze Protection(4). The values are given by the Gira One System.  | 
+| mode      | Number             | RW         | The Heater Working Profile. One of Comfort(1), Standby(2), Night(3), Freeze Protection(4). The values are given by the Gira One System.  | 
 
 ### Thing `giraone:shutter-roof-window`
 Offers information about roof window position and open/closes the window.
@@ -148,35 +148,71 @@ executes a function scene as configured within the Gira Smart Home
 
 ## Full Example
 
-_Provide a full usage example based on textual configuration files._
-_*.things, *.items examples are mandatory as textual configuration is well used by many users._
-_*.sitemap examples are optional._
+### Thing Configuration by channelViewUrn
+If you want to configure your thing manually, you need to find out the concerning `channelViewUrn` or `channelName`. You should prefer using the channelViewUrn, because it's more stable and
+changes only if the hardwired installation is changed. There are two option to get this value.
 
-### Thing Configuration
+#### Extract channelViewUrn from Service Discovery Result
+You can extract the information from your Things Inbox.
+![Things Inbox](doc/Things-Inbox-001.png)
+
+#### Extract channelViewUrn from logfile
+- Set addon's loglevel to `TRACE`
+- Lookup the log for a received message `GetUIConfiguration` 
+```
+  openhab.log:2025-03-27 08:05:31.527 [TRACE] [internal.communication.GiraOneClient] - Received Message :: {"response":{"request":{"urns":true,"_gdsqueryId":3,"command":"GetUIConfiguration"},"error":{"code":0,"text":"OK","hint":""},"config":[ 
+``` 
+- Now find the desired channel within the message.
+```json
+ {
+        "channelViewID": 216302,
+        "channelViewUrn": "urn:gds:chv:NumericFloatingPointStatus-Float-16",
+        "functionType": "de.gira.schema.functions.NumericFloatStatus",
+        "channelType": "de.gira.schema.channels.Float",
+        "channelTypeId": "NumericFloatStatus.Temperatur",
+        "name": "Wohnen Temperatur",
+        "iconID": 108,
+        "dataPoints": [
+          {
+            "dataPoint": "Float",
+            "id": 215501,
+            "urn": "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-3.Roomtemperature-1:Temperature"
+          }
+        ],
+        "parameters": [],
+        "channelID": 0,
+        "switchTimeChannelID": 0,
+        "switchTimes": []
+      }
+```
 
 ```java
-Bridge giraone:server:123456789 "Gira One Server" @ "Schaltschrank" [ hostname="192.168.178.38", username="User", password="!Ncc1701D" ] {
-    Thing status-temperature Wohnen_Temperatur_1    "Temperatur Wohnen by channelViewUrn "    [ channelViewUrn="urn:gds:chv:NumericFloatingPointStatus-Float-18" ]
+Bridge giraone:server:123456789 "Gira One Server" @ "Schaltschrank" [ hostname="192.168.123.123", username="User", password="TheSecretWord" ] {
+    Thing status-temperature Wohnen_Temperatur_1    "Temperatur Wohnen by channelViewUrn "    [ channelViewUrn="urn:gds:chv:NumericFloatingPointStatus-Float-18" ] 
+}
+```
+
+### Thing Configuration by channelName
+You may also reference the Thing by it's name as given in the Gira GPA software. You need to reconfigure the things if  the channel is renamed in the GPA Software or in the Gira Mobile App. 
+```java
+Bridge giraone:server:123456789 "Gira One Server" @ "Schaltschrank" [ hostname="192.168.123.123", username="User", password="TheSecretWord" ] {
     Thing status-temperature Wohnen_Temperatur_2    "Temperatur Wohnen by channelName"    [ channelName="Wohnen Temperatur" ]
     Thing status-temperature Wohnen_Temperatur_3    "Wohnen Temperatur"    [  ]
 }
 ```
 
 ### Item Configuration
+
 ```java
 Number:Temperature    T_Wohnen_Temperatur_2    "Wohnen Temperatur  [%.1f %unit%]"   ( WOHNEN )  [ "Point" ]    { channel="giraone:status-temperature:123456789:Wohnen_Temperatur_2:float" [  ] }  
 ```
 
-### Sitemap Configuration
 
-```perl
-Optional Sitemap configuration goes here.
-Remove this section, if not needed.
-```
+## Additional Information
+This chapter gives some additional information about the binding.
+### Known Issues
+n.a.
 
-## Any custom content here!
-
-_Feel free to add additional sections for whatever you think should also be mentioned about your binding!_
-
-
+### Planned Extensions
+n.a.
 
