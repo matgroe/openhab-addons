@@ -188,7 +188,8 @@ You can extract the information from your Things Inbox.
 
 ```java
 Bridge giraone:server:123456789 "Gira One Server" @ "Schaltschrank" [ hostname="192.168.123.123", username="User", password="TheSecretWord" ] {
-    Thing status-temperature Wohnen_Temperatur_1    "Temperatur Wohnen by channelViewUrn "    [ channelViewUrn="urn:gds:chv:NumericFloatingPointStatus-Float-18" ] 
+    Thing status-temperature Wohnen_Temperatur_1    "Temperatur Wohnen by channelViewUrn "    [ channelViewUrn="urn:gds:chv:NumericFloatingPointStatus-Float-18" ]
+    Thing dimmer-light Wohnen_Deckenlicht "Wohnen Deckenlicht" [ channelViewUrn="urn:gds:chv:KNXlight-KNX-Dimmer-1"]    
 }
 ```
 
@@ -198,21 +199,22 @@ You may also reference the Thing by it's name as given in the Gira GPA software.
 Bridge giraone:server:123456789 "Gira One Server" @ "Schaltschrank" [ hostname="192.168.123.123", username="User", password="TheSecretWord" ] {
     Thing status-temperature Wohnen_Temperatur_2    "Temperatur Wohnen by channelName"    [ channelName="Wohnen Temperatur" ]
     Thing status-temperature Wohnen_Temperatur_3    "Wohnen Temperatur"    [  ]
+    Thing dimmer-light Wohnen_Deckenlicht "Wohnen Deckenlicht" [ ]
 }
 ```
 
 ### Item Configuration
 
 ```java
-Number:Temperature    T_Wohnen_Temperatur_2    "Wohnen Temperatur  [%.1f %unit%]"   ( WOHNEN )  [ "Point" ]    { channel="giraone:status-temperature:123456789:Wohnen_Temperatur_2:float" [  ] }  
+Number:Temperature    T_Wohnen_Temperatur_2    "Wohnen Temperatur  [%.1f %unit%]"   ( WOHNEN )  [ "Point" ]    { channel="giraone:status-temperature:123456789:Wohnen_Temperatur_2:float" [  ] }
+Switch    T_Wohnen_Licht_Switch   "Wohnen Licht An/Aus"  ["Control" ] { channel="giraone:dimmer-light:123456789:Wohnen_Deckenlicht:on-off" }
+Dimmer    T_Wohnen_Licht_Dimmer   "Wohnen Licht Dimmer"  ["Control" ] { channel="giraone:dimmer-light:123456789:Wohnen_Deckenlicht:brightness" }
 ```
-
 
 ## Additional Information
 This chapter gives some additional information about the binding.
 ### Known Issues
 n.a.
-
 ### Planned Extensions
 n.a.
 

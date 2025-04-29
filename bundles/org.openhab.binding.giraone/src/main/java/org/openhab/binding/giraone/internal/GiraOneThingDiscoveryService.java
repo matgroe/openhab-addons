@@ -58,6 +58,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     private static final int TIMEOUT = 60;
     private static final int BACKGROUND_DISCOVERY_DELAY = 10;
     private static final int BACKGROUND_DISCOVERY_PERIOD = 1800;
+    private static final int DISCOVERY_TTL_FACTOR = 2;
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneThingDiscoveryService.class);
 
@@ -157,7 +158,8 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         String thingId = generateIdentifier(channel);
         return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId))
                 .withLabel(channel.getName()).withBridge(bridgeUID).withProperties(properties)
-                .withTTL(2 * BACKGROUND_DISCOVERY_PERIOD).withRepresentationProperty(PROPERTY_CHANNELVIEW_URN).build();
+                .withTTL(DISCOVERY_TTL_FACTOR * BACKGROUND_DISCOVERY_PERIOD)
+                .withRepresentationProperty(PROPERTY_CHANNELVIEW_URN).build();
     }
 
     protected synchronized void startBackgroundScanning() {

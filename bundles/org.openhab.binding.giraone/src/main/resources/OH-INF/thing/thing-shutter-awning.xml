@@ -9,7 +9,7 @@
 		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
 	-->
 
-	<thing-type id="shutter-awning">
+	<thing-type id="shutter-awning" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>

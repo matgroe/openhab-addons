@@ -4,12 +4,7 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!--
-		All Non-Known Devices are getting mapped to the unkown thing
-		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
-	-->
-
-	<thing-type id="shutter-venetian-blind">
+	<thing-type id="shutter-venetian-blind" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
@@ -17,16 +12,12 @@
 		<description>Venetian-Blind or Covering-Shutter</description>
 		<category>Rollershutter</category>
 		<channels>
-			<channel id="step-up-down" typeId="shutter-venetian-blind-step-up-down"/>
-			<channel id="up-down" typeId="shutter-venetian-blind-up-down"/>
-			<channel id="motion" typeId="shutter-venetian-blind-motion"/>
-			<channel id="position" typeId="shutter-venetian-blind-position"/>
-			<channel id="slat-position" typeId="shutter-venetian-blind-slat-position"/>
+			<channel id="step-up-down" typeId="shutter-step-up-down"/>
+			<channel id="up-down" typeId="shutter-move-up-down"/>
+			<channel id="motion" typeId="shutter-motion-state"/>
+			<channel id="position" typeId="shutter-position"/>
+			<channel id="slat-position" typeId="shutter-slat-position"/>
 		</channels>
-
-		<properties>
-			<property name="thingTypeVersion">1</property>
-		</properties>
 		<representation-property>channelViewUrn</representation-property>
 	</thing-type>
 

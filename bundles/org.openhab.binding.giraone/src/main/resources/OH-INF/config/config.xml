@@ -7,18 +7,18 @@
 
 	<config-description uri="giraone:channel:definition">
 		<parameter name="channelViewUrn" type="text" required="false">
-			<label>Unique Channel Name</label>
-			<description>The Unique Device Name Representation Property</description>
+			<label>Channel Unique Resource Name</label>
+			<description>The Channels Unique Resource Name</description>
 		</parameter>
 
 		<parameter name="channelViewId" type="integer" required="false">
-			<label>Unique Channel ID</label>
-			<description>The Gira One Project Channel-Id </description>
+			<label>Unique Channel View ID</label>
+			<description>The Gira One Project ChannelViewId </description>
 		</parameter>
 
 		<parameter name="channelName" type="text" required="false">
-			<label>Channel Name</label>
-			<description>The The Gira One Project's Device Name</description>
+			<label>GiraOne Label</label>
+			<description>The Gira One Project's Channel/Device Label</description>
 		</parameter>
 
 	</config-description>

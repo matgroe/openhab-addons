@@ -8,7 +8,7 @@
 		All Non-Known Devices are getting mapped to the unkown thing
 		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
 	-->
-	<thing-type id="heating-cooling-underfloor">
+	<thing-type id="heating-cooling-underfloor" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
