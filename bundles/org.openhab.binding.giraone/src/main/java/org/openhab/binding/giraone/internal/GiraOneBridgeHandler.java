@@ -21,8 +21,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketClient;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -57,7 +57,7 @@ import io.reactivex.rxjava3.subjects.Subject;
 @NonNullByDefault
 public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBridge {
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
-    private final GiraOneClient giraOneServerClient;
+    private final GiraOneWebsocketClient giraOneServerClient;
     private final Subject<GiraOneChannelValue> channelValues = PublishSubject.create();
 
     private GiraOneProject giraOneProject = new GiraOneProject();
@@ -67,7 +67,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
-        this.giraOneServerClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
+        this.giraOneServerClient = new GiraOneWebsocketClient(getConfigAs(GiraOneClientConfiguration.class));
         giraOneServerClient.subscribeOnGiraOneClientExceptions(this::onGiraOneClientException);
     }
 
@@ -144,7 +144,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     /**
      *
-     * @param connectionState The {@link GiraOneClient}'s connection state.
+     * @param connectionState The {@link GiraOneWebsocketClient}'s connection state.
      */
     private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
         logger.debug("ConnectionStateChanged to {}", connectionState);
@@ -194,8 +194,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     private GiraOneChannelValue createGiraOneChannelValue(GiraOneChannel projectChannel, GiraOneDataPoint dataPoint) {
         GenericBuilder<GiraOneChannelValue> builder = GenericBuilder.of(GiraOneChannelValue::new);
 
-        return builder.with(GiraOneChannelValue::setChannelViewId, projectChannel.getChannelViewId())
-                .with(GiraOneChannelValue::setChannelViewUrn, projectChannel.getChannelViewUrn())
+        return builder.with(GiraOneChannelValue::setChannelViewUrn, projectChannel.getChannelViewUrn())
                 .with(GiraOneChannelValue::setGiraOneDataPoint, dataPoint).build();
     }
 

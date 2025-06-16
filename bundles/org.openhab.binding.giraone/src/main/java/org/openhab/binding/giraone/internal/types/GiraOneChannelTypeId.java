@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Enumeration describes channel type id
- * for {@link GiraOneProjectItem}
+ * for {@link GiraOneChannelTypeId}
  *
  * @author Matthias Gröger - Initial contribution
  */

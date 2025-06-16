@@ -33,6 +33,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.core.config.discovery.AbstractThingHandlerDiscoveryService;
@@ -111,16 +112,12 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     }
 
     String formatThingTypeId(GiraOneChannel channel) {
-        switch (channel.getFunctionType()) {
-            case Status -> {
-                return CaseFormatter
-                        .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelTypeId().toString());
-            }
-            default -> {
+        if(channel.getFunctionType() == GiraOneFunctionType.Status) {
+            return CaseFormatter
+                    .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelTypeId().toString());
+        }
                 return CaseFormatter
                         .lowerCaseHyphen(channel.getChannelType().toString() + channel.getChannelTypeId().toString());
-            }
-        }
     }
 
     ThingTypeUID detectThingTypeUID(GiraOneChannel channel) {
@@ -141,7 +138,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
             return myHash.toLowerCase().substring(0, Math.min(myHash.length(), 10));
         } catch (NoSuchAlgorithmException e) {
             logger.warn("Cannot generate identifier.", e);
-            return String.format("%d", channel.getChannelViewId());
+            return String.format("%d",  Objects.hash(channel));
         }
     }
 

@@ -15,18 +15,24 @@ package org.openhab.binding.giraone.internal.types;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
- * GiraOneChannelViewRef
+ * The {@link GiraOneChannelCollection} describes a base component within the GiraOne SmartHome system.
+ * A physical GiraOneComponent might Triggering Element like a Rocker or Button
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
-public class GiraOneChannelViewRef implements GiraOneItemReference {
+public class GiraOneChannelCollection {
+    private final Collection<GiraOneChannel> channels = new ArrayList<>();
 
-    private int channelViewID;
+    public Collection<GiraOneChannel> getChannels() {
+        return channels;
+    }
 
-    @Override
-    public int getReferenceId() {
-        return channelViewID;
+    public void add(GiraOneChannel giraOneChannel) {
+        this.channels.add(giraOneChannel);
     }
 }

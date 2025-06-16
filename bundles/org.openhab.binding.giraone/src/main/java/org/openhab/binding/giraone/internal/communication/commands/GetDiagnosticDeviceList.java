@@ -13,21 +13,23 @@
 package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link ServerCommand} for reading the DiagnosticDeviceList
+ * {@link GiraOneCommand} for reading the DiagnosticDeviceList
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GetDiagnosticDeviceList extends ServerCommand {
+@GiraOneServerCommand(name = "GetDiagnosticDeviceList", responsePayload = "data")
+public class GetDiagnosticDeviceList extends GiraOneCommand {
 
     public static GenericBuilder<GetDiagnosticDeviceList> builder() {
         return GenericBuilder.of(GetDiagnosticDeviceList::new);
     }
 
     protected GetDiagnosticDeviceList() {
-        super(GiraOneCommand.GetDiagnosticDeviceList);
     }
 }

@@ -26,17 +26,16 @@ import com.google.gson.annotations.SerializedName;
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneDataPoint {
 
-    @SerializedName(value = "dataPoint")
-    private String dataPointName;
+    private String name;
     private int id;
     private String urn;
 
     public String getName() {
-        return dataPointName;
+        return name;
     }
 
     public void setName(String dataPointName) {
-        this.dataPointName = dataPointName;
+        this.name = dataPointName;
     }
 
     public int getId() {
@@ -57,6 +56,6 @@ public class GiraOneDataPoint {
 
     @Override
     public String toString() {
-        return String.format("{id=%d, dataPoint=%s, urn=%s}", id, dataPointName, urn);
+        return String.format("{id=%d, dataPoint=%s, urn=%s}", id, name, urn);
     }
 }

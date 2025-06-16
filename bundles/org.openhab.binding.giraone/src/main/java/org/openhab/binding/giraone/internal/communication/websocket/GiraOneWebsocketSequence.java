@@ -10,16 +10,26 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.types;
+
+package org.openhab.binding.giraone.internal.communication.websocket;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * GiraOneItemReference
+ * Utility class for generating reliable incrementing sequence ids.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault()
-public interface GiraOneItemReference {
-    int getReferenceId();
+public class GiraOneWebsocketSequence {
+
+    private static int counter = 1;
+
+    public static synchronized void reset() {
+        counter = 1;
+    }
+
+    public static synchronized int next() {
+        return ++counter;
+    }
 }

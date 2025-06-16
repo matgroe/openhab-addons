@@ -15,16 +15,20 @@ package org.openhab.binding.giraone.internal.communication.commands;
 import java.util.UUID;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link ServerCommand} for registering the openhab bridge as
+ * {@link GiraOneWebsocketRequest} for registering the openhab bridge as
  * client application at Gira One Server.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class RegisterApplication extends ServerCommand {
+@GiraOneServerCommand(name = "RegisterApplication")
+public class RegisterApplication extends GiraOneCommand {
 
     private String applicationId = "Gira.UniversalApp";
     private String applicationType = "ui";
@@ -35,7 +39,6 @@ public class RegisterApplication extends ServerCommand {
     }
 
     protected RegisterApplication() {
-        super(GiraOneCommand.RegisterApplication);
         this.instanceId = UUID.randomUUID().toString();
     }
 

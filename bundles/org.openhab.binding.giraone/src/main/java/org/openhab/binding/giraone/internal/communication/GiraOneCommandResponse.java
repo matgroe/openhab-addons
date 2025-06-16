@@ -12,57 +12,51 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
-import java.util.Objects;
-
-import org.eclipse.jdt.annotation.DefaultLocation;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.internal.bind.JsonTreeReader;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
-import org.openhab.binding.giraone.internal.types.GiraOneMessageError;
-import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 
 import com.google.gson.JsonObject;
+import org.openhab.binding.giraone.internal.types.GiraOneComponent;
+import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
- * This class represents a command response as received from the Gira One Sever
- * as to an received {@link ServerCommand}.
+ * This interface represents a command response as received from the Gira One Sever.
+ * It offers access to the raw {@link JsonObject} and the deserialized Object as well.
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
-public class GiraOneCommandResponse {
-    static final String PROPERTY_REQUEST = "request";
-    static final String PROPERTY_ERROR = "error";
+@NonNullByDefault
+public interface GiraOneCommandResponse {
 
-    final JsonObject responseBody;
+    /**
+     * @return returns the raw {@link JsonObject} as received from Gira One Server.
+     */
+    JsonObject getResponseBody();
 
-    public GiraOneCommandResponse(final JsonObject responseBody) {
-        this.responseBody = responseBody;
+    /**
+     * @param <T> The typed response
+     * @param classOfT The class, ths response should get deserializes into
+     *
+     * @return The deserialized response
+     */
+    default <T> T getReply(Class<T> classOfT)  {
+        return GsonMapperFactory.createGson().fromJson(getResponseBody(), classOfT);
     }
 
-    public ServerCommand getRequestServerCommand() {
-        return Objects.requireNonNull(getRequest(ServerCommand.class), "Should not be null at any time");
-    }
-
-    public boolean isInitiatedBy(ServerCommand other) {
-        return getRequestServerCommand().equals(other);
-    }
-
-    public <T> T getRequest(Class<T> classOfT) {
-        return GsonMapperFactory.createGson().fromJson(responseBody.get(PROPERTY_REQUEST), classOfT);
-    }
-
-    public GiraOneMessageError getGiraMessageError() {
-        return Objects.requireNonNullElse(
-                GsonMapperFactory.createGson().fromJson(responseBody.get(PROPERTY_ERROR), GiraOneMessageError.class),
-                new GiraOneMessageError());
-    }
-
-    public <T> T getReply(Class<T> classOfT) {
-        String responseProperty = getRequestServerCommand().getCommand().getResponsePropertyName();
-        if (responseProperty.isEmpty()) {
-            return GsonMapperFactory.createGson().fromJson(responseBody, classOfT);
-        } else {
-            return GsonMapperFactory.createGson().fromJson(responseBody.get(responseProperty), classOfT);
-        }
+    /**
+     * @param <T> The typed response
+     * @param typeOfT The Type<T>, this response should get deserializes into
+     *
+     * @return The deserialized response
+     */
+    default  <T> T getReply(Type typeOfT)  {
+        return GsonMapperFactory.createGson().fromJson(getResponseBody(), typeOfT);
     }
 }

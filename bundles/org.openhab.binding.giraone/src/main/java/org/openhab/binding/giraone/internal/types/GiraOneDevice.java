@@ -11,25 +11,15 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 
-package org.openhab.binding.giraone.internal.communication.commands;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
+package org.openhab.binding.giraone.internal.types;
 
 /**
- * Utility class for generating reliable incrementing sequence ids.
+ * The class {{@link GiraOneDevice} gives access tho all relevant runtime information
+ * of Gira One Server and the deployed project. It also offers convenience functions
+ * to access relevant information.
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault()
-public class ServerCommandSequence {
+public final class GiraOneDevice {
 
-    private static int counter = 1;
-
-    public static synchronized void reset() {
-        counter = 1;
-    }
-
-    public static synchronized int generate() {
-        return ++counter;
-    }
 }

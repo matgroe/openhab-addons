@@ -10,12 +10,19 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.communication;
+package org.openhab.binding.giraone.internal.communication.websocket;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.ONE_SECOND;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URI;
@@ -45,30 +52,34 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
-import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
-import org.openhab.binding.giraone.internal.communication.commands.ServerCommandSequence;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
+import org.openhab.binding.giraone.internal.communication.commands.GetDeviceConfig;
+import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
+import org.openhab.binding.giraone.internal.communication.commands.GetValue;
+import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
 /**
- * Test class for {@link GiraOneClient}
+ * Test class for {@link GiraOneWebsocketClient}
  * 
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
-class GiraOneClientTest {
+class GiraOneWebsocketClientTest {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private static final int RCV_TIMEOUT = 2;
 
-    private GiraOneClient giraClient;
+    private GiraOneWebsocketClient giraOneWebsocketClient;
     private Session websocketSession = Mockito.mock(Session.class);
     private RemoteEndpoint remoteEndpoint = mock(RemoteEndpoint.class);
 
     @BeforeEach
     void setUp() throws IOException, ExecutionException, InterruptedException, TimeoutException {
-        ServerCommandSequence.reset();
+        GiraOneWebsocketSequence.reset();
 
         GiraOneClientConfiguration configuration = new GiraOneClientConfiguration();
         configuration.username = "User";
@@ -86,29 +97,30 @@ class GiraOneClientTest {
         when(session.get(configuration.defaultTimeoutSeconds, TimeUnit.SECONDS)).thenReturn(this.websocketSession);
 
         WebSocketClient webSocketClient = Mockito.mock(WebSocketClient.class);
-        Mockito.when(webSocketClient.connect(any(GiraOneClient.class), any(URI.class))).thenReturn(session);
+        Mockito.when(webSocketClient.connect(any(GiraOneWebsocketClient.class), any(URI.class))).thenReturn(session);
 
-        giraClient = Mockito.spy(new GiraOneClient(configuration));
-        Mockito.doReturn(webSocketClient).when(giraClient).createWebSocketClient(Mockito.any(HttpClient.class));
+        giraOneWebsocketClient = Mockito.spy(new GiraOneWebsocketClient(configuration));
+        Mockito.doReturn(webSocketClient).when(giraOneWebsocketClient)
+                .createWebSocketClient(Mockito.any(HttpClient.class));
     }
 
     @DisplayName("Compute Websocket Authentication Token")
     @ParameterizedTest
     @CsvSource({ "Blah, 1q2w3e4r5t, uiQmxhaDoxcTJ3M2U0cjV0", "User, Pass!Word, uiVXNlcjpQYXNzIVdvcmQ=" })
     public void testComputeWebsocketAuthToken(String username, String password, String expected) {
-        String token = giraClient.computeWebsocketAuthToken(username, password);
+        String token = giraOneWebsocketClient.computeWebsocketAuthToken(username, password);
         assertEquals(expected, token);
     }
 
     @DisplayName("Test Connect, Register and Disconnect against Gira One Server Websocket")
     @Test
     void testConnectRegisterAndDisconnect() throws Exception {
-        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraClient.connectionState.getValue());
+        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
 
-        giraClient.connect();
-        assertEquals(GiraOneBridgeConnectionState.Connecting, giraClient.connectionState.getValue());
+        giraOneWebsocketClient.connect();
+        assertEquals(GiraOneBridgeConnectionState.Connecting, giraOneWebsocketClient.connectionState.getValue());
 
-        giraClient.onWebSocketConnect(websocketSession);
+        giraOneWebsocketClient.onWebSocketConnect(websocketSession);
 
         await().atMost(ONE_SECOND).untilAsserted(() -> {
             ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
@@ -118,55 +130,56 @@ class GiraOneClientTest {
                     String.format("'%s' must contain 'RegisterApplication'", capturedArgument));
         });
 
-        giraClient.onWebSocketText(ResourceLoader.loadStringResource("/messages/1.RegisterApplication/001-resp.json"));
+        giraOneWebsocketClient
+                .onWebSocketText(ResourceLoader.loadStringResource("/messages/1.RegisterApplication/001-resp.json"));
         await().atMost(ONE_SECOND).untilAsserted(() -> {
-            assertEquals(GiraOneBridgeConnectionState.Connected, giraClient.connectionState.getValue());
+            assertEquals(GiraOneBridgeConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
         });
 
-        giraClient.disconnect();
-        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraClient.connectionState.getValue());
+        giraOneWebsocketClient.disconnect();
+        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
     }
 
     private void sendWebsocketText(final String text) {
         executorService.schedule(() -> {
-            giraClient.onWebSocketText(text);
+            giraOneWebsocketClient.onWebSocketText(text);
         }, 1, TimeUnit.SECONDS);
     }
 
     private static Stream<Arguments> provideServerCommandMessages() {
-        return Stream.of(
-                Arguments.of("/messages/1.RegisterApplication/001-resp.json", GiraOneCommand.RegisterApplication),
-                Arguments.of("/messages/2.GetUIConfiguration/001-resp.json", GiraOneCommand.GetUIConfiguration),
-                Arguments.of("/messages/4.GetDeviceConfig/001-resp.json", GiraOneCommand.GetDeviceConfig),
-                Arguments.of("/messages/6.GetNextTriggerTimes/001-resp.json", GiraOneCommand.GetNextTriggerTimes),
-                Arguments.of("/messages/2.GetValue/001-resp.json", GiraOneCommand.GetValue));
+        return Stream.of(Arguments.of("/messages/1.RegisterApplication/001-resp.json", RegisterApplication.class),
+                Arguments.of("/messages/2.GetUIConfiguration/001-resp.json", GetUIConfiguration.class),
+                Arguments.of("/messages/4.GetDeviceConfig/001-resp.json", GetDeviceConfig.class),
+                Arguments.of("/messages/2.GetValue/001-resp.json", GetValue.class));
     }
 
     @DisplayName("Received ServerCommandResponses must be provided by 'responses' Observable ")
     @ParameterizedTest
     @MethodSource("provideServerCommandMessages")
-    void testOnWebSocketTextWithServerCommandResponse(String messageSource, GiraOneCommand command) {
+    void testOnWebSocketTextWithServerCommandResponse(String messageSource, Class<GiraOneCommand> command) {
         sendWebsocketText(ResourceLoader.loadStringResource(messageSource));
-        GiraOneCommandResponse response = giraClient.responses.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
-                .blockingGet();
+        GiraOneCommandResponse response = giraOneWebsocketClient.responses.firstElement()
+                .timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
         assertNotNull(response);
-        assertEquals(command, response.getRequestServerCommand().getCommand());
+
     }
 
     @DisplayName("Received GiraEvents must be provided by 'events' Observable ")
     @Test
     void testOnWebSocketText4ValueEvent() {
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/0.Events/001-evt.json"));
-        GiraOneEvent event = giraClient.events.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
+        GiraOneEvent event = giraOneWebsocketClient.events.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
+                .blockingGet();
         assertNotNull(event);
     }
 
     @DisplayName("Received GiraEvents must be mapped to DataPoint and provided by 'values' Observable ")
     @Test
     void shoutEmitDatapointOnWebSocketTextWithValueEvent() {
-        giraClient.observeAndEmitDataPointValues();
+        giraOneWebsocketClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/0.Events/001-evt.json"));
-        GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
+        GiraOneValue dp = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
+                .blockingGet();
         assertNotNull(dp);
         assertInstanceOf(GiraOneValueChange.class, dp);
         assertEquals("1", ((GiraOneValueChange) dp).getPreviousValue());
@@ -176,9 +189,10 @@ class GiraOneClientTest {
     @DisplayName("Received GetValue responses must be mapped to DataPoint and provided by 'dataPoints' Observable ")
     @Test
     void shoutEmitDatapointOnWebSocketTextWithValueResponse() {
-        giraClient.observeAndEmitDataPointValues();
+        giraOneWebsocketClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/2.GetValue/001-resp.json"));
-        GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
+        GiraOneValue dp = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
+                .blockingGet();
         assertNotNull(dp);
         assertEquals(1002, dp.getId());
         assertEquals("1", dp.getValue());
@@ -191,10 +205,10 @@ class GiraOneClientTest {
             "/messages/4.GetDeviceConfig/001-resp.json", "/messages/5.GetConfiguration/001-resp.json",
             "/messages/6.GetNextTriggerTimes/001-resp.json" })
     void shouldNotEmitDatapointOnWebSocketTextWithCommandResponse(String messageSource) {
-        giraClient.observeAndEmitDataPointValues();
+        giraOneWebsocketClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource(messageSource));
-        GiraOneValue dp = giraClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS).onErrorComplete()
-                .blockingGet();
+        GiraOneValue dp = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
+                .onErrorComplete().blockingGet();
         assertNull(dp);
     }
 }

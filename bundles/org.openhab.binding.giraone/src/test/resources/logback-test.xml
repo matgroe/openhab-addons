@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.openhab.binding.giraone" level="DEBUG" />
+    <logger name="org.openhab.binding.giraone" level="TRACE" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

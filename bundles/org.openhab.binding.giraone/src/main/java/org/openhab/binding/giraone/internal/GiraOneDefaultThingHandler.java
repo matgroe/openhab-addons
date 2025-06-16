@@ -268,6 +268,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     private void updateThingProperties(Optional<GiraOneChannel> channel) {
+        /*
         updateProperty(PROPERTY_FUNCTION_TYPE,
                 channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
         updateProperty(PROPERTY_CHANNEL_TYPE,
@@ -276,6 +277,8 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                 channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
         updateProperty(PROPERTY_CHANNELVIEW_ID,
                 String.format("%d", channel.map(GiraOneChannel::getChannelViewId).orElse(0)));
+
+         */
     }
 
     protected int detectChannelViewId() {
@@ -291,7 +294,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         } else {
             updateThingProperties(channel);
         }
-        return channel.map(GiraOneChannel::getChannelViewId).orElse(0);
+        return 0;
     }
 
     /**

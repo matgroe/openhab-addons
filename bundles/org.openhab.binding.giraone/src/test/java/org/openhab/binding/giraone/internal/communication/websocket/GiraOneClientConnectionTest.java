@@ -11,7 +11,7 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 
-package org.openhab.binding.giraone.internal.communication;
+package org.openhab.binding.giraone.internal.communication.websocket;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.TEN_SECONDS;
@@ -22,17 +22,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
-import org.openhab.binding.giraone.internal.communication.commands.GetConfiguration;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
+import org.openhab.binding.giraone.internal.communication.commands.GetDiagnosticDeviceList;
 
 /**
- * Test class for {@link GiraOneClient}
+ * Test class for {@link GiraOneWebsocketClient}
  *
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault({})
 public class GiraOneClientConnectionTest {
     private GiraOneClientConfiguration configuration = new GiraOneClientConfiguration();
-    private GiraOneClient giraClient = new GiraOneClient(configuration);
+    private GiraOneWebsocketClient giraClient = new GiraOneWebsocketClient(configuration);
 
     @BeforeEach
     void setUp() {
@@ -46,27 +47,27 @@ public class GiraOneClientConnectionTest {
     @Test
     void testConnectWithInvalidCredentials() {
         configuration.password = "_invalid_";
-        giraClient = new GiraOneClient(configuration);
+        giraClient = new GiraOneWebsocketClient(configuration);
         giraClient.connect();
     }
 
     @Test
     void testConnectWithInvalidHostname() {
         configuration.hostname = "127.0.0.1";
-        giraClient = new GiraOneClient(configuration);
+        giraClient = new GiraOneWebsocketClient(configuration);
         giraClient.connect();
     }
 
     @Test
     void testConnectWithInvalidTextMessageSize() {
         configuration.maxTextMessageSize = 20;
-        giraClient = new GiraOneClient(configuration);
+        giraClient = new GiraOneWebsocketClient(configuration);
         giraClient.connect();
     }
 
     @Test
     void testConnectWithInvalidTextMessageSizeXXX() throws InterruptedException {
-        giraClient = new GiraOneClient(configuration);
+        giraClient = new GiraOneWebsocketClient(configuration);
         giraClient.connect();
         await().atMost(TEN_SECONDS).untilAsserted(() -> {
             assertEquals(GiraOneBridgeConnectionState.Connected, giraClient.connectionState.getValue());
@@ -74,24 +75,27 @@ public class GiraOneClientConnectionTest {
             // GiraOneCommandResponse response = giraClient.execute(GetGiraOneDevices.builder().build());
             // GiraOneCommandResponse response = giraClient.execute(GetGiraOneDevices.builder().build());
 
-            GetConfiguration getCfg = GetConfiguration.builder()
-                    // .with(GetConfiguration::setId, 206446)
-                    // .with(GetConfiguration::setUrn,
-                    // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Step-Up-Down")
-                    // .with(GetConfiguration::setUrn,
-                    // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang")
-                    .with(GetConfiguration::setUrn,
-                            "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang")
+            GetDiagnosticDeviceList list = GetDiagnosticDeviceList.builder().build();
 
-                    .build();
+            // GetConfiguration getCfg = GetConfiguration.builder()
+            // .with(GetConfiguration::setId, 206446)
+            // .with(GetConfiguration::setUrn,
+            // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Step-Up-Down")
+            // .with(GetConfiguration::setUrn,
+            // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang")
+            // .with(GetConfiguration::setUrn,
+            // "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang")
 
-            GiraOneCommandResponse response2 = giraClient.execute(getCfg);
+            // .build();
+
+            GiraOneCommandResponse response2 = giraClient.execute(list);
 
             // GiraOneCommandResponse response2 =
             // giraClient.execute(GetConfiguration.builder().with(GetConfiguration::setUrn,
             // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang").build());
 
-            response2.getRequestServerCommand();
+
+
         });
 
         // for (int i = 0; i < 1000; i++) {

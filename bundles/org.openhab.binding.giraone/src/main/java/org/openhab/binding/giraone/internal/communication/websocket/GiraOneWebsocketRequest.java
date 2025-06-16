@@ -10,13 +10,16 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal.communication.commands;
+package org.openhab.binding.giraone.internal.communication.websocket;
 
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -29,19 +32,26 @@ import com.google.gson.annotations.SerializedName;
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class ServerCommand {
-    @SerializedName(value = "_gdsqueryId")
-    private Integer commandId;
+public class GiraOneWebsocketRequest {
+    private static final String PROPERTY_COMMAND_ID = "_gdsqueryId";
+    private static final String PROPERTY_COMMAND_NAME = "command";
 
-    private final GiraOneCommand command;
+    @SerializedName(value = "request")
+    private final JsonObject request;
 
-    protected ServerCommand(GiraOneCommand command) {
-        this.command = command;
-        this.commandId = ServerCommandSequence.generate();
+    public GiraOneWebsocketRequest(GiraOneCommand command) {
+        request = (JsonObject) GsonMapperFactory.createGson().toJsonTree(command);
+        request.addProperty(PROPERTY_COMMAND_ID, GiraOneWebsocketSequence.next());
+        request.addProperty(PROPERTY_COMMAND_NAME, command.getCommand());
     }
 
     public GiraOneCommand getCommand() {
-        return command;
+        return Objects.requireNonNullElse(GsonMapperFactory.createGson().fromJson(request, GiraOneCommand.class),
+                new GiraOneCommand());
+    }
+
+    public Integer getCommandId() {
+        return request.getAsJsonPrimitive(PROPERTY_COMMAND_ID).getAsInt();
     }
 
     @Override
@@ -54,14 +64,14 @@ public class ServerCommand {
             return true;
         }
 
-        if (!(o instanceof ServerCommand that)) {
+        if (!(o instanceof GiraOneWebsocketRequest that)) {
             return false;
         }
-        return Objects.equals(commandId, that.commandId) && command == that.command;
+        return Objects.equals(getCommandId(), that.getCommandId()) && Objects.equals(getCommand(), that.getCommand());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commandId, command);
+        return Objects.hash(request);
     }
 }

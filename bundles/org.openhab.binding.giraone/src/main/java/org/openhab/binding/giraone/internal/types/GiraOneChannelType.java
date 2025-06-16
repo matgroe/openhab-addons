@@ -17,13 +17,12 @@ import java.util.Arrays;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * Enumeration describes channel type for {@link GiraOneProjectItem}
+ * Enumeration describes channel type for {@link GiraOneChannelType}
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
 public enum GiraOneChannelType {
-
     Shutter("de.gira.schema.channels.BlindWithPos"),
     Dimmer("de.gira.schema.channels.KNX.Dimmer"),
     Float("de.gira.schema.channels.Float"),

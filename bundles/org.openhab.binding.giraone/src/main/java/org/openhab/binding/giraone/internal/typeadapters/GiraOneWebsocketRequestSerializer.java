@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -26,22 +26,22 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * Serializes a {@link ServerCommand} into it's Json Representation.
+ * Serializes a {@link GiraOneWebsocketRequest} into it's Json Representation.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneCommandRequestSerializer implements JsonSerializer<ServerCommand> {
+public class GiraOneWebsocketRequestSerializer implements JsonSerializer<GiraOneWebsocketRequest> {
     static final String PROPERTY_REQUEST = "request";
 
     @Override
-    public JsonElement serialize(@Nullable ServerCommand serverCommand, @Nullable Type type,
+    public JsonElement serialize(@Nullable GiraOneWebsocketRequest serverCommand, @Nullable Type type,
             @Nullable JsonSerializationContext jsonSerializationContext) {
         Gson gson = new Gson();
-        Map<String, ServerCommand> wrapper = new HashMap<>();
+        Map<String, GiraOneWebsocketRequest> wrapper = new HashMap<>();
         if (serverCommand != null) {
             wrapper.put(PROPERTY_REQUEST, serverCommand);
         }
-        return gson.toJsonTree(wrapper);
+        return gson.toJsonTree(serverCommand);
     }
 }

@@ -17,9 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Test;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 
 /**
- * Test class for {@link ServerCommand} {@link RegisterApplication}
+ * Test class for {@link GiraOneWebsocketRequest} {@link RegisterApplication}
  * 
  * @author Matthias Groeger - Initial contribution
  */
@@ -36,7 +37,7 @@ class ServerCommandTest {
                 .with(RegisterApplication::setApplicationType, APP_TYPE)
                 .with(RegisterApplication::setInstanceId, INSTANCE_ID).build();
 
-        assertEquals(GiraOneCommand.RegisterApplication, cmd.getCommand());
+        assertEquals("RegisterApplication", cmd.getCommand());
         assertEquals(APP_ID, cmd.getApplicationId());
         assertEquals(APP_TYPE, cmd.getApplicationType());
         assertEquals(INSTANCE_ID, cmd.getInstanceId());
@@ -45,13 +46,13 @@ class ServerCommandTest {
     @Test
     void shouldBuildGiraOneCommandGetUIConfiguration() {
         GetUIConfiguration cmd = GetUIConfiguration.builder().with(GetUIConfiguration::setGuid, INSTANCE_ID).build();
-        assertEquals(GiraOneCommand.GetUIConfiguration, cmd.getCommand());
+        assertEquals("GetUIConfiguration", cmd.getCommand());
     }
 
     @Test
     void shouldBuildGiraOneCommandGetValue() {
         GetValue cmd = GetValue.builder().with(GetValue::setUrn, URN).build();
-        assertEquals(GiraOneCommand.GetValue, cmd.getCommand());
+        assertEquals("GetValue", cmd.getCommand());
         assertEquals(URN, cmd.getUrn());
         assertNull(cmd.getId());
     }

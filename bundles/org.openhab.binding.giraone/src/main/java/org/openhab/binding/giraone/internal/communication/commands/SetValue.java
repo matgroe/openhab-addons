@@ -14,15 +14,19 @@ package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link ServerCommand} for setting a new value on a datapoint.
+ * {@link GiraOneWebsocketRequest} for setting a new value on a datapoint.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class SetValue extends ServerCommand {
+@GiraOneServerCommand(name = "SetValue")
+public class SetValue extends GiraOneCommand {
     public static GenericBuilder<SetValue> builder() {
         return GenericBuilder.of(SetValue::new);
     }
@@ -31,7 +35,6 @@ public class SetValue extends ServerCommand {
     private @Nullable Object value;
 
     protected SetValue() {
-        super(GiraOneCommand.SetValue);
     }
 
     public @Nullable Integer getId() {

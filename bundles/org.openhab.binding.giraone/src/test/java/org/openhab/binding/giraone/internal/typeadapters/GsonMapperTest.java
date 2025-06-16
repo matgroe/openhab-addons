@@ -15,9 +15,13 @@ package org.openhab.binding.giraone.internal.typeadapters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.JsonPrimitive;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,11 +31,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
-import org.openhab.binding.giraone.internal.communication.commands.GiraOneCommand;
-import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
-import org.openhab.binding.giraone.internal.communication.commands.ServerCommand;
+import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceResponse;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
@@ -53,9 +60,14 @@ public class GsonMapperTest {
         gson = GsonMapperFactory.createGson();
     }
 
-    private GiraOneCommandResponse createGiraOneCommandResponseFrom(final String message) {
+    private GiraOneCommandResponse createGiraOneWebsocketResponseFrom(final String message) {
         return Objects.requireNonNull(
-                gson.fromJson(ResourceLoader.loadStringResource(message), GiraOneCommandResponse.class));
+                gson.fromJson(ResourceLoader.loadStringResource(message), GiraOneWebsocketResponse.class));
+    }
+
+    private GiraOneCommandResponse createGiraOneWebserviceResponseFrom(final String message) {
+        return Objects.requireNonNull(
+                gson.fromJson(ResourceLoader.loadStringResource(message), GiraOneWebserviceResponse.class));
     }
 
     private static Stream<Arguments> provideWebsocketMessageTypes() {
@@ -66,6 +78,22 @@ public class GsonMapperTest {
                 Arguments.of("/messages/0.Types/003-event-ok.json", GiraOneMessageType.Event));
     }
 
+    private static Stream<Arguments> provideGiraOneComponentUrns() {
+        return Stream.of(
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort4CSystem55Rocker2-gang-10", GiraOneComponentType.KnxButton),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14", GiraOneComponentType.KnxButton),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator6-gang-1", GiraOneComponentType.KnxDimmingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2", GiraOneComponentType.KnxDimmingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator12-gang-1", GiraOneComponentType.KnxHvacActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2", GiraOneComponentType.KnxHvacActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1", GiraOneComponentType.KnxSwitchingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator1-gang-11", GiraOneComponentType.KnxSwitchingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2", GiraOneComponentType.KnxSwitchingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxUnknownSwitchingActuator6-gang2C16A2FBlindActuator12-gang-2", GiraOneComponentType.Unknown)
+                );
+    }
+
+
     @DisplayName("message should deserialize to GiraOneMessageType")
     @ParameterizedTest
     @MethodSource("provideWebsocketMessageTypes")
@@ -74,14 +102,11 @@ public class GsonMapperTest {
         assertEquals(expected, gson.fromJson(message, GiraOneMessageType.class));
     }
 
-    @Test
-    void shouldSerializeObjectOfRegisterApplication() {
-        RegisterApplication request = RegisterApplication.builder().build();
-        RegisterApplication registerApplication = gson.fromJson(gson.toJson(request, ServerCommand.class),
-                RegisterApplication.class);
-        assertNotNull(registerApplication);
-        assertEquals(request.getApplicationId(), registerApplication.getApplicationId());
-        assertEquals(request.getCommand(), registerApplication.getCommand());
+    @DisplayName("message should deserialize to GiraOneComponentType")
+    @ParameterizedTest
+    @MethodSource("provideGiraOneComponentUrns")
+    void shouldDeserialize2GiraOneComponentType(String urn, GiraOneComponentType expected) {
+        assertEquals(expected, gson.fromJson(new JsonPrimitive(urn), GiraOneComponentType.class));
     }
 
     @DisplayName("message should deserialize a ValueEvent to GiraOneEvent")
@@ -107,29 +132,28 @@ public class GsonMapperTest {
     @DisplayName("message should deserialize to GiraOneCommandResponse")
     @Test
     void shouldDeserialize2GiraOneCommandResponse() {
-        GiraOneCommandResponse response = createGiraOneCommandResponseFrom(
+        GiraOneCommandResponse response = createGiraOneWebsocketResponseFrom(
                 "/messages/2.GetUIConfiguration/001-resp.json");
         assertNotNull(response);
-        assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
+        assertNotNull(response.getResponseBody());
     }
 
     @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneDeviceConfiguration")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneDeviceConfiguration() {
-        GiraOneCommandResponse response = createGiraOneCommandResponseFrom(
+        GiraOneCommandResponse response = createGiraOneWebsocketResponseFrom(
                 "/messages/2.GetUIConfiguration/001-resp.json");
         assertNotNull(response);
-        assertEquals(GiraOneCommand.GetUIConfiguration, response.getRequestServerCommand().getCommand());
-        GiraOneProject g1Project = response.getReply(GiraOneProject.class);
-        assertNotNull(g1Project);
+
+        GiraOneChannelCollection channels = response.getReply(GiraOneChannelCollection.class);
+        assertNotNull(channels);
     }
 
     @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneChannelValue")
     @Test
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneValue() {
-        GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/2.GetValue/001-resp.json");
+        GiraOneCommandResponse response = createGiraOneWebsocketResponseFrom("/messages/2.GetValue/001-resp.json");
         assertNotNull(response);
-        assertEquals(GiraOneCommand.GetValue, response.getRequestServerCommand().getCommand());
         GiraOneChannelValue state = response.getReply(GiraOneChannelValue.class);
         assertNotNull(state);
     }
@@ -137,10 +161,10 @@ public class GsonMapperTest {
     @DisplayName("message should deserialize to GiraOneEvent")
     @Test
     void shouldDeserialize2GiraOneDeviceConfiguration() {
-        GiraOneCommandResponse response = createGiraOneCommandResponseFrom("/messages/4.GetDeviceConfig/001-resp.json");
+        GiraOneCommandResponse response = createGiraOneWebsocketResponseFrom(
+                "/messages/4.GetDeviceConfig/001-resp.json");
 
         assertNotNull(response);
-        assertEquals(GiraOneCommand.GetDeviceConfig, response.getRequestServerCommand().getCommand());
         GiraOneDeviceConfiguration deviceCfg = response.getReply(GiraOneDeviceConfiguration.class);
         assertNotNull(deviceCfg);
 
@@ -149,5 +173,17 @@ public class GsonMapperTest {
         assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.CURRENT_SYSTEM), "System B");
         assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.DEVICE_ID), "OSRVKX03");
         assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.DEVICE_NAME), "GiraOneServer");
+    }
+
+
+
+    @DisplayName("GetDiagnosticDeviceList message should deserialize to GiraOneComponents")
+    @Test
+    void shouldDeserialize2GiraOneComponents() {
+        GiraOneCommandResponse response = createGiraOneWebserviceResponseFrom(
+                "/messages/7.GetDiagnosticDeviceList/001-resp.json");
+        assertNotNull(response);
+        response.getReply(GiraOneComponentCollection.class);
+        
     }
 }

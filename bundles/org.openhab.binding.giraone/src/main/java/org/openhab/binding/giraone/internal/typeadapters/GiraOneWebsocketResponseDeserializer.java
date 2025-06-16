@@ -16,9 +16,7 @@ import java.lang.reflect.Type;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.types.GiraOneItemSubType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -26,26 +24,21 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 /**
- * Deserializes a Json Element to {@link GiraOneItemSubType} within context of Gson parsing.
+ * Deserializes a Json Element to {@link GiraOneWebsocketResponse} within context of Gson parsing.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneItemSubTypeDeserializer implements JsonDeserializer<GiraOneItemSubType> {
-    private final Logger logger = LoggerFactory.getLogger(GiraOneItemSubTypeDeserializer.class);
+public class GiraOneWebsocketResponseDeserializer extends GiraOneMessageJsonTypeAdapter
+        implements JsonDeserializer<GiraOneWebsocketResponse> {
 
     @Override
     @Nullable
-    public GiraOneItemSubType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+    public GiraOneWebsocketResponse deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (jsonElement != null) {
-            try {
-                return GiraOneItemSubType.valueOf(jsonElement.getAsString());
-            } catch (IllegalArgumentException exp) {
-                logger.warn("Cannot map '{}' into enum of {}", jsonElement.getAsString(),
-                        GiraOneItemSubType.class.getName());
-            }
+        if (jsonElement != null && isResponse(jsonElement)) {
+            return new GiraOneWebsocketResponse(getResponse(jsonElement));
         }
-        return GiraOneItemSubType.Unknown;
+        throw new JsonParseException("The JsonElement is not parseable as GiraOneCommandResponse.");
     }
 }

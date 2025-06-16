@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault()
 public enum GiraOneFunctionType {
+    KnxButton("ext.ws-schema.functions.KNX.Button"),
     Light("de.gira.schema.functions.KNX.Light"),
     Covering("de.gira.schema.functions.Covering"),
     HeatingCooling("de.gira.schema.functions.KNX.HeatingCooling"),
@@ -33,7 +34,7 @@ public enum GiraOneFunctionType {
 
     private final String name;
 
-    private GiraOneFunctionType(final String name) {
+    GiraOneFunctionType(final String name) {
         this.name = name;
     }
 

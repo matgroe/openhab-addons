@@ -14,16 +14,19 @@ package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link ServerCommand} for reading the current state for all channels and items
- * from Gira One Server.
+ * {@link GiraOneWebsocketRequest} for reading a datapoint value from Gira One Server.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GetValue extends ServerCommand {
+@GiraOneServerCommand(name = "GetValue")
+public class GetValue extends GiraOneCommand {
     public static GenericBuilder<GetValue> builder() {
         return GenericBuilder.of(GetValue::new);
     }
@@ -34,7 +37,6 @@ public class GetValue extends ServerCommand {
     private String internal = "true";
 
     protected GetValue() {
-        super(GiraOneCommand.GetValue);
     }
 
     public @Nullable Integer getId() {

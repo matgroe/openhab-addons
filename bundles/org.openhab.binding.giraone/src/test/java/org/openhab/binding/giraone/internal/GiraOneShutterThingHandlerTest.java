@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,7 +54,6 @@ class GiraOneShutterThingHandlerTest {
         handler = Mockito.spy(new GiraOneShutterThingHandler(thing));
         when(thing.getUID()).thenReturn(new ThingUID(GENERIC_TYPE_UID, "junit"));
         when(handler.getThing()).thenReturn(thing);
-        channelValue.setChannelViewId(216084);
         channelValue.setChannelViewUrn("urn:gds:chv:Covering-Blind-With-Position-5");
     }
 

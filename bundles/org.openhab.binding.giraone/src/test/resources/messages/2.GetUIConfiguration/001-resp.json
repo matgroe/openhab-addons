@@ -2,7 +2,7 @@
   "response": {
     "request": {
       "command": "GetUIConfiguration",
-      "guid": "",
+      "guid": "guid-123-456-789",
       "urns": true,
       "_gdsqueryId": 3
     },

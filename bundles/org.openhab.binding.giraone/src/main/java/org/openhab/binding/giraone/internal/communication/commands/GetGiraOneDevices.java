@@ -15,17 +15,21 @@ package org.openhab.binding.giraone.internal.communication.commands;
 import java.util.HashMap;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * {@link ServerCommand} for reading getting a gira one device configuration
+ * {@link GiraOneWebsocketRequest} for reading getting a gira one device configuration
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GetGiraOneDevices extends ServerCommand {
+@GiraOneServerCommand(name = "GetGiraOneDevices", responsePayload = "devices")
+public class GetGiraOneDevices extends GiraOneCommand {
     @SerializedName("object")
     private final HashMap<String, Object> object = new HashMap<>();
 
@@ -34,7 +38,6 @@ public class GetGiraOneDevices extends ServerCommand {
     }
 
     protected GetGiraOneDevices() {
-        super(GiraOneCommand.GetGiraOneDevices);
     }
 
     public void setId(int id) {

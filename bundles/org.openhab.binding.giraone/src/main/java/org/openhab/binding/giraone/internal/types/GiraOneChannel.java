@@ -19,8 +19,6 @@ import java.util.Optional;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * GiraOneChannel
  *
@@ -28,43 +26,50 @@ import com.google.gson.annotations.SerializedName;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneChannel {
+    private String urn;
+    private String name;
+    private int channelViewId = 0;
 
-    @SerializedName(value = "channelID")
-    private int channelId;
-    private String channelUrn;
-
-    @SerializedName(value = "channelViewID")
-    private int channelViewId;
-    private String channelViewUrn;
     private GiraOneFunctionType functionType;
     private GiraOneChannelType channelType;
+
     private GiraOneChannelTypeId channelTypeId;
-    private String name;
+    private Collection<GiraOneDataPoint> dataPoints = new ArrayList<>();
 
-    private final Collection<GiraOneDataPoint> dataPoints = new ArrayList<>();
-
-    public int getChannelId() {
-        return channelId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getChannelUrn() {
-        return channelUrn;
+    public void setUrn(String urn) {
+        this.urn = urn;
     }
 
-    public int getChannelViewId() {
-        return channelViewId;
-    }
-
-    public String getChannelViewUrn() {
-        return channelViewUrn;
+    public void setFunctionType(GiraOneFunctionType functionType) {
+        this.functionType = functionType;
     }
 
     public GiraOneFunctionType getFunctionType() {
         return functionType;
     }
 
+    public void setChannelType(GiraOneChannelType channelType) {
+        this.channelType = channelType;
+    }
+
     public GiraOneChannelType getChannelType() {
         return channelType;
+    }
+
+    public void setChannelTypeId(GiraOneChannelTypeId channelTypeId) {
+        this.channelTypeId = channelTypeId;
+    }
+
+    public String getUrn() {
+        return urn;
+    }
+
+    public String getChannelViewUrn() {
+        return urn;
     }
 
     public GiraOneChannelTypeId getChannelTypeId() {
@@ -87,10 +92,22 @@ public class GiraOneChannel {
         return dataPoints;
     }
 
+    public void setDataPoints(Collection<GiraOneDataPoint> dataPoints) {
+        this.dataPoints = dataPoints;
+    }
+
     @Override
     public String toString() {
         return String.format("%s{name='%s', functionType=%s, channelType=%s, channelTypeId=%s, dataPoints=%s}",
                 getClass().getSimpleName(), name, functionType, channelType, channelTypeId,
                 dataPoints.stream().map(GiraOneDataPoint::toString).toList());
+    }
+
+    public void setChannelViewId(int channelViewId) {
+        this.channelViewId = channelViewId;
+    }
+
+    public int getChannelViewId() {
+        return channelViewId;
     }
 }

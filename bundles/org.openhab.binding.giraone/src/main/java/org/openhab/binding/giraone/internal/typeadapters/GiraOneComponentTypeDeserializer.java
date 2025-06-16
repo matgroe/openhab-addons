@@ -12,33 +12,32 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import java.lang.reflect.Type;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
-
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
+
+import java.lang.reflect.Type;
 
 /**
- * Deserializes a Json Element to {@link GiraOneCommandResponse} within context of Gson parsing.
+ * Deserializes a Json Element to {@link GiraOneChannelType} within context of Gson parsing.
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
-public class GiraOneCommandResponseDeserializer extends GiraOneMessageJsonTypeAdapter
-        implements JsonDeserializer<GiraOneCommandResponse> {
-
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
+public class GiraOneComponentTypeDeserializer implements JsonDeserializer<GiraOneComponentType> {
     @Override
     @Nullable
-    public GiraOneCommandResponse deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
+    public GiraOneComponentType deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (jsonElement != null && isResponse(jsonElement)) {
-            return new GiraOneCommandResponse(getResponse(jsonElement));
+        if (jsonElement != null) {
+            return GiraOneComponentType.fromName(jsonElement.getAsString());
         }
-        throw new JsonParseException("The JsonElement is not parseable as GiraOneCommandResponse.");
+        return GiraOneComponentType.Unknown;
     }
 }

@@ -14,28 +14,33 @@ package org.openhab.binding.giraone.internal.communication.commands;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
+import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link ServerCommand} for reading the current project configuration
+ * {@link GiraOneWebsocketRequest} for reading the current project configuration
  * from Gira One Server.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GetUIConfiguration extends ServerCommand {
+@GiraOneServerCommand(name = "GetUIConfiguration", responsePayload = "config")
+public class GetUIConfiguration extends GiraOneCommand {
     public static GenericBuilder<GetUIConfiguration> builder() {
         return GenericBuilder.of(GetUIConfiguration::new);
     }
 
     private boolean urns = true;
+
     @Nullable
     private String guid = null;
+
     @Nullable
     private String instanceId = null;
 
     protected GetUIConfiguration() {
-        super(GiraOneCommand.GetUIConfiguration);
     }
 
     public boolean withUrns() {

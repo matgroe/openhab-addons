@@ -12,7 +12,11 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.*;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BINDING_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HEATING_COOLING_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_FUNCTION_SCENE_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_SHUTTER_THING_TYPE_UID;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;

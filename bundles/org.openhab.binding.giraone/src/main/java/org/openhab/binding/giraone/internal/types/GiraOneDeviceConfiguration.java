@@ -21,7 +21,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * GiraOneChannel
+ * The {@link GiraOneDeviceConfiguration} class describes the gira one server
+ * runtime configuration.
  *
  * @author Matthias Gröger - Initial contribution
  */
