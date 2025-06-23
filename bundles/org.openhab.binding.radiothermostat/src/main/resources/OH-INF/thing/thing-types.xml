@@ -10,6 +10,7 @@
 		<description>
 			CT30, CT50/3M50 or CT80 Wi-Fi Thermostat
 		</description>
+		<semantic-equipment-tag>Thermostat</semantic-equipment-tag>
 
 		<channels>
 			<channel id="temperature" typeId="temperature"/>
@@ -133,6 +134,10 @@
 		<item-type>Switch</item-type>
 		<label>Hold</label>
 		<description>Indicates If the Current Set Point Temperature Is to Be Held Indefinitely</description>
+		<tags>
+			<tag>Status</tag>
+			<tag>Temperature</tag>
+		</tags>
 	</channel-type>
 
 	<channel-type id="status">
@@ -197,6 +202,10 @@
 		<item-type>Number:Time</item-type>
 		<label>Today's Heating Runtime</label>
 		<description>The Number of Minutes of Heating Run-time Today</description>
+		<tags>
+			<tag>Measurement</tag>
+			<tag>Duration</tag>
+		</tags>
 		<state readOnly="true" pattern="%d %unit%"/>
 	</channel-type>
 
@@ -204,6 +213,10 @@
 		<item-type>Number:Time</item-type>
 		<label>Today's Cooling Runtime</label>
 		<description>The Number of Minutes of Cooling Run-time Today</description>
+		<tags>
+			<tag>Measurement</tag>
+			<tag>Duration</tag>
+		</tags>
 		<state readOnly="true" pattern="%d %unit%"/>
 	</channel-type>
 
@@ -211,6 +224,10 @@
 		<item-type>Number:Time</item-type>
 		<label>Yesterday's Heating Runtime</label>
 		<description>The Number of Minutes of Heating Run-time Yesterday</description>
+		<tags>
+			<tag>Measurement</tag>
+			<tag>Duration</tag>
+		</tags>
 		<state readOnly="true" pattern="%d %unit%"/>
 	</channel-type>
 
@@ -218,6 +235,10 @@
 		<item-type>Number:Time</item-type>
 		<label>Yesterday's Cooling Runtime</label>
 		<description>The Number of Minutes of Cooling Run-time Yesterday</description>
+		<tags>
+			<tag>Measurement</tag>
+			<tag>Duration</tag>
+		</tags>
 		<state readOnly="true" pattern="%d %unit%"/>
 	</channel-type>
 
