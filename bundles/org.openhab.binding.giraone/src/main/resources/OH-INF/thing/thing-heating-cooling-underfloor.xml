@@ -44,7 +44,6 @@
 		<category>HVAC</category>
 		<tags>
 			<tag>Setpoint</tag>
-			<tag>Level</tag>
 			<tag>Temperature</tag>
 		</tags>
 
@@ -58,7 +57,7 @@
 		<category>TemperatureHot</category>
 		<tags>
 			<tag>Measurement</tag>
-			<tag>HVAC</tag>
+			<tag>Status</tag>
 		</tags>
 		<state readOnly="true">
 			<options>
@@ -74,9 +73,7 @@
 		<description>Heater Working Profile</description>
 		<category>Heating</category>
 		<tags>
-			<tag>OpenState</tag>
-			<tag>HVAC</tag>
-			<tag>Temperature</tag>
+			<tag>Heating</tag>
 		</tags>
 		<state>
 			<options>
