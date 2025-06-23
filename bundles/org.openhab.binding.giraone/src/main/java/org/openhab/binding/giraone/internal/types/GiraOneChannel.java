@@ -14,10 +14,12 @@ package org.openhab.binding.giraone.internal.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * GiraOneChannel
@@ -96,18 +98,32 @@ public class GiraOneChannel {
         this.dataPoints = dataPoints;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s{name='%s', functionType=%s, channelType=%s, channelTypeId=%s, dataPoints=%s}",
-                getClass().getSimpleName(), name, functionType, channelType, channelTypeId,
-                dataPoints.stream().map(GiraOneDataPoint::toString).toList());
-    }
-
     public void setChannelViewId(int channelViewId) {
         this.channelViewId = channelViewId;
     }
 
     public int getChannelViewId() {
         return channelViewId;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof GiraOneChannel that))
+            return false;
+        return Objects.equals(urn, that.urn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(urn);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s{name='%s', functionType=%s, channelType=%s, channelTypeId=%s, dataPoints=%s}",
+                getClass().getSimpleName(), name, functionType, channelType, channelTypeId,
+                dataPoints.stream().map(GiraOneDataPoint::toString).toList());
     }
 }

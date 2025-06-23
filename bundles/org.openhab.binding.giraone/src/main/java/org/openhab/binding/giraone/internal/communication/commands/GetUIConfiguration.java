@@ -16,11 +16,10 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link GiraOneWebsocketRequest} for reading the current project configuration
+ * {@link GiraOneCommand} for reading the current project configuration
  * from Gira One Server.
  *
  * @author Matthias Gröger - Initial contribution

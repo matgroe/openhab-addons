@@ -55,9 +55,8 @@ public class GiraOneChannelValue {
 
     @Override
     public String toString() {
-        return String.format("{channelViewUrn=%s, datapointId=%d, dataPoint=%s, urn=%s, value=%s}",
-                getChannelViewUrn(), giraOneDataPoint.getId(), giraOneDataPoint.getName(),
-                giraOneDataPoint.getUrn(), getGiraOneValue());
+        return String.format("{channelViewUrn=%s, datapointId=%d, dataPoint=%s, urn=%s, value=%s}", getChannelViewUrn(),
+                giraOneDataPoint.getId(), giraOneDataPoint.getName(), giraOneDataPoint.getUrn(), getGiraOneValue());
     }
 
     public int getChannelViewId() {

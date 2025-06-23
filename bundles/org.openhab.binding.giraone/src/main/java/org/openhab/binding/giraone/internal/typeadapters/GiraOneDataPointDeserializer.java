@@ -12,22 +12,19 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
+import java.lang.reflect.Type;
+import java.util.Map;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.communication.commands.GetConfiguration;
-import org.openhab.binding.giraone.internal.types.GiraOneChannel;
-import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.types.GiraOneEvent;
-import org.openhab.binding.giraone.internal.util.GenericBuilder;
-
-import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * Deserializes a Json Element to {@link GiraOneEvent} within context of Gson parsing.
@@ -35,14 +32,15 @@ import java.util.stream.Stream;
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneDataPointDeserializer extends GiraOneMessageJsonTypeAdapter implements JsonDeserializer<GiraOneDataPoint> {
+public class GiraOneDataPointDeserializer extends GiraOneMessageJsonTypeAdapter
+        implements JsonDeserializer<GiraOneDataPoint> {
 
     @Override
     @Nullable
     public GiraOneDataPoint deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (jsonElement != null && jsonElement.isJsonObject()) {
-            GiraOneDataPoint dataPoint =  new GiraOneDataPoint();
+            GiraOneDataPoint dataPoint = new GiraOneDataPoint();
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
                 switch (entry.getKey()) {

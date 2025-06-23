@@ -34,20 +34,20 @@ import org.eclipse.jetty.websocket.api.MessageTooLargeException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
-import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.commands.GetDeviceConfig;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
 import org.openhab.binding.giraone.internal.communication.commands.GetValue;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.SetValue;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
-import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
@@ -111,7 +111,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
     final Subject<GiraOneValue> values = PublishSubject.create();
 
     /** Observe this subject for Gira Server connection state */
-    final ReplaySubject<GiraOneBridgeConnectionState> connectionState = ReplaySubject.createWithSize(1);
+    final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
 
     /**
      * Constructor
@@ -126,7 +126,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         this.gson = GsonMapperFactory.createGson();
         this.giraOneWssEndpoint = String.format(TEMPLATE_WEBSOCKET_URL, config.hostname,
                 computeWebsocketAuthToken(config.username, config.password));
-        this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
         this.timeoutSeconds = config.defaultTimeoutSeconds;
         this.maxTextMessageSize = config.maxTextMessageSize * FACTOR_BYTES_2_KILO_BYTES;
     }
@@ -169,7 +169,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
                     : Objects.requireNonNull(exp);
             if (exp.getCause() instanceof ConnectException) {
                 this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, cause));
-                this.connectionState.onNext(GiraOneBridgeConnectionState.TemporaryUnavailable);
+                this.connectionState.onNext(GiraOneConnectionState.TemporaryUnavailable);
             } else {
                 this.clientExceptions
                         .onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, cause));
@@ -183,12 +183,12 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      * @throws GiraOneClientException
      */
     public void connect() {
-        if (connectionState.getValue() != GiraOneBridgeConnectionState.Disconnected) {
+        if (connectionState.getValue() != GiraOneConnectionState.Disconnected) {
             this.disconnect();
         }
 
         logger.debug("Connecting to {}", this.giraOneWssEndpoint);
-        this.connectionState.onNext(GiraOneBridgeConnectionState.Connecting);
+        this.connectionState.onNext(GiraOneConnectionState.Connecting);
         observeAndEmitDataPointValues();
         HttpClient httpClient = new HttpClient(new SslContextFactory.Client(true));
         WebSocketClient webSocketClient = createWebSocketClient(httpClient);
@@ -213,7 +213,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
             throw new GiraOneClientException(GiraOneClientException.DISCONNECT_FAILED, e);
         } finally {
             this.websocketSession = null;
-            this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
+            this.connectionState.onNext(GiraOneConnectionState.Disconnected);
             this.dataPointDisposable.dispose();
         }
     }
@@ -245,49 +245,49 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         return new GiraOneValueChange(event.getId(), event.getNewValue(), event.getOldValue());
     }
 
-    private void emitConnectionStateException(GiraOneBridgeConnectionState expected) {
+    private void emitConnectionStateException(GiraOneConnectionState expected) {
         this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
                 expected.toString(), connectionState.getValue().toString()));
     }
 
     public GiraOneDeviceConfiguration lookupGiraOneDeviceConfiguration() {
-        if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
             return execute(GetDeviceConfig.builder().build()).getReply(GiraOneDeviceConfiguration.class);
         }
         throw new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
-                GiraOneBridgeConnectionState.Connected.toString(), connectionState.getValue().toString());
+                GiraOneConnectionState.Connected.toString(), connectionState.getValue().toString());
     }
 
-    public GiraOneProject lookupGiraOneProject() {
-        if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
-            return execute(GetUIConfiguration.builder().build()).getReply(GiraOneProject.class);
+    public GiraOneChannelCollection lookupGiraOneChannels() {
+        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
+            return execute(GetUIConfiguration.builder().build()).getReply(GiraOneChannelCollection.class);
         }
         throw new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
-                GiraOneBridgeConnectionState.Connected.toString(), connectionState.getValue().toString());
+                GiraOneConnectionState.Connected.toString(), connectionState.getValue().toString());
     }
 
     public void lookupGiraOneValue(final int datapointId) {
-        if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
             if (datapointId > 0) {
                 send(GetValue.builder().with(GetValue::setId, datapointId).build());
             } else {
                 logger.debug("lookupGiraOneValue :: ignoring request for datapointId=0");
             }
         } else {
-            emitConnectionStateException(GiraOneBridgeConnectionState.Connected);
+            emitConnectionStateException(GiraOneConnectionState.Connected);
         }
     }
 
     public void setGiraOneValue(final GiraOneValue value) {
-        if (connectionState.getValue() == GiraOneBridgeConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
             send(SetValue.builder().with(SetValue::setId, value.getId()).with(SetValue::setValue, value.getValue())
                     .build());
         } else {
-            emitConnectionStateException(GiraOneBridgeConnectionState.Connected);
+            emitConnectionStateException(GiraOneConnectionState.Connected);
         }
     }
 
-    public Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeConnectionState> onNext) {
+    public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNext) {
         return this.connectionState.subscribe(onNext);
     }
 
@@ -343,6 +343,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      */
     GiraOneCommandResponse execute(GiraOneWebsocketRequest command) {
         final CompletableFuture<GiraOneWebsocketResponse> promise = new CompletableFuture<>();
+        logger.info("Executing GiraOneWebsocketRequest : {}", command.getCommand());
         Disposable disposable = Disposable.empty();
         try {
             disposable = this.responses.filter(f -> f.isInitiatedBy(command)).take(1).subscribe(promise::complete);
@@ -389,9 +390,9 @@ public class GiraOneWebsocketClient implements WebSocketListener {
     public void onWebSocketClose(int code, String reason) {
         logger.info("WebSocket is closed with code={} and reason={}", code, reason);
         if (code == WS_GOING_AWAY.getCode()) {
-            this.connectionState.onNext(GiraOneBridgeConnectionState.TemporaryUnavailable);
+            this.connectionState.onNext(GiraOneConnectionState.TemporaryUnavailable);
         }
-        this.connectionState.onNext(GiraOneBridgeConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
     }
 
     @Override
@@ -405,22 +406,23 @@ public class GiraOneWebsocketClient implements WebSocketListener {
             this.clientExceptions
                     .onNext(new GiraOneClientException(GiraOneClientException.WEBSOCKET_COMMUNICATION, throwable));
         }
-        this.connectionState.onNext(GiraOneBridgeConnectionState.Error);
+        this.connectionState.onNext(GiraOneConnectionState.Error);
     }
 
     @Override
     @NonNullByDefault({})
     public void onWebSocketConnect(Session session) {
-        logger.debug("Received WebSocket Session :: {}", session);
+        logger.trace("onWebSocketConnect:: got WebSocket Session :: {}", session);
         this.websocketSession = session;
         this.registerApplication();
     }
 
     private void registerApplication() {
         CompletableFuture.runAsync(() -> {
+            logger.trace("Registering Application");
             execute(RegisterApplication.builder().with(RegisterApplication::setApplicationId, InstanceUUID.get())
                     .with(RegisterApplication::setApplicationType, "api").build());
-            this.connectionState.onNext(GiraOneBridgeConnectionState.Connected);
+            this.connectionState.onNext(GiraOneConnectionState.Connected);
         });
     }
 }

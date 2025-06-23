@@ -15,20 +15,15 @@ package org.openhab.binding.giraone.internal;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
@@ -157,9 +152,9 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     /**
      * Handler function for receiving updates on the {@link GiraOneBridge} connection state.
      *
-     * @param connectionState The {@link GiraOneBridgeConnectionState}.
+     * @param connectionState The {@link GiraOneConnectionState}.
      */
-    private void onConnectionState(GiraOneBridgeConnectionState connectionState) {
+    private void onConnectionState(GiraOneConnectionState connectionState) {
         switch (connectionState) {
             case Connecting -> this.bridgeMovedToConnecting();
             case Connected -> this.bridgeMovedToConnected();
@@ -170,13 +165,13 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeConnectionState#Connecting}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Connecting}
      */
     protected void bridgeMovedToConnecting() {
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeConnectionState#Connected}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Connected}
      */
     protected void bridgeMovedToConnected() {
         this.channelViewId = detectChannelViewId();
@@ -190,21 +185,21 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeConnectionState#TemporaryUnavailable}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#TemporaryUnavailable}
      */
     protected void bridgeMovedToTemporaryUnavailable() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Bridge temporary offline.");
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeConnectionState#Disconnected}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Disconnected}
      */
     protected void bridgeMovedToDisconnected() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeConnectionState#Error}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Error}
      */
     protected void bridgeMovedToError() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "Bridge is moved into error state");
@@ -269,15 +264,15 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     private void updateThingProperties(Optional<GiraOneChannel> channel) {
         /*
-        updateProperty(PROPERTY_FUNCTION_TYPE,
-                channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
-        updateProperty(PROPERTY_CHANNEL_TYPE,
-                channel.map(GiraOneChannel::getChannelType).orElse(GiraOneChannelType.Unknown).getName());
-        updateProperty(PROPERTY_CHANNEL_TYPE_ID,
-                channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
-        updateProperty(PROPERTY_CHANNELVIEW_ID,
-                String.format("%d", channel.map(GiraOneChannel::getChannelViewId).orElse(0)));
-
+         * updateProperty(PROPERTY_FUNCTION_TYPE,
+         * channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
+         * updateProperty(PROPERTY_CHANNEL_TYPE,
+         * channel.map(GiraOneChannel::getChannelType).orElse(GiraOneChannelType.Unknown).getName());
+         * updateProperty(PROPERTY_CHANNEL_TYPE_ID,
+         * channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
+         * updateProperty(PROPERTY_CHANNELVIEW_ID,
+         * String.format("%d", channel.map(GiraOneChannel::getChannelViewId).orElse(0)));
+         * 
          */
     }
 

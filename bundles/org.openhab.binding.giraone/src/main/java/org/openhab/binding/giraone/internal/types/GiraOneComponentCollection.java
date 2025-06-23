@@ -12,11 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * The {@link GiraOneComponentCollection} describes a base component within the GiraOne SmartHome system.
@@ -28,11 +28,24 @@ import java.util.Collection;
 public class GiraOneComponentCollection {
     private final Collection<GiraOneComponent> components = new ArrayList<>();
 
-    public Collection<GiraOneComponent> getComponents() {
-        return components;
-    }
-
+    /**
+     * Adds a new {@link GiraOneComponent} to this collection
+     *
+     * @param giraOneComponent The {@link GiraOneComponent} to add
+     */
     public void add(GiraOneComponent giraOneComponent) {
         this.components.add(giraOneComponent);
+    }
+
+    /**
+     * Iterates over the component collection and returns a collection of {@link GiraOneChannel}
+     * for the given {@link GiraOneComponentType}.
+     *
+     * @param type The {@link GiraOneComponentType} to filter
+     * @return All {@link GiraOneChannel}s
+     */
+    public Collection<GiraOneChannel> getAllChannels(GiraOneComponentType type) {
+        return this.components.stream().filter(c -> c.getType() == type).map(GiraOneComponent::getChannels)
+                .flatMap(Collection::stream).toList();
     }
 }

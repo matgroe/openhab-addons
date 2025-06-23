@@ -15,13 +15,12 @@ package org.openhab.binding.giraone.internal.communication.commands;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * {@link GiraOneWebsocketRequest} for Webservice Command for creating password salt.
+ * {@link GiraOneCommand} for Webservice Command for creating password salt.
  *
  * @author Matthias Gröger - Initial contribution
  */

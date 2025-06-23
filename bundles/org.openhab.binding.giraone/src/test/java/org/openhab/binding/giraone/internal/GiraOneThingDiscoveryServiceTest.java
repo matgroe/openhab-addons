@@ -13,7 +13,6 @@
 package org.openhab.binding.giraone.internal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -21,7 +20,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,16 +41,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
-import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
-import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
-import org.openhab.binding.giraone.internal.util.ResourceLoader;
+import org.openhab.binding.giraone.internal.util.TestDataProvider;
 import org.openhab.binding.giraone.internal.util.ThingDescriptionSchemaValidationTest;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Bridge;
@@ -63,8 +57,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * Test class for {@link GiraOneThingDiscoveryService}.
@@ -77,19 +69,7 @@ class GiraOneThingDiscoveryServiceTest {
 
     @BeforeEach
     void setUp() {
-        Gson gson = GsonMapperFactory.createGson();
-        String message = ResourceLoader.loadStringResource("/messages/2.GetUIConfiguration/001-resp.json");
-        GiraOneCommandResponse response = gson.fromJson(message, GiraOneWebsocketResponse.class);
-        assertNotNull(response);
-        Type type = new TypeToken<GetUIConfiguration>() {
-        }.getType();
-
-        // GetUIConfiguration cmd = response.getRequest(GetUIConfiguration.class);
-
-        // assertInstanceOf(GetUIConfiguration.class, response.getRequestServerCommand().getCommand());
-        GiraOneProject project = response.getReply(GiraOneProject.class);
-        assertNotNull(project);
-
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
         Configuration clientCfg = new Configuration();
         clientCfg.put("discoverDevices", true);
 
@@ -158,9 +138,9 @@ class GiraOneThingDiscoveryServiceTest {
     void testDetectThingTypeUid(GiraOneFunctionType functionType, GiraOneChannelType channelType,
             GiraOneChannelTypeId channelTypeId, String expected) {
         GiraOneChannel channel = mock(GiraOneChannel.class);
-        //when(channel.getChannelTypeId()).thenReturn(channelTypeId);
-        //when(channel.getChannelType()).thenReturn(channelType);
-        //when(channel.getFunctionType()).thenReturn(functionType);
+        when(channel.getChannelTypeId()).thenReturn(channelTypeId);
+        when(channel.getChannelType()).thenReturn(channelType);
+        when(channel.getFunctionType()).thenReturn(functionType);
 
         ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
 
@@ -202,12 +182,13 @@ class GiraOneThingDiscoveryServiceTest {
             GiraOneChannelTypeId channelTypeId, String expected) throws IOException {
 
         GiraOneChannel channel = mock(GiraOneChannel.class);
-        //when(channel.getChannelTypeId()).thenReturn(channelTypeId);
-        //when(channel.getFunctionType()).thenReturn(functionType);
+        when(channel.getChannelType()).thenReturn(channelType);
+        when(channel.getChannelTypeId()).thenReturn(channelTypeId);
+        when(channel.getFunctionType()).thenReturn(functionType);
 
         ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
 
-        assertTrue(this.checkThingTypeIdDefinitionExists(thingTypeUID.getId()),
+        assertTrue(this.checkThingTypeIdDefinitionExists(expected),
                 "There must be thing-type definition for " + thingTypeUID.getId());
     }
 }

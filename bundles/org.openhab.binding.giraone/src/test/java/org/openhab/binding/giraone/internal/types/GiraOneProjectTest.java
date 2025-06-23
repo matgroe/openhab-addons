@@ -14,28 +14,18 @@ package org.openhab.binding.giraone.internal.types;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Collection;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
-import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
-import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
-import org.openhab.binding.giraone.internal.util.ResourceLoader;
-
-import com.google.gson.Gson;
+import org.openhab.binding.giraone.internal.util.TestDataProvider;
 
 /**
  * Test class for {@link GiraOneProject}.
@@ -44,24 +34,11 @@ import com.google.gson.Gson;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 class GiraOneProjectTest {
-    private final Gson gson = GsonMapperFactory.createGson();
-
-    private GiraOneProject project;
-
-    @BeforeEach
-    void setUp() {
-        String message = ResourceLoader.loadStringResource("/messages/2.GetUIConfiguration/001-resp.json");
-        GiraOneWebsocketResponse response = gson.fromJson(message, GiraOneWebsocketResponse.class);
-        assertNotNull(response);
-        assertInstanceOf(GetUIConfiguration.class, response.getRequestServerCommand().getCommand());
-
-        project = response.getReply(GiraOneProject.class);
-        assertNotNull(project);
-    }
 
     @DisplayName("should find existing channel by channelViewUrn")
     @Test
     void shouldFindChannelByChannelViewUrn() {
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
         String urn = "urn:gds:chv:KNXheating2Fcooling-Heating-Cooling-Switchable-9";
         Optional<GiraOneChannel> channel = project.lookupChannelByChannelViewUrn(urn);
         assertTrue(channel.isPresent());
@@ -72,6 +49,7 @@ class GiraOneProjectTest {
     @ParameterizedTest
     @ValueSource(strings = { "WC Deckenlicht", "Eckfenster Bad Links" })
     void testLookupChannelByName(String name) {
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
         Optional<GiraOneChannel> channel = project.lookupChannelByName(name.toLowerCase());
         assertFalse(channel.isEmpty());
         assertEquals(name, channel.get().getName());
@@ -79,6 +57,7 @@ class GiraOneProjectTest {
 
     @Test
     void testLookupGiraOneChannelDataPoints() {
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
         GiraOneDataPoint dp = project.lookupGiraOneDataPoint(215656).orElse(null);
         assertNotNull(dp);
         assertEquals(215656, dp.getId());

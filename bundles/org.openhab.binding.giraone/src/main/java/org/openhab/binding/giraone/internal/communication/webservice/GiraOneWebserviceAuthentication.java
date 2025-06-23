@@ -18,9 +18,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * This class offers functionality for handling the authentication for using the
  * Gira One Webservice interface.

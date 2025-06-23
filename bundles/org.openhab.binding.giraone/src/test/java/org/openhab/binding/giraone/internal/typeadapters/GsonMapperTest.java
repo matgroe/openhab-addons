@@ -15,13 +15,9 @@ package org.openhab.binding.giraone.internal.typeadapters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.JsonPrimitive;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,16 +31,15 @@ import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebs
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
-import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
-import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
+import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
-import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonPrimitive;
 
 /**
  * Test class for {@link GsonMapperTest}
@@ -80,19 +75,31 @@ public class GsonMapperTest {
 
     private static Stream<Arguments> provideGiraOneComponentUrns() {
         return Stream.of(
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort4CSystem55Rocker2-gang-10", GiraOneComponentType.KnxButton),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14", GiraOneComponentType.KnxButton),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator6-gang-1", GiraOneComponentType.KnxDimmingActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2", GiraOneComponentType.KnxDimmingActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator12-gang-1", GiraOneComponentType.KnxHvacActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2", GiraOneComponentType.KnxHvacActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1", GiraOneComponentType.KnxSwitchingActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator1-gang-11", GiraOneComponentType.KnxSwitchingActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2", GiraOneComponentType.KnxSwitchingActuator),
-                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxUnknownSwitchingActuator6-gang2C16A2FBlindActuator12-gang-2", GiraOneComponentType.Unknown)
-                );
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort4CSystem55Rocker2-gang-10",
+                        GiraOneComponentType.KnxButton),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-14",
+                        GiraOneComponentType.KnxButton),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator6-gang-1",
+                        GiraOneComponentType.KnxDimmingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxDimmingActuator4-gang-2",
+                        GiraOneComponentType.KnxDimmingActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator12-gang-1",
+                        GiraOneComponentType.KnxHvacActuator),
+                Arguments.of("urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-2",
+                        GiraOneComponentType.KnxHvacActuator),
+                Arguments.of(
+                        "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator16-gang2C16A2FBlindActuator8-gang-1",
+                        GiraOneComponentType.KnxSwitchingActuator),
+                Arguments.of(
+                        "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator1-gang-11",
+                        GiraOneComponentType.KnxSwitchingActuator),
+                Arguments.of(
+                        "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-2",
+                        GiraOneComponentType.KnxSwitchingActuator),
+                Arguments.of(
+                        "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxUnknownSwitchingActuator6-gang2C16A2FBlindActuator12-gang-2",
+                        GiraOneComponentType.Unknown));
     }
-
 
     @DisplayName("message should deserialize to GiraOneMessageType")
     @ParameterizedTest
@@ -175,8 +182,6 @@ public class GsonMapperTest {
         assertEquals(deviceCfg.get(GiraOneDeviceConfiguration.DEVICE_NAME), "GiraOneServer");
     }
 
-
-
     @DisplayName("GetDiagnosticDeviceList message should deserialize to GiraOneComponents")
     @Test
     void shouldDeserialize2GiraOneComponents() {
@@ -184,6 +189,5 @@ public class GsonMapperTest {
                 "/messages/7.GetDiagnosticDeviceList/001-resp.json");
         assertNotNull(response);
         response.getReply(GiraOneComponentCollection.class);
-        
     }
 }

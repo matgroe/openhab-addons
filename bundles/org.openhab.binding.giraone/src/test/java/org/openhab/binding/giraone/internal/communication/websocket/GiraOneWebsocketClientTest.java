@@ -50,10 +50,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.GiraOneBridgeConnectionState;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.communication.commands.GetDeviceConfig;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
 import org.openhab.binding.giraone.internal.communication.commands.GetValue;
@@ -115,10 +115,10 @@ class GiraOneWebsocketClientTest {
     @DisplayName("Test Connect, Register and Disconnect against Gira One Server Websocket")
     @Test
     void testConnectRegisterAndDisconnect() throws Exception {
-        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
+        assertEquals(GiraOneConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
 
         giraOneWebsocketClient.connect();
-        assertEquals(GiraOneBridgeConnectionState.Connecting, giraOneWebsocketClient.connectionState.getValue());
+        assertEquals(GiraOneConnectionState.Connecting, giraOneWebsocketClient.connectionState.getValue());
 
         giraOneWebsocketClient.onWebSocketConnect(websocketSession);
 
@@ -133,11 +133,11 @@ class GiraOneWebsocketClientTest {
         giraOneWebsocketClient
                 .onWebSocketText(ResourceLoader.loadStringResource("/messages/1.RegisterApplication/001-resp.json"));
         await().atMost(ONE_SECOND).untilAsserted(() -> {
-            assertEquals(GiraOneBridgeConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
+            assertEquals(GiraOneConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
         });
 
         giraOneWebsocketClient.disconnect();
-        assertEquals(GiraOneBridgeConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
+        assertEquals(GiraOneConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
     }
 
     private void sendWebsocketText(final String text) {
@@ -161,7 +161,6 @@ class GiraOneWebsocketClientTest {
         GiraOneCommandResponse response = giraOneWebsocketClient.responses.firstElement()
                 .timeout(RCV_TIMEOUT, TimeUnit.SECONDS).blockingGet();
         assertNotNull(response);
-
     }
 
     @DisplayName("Received GiraEvents must be provided by 'events' Observable ")

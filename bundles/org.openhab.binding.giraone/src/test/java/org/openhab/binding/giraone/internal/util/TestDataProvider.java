@@ -13,9 +13,18 @@
 
 package org.openhab.binding.giraone.internal.util;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
+import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneProject;
+
+import com.google.gson.Gson;
 
 /**
  * Utility provides test data for various unit tests.
@@ -28,6 +37,21 @@ public class TestDataProvider {
     private static GiraOneDataPoint dataPointBuilder(final String name, final int id, final String urn) {
         return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setId, id)
                 .with(GiraOneDataPoint::setName, name).with(GiraOneDataPoint::setUrn, urn).build();
+    }
+
+    public static GiraOneProject createGiraOneProject() {
+        Gson gson = GsonMapperFactory.createGson();
+
+        String message = ResourceLoader.loadStringResource("/messages/2.GetUIConfiguration/001-resp.json");
+        GiraOneWebsocketResponse response = gson.fromJson(message, GiraOneWebsocketResponse.class);
+        assertNotNull(response);
+        assertInstanceOf(GetUIConfiguration.class, response.getRequestServerCommand().getCommand());
+        GiraOneChannelCollection uiChannels = response.getReply(GiraOneChannelCollection.class);
+
+        GiraOneProject project = new GiraOneProject();
+        uiChannels.getChannels().forEach(project::addChannel);
+
+        return project;
     }
 
     public static GiraOneDataPoint createDataPointStepUpDown() {

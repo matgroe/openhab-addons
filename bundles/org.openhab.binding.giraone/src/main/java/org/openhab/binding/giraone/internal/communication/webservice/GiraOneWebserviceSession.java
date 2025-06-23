@@ -12,9 +12,15 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
+ * The {@link GiraOneWebserviceSession} object represents the current session after authenticating
+ * against Gira One Server via webservice interface.
  *
+ * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault
 class GiraOneWebserviceSession {
     private final String salt;
     private final String sessionSalt;

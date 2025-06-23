@@ -22,9 +22,9 @@ import org.openhab.binding.giraone.internal.typeadapters.GiraOneChannelDeseriali
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneChannelTypeDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneChannelTypeIdDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneCommandDeserializer;
+import org.openhab.binding.giraone.internal.typeadapters.GiraOneComponentCollectionDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneComponentTypeDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneDataPointDeserializer;
-import org.openhab.binding.giraone.internal.typeadapters.GiraOneComponentCollectionDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneEventDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneFunctionTypeDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneMessageTypeDeserializer;
@@ -34,9 +34,9 @@ import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
-import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 
@@ -67,7 +67,8 @@ public abstract class GsonMapperFactory {
         gsonBuilder.registerTypeAdapter(GiraOneMessageType.class, new GiraOneMessageTypeDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneEvent.class, new GiraOneEventDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneWebsocketResponse.class, new GiraOneWebsocketResponseDeserializer());
-        gsonBuilder.registerTypeAdapter(GiraOneWebserviceRequest.class, new GiraOneWebserviceCommandRequestSerializer());
+        gsonBuilder.registerTypeAdapter(GiraOneWebserviceRequest.class,
+                new GiraOneWebserviceCommandRequestSerializer());
         gsonBuilder.registerTypeAdapter(GiraOneChannel.class, new GiraOneChannelDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneDataPoint.class, new GiraOneDataPointDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneChannelTypeId.class, new GiraOneChannelTypeIdDeserializer());

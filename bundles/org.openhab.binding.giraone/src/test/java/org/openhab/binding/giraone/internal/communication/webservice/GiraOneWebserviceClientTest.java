@@ -1,10 +1,24 @@
+/*
+ * Copyright (c) 2010-2025 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,10 +27,18 @@ import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommunicationException;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketSequence;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
 import com.google.gson.JsonParser;
 
+/**
+ * Unit Tests for {@link GiraOneWebserviceClient}.
+ *
+ * @author Matthias Gröger - Initial contribution
+ */
+@NonNullByDefault({})
 class GiraOneWebserviceClientTest {
     private GiraOneWebserviceClient giraOneWebserviceClient;
     private GiraOneClientConfiguration configuration;
@@ -67,6 +89,19 @@ class GiraOneWebserviceClientTest {
         GiraOneCommunicationException thrown = assertThrows(GiraOneCommunicationException.class,
                 () -> giraOneWebserviceClient.connect(),
                 "Expected giraOneWebserviceClient.connect() to throw GiraOneCommunicationException, but it didn't");
-        assertEquals("ERR_COMMUNICATION.10000", thrown.getMessage());
+        assertEquals("getPasswordSalt", thrown.getCausingCommand().getCommand());
+        assertEquals("ERR_COMMUNICATION.235", thrown.getMessage());
+    }
+
+    @DisplayName("Should provide GiraOneComponentCollection")
+    @Test
+    void testLookupGiraOneComponentCollection() throws Exception {
+        String response = ResourceLoader.loadStringResource("/messages/7.GetDiagnosticDeviceList/001-resp.json");
+        Mockito.doReturn(response).when(giraOneWebserviceClient).doPost(Mockito.any());
+
+        GiraOneComponentCollection components = giraOneWebserviceClient.lookupGiraOneComponentCollection();
+        assertNotNull(components);
+
+        components.getAllChannels(GiraOneComponentType.KnxButton);
     }
 }

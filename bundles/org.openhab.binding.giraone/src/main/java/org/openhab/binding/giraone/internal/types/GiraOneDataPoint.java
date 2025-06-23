@@ -15,8 +15,6 @@ package org.openhab.binding.giraone.internal.types;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * The GiraOneDataPoint defines a source of data which may have a
  * value.

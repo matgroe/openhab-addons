@@ -17,11 +17,10 @@ import java.util.UUID;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
- * {@link GiraOneWebsocketRequest} for registering the openhab bridge as
+ * {@link GiraOneCommand} for registering the openhab bridge as
  * client application at Gira One Server.
  *
  * @author Matthias Gröger - Initial contribution

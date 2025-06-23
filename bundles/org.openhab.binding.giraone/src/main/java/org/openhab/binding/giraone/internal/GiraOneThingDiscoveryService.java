@@ -32,6 +32,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
@@ -112,12 +113,12 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     }
 
     String formatThingTypeId(GiraOneChannel channel) {
-        if(channel.getFunctionType() == GiraOneFunctionType.Status) {
+        if (channel.getFunctionType() == GiraOneFunctionType.Status) {
             return CaseFormatter
                     .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelTypeId().toString());
         }
-                return CaseFormatter
-                        .lowerCaseHyphen(channel.getChannelType().toString() + channel.getChannelTypeId().toString());
+        return CaseFormatter
+                .lowerCaseHyphen(channel.getChannelType().toString() + channel.getChannelTypeId().toString());
     }
 
     ThingTypeUID detectThingTypeUID(GiraOneChannel channel) {
@@ -138,7 +139,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
             return myHash.toLowerCase().substring(0, Math.min(myHash.length(), 10));
         } catch (NoSuchAlgorithmException e) {
             logger.warn("Cannot generate identifier.", e);
-            return String.format("%d",  Objects.hash(channel));
+            return String.format("%d", Objects.hash(channel));
         }
     }
 
@@ -184,12 +185,12 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         stopBackgroundScanning();
     }
 
-    private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
+    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
         logger.info("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneBridgeConnectionState.Connected) {
+        if (connectionState == GiraOneConnectionState.Connected) {
             startBackgroundScanning();
-        } else if (connectionState == GiraOneBridgeConnectionState.Disconnected
-                || connectionState == GiraOneBridgeConnectionState.Error) {
+        } else if (connectionState == GiraOneConnectionState.Disconnected
+                || connectionState == GiraOneConnectionState.Error) {
             stopBackgroundDiscovery();
         }
     }

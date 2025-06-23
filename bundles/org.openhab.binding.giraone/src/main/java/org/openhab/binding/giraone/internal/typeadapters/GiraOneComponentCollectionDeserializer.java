@@ -12,27 +12,28 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.types.GiraOneComponent;
-import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 
-import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Stream;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
  * Deserializes a Json Element to {@link GiraOneProject} within context of Gson parsing.
@@ -47,24 +48,21 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
     @Override
     @Nullable
     public GiraOneComponentCollection deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
-                                                  @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
-        assert jsonElement != null;
-        GiraOneComponentCollection diagDevices  = new GiraOneComponentCollection();
-
-        if (jsonElement.isJsonObject()) {
-            streamJsonObjectOfGiraOneComponents(jsonElement.getAsJsonObject())
-                    .map(JsonElement::getAsJsonObject)
-                    .map(e -> this.createGiraOneComponent(jsonDeserializationContext, e))
-                            .forEach(diagDevices::add);
+        GiraOneComponentCollection diagDevices = new GiraOneComponentCollection();
+        if (jsonElement != null && jsonElement.isJsonObject()) {
+            streamJsonObjectOfGiraOneComponents(jsonElement.getAsJsonObject()).map(JsonElement::getAsJsonObject)
+                    .map(e -> this.createGiraOneComponent(jsonDeserializationContext, e)).forEach(diagDevices::add);
         }
 
         return diagDevices;
     }
 
-
-    private GiraOneComponent createGiraOneComponent(JsonDeserializationContext jsonDeserializationContext, JsonObject jsonObject) {
-        GiraOneComponentType cmpType = jsonDeserializationContext.deserialize(jsonObject.get("urn"), GiraOneComponentType.class);
+    private GiraOneComponent createGiraOneComponent(JsonDeserializationContext jsonDeserializationContext,
+            JsonObject jsonObject) {
+        GiraOneComponentType cmpType = jsonDeserializationContext.deserialize(jsonObject.get("urn"),
+                GiraOneComponentType.class);
         if (cmpType == GiraOneComponentType.KnxButton) {
             addKnxButtonProperties(jsonObject);
         }
@@ -79,7 +77,8 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
             JsonArray datapoints = channelObject.getAsJsonArray("datapoints");
             String channelUrn = buildChannelUrnFromDatapoints(jsonObject.get("urn").getAsString(), datapoints);
 
-            String channelName = String.format(("%s, %s"), jsonObject.getAsJsonPrimitive("name").getAsString(), channelObject.getAsJsonPrimitive("name").getAsString() );
+            String channelName = String.format(("%s, %s"), jsonObject.getAsJsonPrimitive("name").getAsString(),
+                    channelObject.getAsJsonPrimitive("name").getAsString());
 
             channelObject.addProperty("name", channelName);
             channelObject.addProperty("urn", channelUrn);
@@ -92,7 +91,7 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
     private GiraOneChannelType deriveGiraOneChannelType(String channelUrn) {
         if (channelUrn.contains("Dimming") || channelUrn.contains("Switching")) {
             return GiraOneChannelType.Switch;
-        }  else if (channelUrn.contains("Curtain")) {
+        } else if (channelUrn.contains("Curtain")) {
             return GiraOneChannelType.Shutter;
         } else if (channelUrn.contains("Scene")) {
             return GiraOneChannelType.Function;
@@ -106,16 +105,14 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
 
     private String buildChannelUrnFromDatapoints(String componentUrn, JsonArray datapoints) {
         String[] parts = componentUrn.split(":");
-        parts[parts.length - 1] = datapoints.asList().stream()
-                .map(e -> e.getAsJsonObject().get("urn").getAsString())
-                .map(this::extractChannelName)
-                .distinct().findFirst().orElse(UUID.randomUUID().toString());
+        parts[parts.length - 1] = datapoints.asList().stream().map(e -> e.getAsJsonObject().get("urn").getAsString())
+                .map(this::extractChannelName).distinct().findFirst().orElse(UUID.randomUUID().toString());
         return String.join(":", parts);
     }
 
     private String extractChannelName(String urn) {
         String[] urnParts = urn.split(":");
-        return urnParts[urnParts.length -2];
+        return urnParts[urnParts.length - 2];
     }
 
     private Stream<JsonElement> streamJsonObjectOfGiraOneComponents(JsonObject jsonObject) {
@@ -123,9 +120,11 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
             switch (entry.getKey()) {
                 case PROPERTY_COMPONENTS:
-                    jsonElements = Stream.concat(jsonElements, jsonObject.getAsJsonArray(entry.getKey()).asList().stream());
+                    jsonElements = Stream.concat(jsonElements,
+                            jsonObject.getAsJsonArray(entry.getKey()).asList().stream());
                 case PROPERTY_SUBLOCATIONS:
-                    jsonElements = Stream.concat(jsonElements, streamJsonArrayOfOfGiraOneComponents(entry.getValue().getAsJsonArray()));
+                    jsonElements = Stream.concat(jsonElements,
+                            streamJsonArrayOfOfGiraOneComponents(entry.getValue().getAsJsonArray()));
                 default:
                     break;
             }
@@ -140,7 +139,6 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
                 jsonElements = Stream.concat(jsonElements, streamJsonObjectOfGiraOneComponents(e.getAsJsonObject()));
             }
         }
-        return  jsonElements;
+        return jsonElements;
     }
-
 }

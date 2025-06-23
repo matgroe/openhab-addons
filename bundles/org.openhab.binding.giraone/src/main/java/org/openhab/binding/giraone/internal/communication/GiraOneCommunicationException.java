@@ -29,12 +29,12 @@ public class GiraOneCommunicationException extends IOException {
     private GiraOneCommand causingCommand = null;
 
     public GiraOneCommunicationException(GiraOneCommand causingCommand, String message, int code) {
-        this(message, code, (Throwable) null);
-        this.causingCommand = causingCommand;
+        this(causingCommand, String.format("%s.%d", message, code), null);
     }
 
-    private GiraOneCommunicationException(String message, int code, Throwable t) {
-        super(String.format("%s.%d", message, code), t);
+    public GiraOneCommunicationException(GiraOneCommand causingCommand, String message, Throwable t) {
+        super(message, t);
+        this.causingCommand = causingCommand;
     }
 
     public GiraOneCommand getCausingCommand() {

@@ -12,6 +12,16 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
+/**
+ * Defines a command to be sent out via websocket or
+ * webservice api to Gira One Server.
+ *
+ * @author Matthias Groeger - Initial contribution
+ */
+@NonNullByDefault({})
 public class GiraOneCommand {
     private static final String MISSING_ANNOTATION = "";
 
@@ -28,5 +38,13 @@ public class GiraOneCommand {
 
     public String getResponsePropertyName() {
         return getAnnotation().responsePayload();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (!(o instanceof GiraOneCommand)) {
+            return false;
+        }
+        return getCommand().equals(((GiraOneCommand) o).getCommand());
     }
 }

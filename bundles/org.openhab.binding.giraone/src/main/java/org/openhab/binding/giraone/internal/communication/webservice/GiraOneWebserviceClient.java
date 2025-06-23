@@ -21,9 +21,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jetty.http.HttpStatus;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
@@ -31,7 +32,9 @@ import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommunicationException;
 import org.openhab.binding.giraone.internal.communication.commands.AuthenticateSession;
+import org.openhab.binding.giraone.internal.communication.commands.GetDiagnosticDeviceList;
 import org.openhab.binding.giraone.internal.communication.commands.GetPasswordSalt;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +47,9 @@ import com.google.gson.JsonParser;
 /**
  * This class gives access the the Gira One Server as offered by the http interface.
  *
+ * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneWebserviceClient {
     private static final String ERR_COMMUNICATION = "ERR_COMMUNICATION";
     private static final int ERR_COMMUNICATION_CODE = 10000;
@@ -124,10 +129,10 @@ public class GiraOneWebserviceClient {
                     throw new GiraOneCommunicationException(command, responseObject.get("error").getAsString(),
                             responseObject.get("id").getAsInt());
                 }
-                return new GiraOneWebserviceResponse(responseObject);
+                return gson.fromJson(body, GiraOneWebserviceResponse.class);
             }
-        } catch (IOException ioexp) {
-            logger.error(ioexp.getMessage(), ioexp);
+        } catch (IOException exp) {
+            throw new GiraOneCommunicationException(command, exp.getMessage(), exp);
         }
         throw new GiraOneCommunicationException(command, ERR_COMMUNICATION, ERR_COMMUNICATION_CODE);
     }
@@ -150,7 +155,10 @@ public class GiraOneWebserviceClient {
 
         this.execute(AuthenticateSession.builder().with(AuthenticateSession::setUsername, username)
                 .with(AuthenticateSession::setToken, token).build());
+    }
 
-
+    public GiraOneComponentCollection lookupGiraOneComponentCollection() throws GiraOneCommunicationException {
+        GiraOneCommandResponse response = this.execute(GetDiagnosticDeviceList.builder().build());
+        return response.getReply(GiraOneComponentCollection.class);
     }
 }

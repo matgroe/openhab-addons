@@ -12,19 +12,12 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.internal.bind.JsonTreeReader;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import java.lang.reflect.Type;
 
-import com.google.gson.JsonObject;
-import org.openhab.binding.giraone.internal.types.GiraOneComponent;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import com.google.gson.JsonObject;
 
 /**
  * This interface represents a command response as received from the Gira One Sever.
@@ -46,7 +39,7 @@ public interface GiraOneCommandResponse {
      *
      * @return The deserialized response
      */
-    default <T> T getReply(Class<T> classOfT)  {
+    default <T> T getReply(Class<T> classOfT) {
         return GsonMapperFactory.createGson().fromJson(getResponseBody(), classOfT);
     }
 
@@ -56,7 +49,7 @@ public interface GiraOneCommandResponse {
      *
      * @return The deserialized response
      */
-    default  <T> T getReply(Type typeOfT)  {
+    default <T> T getReply(Type typeOfT) {
         return GsonMapperFactory.createGson().fromJson(getResponseBody(), typeOfT);
     }
 }

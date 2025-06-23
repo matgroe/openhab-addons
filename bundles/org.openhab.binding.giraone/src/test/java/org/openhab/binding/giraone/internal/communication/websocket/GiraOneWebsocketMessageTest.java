@@ -13,6 +13,7 @@
 package org.openhab.binding.giraone.internal.communication.websocket;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -25,7 +26,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
-import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
@@ -74,7 +75,10 @@ class GiraOneWebsocketMessageTest {
         GiraOneWebsocketResponse response = gson.fromJson(message, GiraOneWebsocketResponse.class);
         assertNotNull(response);
         assertNotNull(response.responseBody);
-        response.getReply(GiraOneProject.class);
+
+        GiraOneChannelCollection uiChannels = response.getReply(GiraOneChannelCollection.class);
+        assertNotNull(uiChannels);
+        assertFalse(uiChannels.getChannels().isEmpty());
     }
 
     @Test

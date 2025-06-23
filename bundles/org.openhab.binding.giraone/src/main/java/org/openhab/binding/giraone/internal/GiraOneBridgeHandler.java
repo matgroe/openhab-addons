@@ -21,8 +21,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketClient;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -57,18 +58,16 @@ import io.reactivex.rxjava3.subjects.Subject;
 @NonNullByDefault
 public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBridge {
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
-    private final GiraOneWebsocketClient giraOneServerClient;
+    private final GiraOneClient giraOneServerClient;
     private final Subject<GiraOneChannelValue> channelValues = PublishSubject.create();
-
-    private GiraOneProject giraOneProject = new GiraOneProject();
 
     private Disposable disposableConnectionState = Disposable.empty();
     private Disposable disposableDataPoint = Disposable.empty();
 
     public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
-        this.giraOneServerClient = new GiraOneWebsocketClient(getConfigAs(GiraOneClientConfiguration.class));
-        giraOneServerClient.subscribeOnGiraOneClientExceptions(this::onGiraOneClientException);
+        this.giraOneServerClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
+        giraOneServerClient.observeOnGiraOneClientExceptions(this::onGiraOneClientException);
     }
 
     @Override
@@ -118,8 +117,8 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         this.giraOneServerClient.disconnect();
         try {
             disposableConnectionState = this.giraOneServerClient
-                    .subscribeOnConnectionState(this::onConnectionStateChanged);
-            disposableDataPoint = this.giraOneServerClient.subscribeOnGiraOneValues(this::onGiraOneValue);
+                    .observeGiraOneConnectionState(this::onConnectionStateChanged);
+            disposableDataPoint = this.giraOneServerClient.observeGiraOneValues(this::onGiraOneValue);
 
             this.giraOneServerClient.connect();
         } catch (GiraOneClientException exp) {
@@ -144,9 +143,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     /**
      *
-     * @param connectionState The {@link GiraOneWebsocketClient}'s connection state.
+     * @param connectionState The {@link GiraOneClient}'s connection state.
      */
-    private void onConnectionStateChanged(GiraOneBridgeConnectionState connectionState) {
+    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
         logger.debug("ConnectionStateChanged to {}", connectionState);
         switch (connectionState) {
             case Connecting -> this.clientMovedToConnecting();
@@ -219,10 +218,13 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public synchronized GiraOneProject lookupGiraOneProject() {
-        if (this.giraOneProject.lookupChannels().isEmpty()) {
-            this.giraOneProject = this.giraOneServerClient.lookupGiraOneProject();
-        }
-        return this.giraOneProject;
+        throw new IllegalStateException("not imeplemenzted yet");
+        /*
+         * if (this.giraOneProject.lookupChannels().isEmpty()) {
+         * this.giraOneProject = this.giraOneServerClient.lookupGiraOneProject();
+         * }
+         * return this.giraOneProject;
+         */
     }
 
     @Override
@@ -230,12 +232,12 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         this.logger.trace("lookupGiraOneChannelValues for channelViewId={}", channelViewId);
         Optional<GiraOneChannel> channel = this.lookupGiraOneProject().lookupChannelByChannelViewId(channelViewId);
         channel.ifPresent(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
-                .map(GiraOneDataPoint::getId).forEach(giraOneServerClient::lookupGiraOneValue));
+                .forEach(giraOneServerClient::lookupGiraOneDatapointValue));
     }
 
     @Override
     public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, String value) {
-        this.giraOneServerClient.setGiraOneValue(new GiraOneValue(dataPoint.getId(), value));
+        this.giraOneServerClient.changeGiraOneDataPointValue(dataPoint, value);
     }
 
     @Override
@@ -249,8 +251,8 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
-    public Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeConnectionState> onNextEvent) {
-        return this.giraOneServerClient.subscribeOnConnectionState(onNextEvent);
+    public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNextEvent) {
+        return this.giraOneServerClient.observeGiraOneConnectionState(onNextEvent);
     }
 
     @Override

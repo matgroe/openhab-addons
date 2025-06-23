@@ -17,13 +17,12 @@ import java.util.HashMap;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketRequest;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * {@link GiraOneWebsocketRequest} for reading getting a gira one device configuration
+ * {@link GiraOneCommand} for reading getting a gira one device configuration
  *
  * @author Matthias Gröger - Initial contribution
  */

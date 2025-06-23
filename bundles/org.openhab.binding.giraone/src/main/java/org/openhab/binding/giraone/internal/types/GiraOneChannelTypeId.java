@@ -30,6 +30,7 @@ public enum GiraOneChannelTypeId {
     Humidity("NumericFloatStatus.Humidity"),
     Light("KNX.Light.Light"),
     Lamp("Switch.Lamp"),
+    Pump("Switch.Pump"),
     PowerOutlet("Switch.PowerOutlet"),
     Awning("Covering.Awning"),
     RoofWindow("Covering.RoofWindow"),

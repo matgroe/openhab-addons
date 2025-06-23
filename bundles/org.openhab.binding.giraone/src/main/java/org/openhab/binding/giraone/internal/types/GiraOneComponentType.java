@@ -14,10 +14,8 @@ package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import java.util.Arrays;
-
 /**
- * Enumeration describes type of  {@link GiraOneComponent}
+ * Enumeration describes type of {@link GiraOneComponent}
  *
  * @author Matthias Gröger - Initial contribution
  */
@@ -30,14 +28,13 @@ public enum GiraOneComponentType {
     Unknown;
 
     public static GiraOneComponentType fromName(String name) {
-        System.out.println(name);
         if (name.matches("urn:gds:cmp:.*:KnxDimmingActuator.*")) {
             return KnxDimmingActuator;
         } else if (name.matches("urn:gds:cmp:.*:KnxHvacActuator.*")) {
             return KnxHvacActuator;
-        }  else if (name.matches("urn:gds:cmp:.*:KnxSwitchingActuator.*")) {
+        } else if (name.matches("urn:gds:cmp:.*:KnxSwitchingActuator.*")) {
             return KnxSwitchingActuator;
-        }   else if (name.matches("urn:gds:cmp:.*:KnxButton.*")) {
+        } else if (name.matches("urn:gds:cmp:.*:KnxButton.*")) {
             return KnxButton;
         }
         return Unknown;

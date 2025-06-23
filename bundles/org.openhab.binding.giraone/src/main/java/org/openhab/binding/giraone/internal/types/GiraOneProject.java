@@ -12,9 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -27,24 +29,18 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneProject {
-    private final Collection<GiraOneChannel> channels;
+
+    private final Set<GiraOneChannel> channels = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * Constructor.
      */
     public GiraOneProject() {
-        this(new ArrayList<>());
     }
 
-    /**
-     * Constructor.
-     *
-     * @param channels All configured channels
-     */
-    public GiraOneProject(Collection<GiraOneChannel> channels) {
-        this.channels = channels;
+    public void addChannel(GiraOneChannel channel) {
+        this.channels.add(channel);
     }
-
 
     /**
      * @return Returna a {@link Collection} of all {@link GiraOneChannel} within this project.

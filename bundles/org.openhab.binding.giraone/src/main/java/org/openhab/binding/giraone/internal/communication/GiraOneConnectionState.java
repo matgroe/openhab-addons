@@ -10,19 +10,20 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.giraone.internal;
+package org.openhab.binding.giraone.internal.communication;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.GiraOneBridge;
 
 /**
- * The enumeration {@link GiraOneBridgeConnectionState} is responsible for describing
+ * The enumeration {@link GiraOneConnectionState} is responsible for describing
  * the current connection state between {@link GiraOneBridge} und the physical
  * GiraOne Server within your network.
  *
  * @author Matthias Groeger - Initial contribution
  */
 @NonNullByDefault
-public enum GiraOneBridgeConnectionState {
+public enum GiraOneConnectionState {
     Disconnected,
     Connecting,
     Connected,
