@@ -12,24 +12,7 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import javax.xml.bind.DatatypeConverter;
-
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
@@ -47,10 +30,27 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.Disposable;
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
 
 /**
- * The {@link GiraOneThingDiscoveryService}
+ * The {@link GiraOneThingDiscoveryService} queries the {@link GiraOneBridgeHandler} for the
+ * {@link GiraOneProject} and registers all determined {@link GiraOneChannel}s as new Thing
+ * within Openhabs inbox.
  *
  * @author Matthias Groeger - Initial contribution
  */
@@ -132,7 +132,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     private String generateIdentifier(GiraOneChannel channel) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(channel.getChannelViewUrn().getBytes());
+            md5.update(channel.getUrn().getBytes());
 
             byte[] digest = md5.digest();
             String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
@@ -150,7 +150,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         Map<String, Object> properties = new HashMap<>();
         properties.put(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
         properties.put(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
-        properties.put(PROPERTY_CHANNELVIEW_URN, channel.getChannelViewUrn());
+        properties.put(PROPERTY_CHANNELVIEW_URN, channel.getUrn());
         properties.put(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
 
         String thingId = generateIdentifier(channel);

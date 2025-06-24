@@ -14,6 +14,9 @@ package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
+import java.util.Objects;
 
 /**
  * The GiraOneDataPoint defines a source of data which may have a
@@ -50,6 +53,21 @@ public class GiraOneDataPoint {
 
     public void setUrn(String urn) {
         this.urn = urn;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GiraOneDataPoint dataPoint = (GiraOneDataPoint) o;
+        return Objects.equals(urn, dataPoint.urn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(urn);
     }
 
     @Override

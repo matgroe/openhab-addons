@@ -12,14 +12,16 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * GiraOneChannel
@@ -36,14 +38,22 @@ public class GiraOneChannel {
     private GiraOneChannelType channelType;
 
     private GiraOneChannelTypeId channelTypeId;
-    private Collection<GiraOneDataPoint> dataPoints = new ArrayList<>();
+    private Set<GiraOneDataPoint> dataPoints = Collections.synchronizedSet(new HashSet<>());
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setUrn(String urn) {
         this.urn = urn;
+    }
+
+    public String getUrn() {
+        return urn;
     }
 
     public void setFunctionType(GiraOneFunctionType functionType) {
@@ -66,20 +76,8 @@ public class GiraOneChannel {
         this.channelTypeId = channelTypeId;
     }
 
-    public String getUrn() {
-        return urn;
-    }
-
-    public String getChannelViewUrn() {
-        return urn;
-    }
-
     public GiraOneChannelTypeId getChannelTypeId() {
         return channelTypeId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean containsGiraOneDataPoint(int datapointId) {
@@ -94,8 +92,8 @@ public class GiraOneChannel {
         return dataPoints;
     }
 
-    public void setDataPoints(Collection<GiraOneDataPoint> dataPoints) {
-        this.dataPoints = dataPoints;
+    public void addDataPoint(GiraOneDataPoint dataPoints) {
+        this.dataPoints.add(dataPoints);
     }
 
     public void setChannelViewId(int channelViewId) {

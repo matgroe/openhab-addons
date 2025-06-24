@@ -12,14 +12,14 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * This class represents the project installation within your as configured GiraOne SmartHome
@@ -38,6 +38,12 @@ public class GiraOneProject {
     public GiraOneProject() {
     }
 
+    /**
+     * Adds the given channel to it's Set of {@link GiraOneChannel}. Duplicates
+     * with same urn are getting ignored.
+     *
+     * @param channel The {@link GiraOneChannel} to add.
+     */
     public void addChannel(GiraOneChannel channel) {
         this.channels.add(channel);
     }
@@ -51,23 +57,12 @@ public class GiraOneProject {
 
     /**
      * Performs a lookup within the internal {@link Collection} of {@link GiraOneChannel}
-     * by the given channelViewUrn.
-     * 
-     * @param urn The channelViewUrn
-     * @return The optional {@link GiraOneChannel}, if there is any
-     */
-    public Optional<GiraOneChannel> lookupChannelByChannelViewUrn(final String urn) {
-        return this.channels.stream().filter(f -> urn.equals(f.getChannelViewUrn())).findFirst();
-    }
-
-    /**
-     * Performs a lookup within the internal {@link Collection} of {@link GiraOneChannel}
      * by the given channelUrn.
      *
      * @param urn The channelUrn
      * @return The optional {@link GiraOneChannel}, if there is any
      */
-    public Optional<GiraOneChannel> lookupChannelByChannelUrn(final String urn) {
+    public Optional<GiraOneChannel> lookupChannelByUrn(final String urn) {
         return this.channels.stream().filter(f -> urn.equals(f.getUrn())).findFirst();
     }
 

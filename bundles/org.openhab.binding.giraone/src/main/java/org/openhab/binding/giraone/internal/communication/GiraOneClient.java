@@ -12,21 +12,21 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceClient;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketClient;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.ReplaySubject;
-import io.reactivex.rxjava3.subjects.Subject;
 
 /**
  * Client for interacting with the Gira One Server. It delegates different commands
@@ -76,8 +76,9 @@ public class GiraOneClient {
     private void onWebsocketConnectionState(GiraOneConnectionState giraOneConnectionState) {
         if (giraOneConnectionState == GiraOneConnectionState.Connected) {
             this.loadGiraOneProject();
+        } else {
+            connectionState.onNext(giraOneConnectionState);
         }
-        connectionState.onNext(giraOneConnectionState);
     }
 
     /**
@@ -124,7 +125,21 @@ public class GiraOneClient {
 
     private void loadGiraOneProject() {
         giraOneProject = new GiraOneProject();
-        this.websocketClient.lookupGiraOneChannels().getChannels().forEach(giraOneProject::addChannel);
+        try {
+            this.webserviceClient.lookupGiraOneComponentCollection().getAllChannels(GiraOneComponentType.KnxButton)
+                    .forEach(giraOneProject::addChannel);
+            this.websocketClient.lookupGiraOneChannels().getChannels().forEach(giraOneProject::addChannel);
+            this.connectionState.onNext(GiraOneConnectionState.Connected);
+        } catch (GiraOneCommunicationException e) {
+            this.connectionState.onNext(GiraOneConnectionState.Error);
+            giraOneProject = new GiraOneProject();
+            this.clientExceptions
+                    .onNext(new GiraOneClientException(GiraOneClientException.WEBSERVICE_COMMUNICATION, e));
+        }
+    }
+
+    public GiraOneProject getGiraOneProject() {
+        return this.giraOneProject;
     }
 
     /**
@@ -139,12 +154,13 @@ public class GiraOneClient {
     }
 
     /**
-     * Initiates the value loookup for the given {@link GiraOneDataPoint}. The determined value
+     * Initiates the value lookup for the given {@link GiraOneDataPoint}. The determined value
      * will be available on consuming the
      *
      * @param dataPoint
      */
     public void lookupGiraOneDatapointValue(GiraOneDataPoint dataPoint) {
+        this.websocketClient.lookupGiraOneValue(dataPoint.getId());
     }
 
     /**
@@ -154,7 +170,7 @@ public class GiraOneClient {
      * @param newValue The new value.
      */
     public void changeGiraOneDataPointValue(GiraOneDataPoint dataPoint, String newValue) {
-        // new GiraOneValue(dataPoint.getId(), newValue);
+        this.websocketClient.setGiraOneValue(new GiraOneValue(dataPoint.getId(), newValue));
     }
 
     /**
@@ -167,6 +183,6 @@ public class GiraOneClient {
      * @return a {@link Disposable}
      */
     public Disposable observeGiraOneValues(Consumer<GiraOneValue> consumer) {
-        return null;
+        return this.websocketClient.subscribeOnGiraOneValues(consumer);
     }
 }

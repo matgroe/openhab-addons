@@ -12,13 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -26,12 +24,10 @@ import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 
-import com.google.common.reflect.ClassPath;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import java.lang.reflect.Type;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Deserializes a Json Element to {@link GiraOneChannelType} within context of Gson parsing.
@@ -40,18 +36,10 @@ import com.google.gson.JsonParseException;
  */
 @NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneCommandDeserializer implements JsonDeserializer<GiraOneCommand> {
-    private static final Set<Class<?>> giraOneCommandClasses = findAllGiraOneServerCommandClasses();
+    private final Set<Class<?>> giraOneCommandClasses;
 
-    private static Set<Class<?>> findAllGiraOneServerCommandClasses() {
-        try {
-            return ClassPath.from(ClassLoader.getSystemClassLoader()).getAllClasses().stream()
-                    .filter(clazz -> clazz.getPackageName()
-                            .equalsIgnoreCase("org.openhab.binding.giraone.internal.communication.commands"))
-                    .map(clazz -> clazz.load()).filter(clazz -> clazz.isAnnotationPresent(GiraOneServerCommand.class))
-                    .collect(Collectors.toSet());
-        } catch (IOException e) {
-            return Set.of();
-        }
+    public GiraOneCommandDeserializer(Set<Class<?>> commandClasses) {
+        this.giraOneCommandClasses = commandClasses;
     }
 
     @Override

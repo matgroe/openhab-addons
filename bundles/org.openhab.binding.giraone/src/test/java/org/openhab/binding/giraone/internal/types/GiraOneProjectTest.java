@@ -12,13 +12,6 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +19,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openhab.binding.giraone.internal.util.TestDataProvider;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class for {@link GiraOneProject}.
@@ -40,9 +40,9 @@ class GiraOneProjectTest {
     void shouldFindChannelByChannelViewUrn() {
         GiraOneProject project = TestDataProvider.createGiraOneProject();
         String urn = "urn:gds:chv:KNXheating2Fcooling-Heating-Cooling-Switchable-9";
-        Optional<GiraOneChannel> channel = project.lookupChannelByChannelViewUrn(urn);
+        Optional<GiraOneChannel> channel = project.lookupChannelByUrn(urn);
         assertTrue(channel.isPresent());
-        assertEquals(urn, channel.get().getChannelViewUrn());
+        assertEquals(urn, channel.get().getUrn());
     }
 
     @DisplayName("should find a channel by it's name")
@@ -64,5 +64,21 @@ class GiraOneProjectTest {
         assertEquals("urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Set-Point",
                 dp.getUrn());
         assertEquals("Set-Point", dp.getName());
+    }
+
+    @DisplayName("should store no GiraOneChannel duplicates")
+    @Test
+    void shouldStoreNoDuplicateChannels() {
+        String urn = "urn:gds:chv:KNXheating2Fcooling-Heating-Cooling-Switchable-9";
+
+        GiraOneProject project = new GiraOneProject();
+        project.addChannel(TestDataProvider.createGiraOneChannel(urn));
+        assertEquals(1, project.lookupChannels().size());
+
+        project.addChannel(TestDataProvider.createGiraOneChannel(urn));
+        assertEquals(1, project.lookupChannels().size());
+
+        project.addChannel(TestDataProvider.createGiraOneChannel(urn + "1"));
+        assertEquals(2, project.lookupChannels().size());
     }
 }

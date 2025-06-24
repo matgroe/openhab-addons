@@ -12,11 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import java.io.Serial;
 import java.util.Arrays;
 import java.util.Objects;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Generic Exception with Gira One Domain.
@@ -32,6 +32,7 @@ public class GiraOneClientException extends RuntimeException {
     public static final String WEBSOCKET_COMMUNICATION = "@text/giraone.client.websocket.communication";
     public static final String MESSAGE_TOO_LARGE = "@text/giraone.client.websocket.message-too-large";
     public static final String DISCONNECT_FAILED = "@text/giraone.client.websocket.disconnect";
+    public static final String WEBSERVICE_COMMUNICATION = "@text/giraone.client.webservice.communication";
 
     @Serial
     private static final long serialVersionUID = 1L;

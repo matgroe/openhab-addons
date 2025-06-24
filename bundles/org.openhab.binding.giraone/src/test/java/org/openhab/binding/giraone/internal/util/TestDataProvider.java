@@ -13,18 +13,21 @@
 
 package org.openhab.binding.giraone.internal.util;
 
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import com.google.gson.Gson;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 
-import com.google.gson.Gson;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Utility provides test data for various unit tests.
@@ -74,8 +77,10 @@ public class TestDataProvider {
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Position");
     }
 
-    public static GiraOneDataPoint dataPointSlatPosition() {
-        return dataPointBuilder("Step-Up-Down", 215880,
-                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Slat-Position");
+    public static GiraOneChannel createGiraOneChannel(final String urn) {
+        return GenericBuilder.of(GiraOneChannel::new).with(GiraOneChannel::setUrn, urn)
+                .with(GiraOneChannel::setChannelType, GiraOneChannelType.Unknown)
+                .with(GiraOneChannel::setChannelTypeId, GiraOneChannelTypeId.Unknown)
+                .with(GiraOneChannel::setFunctionType, GiraOneFunctionType.Unknown).build();
     }
 }

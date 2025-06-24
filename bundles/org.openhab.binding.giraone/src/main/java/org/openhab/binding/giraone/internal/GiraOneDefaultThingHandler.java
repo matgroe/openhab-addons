@@ -12,13 +12,7 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
-
-import java.util.Objects;
-import java.util.Optional;
-
+import io.reactivex.rxjava3.disposables.Disposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
@@ -45,7 +39,12 @@ import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.Disposable;
+import java.util.Objects;
+import java.util.Optional;
+
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
 
 /**
  * The {@link GiraOneDefaultThingHandler} is responsible for handling commands, which are
@@ -252,7 +251,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     private Optional<GiraOneChannel> lookupGiraOneProjectChannel() {
         Optional<String> channelViewUrn = detectChannelViewUrn();
         if (channelViewUrn.isPresent()) {
-            return getGiraOneBridge().lookupGiraOneProject().lookupChannelByChannelViewUrn(channelViewUrn.get());
+            return getGiraOneBridge().lookupGiraOneProject().lookupChannelByUrn(channelViewUrn.get());
         } else {
             if (getThing().getLabel() != null) {
                 return getGiraOneBridge().lookupGiraOneProject()

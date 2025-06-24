@@ -12,9 +12,21 @@
  */
 package org.openhab.binding.giraone.internal.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
+import org.openhab.binding.giraone.internal.communication.commands.AuthenticateSession;
+import org.openhab.binding.giraone.internal.communication.commands.GetConfiguration;
+import org.openhab.binding.giraone.internal.communication.commands.GetDeviceConfig;
+import org.openhab.binding.giraone.internal.communication.commands.GetDiagnosticDeviceList;
+import org.openhab.binding.giraone.internal.communication.commands.GetGiraOneDevices;
+import org.openhab.binding.giraone.internal.communication.commands.GetPasswordSalt;
+import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
+import org.openhab.binding.giraone.internal.communication.commands.GetValue;
+import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
+import org.openhab.binding.giraone.internal.communication.commands.SetValue;
 import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceRequest;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneChannelCollectionDeserializer;
@@ -40,8 +52,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.Set;
 
 /**
  * This class offers creation functions for a pre-configured {@link GsonBuilder}
@@ -53,6 +64,10 @@ import com.google.gson.GsonBuilder;
  */
 @NonNullByDefault
 public abstract class GsonMapperFactory {
+    private static final Set<Class<?>> COMMAND_CLASSES = Set.of(AuthenticateSession.class, GetConfiguration.class,
+            GetDeviceConfig.class, GetDiagnosticDeviceList.class, GetGiraOneDevices.class, GetPasswordSalt.class,
+            GetUIConfiguration.class, GetValue.class, RegisterApplication.class, SetValue.class);
+
     private GsonMapperFactory() {
     }
 
@@ -74,7 +89,7 @@ public abstract class GsonMapperFactory {
         gsonBuilder.registerTypeAdapter(GiraOneChannelTypeId.class, new GiraOneChannelTypeIdDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneChannelType.class, new GiraOneChannelTypeDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneFunctionType.class, new GiraOneFunctionTypeDeserializer());
-        gsonBuilder.registerTypeAdapter(GiraOneCommand.class, new GiraOneCommandDeserializer());
+        gsonBuilder.registerTypeAdapter(GiraOneCommand.class, new GiraOneCommandDeserializer(COMMAND_CLASSES));
         gsonBuilder.registerTypeAdapter(GiraOneComponentCollection.class, new GiraOneComponentCollectionDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneComponentType.class, new GiraOneComponentTypeDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneChannelCollection.class, new GiraOneChannelCollectionDeserializer());
