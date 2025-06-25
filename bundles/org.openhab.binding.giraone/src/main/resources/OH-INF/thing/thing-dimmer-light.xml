@@ -15,7 +15,7 @@
 			<channel id="on-off" typeId="system.power"/>
 			<channel id="brightness" typeId="system.brightness"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 </thing:thing-descriptions>

@@ -16,6 +16,6 @@
 			<channel id="motion" typeId="shutter-awning-motion"/>
 			<channel id="position" typeId="shutter-awning-position"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 </thing:thing-descriptions>

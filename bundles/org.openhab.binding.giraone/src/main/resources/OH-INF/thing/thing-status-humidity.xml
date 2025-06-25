@@ -14,7 +14,7 @@
 		<channels>
 			<channel id="float" typeId="system.atmospheric-humidity"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 </thing:thing-descriptions>

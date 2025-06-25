@@ -23,7 +23,7 @@
 			<channel id="position" typeId="shutter-awning-position"/>
 		</channels>
 
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 	<channel-type id="shutter-awning-position">

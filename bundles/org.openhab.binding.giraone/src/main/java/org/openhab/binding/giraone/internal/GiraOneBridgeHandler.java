@@ -37,6 +37,7 @@ import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.binding.BaseBridgeHandler;
 import org.openhab.core.thing.binding.ThingHandlerService;
 import org.openhab.core.types.Command;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +45,6 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -54,6 +54,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Matthias Groeger - Initial contribution
  */
+@Component(service = { GiraOneBridgeHandler.class, GiraOneBridge.class })
 @NonNullByDefault
 public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBridge {
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
@@ -221,11 +222,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
-    public void lookupGiraOneChannelValues(final int channelViewId) {
-        this.logger.trace("lookupGiraOneChannelValues for channelViewId={}", channelViewId);
-        Optional<GiraOneChannel> channel = this.lookupGiraOneProject().lookupChannelByChannelViewId(channelViewId);
-        channel.ifPresent(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
-                .forEach(giraOneClient::lookupGiraOneDatapointValue));
+    public void lookupGiraOneChannelValues(final GiraOneChannel channel) {
+        this.logger.trace("lookupGiraOneChannelValues for channel={}", channel);
+        channel.getDataPoints().forEach(giraOneClient::lookupGiraOneDatapointValue);
     }
 
     @Override
@@ -249,7 +248,8 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
-    public Disposable subscribeOnGiraOneChannelValue(final int channelViewId, Consumer<GiraOneChannelValue> onNext) {
-        return this.channelValues.filter(f -> f.getChannelViewId() == channelViewId).subscribe(onNext);
+    public Disposable subscribeOnGiraOneChannelValue(final GiraOneChannel channel,
+            Consumer<GiraOneChannelValue> consumer) {
+        return this.channelValues.filter(f -> f.getChannelViewUrn().equals(channel.getUrn())).subscribe(consumer);
     }
 }

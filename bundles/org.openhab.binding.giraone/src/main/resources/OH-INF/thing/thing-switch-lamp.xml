@@ -14,6 +14,6 @@
 		<channels>
 			<channel id="on-off" typeId="system.power"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 </thing:thing-descriptions>

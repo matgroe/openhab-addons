@@ -12,14 +12,14 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
-
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * Use the interface {@link GiraOneBridge} to access the GiraOne Bridge.
@@ -49,9 +49,18 @@ public interface GiraOneBridge {
      * for the given channelViewId. The concerning values are getting reported as
      * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
      *
-     * @param channelViewId
+     * @param channel The {@link GiraOneChannel}, a value lookup should be triggered for.
      */
-    void lookupGiraOneChannelValues(int channelViewId);
+    void lookupGiraOneChannelValues(final GiraOneChannel channel);
+
+    /**
+     * Observes all {@link GiraOneChannelValue} for the given channel.
+     *
+     * @param channel The {@link GiraOneChannel} to observe
+     * @param consumer - The consumer method to receive GiraOneConnectionState Events.
+     * @return A {@link Disposable}
+     */
+    Disposable subscribeOnGiraOneChannelValue(final GiraOneChannel channel, Consumer<GiraOneChannelValue> consumer);
 
     /**
      * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
@@ -79,13 +88,4 @@ public interface GiraOneBridge {
      * @param value The new value
      */
     void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, Integer value);
-
-    /**
-     * Observes all {@link GiraOneChannelValue} for the given channel.
-     *
-     * @param channelViewId - The channelViewId to observe.
-     * @param consumer - The consumer method to receive GiraOneConnectionState Events.
-     * @return A {@link Disposable}
-     */
-    Disposable subscribeOnGiraOneChannelValue(int channelViewId, Consumer<GiraOneChannelValue> consumer);
 }

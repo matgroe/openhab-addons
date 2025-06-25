@@ -78,17 +78,6 @@ public class GiraOneProject {
     }
 
     /**
-     * Performs a lookup within the internal {@link Collection} of {@link GiraOneChannel}
-     * by the given channelViewId.
-     *
-     * @param channelViewId The channelViewId
-     * @return A {@link Optional} of {@link GiraOneChannel}, if there is any
-     */
-    public Optional<GiraOneChannel> lookupChannelByChannelViewId(final int channelViewId) {
-        return this.channels.stream().filter(f -> f.getChannelViewId() == channelViewId).findFirst();
-    }
-
-    /**
      * This method returns a collection of {@link GiraOneChannel} the given {@link GiraOneDataPoint} is assigned to.
      *
      * @param dataPoint - The {@link GiraOneDataPoint} to assign on it's referenced channel

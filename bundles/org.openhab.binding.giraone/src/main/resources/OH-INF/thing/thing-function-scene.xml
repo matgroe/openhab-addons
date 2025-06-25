@@ -14,7 +14,7 @@
 		<channels>
 			<channel id="execute" typeId="scene-execute"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 	<channel-type id="scene-execute">

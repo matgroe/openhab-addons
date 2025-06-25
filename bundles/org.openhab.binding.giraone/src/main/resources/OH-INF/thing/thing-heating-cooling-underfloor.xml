@@ -22,7 +22,7 @@
 			<channel id="mode" typeId="mode-temperature"/>
 			<channel id="heating" typeId="heater-is-warming"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 	<channel-type id="current-temperature">

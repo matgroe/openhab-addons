@@ -10,7 +10,7 @@
 		</supported-bridge-type-refs>
 		<label>Shutter</label>
 		<description>Venetian-Blind or Covering-Shutter</description>
-		<category>Rollershutter</category>
+		<category>Blinds</category>
 		<channels>
 			<channel id="step-up-down" typeId="shutter-step-up-down"/>
 			<channel id="up-down" typeId="shutter-move-up-down"/>
@@ -18,7 +18,7 @@
 			<channel id="position" typeId="shutter-position"/>
 			<channel id="slat-position" typeId="shutter-slat-position"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 	<channel-type id="shutter-venetian-blind-position">

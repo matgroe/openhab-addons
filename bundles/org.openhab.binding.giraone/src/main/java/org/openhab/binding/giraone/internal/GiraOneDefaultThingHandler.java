@@ -16,8 +16,11 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
@@ -42,9 +45,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 
 /**
  * The {@link GiraOneDefaultThingHandler} is responsible for handling commands, which are
@@ -54,9 +59,7 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
  */
 @NonNullByDefault
 public class GiraOneDefaultThingHandler extends BaseThingHandler {
-
     private final Logger logger = LoggerFactory.getLogger(GiraOneDefaultThingHandler.class);
-    private int channelViewId;
 
     private Disposable disposableOnDataPointState = Disposable.empty();
     private Disposable disposableOnConnectionState = Disposable.empty();
@@ -154,6 +157,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param connectionState The {@link GiraOneConnectionState}.
      */
     private void onConnectionState(GiraOneConnectionState connectionState) {
+        logger.trace("onConnectionState :: {}", connectionState);
         switch (connectionState) {
             case Connecting -> this.bridgeMovedToConnecting();
             case Connected -> this.bridgeMovedToConnected();
@@ -173,13 +177,22 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Connected}
      */
     protected void bridgeMovedToConnected() {
-        this.channelViewId = detectChannelViewId();
-        if (this.channelViewId > 0) {
-            this.disposableOnDataPointState = getGiraOneBridge().subscribeOnGiraOneChannelValue(this.channelViewId,
-                    this::onGiraOneChannelValue);
-            updateStatus(ThingStatus.ONLINE);
+        startObservingGiraOneChannel();
+    }
+
+    private void startObservingGiraOneChannel() {
+        Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
+        updateThingProperties(channel);
+        if (channel.isEmpty()) {
+            logger.info(
+                    "startObservingGiraOneChannel failed. Received empty result from lookupGiraOneProjectChannel().");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
+                    "Cannot detect GiraOneChannel by channelUrn, label or name");
         } else {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+            logger.trace("startObservingGiraOneChannel :: {}", channel.get());
+            this.disposableOnDataPointState = getGiraOneBridge().subscribeOnGiraOneChannelValue(channel.get(),
+                    this::onGiraOneChannelValue);
+            getGiraOneBridge().lookupGiraOneChannelValues(channel.get());
         }
     }
 
@@ -222,12 +235,8 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     protected void applyConfiguration() {
         Configuration configuration = editConfiguration();
         updateThingProperties(Optional.empty());
-        if (configurationHasValue(configuration, PROPERTY_CHANNELVIEW_URN)) {
-            updateProperty(PROPERTY_CHANNELVIEW_URN, configuration.get(PROPERTY_CHANNELVIEW_URN).toString());
-        }
-
-        if (configurationHasValue(configuration, PROPERTY_CHANNELVIEW_ID)) {
-            updateProperty(PROPERTY_CHANNELVIEW_ID, configuration.get(PROPERTY_CHANNELVIEW_ID).toString());
+        if (configurationHasValue(configuration, PROPERTY_CHANNEL_URN)) {
+            updateProperty(PROPERTY_CHANNEL_URN, configuration.get(PROPERTY_CHANNEL_URN).toString());
         }
 
         if (configurationHasValue(configuration, PROPERTY_CHANNEL_NAME)) {
@@ -235,10 +244,12 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         }
     }
 
-    private Optional<String> detectChannelViewUrn() {
-        String propChannelViewUrn = getThing().getProperties().get(PROPERTY_CHANNELVIEW_URN);
+    private Optional<String> detectChannelUrn() {
+        String propChannelViewUrn = getThing().getProperties().get(PROPERTY_CHANNEL_URN);
         if (propChannelViewUrn == null) {
             logger.warn("detectChannelViewUrn failed.");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
+                    "Cannot detect thing property " + PROPERTY_CHANNEL_URN);
             return Optional.empty();
         }
         return Optional.of(propChannelViewUrn);
@@ -249,46 +260,39 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @return an {@link Optional< GiraOneChannel >}
      */
     private Optional<GiraOneChannel> lookupGiraOneProjectChannel() {
-        Optional<String> channelViewUrn = detectChannelViewUrn();
-        if (channelViewUrn.isPresent()) {
-            return getGiraOneBridge().lookupGiraOneProject().lookupChannelByUrn(channelViewUrn.get());
-        } else {
+        Optional<String> channelUrn = detectChannelUrn();
+        Optional<GiraOneChannel> theChannel = Optional.empty();
+
+        if (channelUrn.isPresent()) {
+            logger.debug("startObservingGiraOneChannel :: try to lookup channel by urn {}", channelUrn.get());
+            theChannel = getGiraOneBridge().lookupGiraOneProject().lookupChannelByUrn(channelUrn.get());
+        }
+
+        if (theChannel.isEmpty()) {
             if (getThing().getLabel() != null) {
-                return getGiraOneBridge().lookupGiraOneProject()
+                logger.debug("startObservingGiraOneChannel :: try to lookup channel by label {}",
+                        getThing().getLabel());
+                theChannel = getGiraOneBridge().lookupGiraOneProject()
                         .lookupChannelByName(Objects.requireNonNull(getThing().getLabel()));
             }
         }
-        return Optional.empty();
+
+        if (theChannel.isEmpty()) {
+            logger.debug("startObservingGiraOneChannel :: channel lookup by urn or label.");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "Channel Lookup Failed.");
+        } else {
+            updateStatus(ThingStatus.ONLINE);
+        }
+        return theChannel;
     }
 
     private void updateThingProperties(Optional<GiraOneChannel> channel) {
-        /*
-         * updateProperty(PROPERTY_FUNCTION_TYPE,
-         * channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
-         * updateProperty(PROPERTY_CHANNEL_TYPE,
-         * channel.map(GiraOneChannel::getChannelType).orElse(GiraOneChannelType.Unknown).getName());
-         * updateProperty(PROPERTY_CHANNEL_TYPE_ID,
-         * channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
-         * updateProperty(PROPERTY_CHANNELVIEW_ID,
-         * String.format("%d", channel.map(GiraOneChannel::getChannelViewId).orElse(0)));
-         * 
-         */
-    }
-
-    protected int detectChannelViewId() {
-        Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
-        if (channel.isEmpty()) {
-            String propChannelViewId = getThing().getProperties().get(PROPERTY_CHANNELVIEW_ID);
-            if (propChannelViewId == null || "".equals(propChannelViewId)) {
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-                        "Cannot detect GiraOneChannel by channelViewUrn, label or name");
-            } else {
-                return Integer.parseInt(propChannelViewId);
-            }
-        } else {
-            updateThingProperties(channel);
-        }
-        return 0;
+        updateProperty(PROPERTY_FUNCTION_TYPE,
+                channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
+        updateProperty(PROPERTY_CHANNEL_TYPE,
+                channel.map(GiraOneChannel::getChannelType).orElse(GiraOneChannelType.Unknown).getName());
+        updateProperty(PROPERTY_CHANNEL_TYPE_ID,
+                channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
     }
 
     /**
@@ -297,8 +301,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @return
      */
     protected Optional<GiraOneDataPoint> findGiraOneDataPointWithinChannelView(final String ohChannel) {
-        Optional<GiraOneChannel> channel = getGiraOneBridge().lookupGiraOneProject()
-                .lookupChannelByChannelViewId(this.channelViewId);
+        Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
                 .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(ohChannel)).findFirst());
     }
@@ -316,8 +319,8 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                 case StopMoveType cmd -> handleStopMoveTypeCommand(datapoint.get(), cmd);
                 case StringType cmd -> handleStringTypeCommand(datapoint.get(), cmd);
                 case QuantityType<?> cmd -> handleQuantityTypeCommand(datapoint.get(), cmd);
-                default -> throw new IllegalStateException("Unsupported Command '" + command.getClass().getSimpleName()
-                        + "' with value of +" + command.toString());
+                default -> throw new IllegalStateException(
+                        "Unsupported Command '" + command.getClass().getSimpleName() + "' with value of +" + command);
             }
         } else {
             logger.debug("not responsible for handling handleCommand {}, {}", channelUID, command);
@@ -330,8 +333,11 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link RefreshType} command.
      */
     protected void handleRefreshTypeCommand(RefreshType command) {
-        logger.trace("handleRefreshTypeCommand :: channelViewId={}, command={}", this.channelViewId, command);
-        getGiraOneBridge().lookupGiraOneChannelValues(this.channelViewId);
+        Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
+        if (channel.isPresent()) {
+            logger.trace("handleRefreshTypeCommand :: channel={}, command={}", channel.get(), command);
+            getGiraOneBridge().lookupGiraOneChannelValues(channel.get());
+        }
     }
 
     /**

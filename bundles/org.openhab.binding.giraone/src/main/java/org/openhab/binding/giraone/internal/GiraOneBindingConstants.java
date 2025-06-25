@@ -12,12 +12,12 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.thing.ThingTypeUID;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.thing.ThingTypeUID;
 
 /**
  * The {@link GiraOneBindingConstants} class defines common constants, which are
@@ -29,8 +29,7 @@ import org.openhab.core.thing.ThingTypeUID;
 public class GiraOneBindingConstants {
 
     // Thing Property Names
-    public static final String PROPERTY_CHANNELVIEW_URN = "channelViewUrn";
-    public static final String PROPERTY_CHANNELVIEW_ID = "channelViewId";
+    public static final String PROPERTY_CHANNEL_URN = "channelUrn";
     public static final String PROPERTY_FUNCTION_TYPE = "functionType";
     public static final String PROPERTY_CHANNEL_TYPE = "channelType";
     public static final String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";

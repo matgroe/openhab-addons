@@ -22,7 +22,7 @@
 			<channel id="motion" typeId="shutter-roof-window-motion"/>
 			<channel id="position" typeId="shutter-roof-window-position"/>
 		</channels>
-		<representation-property>channelViewUrn</representation-property>
+		<representation-property>channelUrn</representation-property>
 	</thing-type>
 
 	<channel-type id="shutter-roof-window-position">

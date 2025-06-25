@@ -32,7 +32,6 @@ import java.util.Set;
 public class GiraOneChannel {
     private String urn;
     private String name;
-    private int channelViewId = 0;
 
     private GiraOneFunctionType functionType;
     private GiraOneChannelType channelType;
@@ -94,14 +93,6 @@ public class GiraOneChannel {
 
     public void addDataPoint(GiraOneDataPoint dataPoints) {
         this.dataPoints.add(dataPoints);
-    }
-
-    public void setChannelViewId(int channelViewId) {
-        this.channelViewId = channelViewId;
-    }
-
-    public int getChannelViewId() {
-        return channelViewId;
     }
 
     @Override

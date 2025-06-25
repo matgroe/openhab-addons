@@ -41,9 +41,9 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNELVIEW_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
 
@@ -150,14 +150,14 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         Map<String, Object> properties = new HashMap<>();
         properties.put(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
         properties.put(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
-        properties.put(PROPERTY_CHANNELVIEW_URN, channel.getUrn());
+        properties.put(PROPERTY_CHANNEL_URN, channel.getUrn());
         properties.put(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
 
         String thingId = generateIdentifier(channel);
         return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId))
                 .withLabel(channel.getName()).withBridge(bridgeUID).withProperties(properties)
                 .withTTL(DISCOVERY_TTL_FACTOR * BACKGROUND_DISCOVERY_PERIOD)
-                .withRepresentationProperty(PROPERTY_CHANNELVIEW_URN).build();
+                .withRepresentationProperty(PROPERTY_CHANNEL_URN).build();
     }
 
     protected synchronized void startBackgroundScanning() {

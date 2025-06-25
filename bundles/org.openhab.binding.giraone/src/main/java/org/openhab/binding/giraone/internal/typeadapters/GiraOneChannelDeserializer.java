@@ -46,9 +46,6 @@ public class GiraOneChannelDeserializer extends GiraOneMessageJsonTypeAdapter
             GiraOneChannel channel = new GiraOneChannel();
             for (Map.Entry<String, JsonElement> entry : jsonElement.getAsJsonObject().entrySet()) {
                 switch (entry.getKey()) {
-                    case "channelViewId":
-                        channel.setChannelViewId(entry.getValue().getAsInt());
-                        break;
                     case "name":
                         channel.setName(entry.getValue().getAsString());
                         break;

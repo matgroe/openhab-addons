@@ -46,7 +46,7 @@ public class GiraOneClient {
     /** Observe this subject for Gira Server connection state */
     private final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
 
-    /** Observe this subject for occuring {@link GiraOneClientException} */
+    /** Observe this subject for occured {@link GiraOneClientException} */
     private final Subject<GiraOneClientException> clientExceptions = PublishSubject.create();
 
     private GiraOneProject giraOneProject = new GiraOneProject();
