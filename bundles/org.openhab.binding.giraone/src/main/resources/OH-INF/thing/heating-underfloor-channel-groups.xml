@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<channel-group-type id="heating-underfloor">
+		<label>Underfloor Heating</label>
+		<description>Channel Group for Blind Covering Things</description>
+		<category>HVAC</category>
+		<channels>
+			<channel id="current" typeId="heating-current-temperature">
+				<label>Current Temperature</label>
+				<description>The current measured temperature.</description>
+			</channel>
+
+			<channel id="set-point" typeId="heating-set-point-temperature">
+				<label>Specified Temperature</label>
+				<description>Change this value to the desired temperature.</description>
+			</channel>
+
+			<channel id="profile" typeId="heating-profile">
+				<label>Heating Profile</label>
+				<description>Heater Working Profile</description>
+			</channel>
+
+			<channel id="status" typeId="heating-heater-is-warming">
+				<label>Heater Status</label>
+				<description>Shows up, if the heater is warming</description>
+			</channel>
+
+		</channels>
+	</channel-group-type>
+
+
+</thing:thing-descriptions>

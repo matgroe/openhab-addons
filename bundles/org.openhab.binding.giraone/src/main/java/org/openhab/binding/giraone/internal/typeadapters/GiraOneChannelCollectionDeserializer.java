@@ -42,7 +42,6 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
     private static final String PROPERTY_NAME = "name";
     private static final String PROPERTY_MAINTYPE = "mainType";
 
-
     @Override
     @Nullable
     public GiraOneChannelCollection deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
@@ -57,11 +56,8 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
             List<JsonObject> list = jsonElement.getAsJsonArray().asList().stream().filter(JsonElement::isJsonObject)
                     .map(JsonElement::getAsJsonObject)
                     .filter(e -> e.has(PROPERTY_MAINTYPE) && "Root".equals(e.get(PROPERTY_MAINTYPE).getAsString()))
-                    .findFirst().stream()
-                    .map(this::streamJsonObjectOfGiraOneComponents)
-                    .map(Stream::toList)
-                    .flatMap(this::makeFlat)
-                    .toList();
+                    .findFirst().stream().map(this::streamJsonObjectOfGiraOneComponents).map(Stream::toList)
+                    .flatMap(this::makeFlat).toList();
 
             jsonElement.getAsJsonArray().asList().stream().filter(JsonElement::isJsonObject)
                     .map(JsonElement::getAsJsonObject).filter(e -> e.has(PROPERTY_CHANNEL_VIEW_URN))
@@ -75,9 +71,7 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
         return jsonElements.stream().map(JsonElement::getAsJsonObject);
     }
 
-
-    private JsonObject enrichLocation(JsonDeserializationContext jsonDeserializationContext,
-                                      JsonObject jsonObject) {
+    private JsonObject enrichLocation(JsonDeserializationContext jsonDeserializationContext, JsonObject jsonObject) {
         return jsonObject;
     }
 

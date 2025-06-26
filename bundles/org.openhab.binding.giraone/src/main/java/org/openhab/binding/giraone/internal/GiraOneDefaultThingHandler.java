@@ -224,7 +224,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
          * // thingBuilder.withChannel(ch);
          */
 
-        updateThing(thingBuilder.build());
+        // updateThing(thingBuilder.build());
     }
 
     /**
@@ -333,8 +333,11 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      */
     protected Optional<GiraOneDataPoint> findGiraOneDataPointWithinChannelView(final String ohChannel) {
         Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
+        // Split up for case of having channel-groups
+        String[] parts = ohChannel.split("#");
+        String channelId = parts.length == 2 ? parts[1] : parts[0];
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
-                .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(ohChannel)).findFirst());
+                .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(channelId)).findFirst());
     }
 
     @Override

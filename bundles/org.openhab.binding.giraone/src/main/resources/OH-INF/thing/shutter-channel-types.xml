@@ -4,28 +4,10 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="shutter-venetian-blind" listed="false" extensible="true">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-		<label>Shutter</label>
-		<description>Venetian-Blind or Covering-Shutter</description>
-		<category>Blinds</category>
-		<channels>
-			<channel id="step-up-down" typeId="shutter-venetian-blind-step-up-down"/>
-			<channel id="up-down" typeId="shutter-venetian-blind-up-down"/>
-			<channel id="motion" typeId="shutter-venetian-blind-motion"/>
-			<channel id="position" typeId="shutter-venetian-blind-position"/>
-			<channel id="slat-position" typeId="shutter-venetian-blind-slat-position"/>
-		</channels>
-		<representation-property>channelUrn</representation-property>
-	</thing-type>
-
-	<channel-type id="shutter-venetian-blind-position">
+	<channel-type id="shutter-position">
 		<item-type>Rollershutter</item-type>
-		<label>Blind Position</label>
-		<description>Set Blind Level to Position</description>
-		<category>Rollershutter</category>
+		<label>Shutter Position</label>
+		<description>Shutter Blind Level Position</description>
 		<tags>
 			<tag>Control</tag>
 			<tag>Level</tag>
@@ -33,10 +15,10 @@
 		<state min="0" step="2" max="100" pattern="%.0f %%"/>
 	</channel-type>
 
-	<channel-type id="shutter-venetian-blind-slat-position">
+	<channel-type id="shutter-slat-position">
 		<item-type>Number:Dimensionless</item-type>
 		<label>Slat Position</label>
-		<description>Change or View Slat Position</description>
+		<description>Shutter Slat Position</description>
 		<tags>
 			<tag>Control</tag>
 			<tag>Level</tag>
@@ -44,10 +26,10 @@
 		<state min="0" step="5" max="100" pattern="%.0f %%"/>
 	</channel-type>
 
-	<channel-type id="shutter-venetian-blind-motion">
+	<channel-type id="shutter-motion-state">
 		<item-type>String</item-type>
-		<label>Motion State</label>
-		<description>Is currently in motion or stopped.</description>
+		<label>Shutter Motion State</label>
+		<description>Describes the Shutter's motion state (moving up/down or stopped).</description>
 		<tags>
 			<tag>Status</tag>
 		</tags>
@@ -61,10 +43,10 @@
 		</state>
 	</channel-type>
 
-	<channel-type id="shutter-venetian-blind-up-down">
+	<channel-type id="shutter-up-down">
 		<item-type>Rollershutter</item-type>
 		<label>Move Up or Down</label>
-		<description>Move the Blind Level Up or Down</description>
+		<description>Move the Shutter Level Up or Down</description>
 		<category>Rollershutter</category>
 		<state>
 			<options>
@@ -75,10 +57,10 @@
 		</state>
 	</channel-type>
 
-	<channel-type id="shutter-venetian-blind-step-up-down">
+	<channel-type id="shutter-step-up-down">
 		<item-type>Number</item-type>
 		<label>Step Up or Down</label>
-		<description>Raise or Lower the Blind Level by Single Step</description>
+		<description>Raise or Lower the Level Step by Step</description>
 		<category>Rollershutter</category>
 		<state/>
 	</channel-type>

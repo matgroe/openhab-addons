@@ -4,17 +4,13 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="status-humidity" listed="false">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-
-		<label>Humidity</label>
-		<description>Atmospheric humidity in percent</description>
+	<channel-group-type id="dimmable-light">
+		<label>Dimmable Light</label>
+		<description>Channel Group for Dimmable Lights</description>
+		<category>Light</category>
 		<channels>
-			<channel id="float" typeId="system.atmospheric-humidity"/>
+			<channel id="brightness" typeId="system.brightness"/>
 		</channels>
-		<representation-property>channelUrn</representation-property>
-	</thing-type>
+	</channel-group-type>
 
 </thing:thing-descriptions>

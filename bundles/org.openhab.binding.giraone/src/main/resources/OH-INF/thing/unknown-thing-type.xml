@@ -4,18 +4,16 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="dimmer-light" listed="false">
+	<thing-type id="generic" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
+		<label>Unknown Gira One Device</label>
+		<description>You need to configure this thing manually.</description>
+		<channel-groups>
 
-		<label>Dimmable Light</label>
-		<description>Dimmable Light</description>
-		<channels>
-			<channel id="on-off" typeId="system.power"/>
-			<channel id="brightness" typeId="system.brightness"/>
-		</channels>
+			<channel-group id="heating" typeId="heating-underfloor"/>
+		</channel-groups>
 		<representation-property>channelUrn</representation-property>
 	</thing-type>
-
 </thing:thing-descriptions>

@@ -4,16 +4,20 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="switch-power-outlet" listed="false">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-		<label>Poweroutlet</label>
-		<description>Switchable Poweroutlet</description>
-		<category>Poweroutlet</category>
+	<channel-group-type id="switchable-light">
+		<label>Switchable</label>
+		<description>Channel Group for Switchable Things</description>
 		<channels>
 			<channel id="on-off" typeId="system.power"/>
 		</channels>
-		<representation-property>channelUrn</representation-property>
-	</thing-type>
+	</channel-group-type>
+
+	<channel-group-type id="switchable-poweroutlet">
+		<label>Switchable Poweroutlet</label>
+		<description>Channel Group Switchable Poweroutlet</description>
+		<channels>
+			<channel id="on-off" typeId="system.power"/>
+		</channels>
+	</channel-group-type>
+
 </thing:thing-descriptions>

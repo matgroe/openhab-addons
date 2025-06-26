@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="shutter-venetian-blind" listed="false" extensible="true">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+
+		<label>Shutter</label>
+		<description>Venetian-Blind or Covering-Shutter</description>
+		<category>Rollershutter</category>
+		<channel-groups>
+			<channel-group id="shutter" typeId="blind-covering"/>
+			<channel-group id="slat" typeId="slat-covering"/>
+		</channel-groups>
+		<representation-property>channelUrn</representation-property>
+	</thing-type>
+
+	<thing-type id="shutter-awning" listed="false">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+		<label>Awning</label>
+		<description>Electric Driven Awning</description>
+		<category>Awning</category>
+		<channel-groups>
+			<channel-group id="shutter" typeId="blind-covering"/>
+		</channel-groups>
+		<representation-property>channelUrn</representation-property>
+	</thing-type>
+
+	<thing-type id="shutter-roof-window" listed="false">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="server"/>
+		</supported-bridge-type-refs>
+		<label>Roof Window</label>
+		<description>Electric Driven Roof Window</description>
+		<category>Window</category>
+		<channel-groups>
+			<channel-group id="shutter" typeId="blind-covering"/>
+		</channel-groups>
+		<representation-property>channelUrn</representation-property>
+	</thing-type>
+
+</thing:thing-descriptions>

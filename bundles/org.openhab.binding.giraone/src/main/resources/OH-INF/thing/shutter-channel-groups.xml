@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<channel-group-type id="blind-covering">
+		<label>Shutter Covering</label>
+		<description>Channel Group for Blind Covering Things</description>
+		<category>Rollershutter</category>
+		<channels>
+			<channel id="position" typeId="shutter-position">
+				<label>Position</label>
+				<description>Shutter Blind Level Position</description>
+			</channel>
+
+			<channel id="step-up-down" typeId="shutter-step-up-down">
+				<label>Step Up or Down</label>
+				<description>Raise or Lower the Blind Level by Single Step</description>
+			</channel>
+
+			<channel id="up-down" typeId="shutter-up-down">
+				<label>Move Up or Down</label>
+				<description>Move the Blind Level Up or Down</description>
+			</channel>
+
+			<channel id="motion-state" typeId="shutter-motion-state">
+				<label>Motion State</label>
+				<description>Describes the Shutter's motion state (moving up/down or stopped).</description>
+			</channel>
+		</channels>
+	</channel-group-type>
+
+	<channel-group-type id="slat-covering">
+		<label>Shutter Slat</label>
+		<description>Channel Group for Slat Covering Things</description>
+		<category>Blinds</category>
+		<channels>
+			<channel id="position" typeId="shutter-slat-position">
+				<label>Slat Position</label>
+				<description>Shutter Slat Position</description>
+			</channel>
+		</channels>
+	</channel-group-type>
+
+</thing:thing-descriptions>
