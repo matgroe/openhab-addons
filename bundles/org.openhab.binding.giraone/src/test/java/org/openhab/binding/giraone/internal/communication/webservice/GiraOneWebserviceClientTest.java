@@ -12,12 +12,7 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
+import com.google.gson.JsonParser;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +26,11 @@ import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
-import com.google.gson.JsonParser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit Tests for {@link GiraOneWebserviceClient}.
@@ -60,7 +59,7 @@ class GiraOneWebserviceClientTest {
     @DisplayName("Should authenticate against gira one server")
     @Test
     void testWebserviceAuthentication() throws Exception {
-        String response = ResourceLoader.loadStringResource("/messages/8.GetPasswordSalt/001-resp.json");
+        String response = ResourceLoader.loadStringResource("/messages/7.GetPasswordSalt/001-resp.json");
 
         Mockito.doReturn(response).when(giraOneWebserviceClient).doPost(Mockito.any());
         giraOneWebserviceClient.connect();
@@ -83,7 +82,7 @@ class GiraOneWebserviceClientTest {
     @DisplayName("Should fail with GiraOneCommunicationException")
     @Test
     void testWebserviceAuthenticationFails() throws Exception {
-        String response = ResourceLoader.loadStringResource("/messages/8.GetPasswordSalt/002-resp.json");
+        String response = ResourceLoader.loadStringResource("/messages/7.GetPasswordSalt/002-resp.json");
 
         Mockito.doReturn(response).when(giraOneWebserviceClient).doPost(Mockito.any());
         GiraOneCommunicationException thrown = assertThrows(GiraOneCommunicationException.class,
@@ -96,7 +95,7 @@ class GiraOneWebserviceClientTest {
     @DisplayName("Should provide GiraOneComponentCollection")
     @Test
     void testLookupGiraOneComponentCollection() throws Exception {
-        String response = ResourceLoader.loadStringResource("/messages/7.GetDiagnosticDeviceList/001-resp.json");
+        String response = ResourceLoader.loadStringResource("/messages/9.GetDiagnosticDeviceList/001-resp.json");
         Mockito.doReturn(response).when(giraOneWebserviceClient).doPost(Mockito.any());
 
         GiraOneComponentCollection components = giraOneWebserviceClient.lookupGiraOneComponentCollection();

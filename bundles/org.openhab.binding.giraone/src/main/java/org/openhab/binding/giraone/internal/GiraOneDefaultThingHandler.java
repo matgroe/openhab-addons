@@ -31,17 +31,20 @@ import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.library.types.StopMoveType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.library.types.UpDownType;
+import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.binding.BaseThingHandler;
+import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,6 +81,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         logger.debug("initialize {}", getThing().getUID());
         try {
             applyConfiguration();
+            configureThingChannels();
             this.disposableOnConnectionState = getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState);
         } catch (Exception exp) {
             updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
@@ -190,10 +194,37 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                     "Cannot detect GiraOneChannel by channelUrn, label or name");
         } else {
             logger.trace("startObservingGiraOneChannel :: {}", channel.get());
+
             this.disposableOnDataPointState = getGiraOneBridge().subscribeOnGiraOneChannelValue(channel.get(),
                     this::onGiraOneChannelValue);
             getGiraOneBridge().lookupGiraOneChannelValues(channel.get());
         }
+    }
+
+    protected void configureThingChannels() {
+        ThingBuilder thingBuilder = editThing();
+
+        logger.debug("configuring sensors for {}", thing.getUID());
+
+        // remove unwanted channels
+        List<Channel> existingChannels = thing.getChannels();
+        /*
+         * ChannelBuilder channelBuilder = ChannelBuilder
+         * .create(new ChannelUID(getThing().getUID(), UUID.randomUUID().toString()));
+         * channelBuilder.withDescription("Description");
+         * channelBuilder.withLabel("Label");
+         * channelBuilder.withAcceptedItemType("Number:Temperature");
+         * channelBuilder.withKind(ChannelKind.STATE);
+         * channelBuilder.withType(new ChannelTypeUID(getThing().getUID().getBindingId(), "step-up-down"));
+         * channelBuilder.withDefaultTags(Set.of("HVAC", "Setpoint"));
+         * 
+         * Channel ch = channelBuilder.build();
+         * 
+         * thingBuilder.withLocation("Location : " + getThing().getLabel());
+         * // thingBuilder.withChannel(ch);
+         */
+
+        updateThing(thingBuilder.build());
     }
 
     /**

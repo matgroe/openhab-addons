@@ -4,7 +4,7 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="shutter-venetian-blind" listed="false">
+	<thing-type id="shutter-venetian-blind" listed="false" extensible="true">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
@@ -12,11 +12,11 @@
 		<description>Venetian-Blind or Covering-Shutter</description>
 		<category>Blinds</category>
 		<channels>
-			<channel id="step-up-down" typeId="shutter-step-up-down"/>
-			<channel id="up-down" typeId="shutter-move-up-down"/>
-			<channel id="motion" typeId="shutter-motion-state"/>
-			<channel id="position" typeId="shutter-position"/>
-			<channel id="slat-position" typeId="shutter-slat-position"/>
+			<channel id="step-up-down" typeId="shutter-venetian-blind-step-up-down"/>
+			<channel id="up-down" typeId="shutter-venetian-blind-up-down"/>
+			<channel id="motion" typeId="shutter-venetian-blind-motion"/>
+			<channel id="position" typeId="shutter-venetian-blind-position"/>
+			<channel id="slat-position" typeId="shutter-venetian-blind-slat-position"/>
 		</channels>
 		<representation-property>channelUrn</representation-property>
 	</thing-type>

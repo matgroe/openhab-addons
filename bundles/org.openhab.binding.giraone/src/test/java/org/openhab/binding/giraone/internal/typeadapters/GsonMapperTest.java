@@ -12,12 +12,8 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.Objects;
-import java.util.stream.Stream;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonPrimitive;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +34,11 @@ import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonPrimitive;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Test class for {@link GsonMapperTest}
@@ -186,7 +185,7 @@ public class GsonMapperTest {
     @Test
     void shouldDeserialize2GiraOneComponents() {
         GiraOneCommandResponse response = createGiraOneWebserviceResponseFrom(
-                "/messages/7.GetDiagnosticDeviceList/001-resp.json");
+                "/messages/9.GetDiagnosticDeviceList/001-resp.json");
         assertNotNull(response);
         response.getReply(GiraOneComponentCollection.class);
     }

@@ -123,6 +123,8 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     ThingTypeUID detectThingTypeUID(GiraOneChannel channel) {
         String thingTypeId = formatThingTypeId(channel);
+
+        logger.debug("detectThingTypeUID :: {} maps to {}", channel.toString(), thingTypeId);
         Optional<ThingTypeUID> opt = GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID.stream()
                 .filter(t -> t.getId().equals(thingTypeId)).findFirst();
 
