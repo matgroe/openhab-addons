@@ -11,8 +11,13 @@
 		<label>Unknown Gira One Device</label>
 		<description>You need to configure this thing manually.</description>
 		<channel-groups>
-
 			<channel-group id="heating" typeId="heating-underfloor"/>
+			<channel-group id="shutter" typeId="blind-covering"/>
+			<channel-group id="slat" typeId="slat-covering"/>
+			<channel-group id="light" typeId="switchable-light"/>
+			<channel-group id="poweroutlet" typeId="switchable-poweroutlet"/>
+			<channel-group id="switch" typeId="switchable-light"/>
+			<channel-group id="dimmer" typeId="dimmable-light"/>
 		</channel-groups>
 		<representation-property>channelUrn</representation-property>
 	</thing-type>

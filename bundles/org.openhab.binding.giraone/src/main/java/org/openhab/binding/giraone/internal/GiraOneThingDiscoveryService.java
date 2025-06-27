@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
-import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.core.config.discovery.AbstractThingHandlerDiscoveryService;
@@ -113,10 +112,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     }
 
     String formatThingTypeId(GiraOneChannel channel) {
-        if (channel.getFunctionType() == GiraOneFunctionType.Status) {
-            return CaseFormatter
-                    .lowerCaseHyphen(channel.getFunctionType().toString() + channel.getChannelTypeId().toString());
-        }
         return CaseFormatter
                 .lowerCaseHyphen(channel.getChannelType().toString() + channel.getChannelTypeId().toString());
     }

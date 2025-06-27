@@ -19,6 +19,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
@@ -27,7 +28,6 @@ import org.openhab.binding.giraone.internal.types.GiraOneComponent;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
-import org.openhab.binding.giraone.internal.types.GiraOneProject;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -47,7 +47,7 @@ import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPrope
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_URN;
 
 /**
- * Deserializes a Json Element to {@link GiraOneProject} within context of Gson parsing.
+ * Deserializes a Json Element to {@link GiraOneComponentCollection} within context of Gson parsing.
  *
  * @author Matthias Gröger - Initial contribution
  */
@@ -60,7 +60,7 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
         GiraOneComponentCollection diagDevices = new GiraOneComponentCollection();
-        if (jsonElement != null && jsonElement.isJsonObject()) {
+        if (jsonDeserializationContext != null && jsonElement != null && jsonElement.isJsonObject()) {
             streamJsonObjectOfGiraOneComponents(jsonElement.getAsJsonObject()).map(JsonElement::getAsJsonObject)
                     .map(e -> this.createGiraOneComponent(jsonDeserializationContext, e)).forEach(diagDevices::add);
         }
@@ -68,7 +68,7 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
         return diagDevices;
     }
 
-    private GiraOneComponent createGiraOneComponent(JsonDeserializationContext jsonDeserializationContext,
+    private GiraOneComponent createGiraOneComponent(@NonNull JsonDeserializationContext jsonDeserializationContext,
             JsonObject jsonObject) {
         GiraOneComponentType cmpType = jsonDeserializationContext.deserialize(jsonObject.get(PROPERTY_URN),
                 GiraOneComponentType.class);
@@ -91,7 +91,7 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
 
             channelObject.addProperty(PROPERTY_NAME, channelName);
             channelObject.addProperty(PROPERTY_URN, channelUrn);
-            channelObject.addProperty(PROPERTY_FUNCTION_TYPE, GiraOneFunctionType.KnxButton.getName());
+            channelObject.addProperty(PROPERTY_FUNCTION_TYPE, GiraOneFunctionType.Trigger.getName());
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE, deriveGiraOneChannelType(channelUrn).getName());
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE_ID, deriveGiraOneChannelTypeId(channelUrn).getName());
         }

@@ -18,11 +18,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Deserializes a Json Element to {@link GiraOneChannelType} within context of Gson parsing.
+ * Deserializes a Json Element to {@link GiraOneCommand} within context of Gson parsing.
  *
  * @author Matthias Gröger - Initial contribution
  */
@@ -38,7 +38,7 @@ import java.util.Set;
 public class GiraOneCommandDeserializer implements JsonDeserializer<GiraOneCommand> {
     private final Set<Class<?>> giraOneCommandClasses;
 
-    public GiraOneCommandDeserializer(Set<Class<?>> commandClasses) {
+    public GiraOneCommandDeserializer(@NonNull Set<Class<?>> commandClasses) {
         this.giraOneCommandClasses = commandClasses;
     }
 
@@ -46,7 +46,7 @@ public class GiraOneCommandDeserializer implements JsonDeserializer<GiraOneComma
     @Nullable
     public GiraOneCommand deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (jsonElement != null && jsonElement.isJsonObject()) {
+        if (jsonDeserializationContext != null && jsonElement != null && jsonElement.isJsonObject()) {
             String command = ((JsonObject) jsonElement).getAsJsonPrimitive("command").getAsString();
             Optional<Class<?>> commandClassOptional = giraOneCommandClasses.stream()
                     .filter(f -> command.equals(f.getAnnotation(GiraOneServerCommand.class).name())).findFirst();

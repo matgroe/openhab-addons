@@ -12,9 +12,9 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.Arrays;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import java.util.Arrays;
 
 /**
  * Enumeration describes channel type for {@link GiraOneChannelType}
@@ -23,12 +23,15 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault
 public enum GiraOneChannelType {
+
     Shutter("de.gira.schema.channels.BlindWithPos"),
     Dimmer("de.gira.schema.channels.KNX.Dimmer"),
-    Float("de.gira.schema.channels.Float"),
+    Status("de.gira.schema.channels.Float"),
     Switch("de.gira.schema.channels.Switch"),
     Function("de.gira.schema.channels.FunctionScene"),
-    HeatingCooling("de.gira.schema.channels.KNX.HeatingCoolingSwitchable"),
+    Heating("de.gira.schema.channels.KNX.HeatingCoolingSwitchable"),
+    Trigger("de.gira.schema.channels.Trigger"),
+
     Unknown("Unknown");
 
     private final String name;

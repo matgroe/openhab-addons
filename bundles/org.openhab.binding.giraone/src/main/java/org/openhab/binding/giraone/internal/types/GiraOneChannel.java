@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -88,12 +87,12 @@ public class GiraOneChannel {
         return channelTypeId;
     }
 
-    public boolean containsGiraOneDataPoint(int datapointId) {
-        return this.dataPoints.stream().anyMatch(f -> f.getId() == datapointId);
+    public boolean containsGiraOneDataPoint(String datapointName) {
+        return this.dataPoints.stream().anyMatch(f -> datapointName.equals(f.getName()));
     }
 
-    public Optional<GiraOneDataPoint> getGiraOneDataPoint(int datapointId) {
-        return this.dataPoints.stream().filter(f -> f.getId() == datapointId).findFirst();
+    public boolean containsGiraOneDataPoint(int datapointId) {
+        return this.dataPoints.stream().anyMatch(f -> f.getId() == datapointId);
     }
 
     public Collection<GiraOneDataPoint> getDataPoints() {

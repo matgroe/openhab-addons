@@ -44,10 +44,13 @@ import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
@@ -81,7 +84,8 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         logger.debug("initialize {}", getThing().getUID());
         try {
             applyConfiguration();
-            configureThingChannels();
+            this.lookupGiraOneProjectChannel().map(this::updateThing);
+
             this.disposableOnConnectionState = getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState);
         } catch (Exception exp) {
             updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
@@ -186,7 +190,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     private void startObservingGiraOneChannel() {
         Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
-        updateThingProperties(channel);
+
         if (channel.isEmpty()) {
             logger.info(
                     "startObservingGiraOneChannel failed. Received empty result from lookupGiraOneProjectChannel().");
@@ -199,32 +203,6 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
                     this::onGiraOneChannelValue);
             getGiraOneBridge().lookupGiraOneChannelValues(channel.get());
         }
-    }
-
-    protected void configureThingChannels() {
-        ThingBuilder thingBuilder = editThing();
-
-        logger.debug("configuring sensors for {}", thing.getUID());
-
-        // remove unwanted channels
-        List<Channel> existingChannels = thing.getChannels();
-        /*
-         * ChannelBuilder channelBuilder = ChannelBuilder
-         * .create(new ChannelUID(getThing().getUID(), UUID.randomUUID().toString()));
-         * channelBuilder.withDescription("Description");
-         * channelBuilder.withLabel("Label");
-         * channelBuilder.withAcceptedItemType("Number:Temperature");
-         * channelBuilder.withKind(ChannelKind.STATE);
-         * channelBuilder.withType(new ChannelTypeUID(getThing().getUID().getBindingId(), "step-up-down"));
-         * channelBuilder.withDefaultTags(Set.of("HVAC", "Setpoint"));
-         * 
-         * Channel ch = channelBuilder.build();
-         * 
-         * thingBuilder.withLocation("Location : " + getThing().getLabel());
-         * // thingBuilder.withChannel(ch);
-         */
-
-        // updateThing(thingBuilder.build());
     }
 
     /**
@@ -265,7 +243,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     protected void applyConfiguration() {
         Configuration configuration = editConfiguration();
-        updateThingProperties(Optional.empty());
+        invalidateThingProperties();
         if (configurationHasValue(configuration, PROPERTY_CHANNEL_URN)) {
             updateProperty(PROPERTY_CHANNEL_URN, configuration.get(PROPERTY_CHANNEL_URN).toString());
         }
@@ -317,13 +295,44 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         return theChannel;
     }
 
-    private void updateThingProperties(Optional<GiraOneChannel> channel) {
-        updateProperty(PROPERTY_FUNCTION_TYPE,
-                channel.map(GiraOneChannel::getFunctionType).orElse(GiraOneFunctionType.Unknown).getName());
-        updateProperty(PROPERTY_CHANNEL_TYPE,
-                channel.map(GiraOneChannel::getChannelType).orElse(GiraOneChannelType.Unknown).getName());
-        updateProperty(PROPERTY_CHANNEL_TYPE_ID,
-                channel.map(GiraOneChannel::getChannelTypeId).orElse(GiraOneChannelTypeId.Unknown).getName());
+    private void invalidateThingProperties() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put(PROPERTY_CHANNEL_URN,
+                Objects.requireNonNullElse(this.thing.getProperties().get(PROPERTY_CHANNEL_URN), "n.a"));
+        properties.put(PROPERTY_FUNCTION_TYPE, GiraOneFunctionType.Unknown.getName());
+        properties.put(PROPERTY_CHANNEL_TYPE_ID, GiraOneChannelTypeId.Unknown.getName());
+        properties.put(PROPERTY_CHANNEL_TYPE, GiraOneChannelType.Unknown.getName());
+        updateProperties(properties);
+    }
+
+    private GiraOneChannel updateThing(GiraOneChannel channel) {
+        updateProperty(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
+        updateProperty(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
+        updateProperty(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
+
+        ThingBuilder thingBuilder = editThing();
+        List<Channel> existingChannels = thing.getChannels();
+
+        thingBuilder.withChannels(existingChannels);
+        thingBuilder.withLabel(channel.getName());
+        thingBuilder.withLocation(channel.getLocation());
+
+        if (thing.getThingTypeUID().equals(GENERIC_TYPE_UID)) {
+            List<String> supportedDataPoints = channel.getDataPoints().stream().map(GiraOneDataPoint::getName)
+                    .map(CaseFormatter::lowerCaseHyphen).toList();
+
+            List<String> filtered = existingChannels.stream().map((f -> f.getUID().getId()))
+                    .map(this::normalizeOpenhabChannelName).filter(supportedDataPoints::contains).toList();
+
+            List<Channel> supportedChannels = existingChannels.stream()
+                    .filter(c -> filtered.contains(normalizeOpenhabChannelName(c.getUID().getId()))).toList();
+
+            thingBuilder.withChannels(supportedChannels);
+        }
+
+        updateThing(thingBuilder.build());
+
+        return channel;
     }
 
     /**
@@ -392,7 +401,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link DecimalType} command.
      */
     protected void handleDecimalTypeCommand(GiraOneDataPoint datapoint, DecimalType command) {
-        logger.trace("handleDecimalTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.intValue());
+        logger.trace("handleDecimalTypeCommand :: datapoint={}, command={}", datapoint, command.intValue());
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.toString());
     }
 
@@ -403,7 +412,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link OnOffType} command.
      */
     protected void handleOnOffTypeCommand(GiraOneDataPoint datapoint, OnOffType command) {
-        logger.trace("handleOnOffTypeCommand :: datapoint={}, command={}", datapoint.getId(), command.name());
+        logger.trace("handleOnOffTypeCommand :: datapoint={}, command={}", datapoint, command.name());
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, (command == OnOffType.ON ? 1 : 0));
     }
 
@@ -414,7 +423,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link UpDownType} command.
      */
     protected void handleUpDownTypeCommand(GiraOneDataPoint datapoint, UpDownType command) {
-        logger.trace("handleUpDownType :: datapoint={}, command={}", datapoint.getId(), command.name());
+        logger.trace("handleUpDownType :: datapoint={}, command={}", datapoint, command.name());
         switch (command) {
             case DOWN -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, 100);
             case UP -> getGiraOneBridge().setGiraOneDataPointValue(datapoint, 0);
@@ -428,8 +437,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link StopMoveType} command.
      */
     protected void handleStopMoveTypeCommand(GiraOneDataPoint datapoint, StopMoveType command) {
-        logger.warn("handleStopMoveType is not implemented :: datapoint={}, command={}", datapoint.getId(),
-                command.name());
+        logger.warn("handleStopMoveType is not implemented :: datapoint={}, command={}", datapoint, command.name());
     }
 
     /**
@@ -439,7 +447,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link StringType} command.
      */
     protected void handleStringTypeCommand(GiraOneDataPoint datapoint, StringType command) {
-        logger.warn("handleStringType :: datapoint={}, command={}", datapoint.getId(), command);
+        logger.warn("handleStringType :: datapoint={}, command={}", datapoint, command);
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.toString());
     }
 
@@ -450,7 +458,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
      * @param command The {@link QuantityType} command.
      */
     protected void handleQuantityTypeCommand(GiraOneDataPoint datapoint, QuantityType<?> command) {
-        logger.warn("handleQuantityType is not implemented :: datapoint={}, command={}", datapoint.getId(), command);
+        logger.warn("handleQuantityType is not implemented :: datapoint={}, command={}", datapoint, command);
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.floatValue());
     }
 }

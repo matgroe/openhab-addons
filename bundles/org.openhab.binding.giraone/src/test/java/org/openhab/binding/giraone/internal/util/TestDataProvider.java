@@ -17,11 +17,14 @@ import com.google.gson.Gson;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
+import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceResponse;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
@@ -53,6 +56,14 @@ public class TestDataProvider {
 
         GiraOneProject project = new GiraOneProject();
         uiChannels.getChannels().forEach(project::addChannel);
+
+        GiraOneWebserviceResponse wsresponse = gson.fromJson(
+                ResourceLoader.loadStringResource("/messages/9.GetDiagnosticDeviceList/001-resp.json"),
+                GiraOneWebserviceResponse.class);
+        assertNotNull(wsresponse);
+        GiraOneComponentCollection componentCollection = wsresponse.getReply(GiraOneComponentCollection.class);
+        assertNotNull(componentCollection);
+        componentCollection.getAllChannels(GiraOneComponentType.KnxButton).forEach(project::addChannel);
 
         return project;
     }

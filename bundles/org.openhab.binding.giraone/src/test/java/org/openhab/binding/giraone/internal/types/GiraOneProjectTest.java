@@ -81,4 +81,12 @@ class GiraOneProjectTest {
         project.addChannel(TestDataProvider.createGiraOneChannel(urn + "1"));
         assertEquals(2, project.lookupChannels().size());
     }
+
+    @DisplayName("should store no GiraOneChannel duplicates")
+    @Test
+    void shouldStoreNoDuplicateChannelsYYY() {
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
+        project.lookupChannels().stream().map(c -> String.format("%s, %s, %s", c.getChannelType().getName(),
+                c.getChannelTypeId().getName(), c.getFunctionType().getName())).forEach(System.out::println);
+    }
 }

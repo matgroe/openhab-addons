@@ -13,12 +13,11 @@
 package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketClient;
 
 /**
  * The {@link GiraOneValueChange} represents value change for a single source of data. The
- * {@link GiraOneWebsocketClient} emits {@link GiraOneValueChange}
- * as a result after received a {@link GiraOneEvent}
+ * GiraOneWebsocketClient emits {@link GiraOneValueChange} as a result after
+ * received a GiraOneEvent.
  *
  * @author Matthias Gröger - Initial contribution
  */

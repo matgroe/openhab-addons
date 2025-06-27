@@ -12,9 +12,9 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.Arrays;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import java.util.Arrays;
 
 /**
  * Enumeration describes channel type id
@@ -25,17 +25,17 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault()
 public enum GiraOneChannelTypeId {
     Temperature("NumericFloatStatus.Temperatur"),
-    Scene("FunctionScene.Scene"),
-    Underfloor("KNX.HeatingCooling.HeatingUnderfloorHeatingWaterBased"),
     Humidity("NumericFloatStatus.Humidity"),
+    Underfloor("KNX.HeatingCooling.HeatingUnderfloorHeatingWaterBased"),
     Light("KNX.Light.Light"),
+    Dimmer("KNX.Light.Dimmer"),
     Lamp("Switch.Lamp"),
     Pump("Switch.Pump"),
     PowerOutlet("Switch.PowerOutlet"),
     Awning("Covering.Awning"),
     RoofWindow("Covering.RoofWindow"),
     VenetianBlind("Covering.VenetianBlind"),
-
+    Scene("FunctionScene.Scene"),
     Unknown("Unknown");
 
     private final String name;

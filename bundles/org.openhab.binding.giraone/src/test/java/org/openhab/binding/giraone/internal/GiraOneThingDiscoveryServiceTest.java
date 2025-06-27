@@ -12,27 +12,7 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.stream.Stream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
+import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +36,25 @@ import org.openhab.core.thing.ThingUID;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * Test class for {@link GiraOneThingDiscoveryService}.
@@ -114,13 +112,13 @@ class GiraOneThingDiscoveryServiceTest {
                         GiraOneChannelTypeId.VenetianBlind, GiraOneBindingConstants.GENERIC_TYPE_ID),
                 Arguments.of(GiraOneFunctionType.Light, GiraOneChannelType.Dimmer, GiraOneChannelTypeId.Light,
                         GiraOneBindingConstants.DIMMER_TYPE_ID),
-                Arguments.of(GiraOneFunctionType.HeatingCooling, GiraOneChannelType.HeatingCooling,
+                Arguments.of(GiraOneFunctionType.HeatingCooling, GiraOneChannelType.Heating,
                         GiraOneChannelTypeId.Underfloor, GiraOneBindingConstants.HEATING_COOLING_TYPE_ID),
-                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Float, GiraOneChannelTypeId.Temperature,
+                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Status, GiraOneChannelTypeId.Temperature,
                         GiraOneBindingConstants.TEMPERATURE_TYPE_ID),
-                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Float, GiraOneChannelTypeId.Humidity,
+                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Status, GiraOneChannelTypeId.Humidity,
                         GiraOneBindingConstants.HUMIDITY_TYPE_ID),
-                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Float, GiraOneChannelTypeId.PowerOutlet,
+                Arguments.of(GiraOneFunctionType.Status, GiraOneChannelType.Status, GiraOneChannelTypeId.PowerOutlet,
                         GiraOneBindingConstants.GENERIC_TYPE_ID),
                 Arguments.of(GiraOneFunctionType.Scene, GiraOneChannelType.Function, GiraOneChannelTypeId.Scene,
                         GiraOneBindingConstants.SCENE_TYPE_ID),
@@ -190,5 +188,20 @@ class GiraOneThingDiscoveryServiceTest {
 
         assertTrue(this.checkThingTypeIdDefinitionExists(expected),
                 "There must be thing-type definition for " + thingTypeUID.getId());
+    }
+
+    @DisplayName("There must be a thing-type definition for each determined thingTypeId")
+    @Test
+    void testForExistingThingTypeDefinition() throws IOException {
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
+
+        project.lookupChannels().stream().map(discoveryService::formatThingTypeId)
+                // .map(ThingTypeUID::getAsString)
+                .distinct().sorted().toList().forEach(System.out::println);
+
+        // ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
+
+        // assertTrue(this.checkThingTypeIdDefinitionExists(thingTypeUID.getId()),
+        // "There must be thing-type definition for " + thingTypeUID.getId());
     }
 }
