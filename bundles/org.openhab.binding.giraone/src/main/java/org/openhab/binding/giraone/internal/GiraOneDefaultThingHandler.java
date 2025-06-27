@@ -327,15 +327,26 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     /**
+     * Extracts the name from the openhab channel. If we're using channel groups,
+     * the channel name occurs after the '#'
+     *
+     * @param name The openhab channel name.
+     *
+     * @return The channel name
+     */
+    private String normalizeOpenhabChannelName(final String name) {
+        String[] parts = name.split("#");
+        return parts[parts.length - 1];
+    }
+
+    /**
      *
      * @param ohChannel the channel id in OpenHab context
      * @return
      */
     protected Optional<GiraOneDataPoint> findGiraOneDataPointWithinChannelView(final String ohChannel) {
         Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
-        // Split up for case of having channel-groups
-        String[] parts = ohChannel.split("#");
-        String channelId = parts.length == 2 ? parts[1] : parts[0];
+        String channelId = normalizeOpenhabChannelName(ohChannel);
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
                 .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(channelId)).findFirst());
     }

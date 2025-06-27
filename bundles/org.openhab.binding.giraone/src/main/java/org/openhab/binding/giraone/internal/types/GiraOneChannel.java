@@ -32,12 +32,21 @@ import java.util.Set;
 public class GiraOneChannel {
     private String urn;
     private String name;
+    private String location;
 
     private GiraOneFunctionType functionType;
     private GiraOneChannelType channelType;
 
     private GiraOneChannelTypeId channelTypeId;
     private Set<GiraOneDataPoint> dataPoints = Collections.synchronizedSet(new HashSet<>());
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public void setName(String name) {
         this.name = name;

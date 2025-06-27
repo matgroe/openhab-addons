@@ -25,6 +25,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceResponse;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
@@ -34,6 +35,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -153,6 +155,9 @@ public class GsonMapperTest {
 
         GiraOneChannelCollection channels = response.getReply(GiraOneChannelCollection.class);
         assertNotNull(channels);
+        GiraOneChannel g1ch = channels.getChannels().stream()
+                .filter(f -> "urn:gds:chv:KNXlight-KNX-Dimmer-2".equals(f.getUrn())).findFirst().orElse(null);
+        assertNotNull(g1ch);
     }
 
     @DisplayName("message should deserialize to GiraOneCommandResponse of GiraOneChannelValue")
@@ -187,6 +192,15 @@ public class GsonMapperTest {
         GiraOneCommandResponse response = createGiraOneWebserviceResponseFrom(
                 "/messages/9.GetDiagnosticDeviceList/001-resp.json");
         assertNotNull(response);
-        response.getReply(GiraOneComponentCollection.class);
+        GiraOneComponentCollection componentCollection = response.getReply(GiraOneComponentCollection.class);
+        assertNotNull(componentCollection);
+        Collection<GiraOneChannel> g1channels = componentCollection.getAllChannels(GiraOneComponentType.KnxButton);
+        assertNotNull(g1channels);
+
+        GiraOneChannel g1ch = g1channels.stream()
+                .filter(f -> "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5.Curtain-3"
+                        .equals(f.getUrn()))
+                .findFirst().orElse(null);
+        assertNotNull(g1ch);
     }
 }

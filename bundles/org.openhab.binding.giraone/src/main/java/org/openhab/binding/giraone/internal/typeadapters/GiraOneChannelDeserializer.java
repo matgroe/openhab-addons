@@ -27,6 +27,16 @@ import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_VIEW_URN;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_DATAPOINTS;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_DATA_POINTS_CC;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_FUNCTION_TYPE;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_LOCATION;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_NAME;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_URN;
+
 /**
  * Deserializes a Json Element to {@link GiraOneChannel} within context of Gson parsing.
  *
@@ -46,25 +56,28 @@ public class GiraOneChannelDeserializer extends GiraOneMessageJsonTypeAdapter
             GiraOneChannel channel = new GiraOneChannel();
             for (Map.Entry<String, JsonElement> entry : jsonElement.getAsJsonObject().entrySet()) {
                 switch (entry.getKey()) {
-                    case "name":
+                    case PROPERTY_LOCATION:
+                        channel.setLocation(entry.getValue().getAsString());
+                        break;
+                    case PROPERTY_NAME:
                         channel.setName(entry.getValue().getAsString());
                         break;
-                    case "urn", "channelViewUrn":
+                    case PROPERTY_CHANNEL_VIEW_URN, PROPERTY_URN:
                         channel.setUrn(entry.getValue().getAsString());
                         break;
-                    case "functionType":
+                    case PROPERTY_FUNCTION_TYPE:
                         channel.setFunctionType(
                                 jsonDeserializationContext.deserialize(entry.getValue(), GiraOneFunctionType.class));
                         break;
-                    case "channelType":
+                    case PROPERTY_CHANNEL_TYPE:
                         channel.setChannelType(
                                 jsonDeserializationContext.deserialize(entry.getValue(), GiraOneChannelType.class));
                         break;
-                    case "channelTypeId":
+                    case PROPERTY_CHANNEL_TYPE_ID:
                         channel.setChannelTypeId(
                                 jsonDeserializationContext.deserialize(entry.getValue(), GiraOneChannelTypeId.class));
                         break;
-                    case "datapoints", "dataPoints":
+                    case PROPERTY_DATAPOINTS, PROPERTY_DATA_POINTS_CC:
                         addDatapoints(channel, jsonDeserializationContext, entry.getValue());
                         break;
                     default:

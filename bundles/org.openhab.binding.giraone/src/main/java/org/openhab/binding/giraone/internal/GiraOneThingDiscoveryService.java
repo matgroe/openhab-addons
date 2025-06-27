@@ -156,8 +156,12 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         properties.put(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
 
         String thingId = generateIdentifier(channel);
-        return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId))
-                .withLabel(channel.getName()).withBridge(bridgeUID).withProperties(properties)
+        String label = channel.getLocation() != null
+                ? String.format("%s > %s", channel.getLocation(), channel.getName())
+                : channel.getName();
+
+        return DiscoveryResultBuilder.create(new ThingUID(thingTypeUid, bridgeUID, thingId)).withLabel(label)
+                .withBridge(bridgeUID).withProperties(properties)
                 .withTTL(DISCOVERY_TTL_FACTOR * BACKGROUND_DISCOVERY_PERIOD)
                 .withRepresentationProperty(PROPERTY_CHANNEL_URN).build();
     }

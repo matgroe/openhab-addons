@@ -23,24 +23,28 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
-import org.openhab.binding.giraone.internal.types.GiraOneProject;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_VIEW_ID;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_VIEW_URN;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CONTENT;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_LOCATION;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_MAINTYPE;
+import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_NAME;
+
 /**
- * Deserializes a Json Element to {@link GiraOneProject} within context of Gson parsing.
+ * Uses the Gson parsing to deserializes the response of
+ * {@link org.openhab.binding.giraone.internal.communication.GiraOneCommand} command
+ * {@link org.openhab.binding.giraone.internal.communication.commands.GetDiagnosticDeviceList} into
+ * {@link GiraOneChannelCollection}.
  *
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<GiraOneChannelCollection> {
-    private static final String PROPERTY_CHANNEL_VIEW_ID = "channelViewID";
-    private static final String PROPERTY_CHANNEL_VIEW_URN = "channelViewUrn";
-    private static final String PROPERTY_CONTENT = "content";
-    private static final String PROPERTY_NAME = "name";
-    private static final String PROPERTY_MAINTYPE = "mainType";
 
     @Override
     @Nullable
@@ -53,15 +57,17 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
         GiraOneChannelCollection channelCollection = new GiraOneChannelCollection();
         if (jsonElement.isJsonArray()) {
 
-            List<JsonObject> list = jsonElement.getAsJsonArray().asList().stream().filter(JsonElement::isJsonObject)
-                    .map(JsonElement::getAsJsonObject)
+            // extract the channel -> location mapping from json
+            List<JsonObject> channelLocations = jsonElement.getAsJsonArray().asList().stream()
+                    .filter(JsonElement::isJsonObject).map(JsonElement::getAsJsonObject)
                     .filter(e -> e.has(PROPERTY_MAINTYPE) && "Root".equals(e.get(PROPERTY_MAINTYPE).getAsString()))
-                    .findFirst().stream().map(this::streamJsonObjectOfGiraOneComponents).map(Stream::toList)
+                    .findFirst().stream().map(this::streamChannelLocationInformation).map(Stream::toList)
                     .flatMap(this::makeFlat).toList();
 
+            // and convert into GiraOneChannel objects
             jsonElement.getAsJsonArray().asList().stream().filter(JsonElement::isJsonObject)
                     .map(JsonElement::getAsJsonObject).filter(e -> e.has(PROPERTY_CHANNEL_VIEW_URN))
-                    .map(e -> enrichLocation(jsonDeserializationContext, e))
+                    .map(e -> enrichLocation(jsonDeserializationContext, e, channelLocations))
                     .map(e -> createGiraOneChannel(jsonDeserializationContext, e)).forEach(channelCollection::add);
         }
         return channelCollection;
@@ -71,7 +77,14 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
         return jsonElements.stream().map(JsonElement::getAsJsonObject);
     }
 
-    private JsonObject enrichLocation(JsonDeserializationContext jsonDeserializationContext, JsonObject jsonObject) {
+    private JsonObject enrichLocation(JsonDeserializationContext jsonDeserializationContext, JsonObject jsonObject,
+            List<JsonObject> channelLocations) {
+        JsonElement viewId = jsonObject.get(PROPERTY_CHANNEL_VIEW_ID);
+        if (viewId != null) {
+            channelLocations.stream().filter(f -> f.has(PROPERTY_CHANNEL_VIEW_ID))
+                    .filter(f -> f.get(PROPERTY_CHANNEL_VIEW_ID).getAsString().equals(viewId.getAsString())).findFirst()
+                    .ifPresent(object -> jsonObject.add(PROPERTY_LOCATION, object.get(PROPERTY_LOCATION)));
+        }
         return jsonObject;
     }
 
@@ -80,33 +93,26 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
         return jsonDeserializationContext.deserialize(jsonElement, GiraOneChannel.class);
     }
 
-    private Stream<JsonElement> streamJsonObjectOfGiraOneComponents(JsonObject jsonObject) {
+    private Stream<JsonElement> streamChannelLocationInformation(JsonObject jsonObject) {
         Stream<JsonElement> jsonElements = Stream.empty();
         if (jsonObject.has(PROPERTY_CONTENT)) {
             jsonElements = Stream.concat(jsonElements,
-                    streamJsonArrayOfOfGiraOneComponents(jsonObject, jsonObject.getAsJsonArray(PROPERTY_CONTENT)));
+                    streamChannelLocationInformation(jsonObject, jsonObject.getAsJsonArray(PROPERTY_CONTENT)));
         }
         return jsonElements;
     }
 
-    private Stream<JsonElement> streamJsonArrayOfOfGiraOneComponents(JsonObject jsonParentObject, JsonArray jsonArray) {
+    private Stream<JsonElement> streamChannelLocationInformation(JsonObject jsonParentObject, JsonArray jsonArray) {
         Stream<JsonElement> jsonElements = Stream.empty();
         for (JsonElement e : jsonArray.asList()) {
             if (e.isJsonObject()) {
                 JsonObject jsonObject = e.getAsJsonObject();
-
                 if (jsonObject.has(PROPERTY_MAINTYPE)) {
-                    if (jsonObject.has(PROPERTY_NAME) && jsonParentObject.has(PROPERTY_NAME)) {
-                        String parentName = jsonParentObject.get(PROPERTY_NAME).getAsString();
-                        String name = jsonObject.get(PROPERTY_NAME).getAsString();
-                        jsonObject.addProperty(PROPERTY_NAME, parentName + " > " + name);
-                    }
-
-                    jsonElements = Stream.concat(jsonElements, streamJsonObjectOfGiraOneComponents(jsonObject));
+                    jsonElements = Stream.concat(jsonElements, streamChannelLocationInformation(jsonObject));
                 } else if (jsonObject.has(PROPERTY_CHANNEL_VIEW_ID)) {
                     if (jsonParentObject.has(PROPERTY_NAME)) {
                         String parentName = jsonParentObject.get(PROPERTY_NAME).getAsString();
-                        jsonObject.addProperty(PROPERTY_NAME, parentName);
+                        jsonObject.addProperty(PROPERTY_LOCATION, parentName);
                     }
                     jsonElements = Stream.concat(jsonElements, Stream.of(jsonObject));
                 }
