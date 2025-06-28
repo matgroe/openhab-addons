@@ -4,22 +4,17 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!--
-		All Non-Known Devices are getting mapped to the unkown thing
-		https://www.openhab.org/docs/developer/bindings/thing-xml.html#state-channel-types
-	-->
-	<thing-type id="heating-underfloor" listed="false">
+	<thing-type id="function-scene" listed="false">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 
-		<label>Heating/Cooling</label>
-		<description>Underfloor Heating or Cooling</description>
-		<channel-groups>
-			<channel-group id="heating" typeId="heating-underfloor"/>
-		</channel-groups>
+		<label>Gira One Function/Scene</label>
+		<description>Trigger a Gira Smart Home Scene.</description>
+		<channels>
+			<channel id="execute" typeId="scene-execute"/>
+		</channels>
 		<representation-property>channelUrn</representation-property>
 	</thing-type>
-
 
 </thing:thing-descriptions>

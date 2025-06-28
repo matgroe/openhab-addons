@@ -92,23 +92,21 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
             channelObject.addProperty(PROPERTY_NAME, channelName);
             channelObject.addProperty(PROPERTY_URN, channelUrn);
             channelObject.addProperty(PROPERTY_FUNCTION_TYPE, GiraOneFunctionType.Trigger.getName());
-            channelObject.addProperty(PROPERTY_CHANNEL_TYPE, deriveGiraOneChannelType(channelUrn).getName());
+            channelObject.addProperty(PROPERTY_CHANNEL_TYPE, GiraOneChannelType.Trigger.getName());
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE_ID, deriveGiraOneChannelTypeId(channelUrn).getName());
         }
     }
 
-    private GiraOneChannelType deriveGiraOneChannelType(String channelUrn) {
-        if (channelUrn.contains("Dimming") || channelUrn.contains("Switching")) {
-            return GiraOneChannelType.Switch;
-        } else if (channelUrn.contains("Curtain")) {
-            return GiraOneChannelType.Shutter;
-        } else if (channelUrn.contains("Scene")) {
-            return GiraOneChannelType.Function;
-        }
-        return GiraOneChannelType.Unknown;
-    }
-
     private GiraOneChannelTypeId deriveGiraOneChannelTypeId(String channelUrn) {
+        if (channelUrn.contains("Dimming")) {
+            return GiraOneChannelTypeId.Dimming;
+        } else if (channelUrn.contains("Switching")) {
+            return GiraOneChannelTypeId.Switch;
+        } else if (channelUrn.contains("Curtain")) {
+            return GiraOneChannelTypeId.Curtain;
+        } else if (channelUrn.contains("Scene")) {
+            return GiraOneChannelTypeId.Scene;
+        }
         return GiraOneChannelTypeId.Unknown;
     }
 

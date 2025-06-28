@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<channel-type id="trigger-up-down">
+		<item-type>Rollershutter</item-type>
+		<label>Move Up or Down</label>
+		<description>Move the Shutter Level Up or Down</description>
+		<category>Rollershutter</category>
+		<state>
+			<options>
+				<option value="0">Up</option>
+				<option value="1">Down</option>
+				<option value="100">Down</option>
+			</options>
+		</state>
+	</channel-type>
+
+	<channel-type id="trigger-scene">
+		<item-type>Number</item-type>
+		<label>Scene</label>
+		<description>Trigger Scene Execution</description>
+		<category>x</category>
+		<state/>
+	</channel-type>
+
+	<channel-type id="trigger-step-up-down">
+		<item-type>Number</item-type>
+		<label>Step Up or Down</label>
+		<description>Raise or Lower the Level Step by Step</description>
+		<category>Rollershutter</category>
+		<state/>
+	</channel-type>
+
+	<channel-type id="trigger-on-off">
+		<item-type>Number</item-type>
+		<label>Switch On/Off</label>
+		<description>Switch On/Off</description>
+		<category>Light</category>
+		<state/>
+	</channel-type>
+
+</thing:thing-descriptions>

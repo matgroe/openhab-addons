@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<channel-type id="scene-execute">
+		<item-type>Number</item-type>
+		<label>Execute</label>
+		<description>Triggers the Execution of a Pre-Configured Scene.</description>
+		<category>Switch</category>
+		<tags>
+			<tag>OpenState</tag>
+		</tags>
+		<state min="0" max="50"/>
+	</channel-type>
+
+
+</thing:thing-descriptions>

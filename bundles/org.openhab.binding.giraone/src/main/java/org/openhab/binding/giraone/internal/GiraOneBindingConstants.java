@@ -39,16 +39,21 @@ public class GiraOneBindingConstants {
     public static final String BINDING_ID = "giraone";
     public static final String BRIDGE_TYPE_ID = "server";
     public static final String GENERIC_TYPE_ID = "generic";
+
     public static final String DIMMER_TYPE_ID = "dimmer-light";
-    public static final String HEATING_COOLING_TYPE_ID = "heating-cooling-underfloor";
-    public static final String TEMPERATURE_TYPE_ID = "status-temperature";
-    public static final String HUMIDITY_TYPE_ID = "status-humidity";
     public static final String SCENE_TYPE_ID = "function-scene";
+    public static final String HEATING_COOLING_TYPE_ID = "heating-underfloor";
+    public static final String SHUTTER_AWNING_TYPE_ID = "shutter-awning";
+    public static final String SHUTTER_ROOF_WINDOW_TYPE_ID = "shutter-roof-window";
+    public static final String SHUTTER_VENETIAN_BLIND_TYPE_ID = "shutter-venetian-blind";
+    public static final String HUMIDITY_TYPE_ID = "status-humidity";
+    public static final String TEMPERATURE_TYPE_ID = "status-temperature";
     public static final String SWITCH_LAMP_TYPE_ID = "switch-lamp";
     public static final String SWITCH_POWER_OUTLET_TYPE_ID = "switch-power-outlet";
-    public static final String SHUTTER_VENETIAN_BLIND_TYPE_ID = "shutter-venetian-blind";
-    public static final String SHUTTER_ROOF_WINDOW_TYPE_ID = "shutter-roof-window";
-    public static final String SHUTTER_AWNING_TYPE_ID = "shutter-awning";
+    public static final String TRIGGER_CURTAIN_TYPE_ID = "trigger-curtain";
+    public static final String TRIGGER_DIMMIN_TYPE_ID = "trigger-dimming";
+    public static final String TRIGGER_SCENE_TYPE_ID = "trigger-scene";
+    public static final String TRIGGER_SWITCH_TYPE_ID = "trigger-switch";
 
     /**
      * The {@link ThingTypeUID} for the GiraOne Bridge
@@ -73,12 +78,17 @@ public class GiraOneBindingConstants {
     public static final Set<ThingTypeUID> SUPPORTED_FUNCTION_SCENE_TYPE_UID = Set
             .of(new ThingTypeUID(BINDING_ID, SCENE_TYPE_ID));
 
+    public static final Set<ThingTypeUID> SUPPORTED_TRIGGER_TYPE_UID = Set.of(
+            new ThingTypeUID(BINDING_ID, TRIGGER_CURTAIN_TYPE_ID), new ThingTypeUID(BINDING_ID, TRIGGER_DIMMIN_TYPE_ID),
+            new ThingTypeUID(BINDING_ID, TRIGGER_SCENE_TYPE_ID), new ThingTypeUID(BINDING_ID, TRIGGER_SWITCH_TYPE_ID));
+
     /**
      * List of all supported {@link ThingTypeUID} within this binding.
      */
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPE_UID = Stream
-            .concat(Stream.concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream()),
-                    SUPPORTED_FUNCTION_SCENE_TYPE_UID.stream())
+            .concat(Stream.concat(
+                    Stream.concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream()),
+                    SUPPORTED_FUNCTION_SCENE_TYPE_UID.stream()), SUPPORTED_TRIGGER_TYPE_UID.stream())
             .collect(Collectors.toUnmodifiableSet());
 
     // List of all Channel ids

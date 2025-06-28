@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="giraone"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<channel-group-type id="trigger-curtain">
+		<label>Trigger Curtain / Shutter / Blinds</label>
+		<description>Trigger Trigger Curtain / Shutter / Blinds</description>
+		<category>Rollershutter</category>
+		<channels>
+			<channel id="up-down" typeId="trigger-up-down"/>
+			<channel id="step-up-down" typeId="trigger-step-up-down"/>
+		</channels>
+	</channel-group-type>
+
+	<channel-group-type id="trigger-scene">
+		<label>Dimmable Light</label>
+		<description>Channel Group for Dimmable Lights</description>
+		<category>Light</category>
+		<channels>
+			<channel id="scene" typeId="trigger-scene"/>
+		</channels>
+	</channel-group-type>
+
+	<channel-group-type id="trigger-dimming">
+		<label>Dimmable Light</label>
+		<description>Channel Group for Dimmable Lights</description>
+		<category>Light</category>
+		<channels>
+			<channel id="on-off" typeId="system.power"/>
+		</channels>
+	</channel-group-type>
+
+	<channel-group-type id="trigger-switch">
+		<label>Trigger Light</label>
+		<description>Trigger Light to Switch On/Off</description>
+		<category>Switch</category>
+		<channels>
+			<channel id="on-off" typeId="system.power"/>
+		</channels>
+	</channel-group-type>
+
+</thing:thing-descriptions>
