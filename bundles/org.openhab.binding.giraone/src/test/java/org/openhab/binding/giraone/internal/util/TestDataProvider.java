@@ -40,11 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class TestDataProvider {
 
-    private static GiraOneDataPoint dataPointBuilder(final String name, final int id, final String urn) {
-        return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setId, id)
-                .with(GiraOneDataPoint::setName, name).with(GiraOneDataPoint::setUrn, urn).build();
-    }
-
     public static GiraOneProject createGiraOneProject() {
         Gson gson = GsonMapperFactory.createGson();
 
@@ -86,6 +81,11 @@ public class TestDataProvider {
     public static GiraOneDataPoint dataPointPosition() {
         return dataPointBuilder("Position", 215879,
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Position");
+    }
+
+    public static GiraOneDataPoint dataPointBuilder(final String name, final int id, final String urn) {
+        return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setId, id)
+                .with(GiraOneDataPoint::setName, name).with(GiraOneDataPoint::setUrn, urn).build();
     }
 
     public static GiraOneChannel createGiraOneChannel(final String urn) {

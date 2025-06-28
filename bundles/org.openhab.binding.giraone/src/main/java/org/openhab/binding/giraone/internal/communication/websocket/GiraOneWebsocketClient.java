@@ -12,18 +12,13 @@
  */
 package org.openhab.binding.giraone.internal.communication.websocket;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
+import com.google.gson.Gson;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.client.HttpClient;
@@ -46,6 +41,7 @@ import org.openhab.binding.giraone.internal.communication.commands.GetValue;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.communication.commands.SetValue;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
@@ -55,14 +51,17 @@ import org.openhab.core.id.InstanceUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.ReplaySubject;
-import io.reactivex.rxjava3.subjects.Subject;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The class acts as client for the Gira One Server and handles the
@@ -266,22 +265,28 @@ public class GiraOneWebsocketClient implements WebSocketListener {
                 GiraOneConnectionState.Connected.toString(), connectionState.getValue().toString());
     }
 
-    public void lookupGiraOneValue(final int datapointId) {
+    /**
+     * Emits as {@link GetValue} server command to lookup the current value for a datapoint.
+     *
+     * @param dataPoint The {@link GiraOneDataPoint} to lookup.
+     */
+    public void lookupGiraOneDataPointValue(final GiraOneDataPoint dataPoint) {
         if (connectionState.getValue() == GiraOneConnectionState.Connected) {
-            if (datapointId > 0) {
-                send(GetValue.builder().with(GetValue::setId, datapointId).build());
-            } else {
-                logger.debug("lookupGiraOneValue :: ignoring request for datapointId=0");
-            }
+            send(GetValue.builder().with(GetValue::setUrn, dataPoint.getUrn()).build());
         } else {
             emitConnectionStateException(GiraOneConnectionState.Connected);
         }
     }
 
-    public void setGiraOneValue(final GiraOneValue value) {
+    /**
+     * Emits as {@link SetValue} server command to change the value for a datapoint.
+     *
+     * @param dataPoint The {@link GiraOneDataPoint} to lookup.
+     * @param value The new value to be set.
+     */
+    public void changeGiraOneDataPointValue(final GiraOneDataPoint dataPoint, Object value) {
         if (connectionState.getValue() == GiraOneConnectionState.Connected) {
-            send(SetValue.builder().with(SetValue::setId, value.getId()).with(SetValue::setValue, value.getValue())
-                    .build());
+            send(SetValue.builder().with(SetValue::setUrn, dataPoint.getUrn()).with(SetValue::setValue, value).build());
         } else {
             emitConnectionStateException(GiraOneConnectionState.Connected);
         }

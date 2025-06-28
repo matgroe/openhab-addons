@@ -105,7 +105,7 @@ public class GiraOneClient {
     /**
      * Initiates a connection to Gira One Server. The current connection state is reported
      * through the {@link GiraOneConnectionState} observer. Register on
-     * {{@link GiraOneClient#observeGiraOneConnectionState(Consumer)}
+     * {@link GiraOneClient#observeGiraOneConnectionState(Consumer)
      * to get informed about connection state changes.
      *
      */
@@ -155,12 +155,12 @@ public class GiraOneClient {
 
     /**
      * Initiates the value lookup for the given {@link GiraOneDataPoint}. The determined value
-     * will be available on consuming the
+     * will be available through a registered consumer on {@link GiraOneClient#observeGiraOneValues(Consumer)}
      *
-     * @param dataPoint
+     * @param dataPoint The Datapoint to lookup it's value.
      */
     public void lookupGiraOneDatapointValue(GiraOneDataPoint dataPoint) {
-        this.websocketClient.lookupGiraOneValue(dataPoint.getId());
+        this.websocketClient.lookupGiraOneDataPointValue(dataPoint);
     }
 
     /**
@@ -170,7 +170,7 @@ public class GiraOneClient {
      * @param newValue The new value.
      */
     public void changeGiraOneDataPointValue(GiraOneDataPoint dataPoint, String newValue) {
-        this.websocketClient.setGiraOneValue(new GiraOneValue(dataPoint.getId(), newValue));
+        this.websocketClient.changeGiraOneDataPointValue(dataPoint, newValue);
     }
 
     /**
