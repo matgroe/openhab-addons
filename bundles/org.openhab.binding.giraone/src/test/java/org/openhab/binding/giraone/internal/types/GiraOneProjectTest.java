@@ -57,10 +57,10 @@ class GiraOneProjectTest {
 
     @Test
     void testLookupGiraOneChannelDataPoints() {
+        String urn = "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Set-Point";
         GiraOneProject project = TestDataProvider.createGiraOneProject();
-        GiraOneDataPoint dp = project.lookupGiraOneDataPoint(215656).orElse(null);
+        GiraOneDataPoint dp = project.lookupGiraOneDataPoint(urn).orElse(null);
         assertNotNull(dp);
-        assertEquals(215656, dp.getId());
         assertEquals("urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Set-Point",
                 dp.getUrn());
         assertEquals("Set-Point", dp.getName());

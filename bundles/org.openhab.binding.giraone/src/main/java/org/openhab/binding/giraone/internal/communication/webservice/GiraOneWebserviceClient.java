@@ -12,17 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
-import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Objects;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jetty.http.HttpStatus;
@@ -39,10 +32,16 @@ import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Objects;
 
 /**
  * This class gives access the the Gira One Server as offered by the http interface.
@@ -78,7 +77,7 @@ public class GiraOneWebserviceClient {
         try {
             this.webserviceUri = new URI(String.format(TEMPLATE_WEBSERVICE_URL, this.clientConfiguration.hostname));
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new GiraOneClientException("Cannot format webservice URI", e);
         }
     }
 
@@ -144,7 +143,6 @@ public class GiraOneWebserviceClient {
      * @param password - the user's password
      */
     private void authenticateUser(final String username, final String password) throws GiraOneCommunicationException {
-
         GiraOneCommandResponse saltAsJson = this
                 .execute(GetPasswordSalt.builder().with(GetPasswordSalt::setUsername, username).build());
 

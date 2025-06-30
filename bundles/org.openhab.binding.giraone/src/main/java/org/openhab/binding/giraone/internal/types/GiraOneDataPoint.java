@@ -28,7 +28,6 @@ import java.util.Objects;
 public class GiraOneDataPoint {
 
     private String name;
-    private int id;
     private String urn;
 
     public String getName() {
@@ -37,14 +36,6 @@ public class GiraOneDataPoint {
 
     public void setName(String dataPointName) {
         this.name = dataPointName;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUrn() {
@@ -57,10 +48,12 @@ public class GiraOneDataPoint {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         GiraOneDataPoint dataPoint = (GiraOneDataPoint) o;
         return Objects.equals(urn, dataPoint.urn);
     }
@@ -72,6 +65,6 @@ public class GiraOneDataPoint {
 
     @Override
     public String toString() {
-        return String.format("{id=%d, dataPoint=%s, urn=%s}", id, name, urn);
+        return String.format("{dataPoint=%s, urn=%s}", name, urn);
     }
 }

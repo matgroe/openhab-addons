@@ -64,28 +64,28 @@ public class TestDataProvider {
     }
 
     public static GiraOneDataPoint createDataPointStepUpDown() {
-        return dataPointBuilder("Step-Up-Down", 215876,
+        return dataPointBuilder("Step-Up-Down",
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down");
     }
 
     public static GiraOneDataPoint dataPointUpDown() {
-        return dataPointBuilder("Up-Down", 215877,
+        return dataPointBuilder("Up-Down",
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Step-Up-Down");
     }
 
     public static GiraOneDataPoint dataPointMovement() {
-        return dataPointBuilder("Movement", 215878,
+        return dataPointBuilder("Movement",
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Movement");
     }
 
     public static GiraOneDataPoint dataPointPosition() {
-        return dataPointBuilder("Position", 215879,
+        return dataPointBuilder("Position",
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Position");
     }
 
-    public static GiraOneDataPoint dataPointBuilder(final String name, final int id, final String urn) {
-        return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setId, id)
-                .with(GiraOneDataPoint::setName, name).with(GiraOneDataPoint::setUrn, urn).build();
+    public static GiraOneDataPoint dataPointBuilder(final String name, final String urn) {
+        return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setName, name)
+                .with(GiraOneDataPoint::setUrn, urn).build();
     }
 
     public static GiraOneChannel createGiraOneChannel(final String urn) {

@@ -29,8 +29,8 @@ public class GiraOneValueChange extends GiraOneValue {
      */
     private final String previousValue;
 
-    public GiraOneValueChange(int id, String value, String previous) {
-        super(id, value);
+    public GiraOneValueChange(String urn, String value, String previous) {
+        super(urn, value);
         this.previousValue = previous;
     }
 
@@ -43,6 +43,6 @@ public class GiraOneValueChange extends GiraOneValue {
 
     @Override
     public String toString() {
-        return String.format("{id=%d, oldValue=%s, newValue=%s}", getId(), previousValue, getValue());
+        return String.format("{urn=%s, oldValue=%s, newValue=%s}", getUrn(), previousValue, getValue());
     }
 }

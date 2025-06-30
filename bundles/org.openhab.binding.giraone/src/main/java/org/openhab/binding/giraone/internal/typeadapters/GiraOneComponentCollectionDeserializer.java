@@ -19,7 +19,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
@@ -58,17 +57,15 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
     @Nullable
     public GiraOneComponentCollection deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
         GiraOneComponentCollection diagDevices = new GiraOneComponentCollection();
         if (jsonDeserializationContext != null && jsonElement != null && jsonElement.isJsonObject()) {
             streamJsonObjectOfGiraOneComponents(jsonElement.getAsJsonObject()).map(JsonElement::getAsJsonObject)
                     .map(e -> this.createGiraOneComponent(jsonDeserializationContext, e)).forEach(diagDevices::add);
         }
-
         return diagDevices;
     }
 
-    private GiraOneComponent createGiraOneComponent(@NonNull JsonDeserializationContext jsonDeserializationContext,
+    private GiraOneComponent createGiraOneComponent(JsonDeserializationContext jsonDeserializationContext,
             JsonObject jsonObject) {
         GiraOneComponentType cmpType = jsonDeserializationContext.deserialize(jsonObject.get(PROPERTY_URN),
                 GiraOneComponentType.class);

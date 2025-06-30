@@ -87,12 +87,8 @@ public class GiraOneChannel {
         return channelTypeId;
     }
 
-    public boolean containsGiraOneDataPoint(String datapointName) {
-        return this.dataPoints.stream().anyMatch(f -> datapointName.equals(f.getName()));
-    }
-
-    public boolean containsGiraOneDataPoint(int datapointId) {
-        return this.dataPoints.stream().anyMatch(f -> f.getId() == datapointId);
+    public boolean containsGiraOneDataPoint(String datapointUrn) {
+        return this.dataPoints.stream().anyMatch(f -> datapointUrn.equals(f.getUrn()));
     }
 
     public Collection<GiraOneDataPoint> getDataPoints() {
@@ -105,10 +101,12 @@ public class GiraOneChannel {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof GiraOneChannel that))
+        }
+        if (!(o instanceof GiraOneChannel that)) {
             return false;
+        }
         return Objects.equals(urn, that.urn);
     }
 

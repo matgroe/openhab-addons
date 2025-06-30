@@ -36,7 +36,6 @@ public class GiraOneWebserviceCommandRequestSerializer implements JsonSerializer
     @Override
     public JsonElement serialize(@Nullable GiraOneWebserviceRequest serverCommand, @Nullable Type type,
             @Nullable JsonSerializationContext jsonSerializationContext) {
-
         JsonObject json = new JsonObject();
         assert serverCommand != null;
 

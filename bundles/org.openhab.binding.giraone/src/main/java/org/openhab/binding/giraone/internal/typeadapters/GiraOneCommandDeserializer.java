@@ -17,8 +17,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
@@ -34,11 +32,11 @@ import java.util.Set;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
+@NonNullByDefault({})
 public class GiraOneCommandDeserializer implements JsonDeserializer<GiraOneCommand> {
     private final Set<Class<?>> giraOneCommandClasses;
 
-    public GiraOneCommandDeserializer(@NonNull Set<Class<?>> commandClasses) {
+    public GiraOneCommandDeserializer(Set<Class<?>> commandClasses) {
         this.giraOneCommandClasses = commandClasses;
     }
 

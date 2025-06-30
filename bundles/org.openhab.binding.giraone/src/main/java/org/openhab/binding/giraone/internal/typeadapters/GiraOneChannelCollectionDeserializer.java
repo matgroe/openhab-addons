@@ -50,13 +50,11 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
     @Nullable
     public GiraOneChannelCollection deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
         assert jsonElement != null;
         assert jsonDeserializationContext != null;
 
         GiraOneChannelCollection channelCollection = new GiraOneChannelCollection();
         if (jsonElement.isJsonArray()) {
-
             // extract the channel -> location mapping from json
             List<JsonObject> channelLocations = jsonElement.getAsJsonArray().asList().stream()
                     .filter(JsonElement::isJsonObject).map(JsonElement::getAsJsonObject)
@@ -111,8 +109,7 @@ public class GiraOneChannelCollectionDeserializer implements JsonDeserializer<Gi
                     jsonElements = Stream.concat(jsonElements, streamChannelLocationInformation(jsonObject));
                 } else if (jsonObject.has(PROPERTY_CHANNEL_VIEW_ID)) {
                     if (jsonParentObject.has(PROPERTY_NAME)) {
-                        String parentName = jsonParentObject.get(PROPERTY_NAME).getAsString();
-                        jsonObject.addProperty(PROPERTY_LOCATION, parentName);
+                        jsonObject.addProperty(PROPERTY_LOCATION, jsonParentObject.get(PROPERTY_NAME).getAsString());
                     }
                     jsonElements = Stream.concat(jsonElements, Stream.of(jsonObject));
                 }

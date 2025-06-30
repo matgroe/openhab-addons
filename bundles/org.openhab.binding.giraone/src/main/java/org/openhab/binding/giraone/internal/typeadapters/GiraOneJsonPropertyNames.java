@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Constants to name properties within JsonObjects.
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault()
 abstract class GiraOneJsonPropertyNames {
 
     private GiraOneJsonPropertyNames() {

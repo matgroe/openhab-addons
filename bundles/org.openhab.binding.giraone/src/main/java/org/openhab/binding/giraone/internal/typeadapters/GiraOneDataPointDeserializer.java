@@ -46,9 +46,6 @@ public class GiraOneDataPointDeserializer extends GiraOneMessageJsonTypeAdapter
                     case "name":
                         dataPoint.setName(entry.getValue().getAsString());
                         break;
-                    case "id":
-                        dataPoint.setId(entry.getValue().getAsInt());
-                        break;
                     case "urn":
                         dataPoint.setUrn(entry.getValue().getAsString());
                         break;

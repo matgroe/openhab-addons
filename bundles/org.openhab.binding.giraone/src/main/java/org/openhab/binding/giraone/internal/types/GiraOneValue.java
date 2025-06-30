@@ -13,6 +13,9 @@
 package org.openhab.binding.giraone.internal.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
+import java.util.Objects;
 
 /**
  * The {@link GiraOneValue} represents a value for a single source of data
@@ -25,23 +28,22 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public class GiraOneValue {
 
     /**
-     * The numeric id to reference the data point this value
-     * belongs to.
-     */
-    private final int id;
-
-    /**
      * The value as received from Gira One Server.
      */
     private final String value;
 
-    public GiraOneValue(int id, String value) {
-        this.id = id;
+    /**
+     * The datapoint urn this value belongs to.
+     */
+    private final String urn;
+
+    public GiraOneValue(String urn, String value) {
+        this.urn = urn;
         this.value = value;
     }
 
-    public int getId() {
-        return id;
+    public String getUrn() {
+        return urn;
     }
 
     public String getValue() {
@@ -49,7 +51,24 @@ public class GiraOneValue {
     }
 
     @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GiraOneValue that = (GiraOneValue) o;
+        return Objects.equals(value, that.value) && Objects.equals(urn, that.urn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, urn);
+    }
+
+    @Override
     public String toString() {
-        return String.format("{id=%d, value=%s}", id, value);
+        return String.format("{urn=%s, value=%s}", urn, value);
     }
 }

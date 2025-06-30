@@ -17,6 +17,8 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceClient;
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketClient;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneClient {
     private final Logger logger = LoggerFactory.getLogger(GiraOneClient.class);
 

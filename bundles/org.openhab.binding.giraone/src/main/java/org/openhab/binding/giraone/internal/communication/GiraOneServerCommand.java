@@ -17,8 +17,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 /**
  * Annotation for {@link GiraOneCommand}
  *
@@ -26,7 +24,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@NonNullByDefault({})
 public @interface GiraOneServerCommand {
     enum Context {
         Websocket,

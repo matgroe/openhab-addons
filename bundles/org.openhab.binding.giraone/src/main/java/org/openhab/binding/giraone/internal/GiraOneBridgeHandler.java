@@ -198,7 +198,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     void onGiraOneValue(GiraOneValue giraOneValue) {
-        lookupGiraOneProject().lookupGiraOneDataPoint(giraOneValue.getId())
+        lookupGiraOneProject().lookupGiraOneDataPoint(giraOneValue.getUrn())
                 .ifPresent(giraOneDataPoint -> lookupGiraOneProject().lookupGiraOneChannels(giraOneDataPoint).stream()
                         .map(channel -> createGiraOneChannelValue(channel, giraOneDataPoint))
                         .peek(c -> c.setGiraOneValue(giraOneValue)).peek(this::write2Log)

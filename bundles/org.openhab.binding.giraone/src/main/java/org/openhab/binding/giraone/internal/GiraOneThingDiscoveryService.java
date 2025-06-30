@@ -56,6 +56,7 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPO
 @Component(scope = ServiceScope.PROTOTYPE, service = GiraOneThingDiscoveryService.class)
 @NonNullByDefault
 public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryService<GiraOneBridgeHandler> {
+    public static final String MD_5 = "MD5";
     private static final int TIMEOUT = 60;
     private static final int BACKGROUND_DISCOVERY_DELAY = 10;
     private static final int BACKGROUND_DISCOVERY_PERIOD = 1800;
@@ -65,7 +66,6 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     private ThingUID bridgeUID = new ThingUID(GiraOneBindingConstants.BRIDGE_TYPE_UID, "unknown");
     private @Nullable ScheduledFuture<?> backgroundDiscoveryJob = null;
-    private @Nullable GiraOneBridge giraOneBridge;
 
     private Disposable disposableOnConnectionState = Disposable.empty();
     private boolean discoveryEnabled = false;
@@ -76,14 +76,10 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     @Override
     public void initialize() {
-        if (getThingHandler() != null) {
-            discoveryEnabled = getThingHandler().getThing().getConfiguration()
-                    .as(GiraOneClientConfiguration.class).discoverDevices;
-            bridgeUID = Objects.requireNonNull(getThingHandler()).getThing().getUID();
-            giraOneBridge = ((GiraOneBridgeHandler) getThingHandler());
-            disposableOnConnectionState = Objects.requireNonNull(giraOneBridge)
-                    .subscribeOnConnectionState(this::onConnectionStateChanged);
-        }
+        discoveryEnabled = this.thingHandler.getThing().getConfiguration()
+                .as(GiraOneClientConfiguration.class).discoverDevices;
+        bridgeUID = this.thingHandler.getThing().getUID();
+        disposableOnConnectionState = this.thingHandler.subscribeOnConnectionState(this::onConnectionStateChanged);
         super.initialize();
     }
 
@@ -102,7 +98,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
     private void discoverDevices() {
         if (discoveryEnabled) {
             try {
-                GiraOneProject project = Objects.requireNonNull(giraOneBridge).lookupGiraOneProject();
+                GiraOneProject project = this.thingHandler.lookupGiraOneProject();
                 project.lookupChannels().stream().map(this::createDiscoverResultFromChannel)
                         .forEach(this::thingDiscovered);
             } catch (IllegalStateException exp) {
@@ -118,8 +114,8 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     ThingTypeUID detectThingTypeUID(GiraOneChannel channel) {
         String thingTypeId = formatThingTypeId(channel);
+        logger.debug("detectThingTypeUID :: {} maps to {}", channel, thingTypeId);
 
-        logger.debug("detectThingTypeUID :: {} maps to {}", channel.toString(), thingTypeId);
         Optional<ThingTypeUID> opt = GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID.stream()
                 .filter(t -> t.getId().equals(thingTypeId)).findFirst();
 
@@ -128,7 +124,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
 
     private String generateIdentifier(GiraOneChannel channel) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            MessageDigest md5 = MessageDigest.getInstance(MD_5);
             md5.update(channel.getUrn().getBytes());
 
             byte[] digest = md5.digest();
@@ -165,7 +161,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         // just for getting sure
         stopBackgroundScanning();
         if (discoveryEnabled) {
-            backgroundDiscoveryJob = this.scheduler.scheduleAtFixedRate(this::discoverDevices,
+            backgroundDiscoveryJob = this.scheduler.scheduleWithFixedDelay(this::discoverDevices,
                     BACKGROUND_DISCOVERY_DELAY, BACKGROUND_DISCOVERY_PERIOD, TimeUnit.SECONDS);
         } else {
             logger.info("Service Discovery is Disabled by Configuration");

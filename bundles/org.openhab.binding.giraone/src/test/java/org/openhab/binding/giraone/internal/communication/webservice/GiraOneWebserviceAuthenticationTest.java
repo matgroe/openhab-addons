@@ -12,19 +12,21 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.security.NoSuchAlgorithmException;
-
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.security.NoSuchAlgorithmException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit Tests for {@link GiraOneWebserviceAuthentication}.
  *
  * @author Matthias Gröger - Initial contribution
  */
+@NonNullByDefault({})
 public class GiraOneWebserviceAuthenticationTest {
     GiraOneWebserviceAuthentication auth;
 

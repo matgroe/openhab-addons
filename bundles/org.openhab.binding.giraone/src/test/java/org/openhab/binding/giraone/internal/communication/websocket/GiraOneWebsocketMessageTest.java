@@ -12,25 +12,23 @@
  */
 package org.openhab.binding.giraone.internal.communication.websocket;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import com.google.gson.Gson;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openhab.binding.giraone.internal.GiraOneThingDiscoveryService;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
-import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
 import org.openhab.binding.giraone.internal.communication.commands.RegisterApplication;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
-import com.google.gson.Gson;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Test class for {@link GiraOneThingDiscoveryService}.
@@ -44,16 +42,6 @@ class GiraOneWebsocketMessageTest {
     @BeforeEach
     void setUp() {
         gson = GsonMapperFactory.createGson();
-    }
-
-    @DisplayName("Should deserialize websocket response for GetUIConfiguration")
-    @Test
-    void shouldDoSomeMagic() {
-        GiraOneCommand cmd = GetUIConfiguration.builder().with(GetUIConfiguration::setGuid, "guid")
-                .with(GetUIConfiguration::setInstanceId, "instanceId").build();
-
-        GetUIConfiguration.class.getAnnotation(GiraOneServerCommand.class);
-        String name = cmd.getCommand();
     }
 
     @DisplayName("Should deserialize websocket response for GetUIConfiguration")

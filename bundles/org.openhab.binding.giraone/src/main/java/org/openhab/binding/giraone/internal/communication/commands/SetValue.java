@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.giraone.internal.communication.commands;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
@@ -23,33 +22,24 @@ import org.openhab.binding.giraone.internal.util.GenericBuilder;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({})
 @GiraOneServerCommand(name = "SetValue")
+@NonNullByDefault({})
 public class SetValue extends GiraOneCommand {
     public static GenericBuilder<SetValue> builder() {
         return GenericBuilder.of(SetValue::new);
     }
 
-    private Integer id;
     private String urn;
     private Object value;
 
     protected SetValue() {
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Object getValue() {
         return value;
     }
 
-    public void setValue(@NonNull Object value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 

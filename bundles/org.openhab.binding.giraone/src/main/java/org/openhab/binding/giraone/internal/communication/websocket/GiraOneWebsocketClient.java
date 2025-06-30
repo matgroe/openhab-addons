@@ -19,6 +19,7 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.client.HttpClient;
@@ -69,7 +70,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault
+@NonNullByDefault({ DefaultLocation.RETURN_TYPE })
 public class GiraOneWebsocketClient implements WebSocketListener {
 
     private static final String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
@@ -241,7 +242,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
     }
 
     private GiraOneValue createGiraOneValue(GiraOneEvent event) {
-        return new GiraOneValueChange(event.getId(), event.getNewValue(), event.getOldValue());
+        return new GiraOneValueChange(event.getUrn(), event.getNewValue(), event.getOldValue());
     }
 
     private void emitConnectionStateException(GiraOneConnectionState expected) {
@@ -272,7 +273,9 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      */
     public void lookupGiraOneDataPointValue(final GiraOneDataPoint dataPoint) {
         if (connectionState.getValue() == GiraOneConnectionState.Connected) {
-            send(GetValue.builder().with(GetValue::setUrn, dataPoint.getUrn()).build());
+            if (dataPoint.getUrn() != null) {
+                send(GetValue.builder().with(GetValue::setUrn, dataPoint.getUrn()).build());
+            }
         } else {
             emitConnectionStateException(GiraOneConnectionState.Connected);
         }

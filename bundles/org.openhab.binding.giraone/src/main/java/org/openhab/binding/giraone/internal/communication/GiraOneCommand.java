@@ -42,9 +42,9 @@ public class GiraOneCommand {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (!(o instanceof GiraOneCommand)) {
-            return false;
+        if (o instanceof GiraOneCommand) {
+            return getCommand().equals(((GiraOneCommand) o).getCommand());
         }
-        return getCommand().equals(((GiraOneCommand) o).getCommand());
+        return false;
     }
 }

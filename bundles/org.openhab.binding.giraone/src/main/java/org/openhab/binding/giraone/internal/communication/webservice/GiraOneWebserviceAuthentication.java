@@ -12,14 +12,15 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class offers functionality for handling the authentication for using the
@@ -29,14 +30,16 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 class GiraOneWebserviceAuthentication {
-    private static final Logger logger = LoggerFactory.getLogger(GiraOneWebserviceAuthentication.class);
+    public static final String SHA_256 = "SHA-256";
+
+    private final Logger logger = LoggerFactory.getLogger(GiraOneWebserviceAuthentication.class);
     private final MessageDigest digest;
 
     GiraOneWebserviceAuthentication() {
         try {
-            this.digest = MessageDigest.getInstance("SHA-256");
+            this.digest = MessageDigest.getInstance(SHA_256);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new GiraOneClientException("Cannot create instance of MessageDigest.", e);
         }
     }
 
@@ -73,8 +76,9 @@ class GiraOneWebserviceAuthentication {
 
     private String bytesToHex(byte[] bytes) {
         StringBuilder result = new StringBuilder();
-        for (byte b : bytes)
+        for (byte b : bytes) {
             result.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        }
         return result.toString();
     }
 

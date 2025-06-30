@@ -12,9 +12,6 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -25,6 +22,9 @@ import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The {@link GiraOneShutterThingHandler} is responsible for handling commands, which are
@@ -91,7 +91,7 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
 
     @Override
     protected void handleStopMoveTypeCommand(GiraOneDataPoint datapoint, StopMoveType command) {
-        logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint.getId(), command.name());
+        logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint, command.name());
         Optional<GiraOneDataPoint> stepUpDown = super.findGiraOneDataPointWithinChannelView(
                 GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN);
         if (stepUpDown.isPresent() && this.motionState != MotionState.HALTED) {

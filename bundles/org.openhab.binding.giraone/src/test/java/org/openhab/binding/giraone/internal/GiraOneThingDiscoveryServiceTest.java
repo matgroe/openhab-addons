@@ -16,7 +16,6 @@ import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -84,20 +83,8 @@ class GiraOneThingDiscoveryServiceTest {
         when(thingHandler.getThing()).thenReturn((Bridge) thing);
 
         discoveryService = spy(GiraOneThingDiscoveryService.class);
-        when(discoveryService.getThingHandler()).thenReturn(thingHandler);
+        discoveryService.setThingHandler(thingHandler);
         discoveryService.initialize();
-    }
-
-    @Test
-    void getSupportedThingTypeUIDs() {
-    }
-
-    @Test
-    void createResult() {
-    }
-
-    @Test
-    void getThingUID() {
     }
 
     private static Stream<Arguments> provideForTestDetectThingTypeUid() {
@@ -155,20 +142,17 @@ class GiraOneThingDiscoveryServiceTest {
         return files;
     }
 
-    private boolean checkThingTypeIdDefinitionExists(String expectedThingTypeId) throws IOException {
+    private boolean checkThingTypeIdDefinitionExists(String expectedThingTypeId) throws Exception {
         boolean thingTypeIdExists = false;
         for (File file : provideThingDescriptionFiles()) {
-            try {
-                DocumentBuilderFactory builderFactory = new DocumentBuilderFactoryImpl();
-                DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                Document xmlDocument = builder.parse(file);
-                XPath xPath = XPathFactory.newInstance().newXPath();
-                String expression = String.format(".//thing-type[@id=\"%s\"]", expectedThingTypeId);
-                NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
-                thingTypeIdExists = thingTypeIdExists || (nodeList.getLength() > 0);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            DocumentBuilderFactory builderFactory = new DocumentBuilderFactoryImpl();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document xmlDocument = builder.parse(file);
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            String expression = String.format(".//thing-type[@id=\"%s\"]", expectedThingTypeId);
+            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+            thingTypeIdExists = thingTypeIdExists || (nodeList.getLength() > 0);
+
         }
         return thingTypeIdExists;
     }
@@ -177,8 +161,7 @@ class GiraOneThingDiscoveryServiceTest {
     @ParameterizedTest
     @MethodSource("provideForTestDetectThingTypeUid")
     void testForExistingThingTypeDefinition(GiraOneFunctionType functionType, GiraOneChannelType channelType,
-            GiraOneChannelTypeId channelTypeId, String expected) throws IOException {
-
+            GiraOneChannelTypeId channelTypeId, String expected) throws Exception {
         GiraOneChannel channel = mock(GiraOneChannel.class);
         when(channel.getChannelType()).thenReturn(channelType);
         when(channel.getChannelTypeId()).thenReturn(channelTypeId);
@@ -188,20 +171,5 @@ class GiraOneThingDiscoveryServiceTest {
 
         assertTrue(this.checkThingTypeIdDefinitionExists(expected),
                 "There must be thing-type definition for " + thingTypeUID.getId());
-    }
-
-    @DisplayName("There must be a thing-type definition for each determined thingTypeId")
-    @Test
-    void testForExistingThingTypeDefinition() throws IOException {
-        GiraOneProject project = TestDataProvider.createGiraOneProject();
-
-        project.lookupChannels().stream().map(discoveryService::formatThingTypeId)
-                // .map(ThingTypeUID::getAsString)
-                .distinct().sorted().toList().forEach(System.out::println);
-
-        // ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
-
-        // assertTrue(this.checkThingTypeIdDefinitionExists(thingTypeUID.getId()),
-        // "There must be thing-type definition for " + thingTypeUID.getId());
     }
 }
