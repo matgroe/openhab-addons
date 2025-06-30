@@ -96,7 +96,7 @@ public class GiraOneProject {
      */
     public Optional<GiraOneDataPoint> lookupGiraOneDataPoint(final String dataPointUrn) {
         return this.channels.stream().filter(ch -> ch.containsGiraOneDataPoint(dataPointUrn))
-                .map(GiraOneChannel::getDataPoints).flatMap(Collection::stream)
+                .map(GiraOneChannel::getDataPoints).flatMap(Collection::stream).filter(x -> x.getUrn() != null)
                 .filter(x -> x.getUrn().equals(dataPointUrn)).findFirst();
     }
 }

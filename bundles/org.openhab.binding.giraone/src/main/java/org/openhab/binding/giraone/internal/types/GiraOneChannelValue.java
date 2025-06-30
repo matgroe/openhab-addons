@@ -23,10 +23,10 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneChannelValue {
-
     private String channelViewUrn;
 
     private GiraOneDataPoint giraOneDataPoint = new GiraOneDataPoint();
+
     private GiraOneValue giraOneValue;
 
     public GiraOneDataPoint getGiraOneDataPoint() {

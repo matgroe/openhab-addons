@@ -19,12 +19,12 @@
 				<description>Change this value to the desired temperature.</description>
 			</channel>
 
-			<channel id="profile" typeId="heating-profile">
+			<channel id="mode" typeId="heating-mode">
 				<label>Heating Profile</label>
 				<description>Heater Working Profile</description>
 			</channel>
 
-			<channel id="status" typeId="heating-heater-is-warming">
+			<channel id="heating" typeId="heating-heater-is-warming">
 				<label>Heater Status</label>
 				<description>Shows up, if the heater is warming</description>
 			</channel>

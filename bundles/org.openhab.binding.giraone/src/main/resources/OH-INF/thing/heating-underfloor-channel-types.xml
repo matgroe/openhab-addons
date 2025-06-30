@@ -46,20 +46,16 @@
 		</state>
 	</channel-type>
 
-	<channel-type id="heating-profile">
-		<item-type>Number</item-type>
+	<channel-type id="heating-mode">
+		<item-type>String</item-type>
 		<label>Heating Profile</label>
 		<description>Heater Working Profile</description>
-		<category>Heating</category>
-		<tags>
-			<tag>Heating</tag>
-		</tags>
 		<state>
 			<options>
 				<option value="1">Comfort</option>
 				<option value="2">Standby</option>
 				<option value="3">Night</option>
-				<option value="4">Freeze Protection</option>
+				<option value="4">Frost Protection</option>
 			</options>
 		</state>
 	</channel-type>

@@ -51,6 +51,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_DATAPOINTS;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
@@ -110,8 +111,13 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
     @Override
     protected void updateState(String channelID, State state) {
-        logger.debug("updateState ::  channelId='{}', state='{}'", channelID, state.toString());
-        super.updateState(channelID, state);
+        logger.debug("updateState ::  '{}' :: '{}={}'", this.thing, channelID, state.toString());
+        Optional<Channel> channel = thing.getChannels().stream()
+                .filter(f -> channelID.equals(normalizeOpenhabChannelName(f.getUID().getId()))).findFirst();
+        if (channel.isPresent()) {
+            logger.debug("updateState ::  '{}' :: '{}'", channel.get(), state.toString());
+            super.updateState(channel.get().getUID().getId(), state);
+        }
     }
 
     @Override
@@ -305,10 +311,11 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         updateProperties(properties);
     }
 
-    private GiraOneChannel updateThing(GiraOneChannel channel) {
+    GiraOneChannel updateThing(GiraOneChannel channel) {
         updateProperty(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
         updateProperty(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
         updateProperty(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
+        updateProperty(PROPERTY_CHANNEL_DATAPOINTS, channel.getDataPoints().toString());
 
         ThingBuilder thingBuilder = editThing();
         List<Channel> existingChannels = thing.getChannels();

@@ -34,6 +34,7 @@ public class GiraOneBindingConstants {
     public static final String PROPERTY_CHANNEL_TYPE = "channelType";
     public static final String PROPERTY_CHANNEL_TYPE_ID = "channelTypeId";
     public static final String PROPERTY_CHANNEL_NAME = "channelName";
+    public static final String PROPERTY_CHANNEL_DATAPOINTS = "datapoints";
 
     // List of all ThingTypeIDs
     public static final String BINDING_ID = "giraone";
