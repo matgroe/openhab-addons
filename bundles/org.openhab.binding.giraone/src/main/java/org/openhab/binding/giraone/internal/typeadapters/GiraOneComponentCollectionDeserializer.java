@@ -90,21 +90,8 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
             channelObject.addProperty(PROPERTY_URN, channelUrn);
             channelObject.addProperty(PROPERTY_FUNCTION_TYPE, GiraOneFunctionType.Trigger.getName());
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE, GiraOneChannelType.Trigger.getName());
-            channelObject.addProperty(PROPERTY_CHANNEL_TYPE_ID, deriveGiraOneChannelTypeId(channelUrn).getName());
+            channelObject.addProperty(PROPERTY_CHANNEL_TYPE_ID, GiraOneChannelTypeId.Button.getName());
         }
-    }
-
-    private GiraOneChannelTypeId deriveGiraOneChannelTypeId(String channelUrn) {
-        if (channelUrn.contains("Dimming")) {
-            return GiraOneChannelTypeId.Dimming;
-        } else if (channelUrn.contains("Switching")) {
-            return GiraOneChannelTypeId.Switch;
-        } else if (channelUrn.contains("Curtain")) {
-            return GiraOneChannelTypeId.Curtain;
-        } else if (channelUrn.contains("Scene")) {
-            return GiraOneChannelTypeId.Scene;
-        }
-        return GiraOneChannelTypeId.Unknown;
     }
 
     private String buildChannelUrnFromDatapoints(String componentUrn, JsonArray datapoints) {

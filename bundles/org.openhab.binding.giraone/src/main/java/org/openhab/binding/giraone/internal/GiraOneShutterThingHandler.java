@@ -92,7 +92,7 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     @Override
     protected void handleStopMoveTypeCommand(GiraOneDataPoint datapoint, StopMoveType command) {
         logger.trace("handleStopMoveType :: datapoint={}, command={}", datapoint, command.name());
-        Optional<GiraOneDataPoint> stepUpDown = super.findGiraOneDataPointWithinChannelView(
+        Optional<GiraOneDataPoint> stepUpDown = super.findGiraOneDataPointForOhChannel(
                 GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN);
         if (stepUpDown.isPresent() && this.motionState != MotionState.HALTED) {
             // we need to set value 0 on channel 'step-up-down' to stop moving curtain

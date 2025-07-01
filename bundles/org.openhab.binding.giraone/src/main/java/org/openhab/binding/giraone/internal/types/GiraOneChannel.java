@@ -104,10 +104,10 @@ public class GiraOneChannel {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof GiraOneChannel that)) {
-            return false;
+        if (o instanceof GiraOneChannel that) {
+            return Objects.equals(urn, that.urn);
         }
-        return Objects.equals(urn, that.urn);
+        return false;
     }
 
     @Override

@@ -85,7 +85,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         logger.debug("initialize {}", getThing().getUID());
         try {
             applyConfiguration();
-            this.lookupGiraOneProjectChannel().map(this::updateThing);
+            this.lookupGiraOneProjectChannel().map(this::buildThing).ifPresent(this::updateThing);
 
             this.disposableOnConnectionState = getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState);
         } catch (Exception exp) {
@@ -311,7 +311,14 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
         updateProperties(properties);
     }
 
-    GiraOneChannel updateThing(GiraOneChannel channel) {
+    /**
+     * This function updates
+     *
+     * @param channel The
+     *
+     * @return The channel
+     */
+    Thing buildThing(GiraOneChannel channel) {
         updateProperty(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
         updateProperty(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
         updateProperty(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
@@ -336,10 +343,7 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
 
             thingBuilder.withChannels(supportedChannels);
         }
-
-        updateThing(thingBuilder.build());
-
-        return channel;
+        return thingBuilder.build();
     }
 
     /**
@@ -356,20 +360,22 @@ public class GiraOneDefaultThingHandler extends BaseThingHandler {
     }
 
     /**
+     * This function takes a OpenHab-Channel identifier as arguments and finds the concerning
+     * GiraOneDataPoint within the project configuration.
      *
-     * @param ohChannel the channel id in OpenHab context
-     * @return
+     * @param ohChannelId the channel id in OpenHab context
+     * @return An Optional of GiraOneDataPoint
      */
-    protected Optional<GiraOneDataPoint> findGiraOneDataPointWithinChannelView(final String ohChannel) {
+    protected Optional<GiraOneDataPoint> findGiraOneDataPointForOhChannel(final String ohChannelId) {
         Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
-        String channelId = normalizeOpenhabChannelName(ohChannel);
+        String channelId = normalizeOpenhabChannelName(ohChannelId);
         return channel.flatMap(giraOneProjectChannel -> giraOneProjectChannel.getDataPoints().stream()
                 .filter(f -> CaseFormatter.lowerCaseHyphen(f.getName()).equals(channelId)).findFirst());
     }
 
     @Override
     public final void handleCommand(ChannelUID channelUID, Command command) {
-        Optional<GiraOneDataPoint> datapoint = findGiraOneDataPointWithinChannelView(channelUID.getId());
+        Optional<GiraOneDataPoint> datapoint = findGiraOneDataPointForOhChannel(channelUID.getId());
         if (datapoint.isPresent()) {
             logger.debug("handleCommand :: channelUID={}, command={}", channelUID, command);
             switch ((Object) command) {

@@ -51,10 +51,7 @@ public class GiraOneBindingConstants {
     public static final String TEMPERATURE_TYPE_ID = "status-temperature";
     public static final String SWITCH_LAMP_TYPE_ID = "switch-lamp";
     public static final String SWITCH_POWER_OUTLET_TYPE_ID = "switch-power-outlet";
-    public static final String TRIGGER_CURTAIN_TYPE_ID = "trigger-curtain";
-    public static final String TRIGGER_DIMMIN_TYPE_ID = "trigger-dimming";
-    public static final String TRIGGER_SCENE_TYPE_ID = "trigger-scene";
-    public static final String TRIGGER_SWITCH_TYPE_ID = "trigger-switch";
+    public static final String TRIGGER_BUTTON_ID = "trigger-button";
 
     /**
      * The {@link ThingTypeUID} for the GiraOne Bridge
@@ -74,22 +71,17 @@ public class GiraOneBindingConstants {
             new ThingTypeUID(BINDING_ID, SWITCH_POWER_OUTLET_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SHUTTER_VENETIAN_BLIND_TYPE_ID),
             new ThingTypeUID(BINDING_ID, SHUTTER_AWNING_TYPE_ID),
-            new ThingTypeUID(BINDING_ID, SHUTTER_ROOF_WINDOW_TYPE_ID));
+            new ThingTypeUID(BINDING_ID, SHUTTER_ROOF_WINDOW_TYPE_ID), new ThingTypeUID(BINDING_ID, TRIGGER_BUTTON_ID));
 
     public static final Set<ThingTypeUID> SUPPORTED_FUNCTION_SCENE_TYPE_UID = Set
             .of(new ThingTypeUID(BINDING_ID, SCENE_TYPE_ID));
-
-    public static final Set<ThingTypeUID> SUPPORTED_TRIGGER_TYPE_UID = Set.of(
-            new ThingTypeUID(BINDING_ID, TRIGGER_CURTAIN_TYPE_ID), new ThingTypeUID(BINDING_ID, TRIGGER_DIMMIN_TYPE_ID),
-            new ThingTypeUID(BINDING_ID, TRIGGER_SCENE_TYPE_ID), new ThingTypeUID(BINDING_ID, TRIGGER_SWITCH_TYPE_ID));
 
     /**
      * List of all supported {@link ThingTypeUID} within this binding.
      */
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPE_UID = Stream
-            .concat(Stream.concat(
-                    Stream.concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream()),
-                    SUPPORTED_FUNCTION_SCENE_TYPE_UID.stream()), SUPPORTED_TRIGGER_TYPE_UID.stream())
+            .concat(Stream.concat(SUPPORTED_SHUTTER_THING_TYPE_UID.stream(), SUPPORTED_GENERIC_TYPE_UID.stream()),
+                    SUPPORTED_FUNCTION_SCENE_TYPE_UID.stream())
             .collect(Collectors.toUnmodifiableSet());
 
     // List of all Channel ids

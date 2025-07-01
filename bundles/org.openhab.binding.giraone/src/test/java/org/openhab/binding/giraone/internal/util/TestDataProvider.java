@@ -63,7 +63,7 @@ public class TestDataProvider {
         return project;
     }
 
-    public static GiraOneDataPoint createDataPointStepUpDown() {
+    public static GiraOneDataPoint dataPointStepUpDown() {
         return dataPointBuilder("Step-Up-Down",
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down");
     }
@@ -90,8 +90,12 @@ public class TestDataProvider {
 
     public static GiraOneChannel createGiraOneChannel(final String urn) {
         return GenericBuilder.of(GiraOneChannel::new).with(GiraOneChannel::setUrn, urn)
-                .with(GiraOneChannel::setChannelType, GiraOneChannelType.Unknown)
-                .with(GiraOneChannel::setChannelTypeId, GiraOneChannelTypeId.Unknown)
-                .with(GiraOneChannel::setFunctionType, GiraOneFunctionType.Unknown).build();
+                .with(GiraOneChannel::setChannelType, GiraOneChannelType.Shutter)
+                .with(GiraOneChannel::setChannelTypeId, GiraOneChannelTypeId.VenetianBlind)
+                .with(GiraOneChannel::setFunctionType, GiraOneFunctionType.Covering)
+                .with(GiraOneChannel::addDataPoint, dataPointUpDown())
+                .with(GiraOneChannel::addDataPoint, dataPointMovement())
+                .with(GiraOneChannel::addDataPoint, dataPointMovement())
+                .with(GiraOneChannel::addDataPoint, dataPointStepUpDown()).build();
     }
 }

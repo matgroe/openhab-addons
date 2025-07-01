@@ -23,16 +23,16 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANN
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_STATUS;
 
 /**
- * The {@link GiraOneHeatingCoolingThingHandler} is responsible for handling special
+ * The {@link GiraOneHeatingUnderfloorThingHandler} is responsible for handling special
  * things concerning the heating/cooling channels.
  *
  * @author matthias - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneHeatingCoolingThingHandler extends GiraOneDefaultThingHandler {
-    private final Logger logger = LoggerFactory.getLogger(GiraOneHeatingCoolingThingHandler.class);
+public class GiraOneHeatingUnderfloorThingHandler extends GiraOneDefaultThingHandler {
+    private final Logger logger = LoggerFactory.getLogger(GiraOneHeatingUnderfloorThingHandler.class);
 
-    public GiraOneHeatingCoolingThingHandler(Thing thing) {
+    public GiraOneHeatingUnderfloorThingHandler(Thing thing) {
         super(thing);
     }
 

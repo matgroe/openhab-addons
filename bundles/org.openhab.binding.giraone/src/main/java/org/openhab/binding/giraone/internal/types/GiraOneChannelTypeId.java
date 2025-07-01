@@ -36,9 +36,7 @@ public enum GiraOneChannelTypeId {
     RoofWindow("Covering.RoofWindow"),
     VenetianBlind("Covering.VenetianBlind"),
     Scene("FunctionScene.Scene"),
-    Dimming("Trigger.Dimming"),
-    Curtain("Trigger.Curtain"),
-    Switch("Trigger.Switch"),
+    Button("Trigger.Button"),
     Unknown("Unknown");
 
     private final String name;

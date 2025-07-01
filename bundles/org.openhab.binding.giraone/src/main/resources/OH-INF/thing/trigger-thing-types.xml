@@ -4,55 +4,16 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="trigger-curtain" listed="false" extensible="true">
+	<thing-type id="trigger-button" listed="false" extensible="true">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="server"/>
 		</supported-bridge-type-refs>
 
-		<label>Trigger Shutter</label>
-		<description>Shutter Movement Up/Down or Stepwise Up/Down</description>
+		<label>Button / Trigger</label>
+		<description>Wallmounted Button, Switch or Trigger</description>
 		<category>WallSwitch</category>
 		<channel-groups>
-			<channel-group id="shutter" typeId="trigger-curtain"/>
-		</channel-groups>
-		<representation-property>channelUrn</representation-property>
-	</thing-type>
-
-	<thing-type id="trigger-dimming" listed="false">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-		<label>Trigger Dimming</label>
-		<description>Light Dimming</description>
-		<category>WallSwitch</category>
-		<channel-groups>
-			<channel-group id="dimming" typeId="trigger-dimming"/>
-		</channel-groups>
-		<representation-property>channelUrn</representation-property>
-	</thing-type>
-
-	<thing-type id="trigger-scene" listed="false">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-		<label>Trigger Scene</label>
-		<description>Trigger Scene Execution</description>
-		<category>WallSwitch</category>
-		<channel-groups>
-			<channel-group id="scene" typeId="trigger-scene"/>
-		</channel-groups>
-		<representation-property>channelUrn</representation-property>
-	</thing-type>
-
-	<thing-type id="trigger-switch" listed="false">
-		<supported-bridge-type-refs>
-			<bridge-type-ref id="server"/>
-		</supported-bridge-type-refs>
-		<label>Trigger Switch</label>
-		<description>Trigger Light On/Off</description>
-		<category>WallSwitch</category>
-		<channel-groups>
-			<channel-group id="switch" typeId="trigger-switch"/>
+			<channel-group id="trigger" typeId="trigger-channel-group"/>
 		</channel-groups>
 		<representation-property>channelUrn</representation-property>
 	</thing-type>
