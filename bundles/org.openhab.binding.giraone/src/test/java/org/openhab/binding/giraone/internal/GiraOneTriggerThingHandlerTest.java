@@ -48,7 +48,7 @@ class GiraOneTriggerThingHandlerTest {
         when(thing.getUID()).thenReturn(new ThingUID(GENERIC_TYPE_UID, "junit"));
 
         channelValue = new GiraOneChannelValue();
-        channelValue.setChannelViewUrn("urn:gds:chv:Covering-Blind-With-Position-5");
+        channelValue.setChannelUrn("urn:gds:chv:Covering-Blind-With-Position-5");
         channelValue.setGiraOneDataPoint(TestDataProvider.dataPointBuilder("Feedback",
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback"));
 

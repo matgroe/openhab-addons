@@ -117,8 +117,9 @@ public class GiraOneChannel {
 
     @Override
     public String toString() {
-        return String.format("%s{name='%s', functionType=%s, channelType=%s, channelTypeId=%s, dataPoints=%s}",
-                getClass().getSimpleName(), name, functionType, channelType, channelTypeId,
+        return String.format(
+                "%s{urn='%s', name='%s', functionType=%s, channelType=%s, channelTypeId=%s, dataPoints=%s}",
+                getClass().getSimpleName(), urn, name, functionType, channelType, channelTypeId,
                 dataPoints.stream().map(GiraOneDataPoint::toString).toList());
     }
 }

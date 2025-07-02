@@ -65,6 +65,6 @@ public class GiraOneDataPoint {
 
     @Override
     public String toString() {
-        return String.format("{dataPoint=%s, urn=%s}", name, urn);
+        return String.format("{%s}", getUrn());
     }
 }

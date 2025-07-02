@@ -88,15 +88,21 @@ public class GiraOneProject {
     }
 
     /**
-     * This method iterates searches over all channels for the given dataPointId and returns the
+     * This method iterates over all channels for the given dataPointUrn and returns the
      * concerning {@link GiraOneDataPoint} if there is any.
      *
      * @param dataPointUrn - The datapoint urn
      * @return A {@link Optional} of {@link GiraOneDataPoint}
      */
     public Optional<GiraOneDataPoint> lookupGiraOneDataPoint(final String dataPointUrn) {
-        return this.channels.stream().filter(ch -> ch.containsGiraOneDataPoint(dataPointUrn))
-                .map(GiraOneChannel::getDataPoints).flatMap(Collection::stream).filter(x -> x.getUrn() != null)
-                .filter(x -> x.getUrn().equals(dataPointUrn)).findFirst();
+        return this.channels.stream().map(GiraOneChannel::getDataPoints).flatMap(Collection::stream)
+                .filter(f -> matches(dataPointUrn, f)).findFirst();
+    }
+
+    private boolean matches(String dataPointUrn, GiraOneDataPoint dataPoint) {
+        if (dataPoint.getUrn() != null) {
+            return dataPointUrn.matches(dataPoint.getUrn());
+        }
+        return false;
     }
 }

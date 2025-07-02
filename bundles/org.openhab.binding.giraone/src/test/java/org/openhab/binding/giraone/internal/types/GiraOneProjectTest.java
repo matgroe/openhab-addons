@@ -66,6 +66,15 @@ class GiraOneProjectTest {
         assertEquals("Set-Point", dp.getName());
     }
 
+    @Test
+    void testLookupWildcardGiraOneChannelDataPoints() {
+        String urn = "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-5.Switching-2:Feedback";
+        GiraOneProject project = TestDataProvider.createGiraOneProject();
+        GiraOneDataPoint dp = project.lookupGiraOneDataPoint(urn).orElse(null);
+        assertNotNull(dp);
+        assertEquals("Wildcard", dp.getName());
+    }
+
     @DisplayName("should store no GiraOneChannel duplicates")
     @Test
     void shouldStoreNoDuplicateChannels() {

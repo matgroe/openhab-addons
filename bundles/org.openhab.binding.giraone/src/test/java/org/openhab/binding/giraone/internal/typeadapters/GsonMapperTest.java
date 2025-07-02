@@ -198,7 +198,7 @@ public class GsonMapperTest {
         assertNotNull(g1channels);
 
         GiraOneChannel g1ch = g1channels.stream()
-                .filter(f -> "urn:gds:cmp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-5.Curtain-3"
+                .filter(f -> "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker3-gang-2.Dimming-2"
                         .equals(f.getUrn()))
                 .findFirst().orElse(null);
         assertNotNull(g1ch);

@@ -45,6 +45,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -191,22 +192,27 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
      * @return the {@link GiraOneChannelValue}
      */
     private GiraOneChannelValue createGiraOneChannelValue(GiraOneChannel projectChannel, GiraOneDataPoint dataPoint) {
+        logger.trace("createGiraOneChannelValue :: {}, {}", projectChannel, dataPoint);
         GenericBuilder<GiraOneChannelValue> builder = GenericBuilder.of(GiraOneChannelValue::new);
-
-        return builder.with(GiraOneChannelValue::setChannelViewUrn, projectChannel.getUrn())
+        return builder.with(GiraOneChannelValue::setChannelUrn, projectChannel.getUrn())
                 .with(GiraOneChannelValue::setGiraOneDataPoint, dataPoint).build();
     }
 
     void onGiraOneValue(GiraOneValue giraOneValue) {
-        lookupGiraOneProject().lookupGiraOneDataPoint(giraOneValue.getUrn())
-                .ifPresent(giraOneDataPoint -> lookupGiraOneProject().lookupGiraOneChannels(giraOneDataPoint).stream()
-                        .map(channel -> createGiraOneChannelValue(channel, giraOneDataPoint))
-                        .peek(c -> c.setGiraOneValue(giraOneValue)).peek(this::write2Log)
-                        .forEach(channelValues::onNext));
+        logger.trace("onGiraOneValue :: {}", giraOneValue);
+        Optional<GiraOneDataPoint> giraOneDataPoint = lookupGiraOneProject()
+                .lookupGiraOneDataPoint(giraOneValue.getUrn());
+        if (giraOneDataPoint.isPresent()) {
+            lookupGiraOneProject().lookupGiraOneChannels(giraOneDataPoint.get()).stream()
+                    .map(channel -> createGiraOneChannelValue(channel, giraOneDataPoint.get()))
+                    .peek(c -> c.setGiraOneValue(giraOneValue)).peek(this::write2Log).forEach(channelValues::onNext);
+        } else {
+            logger.info("onGiraOneValue :: Reject '{}'. Datapoint is not found by URN in project.", giraOneValue);
+        }
     }
 
     private void write2Log(GiraOneChannelValue giraOneChannelValue) {
-        this.logger.trace("emitting GiraOneChannelValue :: {}", giraOneChannelValue);
+        this.logger.trace("Emitting GiraOneChannelValue :: {}", giraOneChannelValue);
     }
 
     private void lookupGiraOneConfiguration() {
@@ -250,6 +256,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     @Override
     public Disposable subscribeOnGiraOneChannelValue(final GiraOneChannel channel,
             Consumer<GiraOneChannelValue> consumer) {
-        return this.channelValues.filter(f -> f.getChannelViewUrn().equals(channel.getUrn())).subscribe(consumer);
+        return this.channelValues.filter(f -> f.getChannelUrn().equals(channel.getUrn())).subscribe(consumer);
     }
 }

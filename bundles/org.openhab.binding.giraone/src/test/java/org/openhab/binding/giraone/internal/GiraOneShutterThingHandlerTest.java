@@ -54,7 +54,7 @@ class GiraOneShutterThingHandlerTest {
         handler = Mockito.spy(new GiraOneShutterThingHandler(thing));
         when(thing.getUID()).thenReturn(new ThingUID(GENERIC_TYPE_UID, "junit"));
         when(handler.getThing()).thenReturn(thing);
-        channelValue.setChannelViewUrn("urn:gds:chv:Covering-Blind-With-Position-5");
+        channelValue.setChannelUrn("urn:gds:chv:Covering-Blind-With-Position-5");
     }
 
     private static Stream<Arguments> provideForTestShutterMovementDetection() {

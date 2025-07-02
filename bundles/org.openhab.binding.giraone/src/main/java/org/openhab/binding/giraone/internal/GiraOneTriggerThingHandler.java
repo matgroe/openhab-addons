@@ -13,10 +13,8 @@
 package org.openhab.binding.giraone.internal;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.ChannelUID;
@@ -24,6 +22,7 @@ import org.openhab.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 @NonNullByDefault
 public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
     private final ChannelUID channelUID;
-    private Disposable disposableTimer = Disposable.empty();
+    private @Nullable ScheduledFuture<?> scheduledRunnable = null;
 
     protected enum TriggerState {
         RELEASED,
@@ -70,24 +69,35 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
         if (Integer.parseInt(channelValue.getGiraOneValue().getValue()) == 1) {
             this.updateState(TriggerState.PRESSED);
         } else {
+            if (this.scheduledRunnable != null) {
+                this.scheduledRunnable.cancel(true);
+            }
             this.updateState(TriggerState.RELEASED);
         }
     }
 
-    private Observable<Long> createObservableTimer(long delay, @NonNull TimeUnit unit) {
-        disposableTimer.dispose();
-        return Observable.timer(delay, unit).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).take(1);
+    private void scheduleRunnable(Runnable runnable, long delay, @NonNull TimeUnit unit) {
+        if (this.scheduledRunnable != null) {
+            this.scheduledRunnable.cancel(true);
+        }
+        this.scheduledRunnable = this.scheduler.schedule(runnable, delay, unit);
     }
 
     protected void updateState(TriggerState triggerState) {
         logger.debug("Update {} to {}", channelUID.getAsString(), triggerState);
         if (triggerState == TriggerState.PRESSED) {
-            disposableTimer = createObservableTimer(1200, TimeUnit.MILLISECONDS)
-                    .subscribe(x -> updateState(TriggerState.HOLD));
+            this.scheduleRunnable(this::setStateHOLD, 1200, TimeUnit.MILLISECONDS);
         } else if (triggerState == TriggerState.HOLD) {
-            disposableTimer = createObservableTimer(90, TimeUnit.SECONDS)
-                    .subscribe(x -> updateState(TriggerState.RELEASED));
+            this.scheduleRunnable(this::setStateReleased, 90, TimeUnit.SECONDS);
         }
         super.updateState(channelUID, StringType.valueOf(triggerState.toString()));
+    }
+
+    private void setStateHOLD() {
+        this.updateState(TriggerState.HOLD);
+    }
+
+    private void setStateReleased() {
+        this.updateState(TriggerState.RELEASED);
     }
 }

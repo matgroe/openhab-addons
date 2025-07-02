@@ -23,7 +23,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneChannelValue {
-    private String channelViewUrn;
+    private String channelUrn;
 
     private GiraOneDataPoint giraOneDataPoint = new GiraOneDataPoint();
 
@@ -37,12 +37,12 @@ public class GiraOneChannelValue {
         this.giraOneDataPoint = giraOneDataPoint;
     }
 
-    public String getChannelViewUrn() {
-        return channelViewUrn;
+    public String getChannelUrn() {
+        return channelUrn;
     }
 
-    public void setChannelViewUrn(String channelViewUrn) {
-        this.channelViewUrn = channelViewUrn;
+    public void setChannelUrn(String channelUrn) {
+        this.channelUrn = channelUrn;
     }
 
     public GiraOneValue getGiraOneValue() {
@@ -55,7 +55,7 @@ public class GiraOneChannelValue {
 
     @Override
     public String toString() {
-        return String.format("{channelViewUrn=%s, urn=%s, value=%s}", getChannelViewUrn(), giraOneDataPoint,
+        return String.format("{channelViewUrn=%s, urn=%s, value=%s}", getChannelUrn(), giraOneDataPoint,
                 getGiraOneValue());
     }
 }

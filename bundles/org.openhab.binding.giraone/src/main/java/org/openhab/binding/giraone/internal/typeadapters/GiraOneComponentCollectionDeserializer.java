@@ -79,32 +79,45 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
     private void addKnxButtonProperties(JsonObject jsonObject) {
         for (JsonElement channelElement : jsonObject.getAsJsonArray(PROPERTY_CHANNELS)) {
             JsonObject channelObject = channelElement.getAsJsonObject();
-
-            JsonArray datapoints = channelObject.getAsJsonArray(PROPERTY_DATAPOINTS);
-            String channelUrn = buildChannelUrnFromDatapoints(jsonObject.get(PROPERTY_URN).getAsString(), datapoints);
-
-            String channelName = String.format(("%s, %s"), jsonObject.getAsJsonPrimitive(PROPERTY_NAME).getAsString(),
-                    channelObject.getAsJsonPrimitive(PROPERTY_NAME).getAsString());
-
-            channelObject.addProperty(PROPERTY_NAME, channelName);
-            channelObject.addProperty(PROPERTY_URN, channelUrn);
             channelObject.addProperty(PROPERTY_FUNCTION_TYPE, GiraOneFunctionType.Trigger.getName());
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE, GiraOneChannelType.Trigger.getName());
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE_ID, GiraOneChannelTypeId.Button.getName());
+
+            JsonArray datapoints = channelObject.getAsJsonArray(PROPERTY_DATAPOINTS);
+            String channelUrn = buildChannelUrnFromDatapoints(datapoints);
+            datapoints.add(createWildcardDatapoint(channelUrn));
+            channelObject.addProperty(PROPERTY_URN, channelUrn);
+
+            String channelName = String.format(("%s, %s"), jsonObject.getAsJsonPrimitive(PROPERTY_NAME).getAsString(),
+                    channelObject.getAsJsonPrimitive(PROPERTY_NAME).getAsString());
+            channelObject.addProperty(PROPERTY_NAME, channelName);
         }
     }
 
-    private String buildChannelUrnFromDatapoints(String componentUrn, JsonArray datapoints) {
-        String[] parts = componentUrn.split(":");
-        parts[parts.length - 1] = datapoints.asList().stream()
-                .map(e -> e.getAsJsonObject().get(PROPERTY_URN).getAsString()).map(this::extractChannelName).distinct()
-                .findFirst().orElse(UUID.randomUUID().toString());
-        return String.join(":", parts);
+    private JsonElement createWildcardDatapoint(final String channelUrn) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty(PROPERTY_URN, String.format("%s:.*", channelUrn));
+        obj.addProperty(PROPERTY_NAME, "Wildcard");
+        return obj;
     }
 
-    private String extractChannelName(String urn) {
-        String[] urnParts = urn.split(":");
-        return urnParts[urnParts.length - 2];
+    @Nullable
+    private String buildChannelUrnFromDatapoints(JsonArray datapoints) {
+        return datapoints.asList().stream().map(JsonElement::getAsJsonObject)
+                .map(this::extractChannelUrnFromDatapointUrn).distinct().findFirst()
+                .orElse(UUID.randomUUID().toString());
+    }
+
+    private String extractChannelUrnFromDatapointUrn(JsonObject datapoint) {
+        if (datapoint != null && datapoint.has(PROPERTY_URN)) {
+            String[] urnParts = datapoint.get(PROPERTY_URN).getAsString().split(":");
+            if (urnParts.length > 1) {
+                String b[] = new String[urnParts.length - 1];
+                System.arraycopy(urnParts, 0, b, 0, b.length);
+                return String.join(":", b);
+            }
+        }
+        return UUID.randomUUID().toString();
     }
 
     private Stream<JsonElement> streamJsonObjectOfGiraOneComponents(JsonObject jsonObject) {
