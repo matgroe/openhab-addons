@@ -19,9 +19,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
-import org.openhab.binding.giraone.internal.util.TestDataProvider;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
 
@@ -41,17 +40,14 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENER
 class GiraOneTriggerThingHandlerTest {
     private final Thing thing = Mockito.mock(Thing.class);
     private GiraOneTriggerThingHandler handler;
-    private GiraOneChannelValue channelValue = new GiraOneChannelValue();
+    private GiraOneValue value;
 
     @BeforeEach
     void setUp() {
         when(thing.getUID()).thenReturn(new ThingUID(GENERIC_TYPE_UID, "junit"));
-
-        channelValue = new GiraOneChannelValue();
-        channelValue.setChannelUrn("urn:gds:chv:Covering-Blind-With-Position-5");
-        channelValue.setGiraOneDataPoint(TestDataProvider.dataPointBuilder("Feedback",
-                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback"));
-
+        value = new GiraOneValue(
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback",
+                "1");
         handler = Mockito.spy(new GiraOneTriggerThingHandler(thing));
         when(handler.getThing()).thenReturn(thing);
         handler.initialize();
@@ -77,10 +73,10 @@ class GiraOneTriggerThingHandlerTest {
         ArgumentCaptor<GiraOneTriggerThingHandler.TriggerState> argumentCaptorState = ArgumentCaptor
                 .forClass(GiraOneTriggerThingHandler.TriggerState.class);
 
-        channelValue.setGiraOneValue(new GiraOneValueChange(
+        value = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback", "1",
-                "0"));
-        handler.onGiraOneChannelValue(channelValue);
+                "0");
+        handler.onGiraOneValue(value);
 
         verify(handler, times(2)).updateState(argumentCaptorState.capture());
 
@@ -97,10 +93,10 @@ class GiraOneTriggerThingHandlerTest {
         ArgumentCaptor<GiraOneTriggerThingHandler.TriggerState> argumentCaptorState = ArgumentCaptor
                 .forClass(GiraOneTriggerThingHandler.TriggerState.class);
 
-        channelValue.setGiraOneValue(new GiraOneValueChange(
+        value = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback", "1",
-                "0"));
-        handler.onGiraOneChannelValue(channelValue);
+                "0");
+        handler.onGiraOneValue(value);
         Thread.sleep(2000);
 
         verify(handler, times(3)).updateState(argumentCaptorState.capture());
@@ -118,16 +114,16 @@ class GiraOneTriggerThingHandlerTest {
         ArgumentCaptor<GiraOneTriggerThingHandler.TriggerState> argumentCaptorState = ArgumentCaptor
                 .forClass(GiraOneTriggerThingHandler.TriggerState.class);
 
-        channelValue.setGiraOneValue(new GiraOneValueChange(
+        value = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback", "1",
-                "0"));
-        handler.onGiraOneChannelValue(channelValue);
+                "0");
+        handler.onGiraOneValue(value);
 
         Thread.sleep(800);
-        channelValue.setGiraOneValue(new GiraOneValueChange(
+        value = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback", "0",
-                "1"));
-        handler.onGiraOneChannelValue(channelValue);
+                "1");
+        handler.onGiraOneValue(value);
 
         verify(handler, times(3)).updateState(argumentCaptorState.capture());
         assertEquals(3, argumentCaptorState.getAllValues().size());
@@ -144,16 +140,16 @@ class GiraOneTriggerThingHandlerTest {
         ArgumentCaptor<GiraOneTriggerThingHandler.TriggerState> argumentCaptorState = ArgumentCaptor
                 .forClass(GiraOneTriggerThingHandler.TriggerState.class);
 
-        channelValue.setGiraOneValue(new GiraOneValueChange(
+        value = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback", "1",
-                "0"));
-        handler.onGiraOneChannelValue(channelValue);
+                "0");
+        handler.onGiraOneValue(value);
 
         Thread.sleep(2000);
-        channelValue.setGiraOneValue(new GiraOneValueChange(
+        value = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-3.Dimming-1:Feedback", "0",
-                "1"));
-        handler.onGiraOneChannelValue(channelValue);
+                "1");
+        handler.onGiraOneValue(value);
 
         verify(handler, times(4)).updateState(argumentCaptorState.capture());
         assertEquals(4, argumentCaptorState.getAllValues().size());

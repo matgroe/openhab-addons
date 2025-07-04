@@ -12,8 +12,13 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonPrimitive;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.stream.Stream;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,20 +32,16 @@ import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebs
 import org.openhab.binding.giraone.internal.communication.websocket.GiraOneWebsocketResponse;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.google.gson.Gson;
+import com.google.gson.JsonPrimitive;
 
 /**
  * Test class for {@link GsonMapperTest}
@@ -165,7 +166,7 @@ public class GsonMapperTest {
     void shouldDeserialize2GiraOneCommandResponseWithGiraOneValue() {
         GiraOneCommandResponse response = createGiraOneWebsocketResponseFrom("/messages/2.GetValue/001-resp.json");
         assertNotNull(response);
-        GiraOneChannelValue state = response.getReply(GiraOneChannelValue.class);
+        GiraOneValue state = response.getReply(GiraOneValue.class);
         assertNotNull(state);
     }
 

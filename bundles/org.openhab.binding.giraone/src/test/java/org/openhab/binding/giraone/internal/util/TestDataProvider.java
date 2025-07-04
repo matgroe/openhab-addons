@@ -13,7 +13,9 @@
 
 package org.openhab.binding.giraone.internal.util;
 
-import com.google.gson.Gson;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
@@ -29,8 +31,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.google.gson.Gson;
 
 /**
  * Utility provides test data for various unit tests.
@@ -64,28 +65,23 @@ public class TestDataProvider {
     }
 
     public static GiraOneDataPoint dataPointStepUpDown() {
-        return dataPointBuilder("Step-Up-Down",
+        return new GiraOneDataPoint(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down");
     }
 
     public static GiraOneDataPoint dataPointUpDown() {
-        return dataPointBuilder("Up-Down",
+        return new GiraOneDataPoint(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Step-Up-Down");
     }
 
     public static GiraOneDataPoint dataPointMovement() {
-        return dataPointBuilder("Movement",
+        return new GiraOneDataPoint(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Movement");
     }
 
     public static GiraOneDataPoint dataPointPosition() {
-        return dataPointBuilder("Position",
+        return new GiraOneDataPoint(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Position");
-    }
-
-    public static GiraOneDataPoint dataPointBuilder(final String name, final String urn) {
-        return GenericBuilder.of(GiraOneDataPoint::new).with(GiraOneDataPoint::setName, name)
-                .with(GiraOneDataPoint::setUrn, urn).build();
     }
 
     public static GiraOneChannel createGiraOneChannel(final String urn) {

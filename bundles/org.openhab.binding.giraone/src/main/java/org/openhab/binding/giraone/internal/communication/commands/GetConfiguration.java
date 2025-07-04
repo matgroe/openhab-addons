@@ -12,14 +12,13 @@
  */
 package org.openhab.binding.giraone.internal.communication.commands;
 
-import java.util.HashMap;
-
+import com.google.gson.annotations.SerializedName;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.HashMap;
 
 /**
  * {@link GiraOneCommand} for reading getting a gira one device configuration

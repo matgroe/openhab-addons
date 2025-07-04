@@ -12,11 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The {@link GiraOneComponentCollection} describes a base component within the GiraOne SmartHome system.

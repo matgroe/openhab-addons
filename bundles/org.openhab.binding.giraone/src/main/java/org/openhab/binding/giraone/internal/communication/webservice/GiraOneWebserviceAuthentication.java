@@ -12,15 +12,15 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class offers functionality for handling the authentication for using the

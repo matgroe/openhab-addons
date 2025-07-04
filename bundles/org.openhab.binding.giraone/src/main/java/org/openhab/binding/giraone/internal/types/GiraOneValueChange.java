@@ -43,6 +43,6 @@ public class GiraOneValueChange extends GiraOneValue {
 
     @Override
     public String toString() {
-        return String.format("{urn=%s, oldValue=%s, newValue=%s}", getUrn(), previousValue, getValue());
+        return String.format("{urn=%s, oldValue=%s, newValue=%s}", getDatapointUrn(), previousValue, getValue());
     }
 }

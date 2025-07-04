@@ -22,7 +22,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 /**
  * Deserializes a Json Element to {@link GiraOneDataPoint} within context of Gson parsing.
@@ -38,23 +37,16 @@ public class GiraOneDataPointDeserializer extends GiraOneMessageJsonTypeAdapter
     public GiraOneDataPoint deserialize(@Nullable JsonElement jsonElement, @Nullable Type type,
             @Nullable JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         if (jsonElement != null && jsonElement.isJsonObject()) {
-            GiraOneDataPoint dataPoint = new GiraOneDataPoint();
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-                switch (entry.getKey()) {
-                    case "dataPoint":
-                    case "name":
-                        dataPoint.setName(entry.getValue().getAsString());
-                        break;
-                    case "urn":
-                        dataPoint.setUrn(entry.getValue().getAsString());
-                        break;
-                    default:
-                        break;
+            try {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                if (jsonObject.has(GiraOneJsonPropertyNames.PROPERTY_URN)) {
+                    return new GiraOneDataPoint(jsonObject.get(GiraOneJsonPropertyNames.PROPERTY_URN).getAsString());
                 }
+                return new GiraOneDataPoint("urn:gds:dp:GiraOneServer:invalid:resource");
+            } catch (IllegalArgumentException e) {
+                throw new JsonParseException("Cannot parse JsonElement as GiraOneDataPoint.", e);
             }
-            return dataPoint;
         }
-        throw new JsonParseException("Cannot parse JsonElement as GiraOneDataPoint.");
+        throw new JsonParseException("Cannot parse empty JsonElement as GiraOneDataPoint.");
     }
 }

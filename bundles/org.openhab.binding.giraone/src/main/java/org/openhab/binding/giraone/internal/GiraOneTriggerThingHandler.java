@@ -13,15 +13,18 @@
 package org.openhab.binding.giraone.internal;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
+import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -58,15 +61,24 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
         this.updateState(TriggerState.RELEASED);
     }
 
+    @Override
+    protected void subscribeOnGiraOneDataPointValues(Collection<GiraOneDataPoint> datapoints,
+            CompositeDisposable disposables) {
+        datapoints.stream().map(dp -> String.format("%s:.*", dp.getDeviceUrn()))
+                .map(dp -> getGiraOneBridge().subscribeOnGiraOneDataPointValues(dp, this::onGiraOneValue))
+                .forEach(disposables::add);
+    }
+
     /**
-     * Handler function for receiving {@link GiraOneChannelValue} which contains
+     * Handler function for receiving {@link GiraOneValue} which contains
      * the value for an item channel.
      *
      * @param channelValue The value to apply on a Openhab Thing
      */
-    protected void onGiraOneChannelValue(GiraOneChannelValue channelValue) {
-        logger.debug("onGiraOneChannelValue :: {}", channelValue);
-        if (Integer.parseInt(channelValue.getGiraOneValue().getValue()) == 1) {
+    @Override
+    protected void onGiraOneValue(GiraOneValue channelValue) {
+        logger.debug("onGiraOneValue :: {}", channelValue);
+        if (Integer.parseInt(channelValue.getValue()) == 1) {
             this.updateState(TriggerState.PRESSED);
         } else {
             if (this.scheduledRunnable != null) {

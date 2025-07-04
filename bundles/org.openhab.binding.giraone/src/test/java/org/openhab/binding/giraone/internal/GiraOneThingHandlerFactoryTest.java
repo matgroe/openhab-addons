@@ -19,11 +19,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingUID;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BINDING_ID;
 
@@ -34,7 +36,7 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BINDI
  */
 @NonNullByDefault
 class GiraOneThingHandlerFactoryTest {
-    private final GiraOneThingHandlerFactory factory = new GiraOneThingHandlerFactory();
+    private final GiraOneThingHandlerFactory factory = spy(new GiraOneThingHandlerFactory());
 
     private static Stream<Arguments> provideThingIdentifier() {
         return Stream.of(Arguments.of("shutter-roof-window", GiraOneShutterThingHandler.class),
@@ -43,7 +45,8 @@ class GiraOneThingHandlerFactoryTest {
                 Arguments.of("function-scene", GiraOneFunctionSceneThingHandler.class),
                 Arguments.of("heating-underfloor", GiraOneHeatingUnderfloorThingHandler.class),
                 Arguments.of("trigger-button", GiraOneTriggerThingHandler.class),
-                Arguments.of("status-temperature", GiraOneDefaultThingHandler.class));
+                Arguments.of("status-humidity", GiraOneStatusThingHandler.class),
+                Arguments.of("status-temperature", GiraOneStatusThingHandler.class));
     }
 
     @DisplayName("should create ThingHandler")
@@ -51,8 +54,8 @@ class GiraOneThingHandlerFactoryTest {
     @MethodSource("provideThingIdentifier")
     void testCreateThingHandler(final String thingTypeId, Class<?> expectedClass) {
         Thing thing = mock(Thing.class);
-        ThingTypeUID x = new ThingTypeUID(BINDING_ID, thingTypeId);
-        when(thing.getThingTypeUID()).thenReturn(x);
+        when(thing.getUID()).thenReturn(new ThingUID("junit", "thing"));
+        when(thing.getThingTypeUID()).thenReturn(new ThingTypeUID(BINDING_ID, thingTypeId));
         assertInstanceOf(expectedClass, factory.createHandler(thing));
     }
 }

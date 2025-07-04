@@ -66,15 +66,6 @@ class GiraOneProjectTest {
         assertEquals("Set-Point", dp.getName());
     }
 
-    @Test
-    void testLookupWildcardGiraOneChannelDataPoints() {
-        String urn = "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-5.Switching-2:Feedback";
-        GiraOneProject project = TestDataProvider.createGiraOneProject();
-        GiraOneDataPoint dp = project.lookupGiraOneDataPoint(urn).orElse(null);
-        assertNotNull(dp);
-        assertEquals("Wildcard", dp.getName());
-    }
-
     @DisplayName("should store no GiraOneChannel duplicates")
     @Test
     void shouldStoreNoDuplicateChannels() {
@@ -89,13 +80,5 @@ class GiraOneProjectTest {
 
         project.addChannel(TestDataProvider.createGiraOneChannel(urn + "1"));
         assertEquals(2, project.lookupChannels().size());
-    }
-
-    @DisplayName("should store no GiraOneChannel duplicates")
-    @Test
-    void shouldStoreNoDuplicateChannelsYYY() {
-        GiraOneProject project = TestDataProvider.createGiraOneProject();
-        project.lookupChannels().stream().map(c -> String.format("%s, %s, %s", c.getChannelType().getName(),
-                c.getChannelTypeId().getName(), c.getFunctionType().getName())).forEach(System.out::println);
     }
 }

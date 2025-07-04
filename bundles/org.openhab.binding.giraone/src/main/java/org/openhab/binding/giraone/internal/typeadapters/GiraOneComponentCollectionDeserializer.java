@@ -27,10 +27,10 @@ import org.openhab.binding.giraone.internal.types.GiraOneComponent;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
+import org.openhab.binding.giraone.internal.types.GiraOneURN;
 
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNELS;
@@ -84,9 +84,7 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
             channelObject.addProperty(PROPERTY_CHANNEL_TYPE_ID, GiraOneChannelTypeId.Button.getName());
 
             JsonArray datapoints = channelObject.getAsJsonArray(PROPERTY_DATAPOINTS);
-            String channelUrn = buildChannelUrnFromDatapoints(datapoints);
-            datapoints.add(createWildcardDatapoint(channelUrn));
-            channelObject.addProperty(PROPERTY_URN, channelUrn);
+            channelObject.addProperty(PROPERTY_URN, buildDatapointDeviceUrn(datapoints));
 
             String channelName = String.format(("%s, %s"), jsonObject.getAsJsonPrimitive(PROPERTY_NAME).getAsString(),
                     channelObject.getAsJsonPrimitive(PROPERTY_NAME).getAsString());
@@ -94,30 +92,11 @@ public class GiraOneComponentCollectionDeserializer implements JsonDeserializer<
         }
     }
 
-    private JsonElement createWildcardDatapoint(final String channelUrn) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty(PROPERTY_URN, String.format("%s:.*", channelUrn));
-        obj.addProperty(PROPERTY_NAME, "Wildcard");
-        return obj;
-    }
-
     @Nullable
-    private String buildChannelUrnFromDatapoints(JsonArray datapoints) {
+    private String buildDatapointDeviceUrn(JsonArray datapoints) {
         return datapoints.asList().stream().map(JsonElement::getAsJsonObject)
-                .map(this::extractChannelUrnFromDatapointUrn).distinct().findFirst()
-                .orElse(UUID.randomUUID().toString());
-    }
-
-    private String extractChannelUrnFromDatapointUrn(JsonObject datapoint) {
-        if (datapoint != null && datapoint.has(PROPERTY_URN)) {
-            String[] urnParts = datapoint.get(PROPERTY_URN).getAsString().split(":");
-            if (urnParts.length > 1) {
-                String b[] = new String[urnParts.length - 1];
-                System.arraycopy(urnParts, 0, b, 0, b.length);
-                return String.join(":", b);
-            }
-        }
-        return UUID.randomUUID().toString();
+                .map(e -> e.get(PROPERTY_URN).getAsString()).map(GiraOneURN::of).map(GiraOneURN::getParent).distinct()
+                .findFirst().orElse(GiraOneURN.INVALID).toString();
     }
 
     private Stream<JsonElement> streamJsonObjectOfGiraOneComponents(JsonObject jsonObject) {

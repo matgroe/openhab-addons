@@ -12,6 +12,28 @@
  */
 package org.openhab.binding.giraone.internal.communication.websocket;
 
+import static org.awaitility.Awaitility.await;
+import static org.awaitility.Duration.ONE_SECOND;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.stream.Stream;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jetty.client.HttpClient;
@@ -40,28 +62,6 @@ import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Stream;
-
-import static org.awaitility.Awaitility.await;
-import static org.awaitility.Duration.ONE_SECOND;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Test class for {@link GiraOneWebsocketClient}
@@ -177,12 +177,12 @@ class GiraOneWebsocketClientTest {
     void shoutEmitDatapointOnWebSocketTextWithValueEvent() {
         giraOneWebsocketClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/0.Events/001-evt.json"));
-        GiraOneValue dp = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
+        GiraOneValue g1Value = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
                 .blockingGet();
-        assertNotNull(dp);
-        assertInstanceOf(GiraOneValueChange.class, dp);
-        assertEquals("1", ((GiraOneValueChange) dp).getPreviousValue());
-        assertEquals("0", dp.getValue());
+        assertNotNull(g1Value);
+        assertInstanceOf(GiraOneValueChange.class, g1Value);
+        assertEquals("1", ((GiraOneValueChange) g1Value).getPreviousValue());
+        assertEquals("0", g1Value.getValue());
     }
 
     @DisplayName("Received GetValue responses must be mapped to DataPoint and provided by 'dataPoints' Observable ")
@@ -190,11 +190,11 @@ class GiraOneWebsocketClientTest {
     void shoutEmitDatapointOnWebSocketTextWithValueResponse() {
         giraOneWebsocketClient.observeAndEmitDataPointValues();
         sendWebsocketText(ResourceLoader.loadStringResource("/messages/2.GetValue/001-resp.json"));
-        GiraOneValue dp = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
+        GiraOneValue g1Value = giraOneWebsocketClient.values.firstElement().timeout(RCV_TIMEOUT, TimeUnit.SECONDS)
                 .blockingGet();
-        assertNotNull(dp);
-        assertEquals("urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", dp.getUrn());
-        assertEquals("1", dp.getValue());
+        assertNotNull(g1Value);
+        assertEquals("urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", g1Value.getDatapointUrn());
+        assertEquals("1", g1Value.getValue());
     }
 
     @DisplayName("Received ServerCommandResponses must not be provided by 'dataPoints' Observable ")

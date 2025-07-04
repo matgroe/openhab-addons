@@ -40,6 +40,7 @@ import org.openhab.binding.giraone.internal.typeadapters.GiraOneDataPointDeseria
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneEventDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneFunctionTypeDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneMessageTypeDeserializer;
+import org.openhab.binding.giraone.internal.typeadapters.GiraOneValueDeserializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneWebserviceCommandRequestSerializer;
 import org.openhab.binding.giraone.internal.typeadapters.GiraOneWebsocketResponseDeserializer;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
@@ -51,6 +52,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
 
 import java.util.Set;
 
@@ -93,6 +95,7 @@ public abstract class GsonMapperFactory {
         gsonBuilder.registerTypeAdapter(GiraOneComponentCollection.class, new GiraOneComponentCollectionDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneComponentType.class, new GiraOneComponentTypeDeserializer());
         gsonBuilder.registerTypeAdapter(GiraOneChannelCollection.class, new GiraOneChannelCollectionDeserializer());
+        gsonBuilder.registerTypeAdapter(GiraOneValue.class, new GiraOneValueDeserializer());
         return gsonBuilder;
     }
 

@@ -13,12 +13,11 @@
 
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.HashMap;
-
+import com.google.gson.annotations.SerializedName;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.HashMap;
 
 /**
  * The {@link GiraOneDeviceConfiguration} class describes the gira one server

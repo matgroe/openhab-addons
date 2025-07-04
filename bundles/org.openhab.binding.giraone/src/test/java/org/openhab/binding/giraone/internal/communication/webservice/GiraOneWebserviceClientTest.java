@@ -12,7 +12,12 @@
  */
 package org.openhab.binding.giraone.internal.communication.webservice;
 
-import com.google.gson.JsonParser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,11 +31,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import com.google.gson.JsonParser;
 
 /**
  * Unit Tests for {@link GiraOneWebserviceClient}.

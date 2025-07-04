@@ -69,9 +69,4 @@ public class GiraOneClientTest {
             assertFalse(giraOneClient.getGiraOneProject().lookupChannels().isEmpty());
         });
     }
-
-    @Test
-    @DisplayName("Should authenticate against gira one server")
-    void shouldStartupClient2() {
-    }
 }

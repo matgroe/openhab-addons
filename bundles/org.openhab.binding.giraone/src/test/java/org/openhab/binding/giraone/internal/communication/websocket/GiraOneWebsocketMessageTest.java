@@ -12,7 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.communication.websocket;
 
-import com.google.gson.Gson;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,10 +29,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.google.gson.Gson;
 
 /**
  * Test class for {@link GiraOneThingDiscoveryService}.

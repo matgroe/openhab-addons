@@ -12,15 +12,16 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import java.lang.reflect.Type;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.webservice.GiraOneWebserviceRequest;
 
-import java.lang.reflect.Type;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 /**
  * Serializes a {@link GiraOneWebserviceRequest} into it's Json Representation.

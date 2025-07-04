@@ -13,7 +13,6 @@
 package org.openhab.binding.giraone.internal;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
@@ -78,15 +77,15 @@ public class GiraOneShutterThingHandler extends GiraOneDefaultThingHandler {
     }
 
     @Override
-    protected void onGiraOneChannelValue(GiraOneChannelValue giraOneChannelValue) {
-        logger.debug("onGiraOneChannelValue :: {}", giraOneChannelValue);
-        switch (buildThingChannelId(giraOneChannelValue)) {
-            case GiraOneBindingConstants.CHANNEL_MOVEMENT -> detectMovingState(giraOneChannelValue.getGiraOneValue());
+    protected void onGiraOneValue(GiraOneValue value) {
+        logger.debug("onGiraOneChannelValue :: {}", value);
+        switch (buildThingChannelId(value)) {
+            case GiraOneBindingConstants.CHANNEL_MOVEMENT -> detectMovingState(value);
             case GiraOneBindingConstants.CHANNEL_POSITION, GiraOneBindingConstants.CHANNEL_UP_DOWN,
                     GiraOneBindingConstants.CHANNEL_SLAT_POSITION, GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN ->
-                detectMovingDirection(giraOneChannelValue.getGiraOneValue());
+                detectMovingDirection(value);
         }
-        super.onGiraOneChannelValue(giraOneChannelValue);
+        super.onGiraOneValue(value);
     }
 
     @Override

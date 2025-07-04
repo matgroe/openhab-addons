@@ -22,11 +22,15 @@ import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.annotations.Component;
 
+import java.util.List;
+
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BINDING_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HEATING_COOLING_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HUMIDITY_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_FUNCTION_SCENE_TYPE_UID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_SHUTTER_THING_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.TEMPERATURE_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.TRIGGER_BUTTON_ID;
 
 /**
@@ -57,6 +61,8 @@ public class GiraOneThingHandlerFactory extends BaseThingHandlerFactory {
             return new GiraOneHeatingUnderfloorThingHandler(thing);
         } else if (TRIGGER_BUTTON_ID.equals(thingTypeUID.getId())) {
             return new GiraOneTriggerThingHandler(thing);
+        } else if (List.of(HUMIDITY_TYPE_ID, TEMPERATURE_TYPE_ID).contains(thingTypeUID.getId())) {
+            return new GiraOneStatusThingHandler(thing);
         } else {
             return new GiraOneDefaultThingHandler(thing);
         }

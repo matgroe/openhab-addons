@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.util;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Generic Builder Pattern taken from https://www.baeldung.com/java-builder-pattern

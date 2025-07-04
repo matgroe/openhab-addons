@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import java.util.List;
 
 /**
  * The {@link GiraOneComponent} describes a base component within the GiraOne SmartHome system.

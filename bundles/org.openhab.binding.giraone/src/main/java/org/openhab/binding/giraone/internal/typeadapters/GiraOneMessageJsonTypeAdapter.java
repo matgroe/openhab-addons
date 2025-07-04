@@ -12,10 +12,9 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Base class offers some functionalities for deserializing reseived messages

@@ -21,7 +21,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
@@ -47,14 +46,12 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENER
 class GiraOneShutterThingHandlerTest {
     private Thing thing = Mockito.mock(Thing.class);
     private GiraOneShutterThingHandler handler;
-    private GiraOneChannelValue channelValue = new GiraOneChannelValue();
 
     @BeforeEach
     void setUp() {
         handler = Mockito.spy(new GiraOneShutterThingHandler(thing));
         when(thing.getUID()).thenReturn(new ThingUID(GENERIC_TYPE_UID, "junit"));
         when(handler.getThing()).thenReturn(thing);
-        channelValue.setChannelUrn("urn:gds:chv:Covering-Blind-With-Position-5");
     }
 
     private static Stream<Arguments> provideForTestShutterMovementDetection() {
@@ -71,9 +68,8 @@ class GiraOneShutterThingHandlerTest {
     @ParameterizedTest
     @MethodSource("provideForTestShutterMovementDetection")
     void testShutterMovementDetection(GiraOneDataPoint datapoint, String newValue, String oldValue, String expected) {
-        channelValue.setGiraOneDataPoint(datapoint);
-        channelValue.setGiraOneValue(new GiraOneValueChange(datapoint.getUrn(), newValue, oldValue));
-        handler.onGiraOneChannelValue(channelValue);
+        GiraOneValueChange valueChange = new GiraOneValueChange(datapoint.getUrn(), newValue, oldValue);
+        handler.onGiraOneValue(valueChange);
 
         ArgumentCaptor<String> argumentCaptorChannel = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<State> argumentCaptorState = ArgumentCaptor.forClass(State.class);

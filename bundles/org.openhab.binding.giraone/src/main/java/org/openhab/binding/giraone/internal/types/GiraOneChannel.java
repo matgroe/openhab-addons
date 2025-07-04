@@ -29,7 +29,7 @@ import java.util.Set;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneChannel {
-    private String urn;
+    private GiraOneURN urn;
     private String name;
     private String location;
 
@@ -37,6 +37,7 @@ public class GiraOneChannel {
     private GiraOneChannelType channelType;
 
     private GiraOneChannelTypeId channelTypeId;
+
     private Set<GiraOneDataPoint> dataPoints = Collections.synchronizedSet(new HashSet<>());
 
     public String getLocation() {
@@ -56,11 +57,11 @@ public class GiraOneChannel {
     }
 
     public void setUrn(String urn) {
-        this.urn = urn;
+        this.urn = GiraOneURN.of(urn);
     }
 
     public String getUrn() {
-        return urn;
+        return urn.toString();
     }
 
     public void setFunctionType(GiraOneFunctionType functionType) {

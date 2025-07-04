@@ -12,16 +12,15 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_EXECUTE;
-
-import java.util.concurrent.TimeUnit;
-
+import io.reactivex.rxjava3.core.Observable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.thing.Thing;
 
-import io.reactivex.rxjava3.core.Observable;
+import java.util.concurrent.TimeUnit;
+
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_EXECUTE;
 
 /**
  * The {@link GiraOneFunctionSceneThingHandler} is responsible for handling commands, which are

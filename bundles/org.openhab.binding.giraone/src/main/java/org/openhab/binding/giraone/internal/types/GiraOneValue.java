@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-
-import java.util.Objects;
 
 /**
  * The {@link GiraOneValue} represents a value for a single source of data
@@ -35,15 +35,23 @@ public class GiraOneValue {
     /**
      * The datapoint urn this value belongs to.
      */
-    private final String urn;
+    private final GiraOneURN datapointUrn;
 
-    public GiraOneValue(String urn, String value) {
-        this.urn = urn;
+    public GiraOneValue(String datapointUrn, String value) {
+        this.datapointUrn = GiraOneURN.of(datapointUrn);
         this.value = value;
     }
 
-    public String getUrn() {
-        return urn;
+    public String getDatapointUrn() {
+        return datapointUrn.toString();
+    }
+
+    public GiraOneDataPoint getGiraOneDataPoint() {
+        return new GiraOneDataPoint(datapointUrn.toString());
+    }
+
+    public String getDeviceUrn() {
+        return datapointUrn.getParent().toString();
     }
 
     public String getValue() {
@@ -59,16 +67,16 @@ public class GiraOneValue {
             return false;
         }
         GiraOneValue that = (GiraOneValue) o;
-        return Objects.equals(value, that.value) && Objects.equals(urn, that.urn);
+        return Objects.equals(value, that.value) && Objects.equals(datapointUrn, that.datapointUrn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, urn);
+        return Objects.hash(value, datapointUrn);
     }
 
     @Override
     public String toString() {
-        return String.format("{urn=%s, value=%s}", urn, value);
+        return String.format("{urn=%s, value=%s}", datapointUrn, value);
     }
 }

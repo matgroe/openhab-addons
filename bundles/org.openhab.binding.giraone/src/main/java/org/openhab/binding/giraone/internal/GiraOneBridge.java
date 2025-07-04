@@ -17,9 +17,9 @@ import io.reactivex.rxjava3.functions.Consumer;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelValue;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneValue;
 
 /**
  * Use the interface {@link GiraOneBridge} to access the GiraOne Bridge.
@@ -46,25 +46,33 @@ public interface GiraOneBridge {
 
     /**
      * This function triggers the {@link GiraOneBridge} to lookup all datapoints
-     * for the given channelViewId. The concerning values are getting reported as
-     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     * for the given channel. The concerning values are getting reported as
+     * {@link GiraOneValue} via subscription on {@link GiraOneBridge#subscribeOnGiraOneDataPointValues}.
      *
      * @param channel The {@link GiraOneChannel}, a value lookup should be triggered for.
      */
     void lookupGiraOneChannelValues(final GiraOneChannel channel);
 
     /**
-     * Observes all {@link GiraOneChannelValue} for the given channel.
+     * Initiates the value lookup for the given {@link GiraOneDataPoint}. The determined value
+     * will be available through a registered consumer {@link GiraOneBridge#subscribeOnGiraOneDataPointValues}.
      *
-     * @param channel The {@link GiraOneChannel} to observe
+     * @param dataPoint The Datapoint to lookup it's value.
+     */
+    void lookupGiraOneDatapointValue(GiraOneDataPoint dataPoint);
+
+    /**
+     * Observes all {@link GiraOneValue} for the given device urn.
+     *
+     * @param datapointUrnPattern
      * @param consumer - The consumer method to receive GiraOneConnectionState Events.
      * @return A {@link Disposable}
      */
-    Disposable subscribeOnGiraOneChannelValue(final GiraOneChannel channel, Consumer<GiraOneChannelValue> consumer);
+    Disposable subscribeOnGiraOneDataPointValues(final String datapointUrnPattern, Consumer<GiraOneValue> consumer);
 
     /**
      * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
-     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneDataPointValues}.
      *
      * @param dataPoint The {@link GiraOneDataPoint} to change.
      * @param value The new value
@@ -73,7 +81,7 @@ public interface GiraOneBridge {
 
     /**
      * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
-     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneDataPointValues}.
      *
      * @param dataPoint The {@link GiraOneDataPoint} to change.
      * @param value The new value
@@ -82,7 +90,7 @@ public interface GiraOneBridge {
 
     /**
      * Sets the value on a {@link GiraOneDataPoint}. Any change is getting reported as
-     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneChannelValue}.
+     * {@link GiraOneDataPoint} via subscription on {@link GiraOneBridge#subscribeOnGiraOneDataPointValues}.
      *
      * @param dataPoint The {@link GiraOneDataPoint} to change.
      * @param value The new value

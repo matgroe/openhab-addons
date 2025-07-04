@@ -26,24 +26,26 @@ import java.util.Objects;
  */
 @NonNullByDefault({ DefaultLocation.PARAMETER })
 public class GiraOneDataPoint {
+    private GiraOneURN urn;
 
-    private String name;
-    private String urn;
-
-    public String getName() {
-        return name;
+    public GiraOneDataPoint(final String urn) {
+        this.urn = GiraOneURN.of(urn);
     }
 
-    public void setName(String dataPointName) {
-        this.name = dataPointName;
+    public String getName() {
+        return urn.getResourceName();
+    }
+
+    public String getDeviceUrn() {
+        return urn.getParent().toString();
     }
 
     public String getUrn() {
-        return urn;
+        return urn.toString();
     }
 
     public void setUrn(String urn) {
-        this.urn = urn;
+        this.urn = GiraOneURN.of(urn);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class GiraOneDataPoint {
             return false;
         }
         GiraOneDataPoint dataPoint = (GiraOneDataPoint) o;
-        return Objects.equals(urn, dataPoint.urn);
+        return Objects.equals(getUrn(), dataPoint.getUrn());
     }
 
     @Override
