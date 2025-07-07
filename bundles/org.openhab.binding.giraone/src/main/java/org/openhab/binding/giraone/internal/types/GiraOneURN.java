@@ -12,11 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import java.util.Arrays;
 import java.util.Objects;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Utility class for Uniform Resource Name (URN).

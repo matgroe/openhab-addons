@@ -50,10 +50,6 @@ public class GiraOneValue {
         return new GiraOneDataPoint(datapointUrn.toString());
     }
 
-    public String getDeviceUrn() {
-        return datapointUrn.getParent().toString();
-    }
-
     public String getValue() {
         return value;
     }

@@ -12,8 +12,8 @@
  */
 package org.openhab.binding.giraone.internal.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
@@ -54,7 +54,8 @@ import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 
-import java.util.Set;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * This class offers creation functions for a pre-configured {@link GsonBuilder}

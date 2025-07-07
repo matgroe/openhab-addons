@@ -36,7 +36,7 @@
 		<description>Channel Group for Slat Covering Things</description>
 		<category>Blinds</category>
 		<channels>
-			<channel id="position" typeId="shutter-slat-position">
+			<channel id="slat-position" typeId="shutter-slat-position">
 				<label>Slat Position</label>
 				<description>Shutter Slat Position</description>
 			</channel>

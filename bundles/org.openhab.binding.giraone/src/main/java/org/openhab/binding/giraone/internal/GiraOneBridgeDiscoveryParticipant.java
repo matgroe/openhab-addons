@@ -13,6 +13,13 @@
 
 package org.openhab.binding.giraone.internal;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jupnp.model.meta.RemoteDevice;
@@ -25,13 +32,6 @@ import org.openhab.core.thing.ThingUID;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
 
 /**
  * The {@link GiraOneBridgeDiscoveryParticipant}

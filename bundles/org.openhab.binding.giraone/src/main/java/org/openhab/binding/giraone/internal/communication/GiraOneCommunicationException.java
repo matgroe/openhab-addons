@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import java.io.IOException;
 import java.io.Serial;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Generic Exception with Gira One Domain.

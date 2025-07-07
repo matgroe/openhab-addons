@@ -13,11 +13,11 @@
 
 package org.openhab.binding.giraone.internal.communication;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for {@link GiraOneClientException}

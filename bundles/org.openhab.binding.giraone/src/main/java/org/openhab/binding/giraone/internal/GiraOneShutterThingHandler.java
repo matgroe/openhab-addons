@@ -12,6 +12,9 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
@@ -21,9 +24,6 @@ import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The {@link GiraOneShutterThingHandler} is responsible for handling commands, which are

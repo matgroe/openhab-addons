@@ -12,9 +12,9 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import java.util.Arrays;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Enumeration describes channel type for {@link GiraOneChannelType}

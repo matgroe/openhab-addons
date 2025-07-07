@@ -12,17 +12,18 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
+import java.lang.reflect.Type;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.types.GiraOneEvent;
-
-import java.lang.reflect.Type;
 
 /**
  * Deserializes a Json Element to {@link GiraOneEvent} within context of Gson parsing.

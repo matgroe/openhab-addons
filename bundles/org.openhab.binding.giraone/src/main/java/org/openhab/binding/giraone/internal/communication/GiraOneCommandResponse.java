@@ -12,10 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
-import com.google.gson.JsonObject;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
+
+import com.google.gson.JsonObject;
 
 /**
  * This interface represents a command response as received from the Gira One Sever.

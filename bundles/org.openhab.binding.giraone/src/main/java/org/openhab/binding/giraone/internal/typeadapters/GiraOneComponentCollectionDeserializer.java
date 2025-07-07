@@ -12,27 +12,6 @@
  */
 package org.openhab.binding.giraone.internal.typeadapters;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
-import org.openhab.binding.giraone.internal.types.GiraOneComponent;
-import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
-import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
-import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
-import org.openhab.binding.giraone.internal.types.GiraOneURN;
-
-import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNELS;
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_TYPE;
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_CHANNEL_TYPE_ID;
@@ -44,6 +23,28 @@ import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPrope
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_SUBLOCATIONS;
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_TYPE;
 import static org.openhab.binding.giraone.internal.typeadapters.GiraOneJsonPropertyNames.PROPERTY_URN;
+
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
+import org.openhab.binding.giraone.internal.types.GiraOneComponent;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentCollection;
+import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
+import org.openhab.binding.giraone.internal.types.GiraOneFunctionType;
+import org.openhab.binding.giraone.internal.types.GiraOneURN;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
  * Deserializes a Json Element to {@link GiraOneComponentCollection} within context of Gson parsing.

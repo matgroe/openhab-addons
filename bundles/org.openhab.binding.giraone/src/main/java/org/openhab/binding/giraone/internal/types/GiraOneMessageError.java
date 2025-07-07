@@ -13,8 +13,9 @@
 
 package org.openhab.binding.giraone.internal.types;
 
-import com.google.gson.annotations.SerializedName;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Type for received error states from gira one server

@@ -12,10 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import com.google.gson.annotations.SerializedName;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * This class represents a system event as received from the Gira One Sever

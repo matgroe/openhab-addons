@@ -12,6 +12,17 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BINDING_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HEATING_COOLING_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HUMIDITY_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_FUNCTION_SCENE_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_SHUTTER_THING_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.TEMPERATURE_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.TRIGGER_BUTTON_ID;
+
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.thing.Bridge;
@@ -21,17 +32,6 @@ import org.openhab.core.thing.binding.BaseThingHandlerFactory;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.annotations.Component;
-
-import java.util.List;
-
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BINDING_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.BRIDGE_TYPE_UID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HEATING_COOLING_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.HUMIDITY_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_FUNCTION_SCENE_TYPE_UID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_SHUTTER_THING_TYPE_UID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.TEMPERATURE_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.TRIGGER_BUTTON_ID;
 
 /**
  * The {@link GiraOneThingHandlerFactory} is responsible for creating things and thing

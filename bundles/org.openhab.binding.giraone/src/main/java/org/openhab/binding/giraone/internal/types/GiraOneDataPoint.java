@@ -12,11 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-
-import java.util.Objects;
 
 /**
  * The GiraOneDataPoint defines a source of data which may have a
