@@ -111,7 +111,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         scheduler.execute(this::doBackgroundInitialization);
     }
 
-    private void doBackgroundInitialization() {
+    protected void doBackgroundInitialization() {
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
         this.giraOneClient.disconnect();

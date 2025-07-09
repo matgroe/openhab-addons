@@ -1,0 +1,16 @@
+@startuml
+
+box "GiraOne Binding" #LightBlue
+participant GiraOneBridgeHandler
+participant GiraOneClient
+end box
+
+box "GiraOne Server" #lightyellow
+participant WebserviceAPI
+participant WebsocketAPI
+end box
+
+participant Other
+
+
+@enduml

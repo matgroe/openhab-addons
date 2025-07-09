@@ -56,6 +56,13 @@
 				<advanced>true</advanced>
 			</parameter>
 
+			<parameter name="discoverButtons" type="boolean">
+				<label>Discover Gira One Buttons/Trigger</label>
+				<description>Should the Bridge Auto Discover KnxButtons and attach them to the Inbox.</description>
+				<default>false</default>
+				<advanced>true</advanced>
+			</parameter>
+
 		</config-description>
 	</bridge-type>
 </thing:thing-descriptions>

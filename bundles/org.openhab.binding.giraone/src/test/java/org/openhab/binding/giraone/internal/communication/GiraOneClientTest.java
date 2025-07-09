@@ -50,10 +50,11 @@ public class GiraOneClientTest {
         configuration.hostname = "192.168.178.38";
         configuration.maxTextMessageSize = 350000;
         configuration.defaultTimeoutSeconds = 45;
+        configuration.discoverButtons = true;
 
         webserviceClient = Mockito.spy(new GiraOneWebserviceClient(configuration));
         websocketClient = Mockito.spy(new GiraOneWebsocketClient(configuration));
-        giraOneClient = new GiraOneClient(websocketClient, webserviceClient);
+        giraOneClient = new GiraOneClient(configuration, websocketClient, webserviceClient);
         giraOneClient.observeGiraOneConnectionState(giraOneConnectionState -> {
             connectionState = giraOneConnectionState;
         });

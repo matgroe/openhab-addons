@@ -30,5 +30,6 @@ public class GiraOneClientConfiguration {
     public int defaultTimeoutSeconds = 10;
     public int maxTextMessageSize = 100; // 100kB
     public int tryReconnectAfterSeconds = 30;
-    public boolean discoverDevices = false;
+    public boolean discoverDevices = true;
+    public boolean discoverButtons = true;
 }

@@ -113,7 +113,7 @@ public class GiraOneWebserviceClient {
      * as {@link GiraOneCommandResponse} object.
      *
      * @param command The command to send
-     * @throws {{@link GiraOneCommunicationException} in case of an error.
+     * @throws {@link GiraOneCommunicationException} in case of an error.
      */
     public GiraOneCommandResponse execute(GiraOneCommand command) throws GiraOneCommunicationException {
         try {

@@ -20,6 +20,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -64,14 +66,23 @@ class GiraOneBridgeHandlerTest {
 
     @DisplayName("Should start observing GiraOneClient observables and connect")
     @Test
-    void testInitialize() {
+    void testInitialize() throws Exception {
         ArgumentCaptor<Consumer<GiraOneConnectionState>> captorConnectionState = ArgumentCaptor
                 .forClass(Consumer.class);
+
+        ScheduledExecutorService scheduler = mock(ScheduledExecutorService.class);
+        Field schedulerField = GiraOneBridgeHandler.class.getSuperclass().getSuperclass().getDeclaredField("scheduler");
+        schedulerField.setAccessible(true);
+        schedulerField.set(bridgeHandler, scheduler);
 
         bridgeHandler.initialize();
         verify(giraOneClient).observeGiraOneValues(any());
         verify(giraOneClient).observeGiraOneConnectionState(captorConnectionState.capture());
         verify(giraOneClient).observeOnGiraOneClientExceptions(any());
+
+        ArgumentCaptor<Runnable> argCaptorRunnable = ArgumentCaptor.forClass(Runnable.class);
+        verify(scheduler).execute(argCaptorRunnable.capture());
+        argCaptorRunnable.getValue().run();
 
         ArgumentCaptor<ThingStatus> argCaptorThingStatus = ArgumentCaptor.forClass(ThingStatus.class);
         ArgumentCaptor<ThingStatusDetail> argCaptorThingStatusDetail = ArgumentCaptor.forClass(ThingStatusDetail.class);

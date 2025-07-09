@@ -42,8 +42,7 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
 
     protected enum TriggerState {
         RELEASED,
-        PRESSED,
-        HOLD
+        PRESSED
     }
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneTriggerThingHandler.class);
@@ -99,15 +98,9 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
     protected void updateState(TriggerState triggerState) {
         logger.debug("Update {} to {}", channelUID.getAsString(), triggerState);
         if (triggerState == TriggerState.PRESSED) {
-            this.scheduleRunnable(this::setStateHOLD, 1200, TimeUnit.MILLISECONDS);
-        } else if (triggerState == TriggerState.HOLD) {
-            this.scheduleRunnable(this::setStateReleased, 90, TimeUnit.SECONDS);
+            this.scheduleRunnable(this::setStateReleased, 1200, TimeUnit.MILLISECONDS);
         }
         super.updateState(channelUID, StringType.valueOf(triggerState.toString()));
-    }
-
-    private void setStateHOLD() {
-        this.updateState(TriggerState.HOLD);
     }
 
     private void setStateReleased() {

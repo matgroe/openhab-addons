@@ -14,7 +14,6 @@ package org.openhab.binding.giraone.internal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,16 +29,19 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.support.ReflectionSupport;
 import org.mockito.Mockito;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.util.TestDataProvider;
-import org.openhab.core.thing.Bridge;
+import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingStatus;
+import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.ThingUID;
 
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -53,7 +55,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 public class GiraOneDefaultThingHandlerTest {
     private Thing thing = Mockito.spy(Thing.class);
     private GiraOneDefaultThingHandler handler;
-    private GiraOneBridgeHandler giraOneBridgeHandler;
+    private GiraOneBridge giraOneBridge;
 
     private GiraOneChannel findGiraOneChannelWithChannelType(GiraOneChannelType type) {
         return TestDataProvider.createGiraOneProject().lookupChannels().stream().filter(f -> f.getChannelType() == type)
@@ -61,25 +63,49 @@ public class GiraOneDefaultThingHandlerTest {
     }
 
     @BeforeEach
-    void setUp() throws Exception {
-        giraOneBridgeHandler = mock(GiraOneBridgeHandler.class);
-        when(giraOneBridgeHandler.lookupGiraOneProject()).thenReturn(TestDataProvider.createGiraOneProject());
-        when(giraOneBridgeHandler.subscribeOnConnectionState(any())).thenReturn(Disposable.empty());
-
-        Bridge bridge = mock(Bridge.class);
-        when(bridge.getHandler()).thenReturn(giraOneBridgeHandler);
+    void setUp() {
+        giraOneBridge = mock(GiraOneBridge.class);
+        when(giraOneBridge.subscribeOnGiraOneDataPointValues(any(), any())).thenReturn(Disposable.empty());
+        when(giraOneBridge.lookupGiraOneProject()).thenReturn(TestDataProvider.createGiraOneProject());
 
         when(thing.getUID()).thenReturn(new ThingUID(GENERIC_TYPE_UID, "junit"));
         when(thing.getChannels()).thenReturn(List.of());
         when(thing.getThingTypeUID()).thenReturn(GENERIC_TYPE_UID);
+        when(thing.getConfiguration()).thenReturn(new Configuration(Map.of()));
 
         GiraOneChannel channel = findGiraOneChannelWithChannelType(GiraOneChannelType.Switch);
         when(thing.getProperties()).thenReturn(Map.of(PROPERTY_CHANNEL_URN, channel.getUrn()));
 
-        handler = Mockito.spy(new GiraOneDefaultThingHandler(thing));
+        handler = Mockito.spy(new GiraOneDefaultThingHandler(thing) {
+            /**
+             * @param status
+             * @param statusDetail
+             * @param description
+             */
+            @Override
+            protected void updateStatus(ThingStatus status, ThingStatusDetail statusDetail,
+                    @Nullable String description) {
+                super.updateStatus(status, statusDetail, description);
+            }
 
-        ReflectionSupport.invokeMethod(GiraOneDefaultThingHandler.class.getSuperclass().getDeclaredMethod("getBridge"),
-                doReturn(bridge).when(handler));
+            /**
+             * @param status
+             * @param statusDetail
+             */
+            @Override
+            protected void updateStatus(ThingStatus status, ThingStatusDetail statusDetail) {
+                super.updateStatus(status, statusDetail);
+            }
+
+            /**
+             * @param status
+             */
+            @Override
+            protected void updateStatus(ThingStatus status) {
+                super.updateStatus(status);
+            }
+        });
+        Mockito.doReturn(giraOneBridge).when((GiraOneAbstractThingHandler) handler).getGiraOneBridge();
 
         when(handler.getThing()).thenReturn(thing);
     }
@@ -88,8 +114,10 @@ public class GiraOneDefaultThingHandlerTest {
     @Test
     void shouldStartObservingDatapoints() {
         handler.initialize();
-        handler.bridgeMovedToConnected();
-        verify(giraOneBridgeHandler).subscribeOnGiraOneDataPointValues(any(), any());
+        verify(giraOneBridge).subscribeOnConnectionState(any());
+
+        handler.onConnectionState(GiraOneConnectionState.Connected);
+        verify(giraOneBridge).subscribeOnGiraOneDataPointValues(any(), any());
     }
 
     @DisplayName("Should build Thing from GiraOneChannel")

@@ -55,25 +55,29 @@ public class GiraOneClient {
 
     private GiraOneProject giraOneProject = new GiraOneProject();
 
+    private final GiraOneClientConfiguration configuration;
+
     /**
      * Constructor.
      *
      * @param config The {@link GiraOneClientConfiguration}
      */
     public GiraOneClient(final GiraOneClientConfiguration config) {
-        this(new GiraOneWebsocketClient(config), new GiraOneWebserviceClient(config));
+        this(config, new GiraOneWebsocketClient(config), new GiraOneWebserviceClient(config));
     }
 
     /**
      * Constructor.
      *
+     * @param config The {@link GiraOneClientConfiguration}
      * @param websocketClient The {@link GiraOneWebsocketClient} to use
      * @param webserviceClient The {@link GiraOneWebserviceClient} to use
      */
-    public GiraOneClient(GiraOneWebsocketClient websocketClient, GiraOneWebserviceClient webserviceClient) {
+    public GiraOneClient(final GiraOneClientConfiguration config, GiraOneWebsocketClient websocketClient,
+            GiraOneWebserviceClient webserviceClient) {
         this.websocketClient = websocketClient;
         this.webserviceClient = webserviceClient;
-
+        this.configuration = config;
         this.websocketClient.subscribeOnConnectionState(this::onWebsocketConnectionState);
     }
 
@@ -130,8 +134,11 @@ public class GiraOneClient {
     private void loadGiraOneProject() {
         giraOneProject = new GiraOneProject();
         try {
-            this.webserviceClient.lookupGiraOneComponentCollection().getAllChannels(GiraOneComponentType.KnxButton)
-                    .forEach(giraOneProject::addChannel);
+            if (configuration.discoverButtons) {
+                this.webserviceClient.lookupGiraOneComponentCollection().getAllChannels(GiraOneComponentType.KnxButton)
+                        .forEach(giraOneProject::addChannel);
+            }
+
             this.websocketClient.lookupGiraOneChannels().getChannels().forEach(giraOneProject::addChannel);
             this.connectionState.onNext(GiraOneConnectionState.Connected);
         } catch (GiraOneCommunicationException e) {

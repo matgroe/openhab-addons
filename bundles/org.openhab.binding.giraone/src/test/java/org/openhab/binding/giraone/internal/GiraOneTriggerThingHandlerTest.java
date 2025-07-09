@@ -103,7 +103,6 @@ class GiraOneTriggerThingHandlerTest {
         assertEquals(3, argumentCaptorState.getAllValues().size());
         assertEquals(GiraOneTriggerThingHandler.TriggerState.RELEASED, argumentCaptorState.getAllValues().getFirst());
         assertEquals(GiraOneTriggerThingHandler.TriggerState.PRESSED, argumentCaptorState.getAllValues().get(1));
-        assertEquals(GiraOneTriggerThingHandler.TriggerState.HOLD, argumentCaptorState.getAllValues().getLast());
     }
 
     @DisplayName("State must move from Released -> Pressed -> Released")
@@ -155,7 +154,6 @@ class GiraOneTriggerThingHandlerTest {
         assertEquals(4, argumentCaptorState.getAllValues().size());
         assertEquals(GiraOneTriggerThingHandler.TriggerState.RELEASED, argumentCaptorState.getAllValues().getFirst());
         assertEquals(GiraOneTriggerThingHandler.TriggerState.PRESSED, argumentCaptorState.getAllValues().get(1));
-        assertEquals(GiraOneTriggerThingHandler.TriggerState.HOLD, argumentCaptorState.getAllValues().get(2));
         assertEquals(GiraOneTriggerThingHandler.TriggerState.RELEASED, argumentCaptorState.getAllValues().getLast());
     }
 }
