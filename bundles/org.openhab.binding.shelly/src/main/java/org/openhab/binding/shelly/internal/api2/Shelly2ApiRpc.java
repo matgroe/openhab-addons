@@ -267,7 +267,7 @@ public class Shelly2ApiRpc extends Shelly2ApiClient implements ShellyApiInterfac
         // Pro 3EM has 3 meters
         // Pro 2 has 2 relays, but no meters
         // Mini PM has 1 meter, but no relay
-        if (thingType.equals(THING_TYPE_SHELLYPRO2_RELAY_STR)) {
+        if (thingType.equals(THING_TYPE_SHELLYPRO2_STR)) {
             profile.numMeters = 0;
         } else if (thingType.equals(THING_TYPE_SHELLYPRO3EM_STR)) {
             profile.numMeters = 3;
@@ -1243,7 +1243,7 @@ public class Shelly2ApiRpc extends Shelly2ApiClient implements ShellyApiInterfac
     }
 
     @Override
-    public void sendIRKey(String keyCode) throws ShellyApiException, IllegalArgumentException {
+    public void sendIRKey(String keyCode) throws ShellyApiException {
         throw new ShellyApiException("API call not implemented");
     }
 

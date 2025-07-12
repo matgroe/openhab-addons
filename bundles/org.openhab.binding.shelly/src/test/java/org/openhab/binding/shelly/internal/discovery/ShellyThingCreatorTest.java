@@ -48,7 +48,7 @@ public class ShellyThingCreatorTest {
     }
 
     private static Stream<Arguments> provideTestCasesForGetThingUIDThrowsForInvalidServiceName() {
-        return Stream.of(Arguments.of(""), Arguments.of("-", Arguments.of("foo")));
+        return Stream.of(Arguments.of(""), Arguments.of("-", Arguments.of("foo"), Arguments.of("shellypmmini")));
     }
 
     @Test
@@ -115,7 +115,6 @@ public class ShellyThingCreatorTest {
                 Arguments.of(SHELLYDT_1L, "", THING_TYPE_SHELLY1L), //
                 Arguments.of(SHELLYDT_1, "", THING_TYPE_SHELLY1), //
                 Arguments.of(SHELLYDT_SHPRO, "", THING_TYPE_SHELLY4PRO), //
-                Arguments.of(SHELLYDT_4PRO, "", THING_TYPE_SHELLY4PRO), //
                 Arguments.of(SHELLYDT_3EM, "", THING_TYPE_SHELLY3EM), //
                 Arguments.of(SHELLYDT_EM, "", THING_TYPE_SHELLYEM), //
                 Arguments.of(SHELLYDT_SHPLG_S, "", THING_TYPE_SHELLYPLUGS), //
@@ -171,6 +170,7 @@ public class ShellyThingCreatorTest {
                 Arguments.of(SHELLYDT_MINIG3_1, "", THING_TYPE_SHELLY1MINI), //
                 Arguments.of(SHELLYDT_MINIG3_PM, "", THING_TYPE_SHELLYPMMINI), //
                 Arguments.of(SHELLYDT_MINIG3_1PM, "", THING_TYPE_SHELLY1PMMINI), //
+
                 // Pro Series
                 Arguments.of(SHELLYDT_PRO1, "", THING_TYPE_SHELLYPRO1), //
                 Arguments.of(SHELLYDT_PRO1_2, "", THING_TYPE_SHELLYPRO1), //
@@ -179,9 +179,9 @@ public class ShellyThingCreatorTest {
                 Arguments.of(SHELLYDT_PRO1PM_2, "", THING_TYPE_SHELLYPRO1PM), //
                 Arguments.of(SHELLYDT_PRO1PM_3, "", THING_TYPE_SHELLYPRO1PM), //
                 Arguments.of(SHELLYDT_PRO1CB, "", THING_TYPE_SHELLYPRO1CB), //
-                Arguments.of("SPSW-002XE16EU", "", THING_TYPE_SHELLYPRO2_RELAY), //
-                Arguments.of("SPSW-102XE16EU", "", THING_TYPE_SHELLYPRO2_RELAY), //
-                Arguments.of("SPSW-202XE16EU", "", THING_TYPE_SHELLYPRO2_RELAY), //
+                Arguments.of(SHELLYDT_PRO2, "", THING_TYPE_SHELLYPRO2), //
+                Arguments.of(SHELLYDT_PRO2_2, "", THING_TYPE_SHELLYPRO2), //
+                Arguments.of(SHELLYDT_PRO2_3, "", THING_TYPE_SHELLYPRO2), //
                 Arguments.of("SPSW-002PE16EU", "relay", THING_TYPE_SHELLYPRO2PM_RELAY), //
                 Arguments.of("SPSW-102PE16EU", "relay", THING_TYPE_SHELLYPRO2PM_RELAY), //
                 Arguments.of("SPSW-202PE16EU", "relay", THING_TYPE_SHELLYPRO2PM_RELAY), //
@@ -193,12 +193,15 @@ public class ShellyThingCreatorTest {
                 Arguments.of(SHELLYDT_PRO3EM, "", THING_TYPE_SHELLYPRO3EM), //
                 Arguments.of(SHELLYDT_PRO4PM, "", THING_TYPE_SHELLYPRO4PM), //
                 Arguments.of(SHELLYDT_PRO4PM_2, "", THING_TYPE_SHELLYPRO4PM), //
+                Arguments.of(SHELLYDT_4PRO, "", THING_TYPE_SHELLYPRO4PM), //
+
                 // BLU Series
                 Arguments.of(SHELLYDT_BLUBUTTON, "", THING_TYPE_SHELLYBLUBUTTON), //
                 Arguments.of(SHELLYDT_BLUDW, "", THING_TYPE_SHELLYBLUDW), //
                 Arguments.of(SHELLYDT_BLUMOTION, "", THING_TYPE_SHELLYBLUMOTION), //
                 Arguments.of(SHELLYDT_BLUHT, "", THING_TYPE_SHELLYBLUHT), //
                 Arguments.of(SHELLYDT_BLUGW, "", THING_TYPE_SHELLYBLUGW), //
+
                 // Wall displays
                 Arguments.of(SHELLYDT_PLUSWALLDISPLAY, "", THING_TYPE_SHELLYPLUSWALLDISPLAY));
     }
@@ -207,7 +210,7 @@ public class ShellyThingCreatorTest {
     void getThingUIDReturnsThingTypeMatchingServiceName() {
         Set<ThingTypeUID> excludedThingTypeUids = Set.of(THING_TYPE_SHELLY2_RELAY, THING_TYPE_SHELLY2_ROLLER,
                 THING_TYPE_SHELLY25_ROLLER, THING_TYPE_SHELLY25_RELAY, THING_TYPE_SHELLYPLUSHTG3,
-                THING_TYPE_SHELLYPLUS2PM_RELAY, THING_TYPE_SHELLYPLUS2PM_ROLLER, THING_TYPE_SHELLYPRO2_RELAY,
+                THING_TYPE_SHELLYPLUS2PM_RELAY, THING_TYPE_SHELLYPLUS2PM_ROLLER, THING_TYPE_SHELLYPRO2,
                 THING_TYPE_SHELLYPRO2PM_ROLLER, THING_TYPE_SHELLYPRO2PM_RELAY, THING_TYPE_SHELLYRGBW2_COLOR);
 
         for (ThingTypeUID supportedThingTypeUid : SUPPORTED_THING_TYPES.stream()
@@ -217,5 +220,29 @@ public class ShellyThingCreatorTest {
             ThingUID expectedThingUid = new ThingUID(BINDING_ID, thingTypeId, DEVICE_ID);
             assertThat(actualThingUid, is(equalTo(expectedThingUid)));
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideTestCasesForIsValidShellyServiceName")
+    void isValidShellyServiceName(String serviceName, boolean expected) {
+        assertThat("serviceName: " + serviceName, ShellyThingCreator.isValidShellyServiceName(serviceName),
+                is(expected));
+    }
+
+    private static Stream<Arguments> provideTestCasesForIsValidShellyServiceName() {
+        return Stream.of( //
+                Arguments.of("shellypmmini-123456789012", true), //
+                Arguments.of("ShellyPlusPMMini-Test", true), //
+                Arguments.of("shelly1-ABC", true), //
+                Arguments.of("ShellyOne-001", true), //
+                Arguments.of("MyShelly-001", true), //
+                Arguments.of("my-shelly", false), //
+                Arguments.of("shelly_one-001", false), //
+                Arguments.of("shelly-", false), //
+                Arguments.of("shelly 1-001", false), //
+                Arguments.of("shelly1-001!", false), //
+                Arguments.of("shell-001", false), //
+                Arguments.of("ShellyPlusPMMini", false), //
+                Arguments.of("ShellyPlusPMMini - Test", false));
     }
 }
