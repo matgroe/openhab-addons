@@ -63,6 +63,13 @@
 				<advanced>true</advanced>
 			</parameter>
 
+			<parameter name="buttonReleaseTimeout" type="integer" min="200" max="5000">
+				<label>Button RELEASED Timeout</label>
+				<description>The timeout in ms, a Pressed Button Switches back the Released.</description>
+				<default>1200</default>
+				<advanced>true</advanced>
+			</parameter>
+
 		</config-description>
 	</bridge-type>
 </thing:thing-descriptions>

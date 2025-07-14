@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -173,7 +172,7 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
             Objects.requireNonNull(backgroundDiscoveryJob).cancel(true);
         }
         backgroundDiscoveryJob = null;
-        removeOlderResults(Instant.now());
+        // TODO: removeOlderResults(getTimestampOfLastScan());
     }
 
     @Override

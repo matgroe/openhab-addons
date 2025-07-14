@@ -12,10 +12,8 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import java.util.Collection;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -26,8 +24,9 @@ import org.openhab.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import java.util.Collection;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The {@link GiraOneTriggerThingHandler} is responsible for handling special
@@ -38,6 +37,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 @NonNullByDefault
 public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
     private final ChannelUID channelUID;
+    private final int releasedTimeout;
     private @Nullable ScheduledFuture<?> scheduledRunnable = null;
 
     protected enum TriggerState {
@@ -50,6 +50,7 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
     public GiraOneTriggerThingHandler(Thing thing) {
         super(thing);
         this.channelUID = new ChannelUID(this.getThing().getUID(), "trigger#state");
+        this.releasedTimeout = getConfigAs(GiraOneClientConfiguration.class).buttonReleaseTimeout;
     }
 
     /**
@@ -98,7 +99,7 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
     protected void updateState(TriggerState triggerState) {
         logger.debug("Update {} to {}", channelUID.getAsString(), triggerState);
         if (triggerState == TriggerState.PRESSED) {
-            this.scheduleRunnable(this::setStateReleased, 1200, TimeUnit.MILLISECONDS);
+            this.scheduleRunnable(this::setStateReleased, this.releasedTimeout, TimeUnit.MILLISECONDS);
         }
         super.updateState(channelUID, StringType.valueOf(triggerState.toString()));
     }
