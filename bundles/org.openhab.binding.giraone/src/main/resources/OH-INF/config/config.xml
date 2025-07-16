@@ -6,14 +6,9 @@
 		https://openhab.org/schemas/config-description-1.0.0.xsd">
 
 	<config-description uri="giraone:channel:definition">
-		<parameter name="channelViewUrn" type="text" required="false">
-			<label>Channel Unique Resource Name</label>
-			<description>The Channels Unique Resource Name</description>
-		</parameter>
-
-		<parameter name="channelName" type="text" required="false">
-			<label>GiraOne Label</label>
-			<description>The Gira One Project's Channel/Device Label</description>
+		<parameter name="channelUrn" type="text" required="false" readOnly="true">
+			<label>Unique Resource Name</label>
+			<description>The Gira One Channel's Unique Resource Name (URN)</description>
 		</parameter>
 	</config-description>
 

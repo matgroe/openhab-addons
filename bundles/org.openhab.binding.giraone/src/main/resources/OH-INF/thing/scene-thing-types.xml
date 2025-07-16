@@ -14,7 +14,7 @@
 		<channels>
 			<channel id="execute" typeId="scene-execute"/>
 		</channels>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 </thing:thing-descriptions>

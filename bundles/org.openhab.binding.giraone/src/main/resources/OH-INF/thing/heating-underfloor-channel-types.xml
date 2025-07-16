@@ -35,7 +35,6 @@
 		<description>Shows up, if the heater is warming</description>
 		<category>TemperatureHot</category>
 		<tags>
-			<tag>Measurement</tag>
 			<tag>Status</tag>
 		</tags>
 		<state readOnly="true">
@@ -50,6 +49,9 @@
 		<item-type>String</item-type>
 		<label>Heating Profile</label>
 		<description>Heater Working Profile</description>
+		<tags>
+			<tag>Setpoint</tag>
+		</tags>
 		<state>
 			<options>
 				<option value="1">Comfort</option>

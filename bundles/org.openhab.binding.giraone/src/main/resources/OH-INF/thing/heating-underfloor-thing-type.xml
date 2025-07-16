@@ -18,7 +18,7 @@
 		<channel-groups>
 			<channel-group id="heating" typeId="heating-underfloor"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 

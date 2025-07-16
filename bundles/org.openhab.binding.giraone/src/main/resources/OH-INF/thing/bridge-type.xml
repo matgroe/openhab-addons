@@ -70,6 +70,13 @@
 				<advanced>true</advanced>
 			</parameter>
 
+			<parameter name="overrideWithProjectSettings" type="boolean">
+				<label>Allow to override manual config by Project</label>
+				<description>Allows to override manual configured settings for Label or Location by values from Project</description>
+				<default>false</default>
+				<advanced>true</advanced>
+			</parameter>
+
 		</config-description>
 	</bridge-type>
 </thing:thing-descriptions>

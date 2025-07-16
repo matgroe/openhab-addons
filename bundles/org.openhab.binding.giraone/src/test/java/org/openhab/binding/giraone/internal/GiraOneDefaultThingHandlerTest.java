@@ -12,6 +12,24 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.types.GiraOneChannel;
+import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
+import org.openhab.binding.giraone.internal.util.TestDataProvider;
+import org.openhab.core.config.core.Configuration;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingUID;
+
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -23,28 +41,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
-import org.openhab.binding.giraone.internal.types.GiraOneChannel;
-import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
-import org.openhab.binding.giraone.internal.util.TestDataProvider;
-import org.openhab.core.config.core.Configuration;
-import org.openhab.core.thing.Thing;
-import org.openhab.core.thing.ThingStatus;
-import org.openhab.core.thing.ThingStatusDetail;
-import org.openhab.core.thing.ThingUID;
-
-import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * Test class for {@link GiraOneShutterThingHandler}.
@@ -76,35 +72,8 @@ public class GiraOneDefaultThingHandlerTest {
         GiraOneChannel channel = findGiraOneChannelWithChannelType(GiraOneChannelType.Switch);
         when(thing.getProperties()).thenReturn(Map.of(PROPERTY_CHANNEL_URN, channel.getUrn()));
 
-        handler = Mockito.spy(new GiraOneDefaultThingHandler(thing) {
-            /**
-             * @param status
-             * @param statusDetail
-             * @param description
-             */
-            @Override
-            protected void updateStatus(ThingStatus status, ThingStatusDetail statusDetail,
-                    @Nullable String description) {
-                super.updateStatus(status, statusDetail, description);
-            }
+        handler = Mockito.spy(new GiraOneDefaultThingHandler(thing));
 
-            /**
-             * @param status
-             * @param statusDetail
-             */
-            @Override
-            protected void updateStatus(ThingStatus status, ThingStatusDetail statusDetail) {
-                super.updateStatus(status, statusDetail);
-            }
-
-            /**
-             * @param status
-             */
-            @Override
-            protected void updateStatus(ThingStatus status) {
-                super.updateStatus(status);
-            }
-        });
         Mockito.doReturn(giraOneBridge).when((GiraOneAbstractThingHandler) handler).getGiraOneBridge();
 
         when(handler.getThing()).thenReturn(thing);

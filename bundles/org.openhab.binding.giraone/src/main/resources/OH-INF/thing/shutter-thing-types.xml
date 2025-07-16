@@ -16,7 +16,7 @@
 			<channel-group id="shutter" typeId="blind-covering"/>
 			<channel-group id="slat" typeId="slat-covering"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 	<thing-type id="shutter-awning" listed="false">
@@ -29,7 +29,7 @@
 		<channel-groups>
 			<channel-group id="shutter" typeId="blind-covering"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 	<thing-type id="shutter-roof-window" listed="false">
@@ -42,7 +42,7 @@
 		<channel-groups>
 			<channel-group id="shutter" typeId="blind-covering"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 </thing:thing-descriptions>

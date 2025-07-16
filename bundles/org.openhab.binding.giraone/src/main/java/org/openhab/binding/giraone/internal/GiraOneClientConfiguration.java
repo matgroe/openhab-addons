@@ -33,4 +33,5 @@ public class GiraOneClientConfiguration {
     public int buttonReleaseTimeout = 1200;
     public boolean discoverDevices = true;
     public boolean discoverButtons = true;
+    public boolean overrideWithProjectSettings = false;
 }

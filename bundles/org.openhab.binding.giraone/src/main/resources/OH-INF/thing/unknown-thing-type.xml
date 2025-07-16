@@ -19,6 +19,6 @@
 			<channel-group id="switch" typeId="switchable-light"/>
 			<channel-group id="dimmer" typeId="dimmable-light"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 </thing:thing-descriptions>

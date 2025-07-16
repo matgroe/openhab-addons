@@ -12,12 +12,11 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import java.time.Instant;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
@@ -41,11 +40,11 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.Subject;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The {@link GiraOneBridgeHandler} is responsible for handling commands, which are
@@ -159,7 +158,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     protected void clientMovedToConnecting() {
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.NOT_YET_READY, "@text/bridge.try-connect");
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.NOT_YET_READY, "@text/giraone.bridge.try-connect");
     }
 
     protected void clientMovedToConnected() {
@@ -169,7 +168,8 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     protected void clientMovedToTemporaryUnavailable() {
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "@text/bridge.temporary-unavailable");
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
+                "@text/giraone.bridge.temporary-unavailable");
         GiraOneClientConfiguration cfg = getConfigAs(GiraOneClientConfiguration.class);
         scheduler.schedule(this::doBackgroundInitialization, cfg.tryReconnectAfterSeconds, TimeUnit.SECONDS);
     }

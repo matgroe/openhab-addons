@@ -14,7 +14,7 @@
 		<channel-groups>
 			<channel-group id="switch" typeId="switchable-light"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 	<thing-type id="switch-power-outlet" listed="false">
@@ -27,7 +27,7 @@
 		<channel-groups>
 			<channel-group id="switch" typeId="switchable-poweroutlet"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 </thing:thing-descriptions>

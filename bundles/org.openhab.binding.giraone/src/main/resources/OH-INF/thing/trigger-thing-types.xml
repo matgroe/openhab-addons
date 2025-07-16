@@ -15,7 +15,7 @@
 		<channel-groups>
 			<channel-group id="trigger" typeId="trigger-channel-group"/>
 		</channel-groups>
-		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 </thing:thing-descriptions>

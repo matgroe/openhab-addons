@@ -15,6 +15,7 @@
 			<channel id="value" typeId="system.atmospheric-humidity"/>
 		</channels>
 		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 
@@ -29,6 +30,7 @@
 			<channel id="value" typeId="system.indoor-temperature"/>
 		</channels>
 		<representation-property>channelUrn</representation-property>
+		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
 
 </thing:thing-descriptions>

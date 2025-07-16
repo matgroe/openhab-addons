@@ -12,21 +12,7 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_DATAPOINTS;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
@@ -48,7 +34,20 @@ import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_DATAPOINTS;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 
 /**
  * The {@link GiraOneAbstractThingHandler} is responsible for handling commands, which are
@@ -59,7 +58,10 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 @NonNullByDefault
 public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
     protected final CompositeDisposable disposables = new CompositeDisposable();
+
     private final Logger logger = LoggerFactory.getLogger(GiraOneAbstractThingHandler.class);
+    private static final String CONFIG_MISSING_CHANNEL_URN = "@text/giraone.thing.config.missing.channel-urn";
+    private static final String PROJECT_MISSING_CHANNEL_URN = "@text/giraone.project.missing.channel-urn";
 
     public GiraOneAbstractThingHandler(Thing thing) {
         super(thing);
@@ -116,46 +118,36 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
         startObservingGiraOneChannel();
     }
 
-    private Optional<String> detectChannelUrn() {
-        String propChannelViewUrn = getThing().getProperties().get(PROPERTY_CHANNEL_URN);
-        if (propChannelViewUrn == null) {
-            logger.warn("detectChannelViewUrn failed.");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-                    "Cannot detect thing property " + PROPERTY_CHANNEL_URN);
-            return Optional.empty();
-        }
-        return Optional.of(propChannelViewUrn);
+    /**
+     * Detects the channelUrn from the configuration
+     * 
+     * @return an Optional<String> which represents the channelUrn.
+     */
+    protected Optional<String> detectChannelUrn() {
+        String channelUrn = getThing().getProperties().get(PROPERTY_CHANNEL_URN);
+        return channelUrn != null ? Optional.of(channelUrn) : Optional.empty();
     }
 
     /**
+     * Detects the channelUrn and performs a lookup for the concerning {@link GiraOneChannel}
+     * within the {@link GiraOneProject}.
      *
-     * @return an {@link Optional< GiraOneChannel >}
+     * @return an Optional<GiraOneChannel>
      */
     protected Optional<GiraOneChannel> lookupGiraOneProjectChannel() {
-        Optional<GiraOneChannel> theChannel = Optional.empty();
         GiraOneProject project = getGiraOneBridge().lookupGiraOneProject();
-
         Optional<String> channelUrn = detectChannelUrn();
         if (channelUrn.isPresent()) {
-            logger.debug("startObservingGiraOneChannel :: try to lookup channel by urn {}", channelUrn.get());
-            theChannel = project.lookupChannelByUrn(channelUrn.get());
-        }
-
-        if (theChannel.isEmpty()) {
-            String label = getThing().getLabel();
-            if (label != null) {
-                logger.debug("startObservingGiraOneChannel :: try to lookup channel by label {}", label);
-                theChannel = project.lookupChannelByName(label);
+            logger.debug("detectGiraOneChannel :: try to lookup channel by urn {}", channelUrn.get());
+            Optional<GiraOneChannel> channel = project.lookupChannelByUrn(channelUrn.get());
+            if (channel.isPresent()) {
+                return channel;
+            } else {
+                logger.warn("detectGiraOneChannel :: channel lookup by urn {} returned without result. ",
+                        channelUrn.get());
             }
         }
-
-        if (theChannel.isEmpty()) {
-            logger.debug("startObservingGiraOneChannel :: channel lookup by urn or label.");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "Channel Lookup Failed.");
-        } else {
-            updateStatus(ThingStatus.ONLINE);
-        }
-        return theChannel;
+        return Optional.empty();
     }
 
     /**
@@ -167,16 +159,23 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
      */
     Thing buildThing(GiraOneChannel channel) {
         ThingBuilder thingBuilder = editThing();
-        List<Channel> existingChannels = thing.getChannels();
+
         thingBuilder.withProperty(PROPERTY_FUNCTION_TYPE, channel.getFunctionType().getName());
         thingBuilder.withProperty(PROPERTY_CHANNEL_TYPE, channel.getChannelType().getName());
         thingBuilder.withProperty(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
         thingBuilder.withProperty(PROPERTY_CHANNEL_DATAPOINTS, channel.getDataPoints().toString());
 
-        thingBuilder.withChannels(existingChannels);
-        thingBuilder.withLabel(channel.getName());
-        thingBuilder.withLocation(channel.getLocation());
+        if (getConfigAs(GiraOneClientConfiguration.class).overrideWithProjectSettings) {
+            thingBuilder.withLabel(channel.getName());
+            thingBuilder.withLocation(channel.getLocation());
+        }
+        thingBuilder.withChannels(determineSupportedChannels(channel));
 
+        return thingBuilder.build();
+    }
+
+    private List<Channel> determineSupportedChannels(GiraOneChannel channel) {
+        List<Channel> existingChannels = thing.getChannels();
         if (thing.getThingTypeUID().equals(GENERIC_TYPE_UID)) {
             List<String> supportedDataPoints = channel.getDataPoints().stream().map(GiraOneDataPoint::getName)
                     .map(CaseFormatter::lowerCaseHyphen).toList();
@@ -184,24 +183,25 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
             List<String> filtered = existingChannels.stream().map((f -> f.getUID().getId()))
                     .map(this::normalizeOpenhabChannelName).filter(supportedDataPoints::contains).toList();
 
-            List<Channel> supportedChannels = existingChannels.stream()
+            return existingChannels.stream()
                     .filter(c -> filtered.contains(normalizeOpenhabChannelName(c.getUID().getId()))).toList();
-
-            thingBuilder.withChannels(supportedChannels);
         }
-        return thingBuilder.build();
+        return existingChannels;
     }
 
     private void startObservingGiraOneChannel() {
         Optional<GiraOneChannel> channel = lookupGiraOneProjectChannel();
-
         if (channel.isEmpty()) {
-            logger.info(
-                    "startObservingGiraOneChannel failed. Received empty result from lookupGiraOneProjectChannel().");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-                    "Cannot detect GiraOneChannel by channelUrn, label or name");
+            Optional<String> channelUrn = detectChannelUrn();
+            if (channelUrn.isEmpty()) {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, CONFIG_MISSING_CHANNEL_URN);
+            } else {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
+                        String.format("%s [\"%s\"]", PROJECT_MISSING_CHANNEL_URN, channelUrn.get()));
+            }
         } else {
             logger.trace("startObservingGiraOneChannel :: {}", channel.get());
+            updateStatus(ThingStatus.ONLINE);
             subscribeOnGiraOneDataPointValues(channel.get().getDataPoints(), this.disposables);
             getGiraOneBridge().lookupGiraOneChannelValues(channel.get());
         }
@@ -237,20 +237,17 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "Bridge is moved into error state");
     }
 
-    private boolean configurationHasValue(Configuration configuration, String key) {
-        return configuration.containsKey(key) && configuration.get(key) != null && !"".equals(configuration.get(key));
+    private Optional<Object> getConfigurationValue(String key) {
+        return getConfig().containsKey(key) ? Optional.of(getConfig().get(key)) : Optional.empty();
     }
 
     protected void applyConfiguration() {
-        Configuration configuration = editConfiguration();
         invalidateThingProperties();
-        if (configurationHasValue(configuration, PROPERTY_CHANNEL_URN)) {
-            updateProperty(PROPERTY_CHANNEL_URN, configuration.get(PROPERTY_CHANNEL_URN).toString());
-        }
 
-        if (configurationHasValue(configuration, PROPERTY_CHANNEL_NAME)) {
-            getThing().setLabel(configuration.get(PROPERTY_CHANNEL_NAME).toString());
-        }
+        getConfigurationValue(PROPERTY_CHANNEL_URN)
+                .ifPresent(val -> updateProperty(PROPERTY_CHANNEL_URN, val.toString()));
+
+        getConfigurationValue(PROPERTY_CHANNEL_NAME).ifPresent(val -> getThing().setLabel(val.toString()));
     }
 
     private void invalidateThingProperties() {
