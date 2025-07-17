@@ -19,6 +19,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_SERVER_TIME;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
@@ -28,6 +29,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.core.config.core.Configuration;
+import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -55,6 +57,8 @@ import java.util.concurrent.TimeUnit;
 @Component(service = { GiraOneBridgeHandler.class, GiraOneBridge.class })
 @NonNullByDefault
 public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBridge {
+    private final static String GDS_DEVICE_CHANNEL_URN = "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:.*";
+
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
     private final GiraOneClient giraOneClient;
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -107,6 +111,8 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         // Register for ConnectionState changes
         disposables.add(this.giraOneClient.observeGiraOneConnectionState(this::onConnectionStateChanged));
 
+        subscribeOnGiraOneDataPointValues(GDS_DEVICE_CHANNEL_URN, this::onDeviceChannelEvent);
+
         scheduler.execute(this::doBackgroundInitialization);
     }
 
@@ -157,6 +163,19 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         }
     }
 
+    private void onDeviceChannelEvent(GiraOneValue value) {
+        logger.trace("onDeviceChannelEvent:: {}", value);
+        if ("Local-Time".equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
+            updateState(CHANNEL_SERVER_TIME, DateTimeType.valueOf(value.getValue()));
+        }
+    }
+
+    private void scheduleReconnect() {
+        GiraOneClientConfiguration cfg = getConfigAs(GiraOneClientConfiguration.class);
+        logger.info("Schedule server reconnect in {} seconds.", cfg.tryReconnectAfterSeconds);
+        scheduler.schedule(this::doBackgroundInitialization, cfg.tryReconnectAfterSeconds, TimeUnit.SECONDS);
+    }
+
     protected void clientMovedToConnecting() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.NOT_YET_READY, "@text/giraone.bridge.try-connect");
     }
@@ -170,8 +189,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     protected void clientMovedToTemporaryUnavailable() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
                 "@text/giraone.bridge.temporary-unavailable");
-        GiraOneClientConfiguration cfg = getConfigAs(GiraOneClientConfiguration.class);
-        scheduler.schedule(this::doBackgroundInitialization, cfg.tryReconnectAfterSeconds, TimeUnit.SECONDS);
+        this.scheduleReconnect();
     }
 
     protected void clientMovedToDisconnected() {
@@ -180,6 +198,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     protected void clientMovedToError() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+        this.scheduleReconnect();
     }
 
     void onGiraOneValue(GiraOneValue giraOneValue) {

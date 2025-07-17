@@ -14,6 +14,13 @@ package org.openhab.binding.giraone.internal;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_DATAPOINTS;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
@@ -40,14 +47,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_DATAPOINTS;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 
 /**
  * The {@link GiraOneAbstractThingHandler} is responsible for handling commands, which are
@@ -78,7 +77,7 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
         Optional<Channel> channel = thing.getChannels().stream()
                 .filter(f -> channelID.equals(normalizeOpenhabChannelName(f.getUID().getId()))).findFirst();
         if (channel.isPresent()) {
-            logger.debug("updateState ::  '{}' :: '{}'", channel.get(), state.toString());
+            logger.debug("updateState ::  '{}' :: '{}'", channel.get().getUID(), state.toString());
             super.updateState(channel.get().getUID().getId(), state);
         }
     }
@@ -150,6 +149,13 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
         return Optional.empty();
     }
 
+    protected GiraOneClientConfiguration getGiraOneClientConfiguration() {
+        if (getBridge() != null) {
+            return (getBridge()).getConfiguration().as(GiraOneClientConfiguration.class);
+        }
+        return getConfigAs(GiraOneClientConfiguration.class);
+    }
+
     /**
      * This function build the thing definition for OpenHab.
      *
@@ -165,7 +171,7 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
         thingBuilder.withProperty(PROPERTY_CHANNEL_TYPE_ID, channel.getChannelTypeId().getName());
         thingBuilder.withProperty(PROPERTY_CHANNEL_DATAPOINTS, channel.getDataPoints().toString());
 
-        if (getConfigAs(GiraOneClientConfiguration.class).overrideWithProjectSettings) {
+        if (getGiraOneClientConfiguration().overrideWithProjectSettings) {
             thingBuilder.withLabel(channel.getName());
             thingBuilder.withLocation(channel.getLocation());
         }

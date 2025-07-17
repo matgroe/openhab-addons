@@ -12,12 +12,12 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.thing.ThingTypeUID;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.thing.ThingTypeUID;
 
 /**
  * The {@link GiraOneBindingConstants} class defines common constants, which are
@@ -104,4 +104,5 @@ public class GiraOneBindingConstants {
     public static final String CHANNEL_FLOAT = "float";
     public static final String CHANNEL_EXECUTE = "execute";
     public static final String CHANNEL_TEACH = "teach";
+    public static final String CHANNEL_SERVER_TIME = "server-time";
 }

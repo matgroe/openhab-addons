@@ -50,7 +50,7 @@ public class GiraOneTriggerThingHandler extends GiraOneDefaultThingHandler {
     public GiraOneTriggerThingHandler(Thing thing) {
         super(thing);
         this.channelUID = new ChannelUID(this.getThing().getUID(), "trigger#state");
-        this.releasedTimeout = getConfigAs(GiraOneClientConfiguration.class).buttonReleaseTimeout;
+        this.releasedTimeout = getGiraOneClientConfiguration().buttonReleaseTimeout;
     }
 
     /**

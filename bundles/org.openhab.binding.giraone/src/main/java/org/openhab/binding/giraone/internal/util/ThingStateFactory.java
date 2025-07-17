@@ -14,6 +14,7 @@ package org.openhab.binding.giraone.internal.util;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.GiraOneBindingConstants;
+import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.StringType;
@@ -31,6 +32,10 @@ public abstract class ThingStateFactory {
         switch (channelId) {
             case GiraOneBindingConstants.CHANNEL_ON_OFF:
                 return OnOffType.from(value);
+            case GiraOneBindingConstants.CHANNEL_SERVER_TIME:
+                return DateTimeType.valueOf(value);
+            case GiraOneBindingConstants.CHANNEL_FLOAT:
+                return DecimalType.valueOf(value);
 
             // case GiraOneBindingConstants.CHANNEL_SHIFT:
             // case GiraOneBindingConstants.CHANNEL_BRIGHTNESS:
@@ -47,9 +52,6 @@ public abstract class ThingStateFactory {
             // case GiraOneBindingConstants.CHANNEL_HEATING:
             // case GiraOneBindingConstants.CHANNEL_COOLING:
             // case GiraOneBindingConstants.CHANNEL_HEAT_COOL:
-            case GiraOneBindingConstants.CHANNEL_FLOAT:
-                return DecimalType.valueOf(value);
-
             // case GiraOneBindingConstants.CHANNEL_EXECUTE:
             // case GiraOneBindingConstants.CHANNEL_TEACH:
             // case GiraOneBindingConstants.CHANNEL_MOVEMENT:
