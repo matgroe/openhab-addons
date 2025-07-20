@@ -21,7 +21,7 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
@@ -77,7 +77,7 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
         logger.debug("initialize {}", getThing().getUID());
         try {
             applyConfiguration();
-            disposables.add(getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState));
+            disposables.add(getGiraOneBridge().subscribeOnConnectionState(this::onBridgeConnectionState));
         } catch (Exception exp) {
             updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
         }
@@ -111,29 +111,21 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
     /**
      * Handler function for receiving updates on the {@link GiraOneBridge} connection state.
      *
-     * @param connectionState The {@link GiraOneConnectionState}.
+     * @param connectionState The {@link GiraOneBridgeState}.
      */
-    void onConnectionState(GiraOneConnectionState connectionState) {
-        logger.trace("onConnectionState :: {}", connectionState);
+    void onBridgeConnectionState(GiraOneBridgeState connectionState) {
+        logger.trace("onBridgeConnectionState :: {}", connectionState);
         switch (connectionState) {
-            case Connecting -> this.bridgeMovedToConnecting();
-            case Connected -> this.bridgeMovedToConnected();
-            case Disconnected -> this.bridgeMovedToDisconnected();
+            case Online -> this.bridgeMovedToOnline();
+            case Offline -> this.bridgeMovedToOffline();
             case Error -> this.bridgeMovedToError();
-            case TemporaryUnavailable -> this.bridgeMovedToTemporaryUnavailable();
         }
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Connecting}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneClientConnectionState#Connected}
      */
-    protected void bridgeMovedToConnecting() {
-    }
-
-    /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Connected}
-     */
-    protected void bridgeMovedToConnected() {
+    protected void bridgeMovedToOnline() {
         startObservingGiraOneChannel();
     }
 
@@ -265,21 +257,14 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#TemporaryUnavailable}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneClientConnectionState#Disconnected}
      */
-    protected void bridgeMovedToTemporaryUnavailable() {
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Bridge temporary offline.");
-    }
-
-    /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Disconnected}
-     */
-    protected void bridgeMovedToDisconnected() {
+    protected void bridgeMovedToOffline() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#Error}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneClientConnectionState#Error}
      */
     protected void bridgeMovedToError() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "Bridge is moved into error state");

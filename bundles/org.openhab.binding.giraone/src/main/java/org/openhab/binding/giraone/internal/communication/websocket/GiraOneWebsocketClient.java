@@ -31,10 +31,10 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneMessageType;
 import org.openhab.binding.giraone.internal.communication.commands.GetDeviceConfig;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
@@ -111,7 +111,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
     final Subject<GiraOneValue> values = PublishSubject.create();
 
     /** Observe this subject for Gira Server connection state */
-    final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
+    final ReplaySubject<GiraOneClientConnectionState> connectionState = ReplaySubject.createWithSize(1);
 
     /**
      * Constructor
@@ -126,7 +126,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         this.gson = GsonMapperFactory.createGson();
         this.giraOneWssEndpoint = String.format(TEMPLATE_WEBSOCKET_URL, config.hostname,
                 computeWebsocketAuthToken(config.username, config.password));
-        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
         this.timeoutSeconds = config.defaultTimeoutSeconds;
         this.maxTextMessageSize = config.maxTextMessageSize * FACTOR_BYTES_2_KILO_BYTES;
     }
@@ -169,7 +169,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
                     : Objects.requireNonNull(exp);
             if (exp.getCause() instanceof ConnectException) {
                 this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, cause));
-                this.connectionState.onNext(GiraOneConnectionState.TemporaryUnavailable);
+                this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
             } else {
                 this.clientExceptions
                         .onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, cause));
@@ -181,12 +181,12 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      * Establish a new Websocket connection to the Gira One Server.
      */
     public void connect() {
-        if (connectionState.getValue() != GiraOneConnectionState.Disconnected) {
+        if (connectionState.getValue() != GiraOneClientConnectionState.Disconnected) {
             this.disconnect();
         }
 
         logger.debug("Connecting to {}", this.giraOneWssEndpoint);
-        this.connectionState.onNext(GiraOneConnectionState.Connecting);
+        this.connectionState.onNext(GiraOneClientConnectionState.Connecting);
         observeAndEmitDataPointValues();
         HttpClient httpClient = new HttpClient(new SslContextFactory.Client(true));
         WebSocketClient webSocketClient = createWebSocketClient(httpClient);
@@ -211,7 +211,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
             throw new GiraOneClientException(GiraOneClientException.DISCONNECT_FAILED, e);
         } finally {
             this.websocketSession = null;
-            this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+            this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
             this.dataPointDisposable.dispose();
         }
     }
@@ -243,26 +243,26 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         return new GiraOneValueChange(event.getUrn(), event.getNewValue(), event.getOldValue());
     }
 
-    private void emitConnectionStateException(GiraOneConnectionState expected) {
+    private void emitConnectionStateException(GiraOneClientConnectionState expected) {
         this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
                 expected.toString(), connectionState.getValue().toString()));
     }
 
     public GiraOneDeviceConfiguration lookupGiraOneDeviceConfiguration() {
-        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneClientConnectionState.Connected) {
             return execute(GetDeviceConfig.builder().build()).getReply(GiraOneDeviceConfiguration.class);
         }
         throw new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
-                GiraOneConnectionState.Connected.toString(),
+                GiraOneClientConnectionState.Connected.toString(),
                 Objects.requireNonNull(connectionState.getValue()).toString());
     }
 
     public GiraOneChannelCollection lookupGiraOneChannels() {
-        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneClientConnectionState.Connected) {
             return execute(GetUIConfiguration.builder().build()).getReply(GiraOneChannelCollection.class);
         }
         throw new GiraOneClientException(GiraOneClientException.UNEXPECTED_CONNECTION_STATE,
-                GiraOneConnectionState.Connected.toString(),
+                GiraOneClientConnectionState.Connected.toString(),
                 Objects.requireNonNull(connectionState.getValue()).toString());
     }
 
@@ -272,12 +272,12 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      * @param dataPoint The {@link GiraOneDataPoint} to lookup.
      */
     public void lookupGiraOneDataPointValue(final GiraOneDataPoint dataPoint) {
-        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneClientConnectionState.Connected) {
             if (dataPoint.getUrn() != null) {
                 send(GetValue.builder().with(GetValue::setUrn, dataPoint.getUrn()).build());
             }
         } else {
-            emitConnectionStateException(GiraOneConnectionState.Connected);
+            emitConnectionStateException(GiraOneClientConnectionState.Connected);
         }
     }
 
@@ -288,14 +288,14 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      * @param value The new value to be set.
      */
     public void changeGiraOneDataPointValue(final GiraOneDataPoint dataPoint, Object value) {
-        if (connectionState.getValue() == GiraOneConnectionState.Connected) {
+        if (connectionState.getValue() == GiraOneClientConnectionState.Connected) {
             send(SetValue.builder().with(SetValue::setUrn, dataPoint.getUrn()).with(SetValue::setValue, value).build());
         } else {
-            emitConnectionStateException(GiraOneConnectionState.Connected);
+            emitConnectionStateException(GiraOneClientConnectionState.Connected);
         }
     }
 
-    public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNext) {
+    public Disposable subscribeOnConnectionState(Consumer<GiraOneClientConnectionState> onNext) {
         return this.connectionState.subscribe(onNext);
     }
 
@@ -398,9 +398,9 @@ public class GiraOneWebsocketClient implements WebSocketListener {
     public void onWebSocketClose(int code, String reason) {
         logger.info("WebSocket is closed with code={} and reason={}", code, reason);
         if (code == WS_GOING_AWAY.getCode()) {
-            this.connectionState.onNext(GiraOneConnectionState.TemporaryUnavailable);
+            this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
         }
-        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
     }
 
     @Override
@@ -414,7 +414,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
             this.clientExceptions
                     .onNext(new GiraOneClientException(GiraOneClientException.WEBSOCKET_COMMUNICATION, throwable));
         }
-        this.connectionState.onNext(GiraOneConnectionState.Error);
+        this.connectionState.onNext(GiraOneClientConnectionState.Error);
     }
 
     @Override
@@ -430,7 +430,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
             logger.trace("Registering Application");
             execute(RegisterApplication.builder().with(RegisterApplication::setApplicationId, InstanceUUID.get())
                     .with(RegisterApplication::setApplicationType, "api").build());
-            this.connectionState.onNext(GiraOneConnectionState.Connected);
+            this.connectionState.onNext(GiraOneClientConnectionState.Connected);
         });
     }
 }

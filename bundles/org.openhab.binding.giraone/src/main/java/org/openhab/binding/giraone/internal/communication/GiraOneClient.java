@@ -12,6 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
@@ -24,12 +29,6 @@ import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.ReplaySubject;
-import io.reactivex.rxjava3.subjects.Subject;
 
 /**
  * Client for interacting with the Gira One Server. It delegates different commands
@@ -48,7 +47,7 @@ public class GiraOneClient {
     private final GiraOneWebserviceClient webserviceClient;
 
     /** Observe this subject for Gira Server connection state */
-    private final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
+    private final ReplaySubject<GiraOneClientConnectionState> connectionState = ReplaySubject.createWithSize(1);
 
     /** Observe this subject for occured {@link GiraOneClientException} */
     private final Subject<GiraOneClientException> clientExceptions = PublishSubject.create();
@@ -81,21 +80,21 @@ public class GiraOneClient {
         this.websocketClient.subscribeOnConnectionState(this::onWebsocketConnectionState);
     }
 
-    private void onWebsocketConnectionState(GiraOneConnectionState giraOneConnectionState) {
-        if (giraOneConnectionState == GiraOneConnectionState.Connected) {
+    private void onWebsocketConnectionState(GiraOneClientConnectionState giraOneClientConnectionState) {
+        if (giraOneClientConnectionState == GiraOneClientConnectionState.Connected) {
             this.loadGiraOneProject();
         } else {
-            connectionState.onNext(giraOneConnectionState);
+            connectionState.onNext(giraOneClientConnectionState);
         }
     }
 
     /**
-     * Register's a listener for changes on {@link GiraOneConnectionState}.
+     * Register's a listener for changes on {@link GiraOneClientConnectionState}.
      *
-     * @param consumer The Consumer for {@link GiraOneConnectionState} changes.
+     * @param consumer The Consumer for {@link GiraOneClientConnectionState} changes.
      * @return a {@link Disposable}
      */
-    public Disposable observeGiraOneConnectionState(Consumer<GiraOneConnectionState> consumer) {
+    public Disposable observeGiraOneConnectionState(Consumer<GiraOneClientConnectionState> consumer) {
         return connectionState.subscribe(consumer);
     }
 
@@ -112,7 +111,7 @@ public class GiraOneClient {
 
     /**
      * Initiates a connection to Gira One Server. The current connection state is reported
-     * through the {@link GiraOneConnectionState} observer. Register on
+     * through the {@link GiraOneClientConnectionState} observer. Register on
      * {@link GiraOneClient#observeGiraOneConnectionState(Consumer)
      * to get informed about connection state changes.
      *
@@ -120,13 +119,13 @@ public class GiraOneClient {
     public void connect() throws GiraOneClientException {
         logger.trace("Initiating a server connect via webservice");
         try {
-            this.connectionState.onNext(GiraOneConnectionState.Connecting);
+            this.connectionState.onNext(GiraOneClientConnectionState.Connecting);
 
             this.webserviceClient.connect();
             this.websocketClient.connect();
 
         } catch (GiraOneCommunicationException commExp) {
-            this.connectionState.onNext(GiraOneConnectionState.Error);
+            this.connectionState.onNext(GiraOneClientConnectionState.Error);
             throw new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, commExp);
         }
     }
@@ -140,9 +139,9 @@ public class GiraOneClient {
             }
 
             this.websocketClient.lookupGiraOneChannels().getChannels().forEach(giraOneProject::addChannel);
-            this.connectionState.onNext(GiraOneConnectionState.Connected);
+            this.connectionState.onNext(GiraOneClientConnectionState.Connected);
         } catch (GiraOneCommunicationException e) {
-            this.connectionState.onNext(GiraOneConnectionState.Error);
+            this.connectionState.onNext(GiraOneClientConnectionState.Error);
             giraOneProject = new GiraOneProject();
             this.clientExceptions
                     .onNext(new GiraOneClientException(GiraOneClientException.WEBSERVICE_COMMUNICATION, e));

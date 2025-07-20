@@ -40,9 +40,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommandResponse;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.communication.commands.GetDeviceConfig;
 import org.openhab.binding.giraone.internal.communication.commands.GetUIConfiguration;
 import org.openhab.binding.giraone.internal.communication.commands.GetValue;
@@ -114,10 +114,10 @@ class GiraOneWebsocketClientTest {
     @DisplayName("Test Connect, Register and Disconnect against Gira One Server Websocket")
     @Test
     void testConnectRegisterAndDisconnect() throws Exception {
-        assertEquals(GiraOneConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
+        assertEquals(GiraOneClientConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
 
         giraOneWebsocketClient.connect();
-        assertEquals(GiraOneConnectionState.Connecting, giraOneWebsocketClient.connectionState.getValue());
+        assertEquals(GiraOneClientConnectionState.Connecting, giraOneWebsocketClient.connectionState.getValue());
 
         giraOneWebsocketClient.onWebSocketConnect(websocketSession);
 
@@ -132,11 +132,11 @@ class GiraOneWebsocketClientTest {
         giraOneWebsocketClient
                 .onWebSocketText(ResourceLoader.loadStringResource("/messages/1.RegisterApplication/001-resp.json"));
         await().atMost(ONE_SECOND).untilAsserted(() -> {
-            assertEquals(GiraOneConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
+            assertEquals(GiraOneClientConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
         });
 
         giraOneWebsocketClient.disconnect();
-        assertEquals(GiraOneConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
+        assertEquals(GiraOneClientConnectionState.Disconnected, giraOneWebsocketClient.connectionState.getValue());
     }
 
     private void sendWebsocketText(final String text) {

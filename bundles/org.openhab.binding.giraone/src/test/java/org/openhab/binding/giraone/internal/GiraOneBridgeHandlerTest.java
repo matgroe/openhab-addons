@@ -32,7 +32,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.core.thing.Bridge;
@@ -65,7 +65,7 @@ class GiraOneBridgeHandlerTest {
     @DisplayName("Should start observing GiraOneClient observables and connect")
     @Test
     void testInitialize() throws Exception {
-        ArgumentCaptor<Consumer<GiraOneConnectionState>> captorConnectionState = ArgumentCaptor
+        ArgumentCaptor<Consumer<GiraOneClientConnectionState>> captorConnectionState = ArgumentCaptor
                 .forClass(Consumer.class);
 
         ScheduledExecutorService scheduler = mock(ScheduledExecutorService.class);

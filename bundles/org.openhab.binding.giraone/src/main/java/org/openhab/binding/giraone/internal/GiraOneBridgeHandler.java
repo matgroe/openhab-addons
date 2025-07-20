@@ -22,8 +22,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_SERVER_TIME;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
@@ -58,14 +58,19 @@ import java.util.concurrent.TimeUnit;
 @Component(service = { GiraOneBridgeHandler.class, GiraOneBridge.class })
 @NonNullByDefault
 public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBridge {
-    private final static String GDS_DEVICE_CHANNEL_URN = "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:.*";
+    private final static String GDS_DEVICE_CHANNEL_URN = "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel";
+    private final static String GDS_DEVICE_DATAPOINT_READY = "Ready";
+    private final static String GDS_DEVICE_DATAPOINT_LOCAL_TIME = "Local-Time";
+
+    private final static GiraOneDataPoint G1_DATAPOINT_READY = new GiraOneDataPoint(
+            GDS_DEVICE_CHANNEL_URN + ":" + GDS_DEVICE_DATAPOINT_READY);
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
     private final GiraOneClient giraOneClient;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     /** Observe this subject for Gira Server connection state */
-    private final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
+    private final ReplaySubject<GiraOneBridgeState> connectionState = ReplaySubject.createWithSize(1);
 
     protected final Subject<GiraOneValue> datapointValues = PublishSubject.create();
 
@@ -118,7 +123,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         // Register for ConnectionState changes
         disposables.add(this.giraOneClient.observeGiraOneConnectionState(this::onConnectionStateChanged));
 
-        subscribeOnGiraOneDataPointValues(GDS_DEVICE_CHANNEL_URN, this::onDeviceChannelEvent);
+        subscribeOnGiraOneDataPointValues(String.format("%s:.*", GDS_DEVICE_CHANNEL_URN), this::onDeviceChannelEvent);
+
+        connectionState.onNext(GiraOneBridgeState.Offline);
 
         scheduler.execute(this::doBackgroundInitialization);
     }
@@ -159,7 +166,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
      *
      * @param connectionState The {@link GiraOneClient}'s connection state.
      */
-    protected void onConnectionStateChanged(GiraOneConnectionState connectionState) {
+    protected void onConnectionStateChanged(GiraOneClientConnectionState connectionState) {
         logger.debug("ConnectionStateChanged to {}", connectionState);
         switch (connectionState) {
             case Connecting -> this.clientMovedToConnecting();
@@ -172,10 +179,14 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     private void onDeviceChannelEvent(GiraOneValue value) {
         logger.trace("onDeviceChannelEvent:: {}", value);
-        if ("Local-Time".equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
+        if (GDS_DEVICE_DATAPOINT_LOCAL_TIME.equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
             updateState(CHANNEL_SERVER_TIME, DateTimeType.valueOf(value.getValue()));
-        } else if ("Ready".equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
-            updateState(CHANNEL_SERVER_TIME, DateTimeType.valueOf(value.getValue()));
+        } else if (GDS_DEVICE_DATAPOINT_READY.equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
+            if (value.getValueAsBoolean()) {
+                this.connectionState.onNext(GiraOneBridgeState.Online);
+            } else {
+                this.connectionState.onNext(GiraOneBridgeState.Offline);
+            }
         }
     }
 
@@ -192,26 +203,26 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     protected void clientMovedToConnected() {
         lookupGiraOneProject();
         this.updateBridgeProperties();
+        this.lookupGiraOneDatapointValue(G1_DATAPOINT_READY);
         updateStatus(ThingStatus.ONLINE);
-        this.connectionState.onNext(GiraOneConnectionState.Connected);
     }
 
     protected void clientMovedToTemporaryUnavailable() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
                 "@text/giraone.bridge.temporary-unavailable");
         this.scheduleReconnect();
-        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneBridgeState.Offline);
     }
 
     protected void clientMovedToDisconnected() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
-        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneBridgeState.Offline);
     }
 
     protected void clientMovedToError() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
         this.scheduleReconnect();
-        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
+        this.connectionState.onNext(GiraOneBridgeState.Error);
     }
 
     void onGiraOneValue(GiraOneValue giraOneValue) {
@@ -260,7 +271,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     @Override
-    public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNextEvent) {
+    public Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeState> onNextEvent) {
         return this.connectionState.subscribe(onNextEvent);
     }
 

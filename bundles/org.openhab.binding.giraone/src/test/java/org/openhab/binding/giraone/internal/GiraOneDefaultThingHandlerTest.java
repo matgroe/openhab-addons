@@ -30,7 +30,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.util.TestDataProvider;
@@ -84,7 +83,7 @@ public class GiraOneDefaultThingHandlerTest {
         handler.initialize();
         verify(giraOneBridge).subscribeOnConnectionState(any());
 
-        handler.onConnectionState(GiraOneConnectionState.Connected);
+        handler.onBridgeConnectionState(GiraOneBridgeState.Online);
         verify(giraOneBridge).subscribeOnGiraOneDataPointValues(any(), any());
     }
 

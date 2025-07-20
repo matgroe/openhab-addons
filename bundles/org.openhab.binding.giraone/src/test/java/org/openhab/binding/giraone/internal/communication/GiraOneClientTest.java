@@ -14,10 +14,9 @@ package org.openhab.binding.giraone.internal.communication;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.TEN_SECONDS;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,7 @@ public class GiraOneClientTest {
     private GiraOneClientConfiguration configuration;
     private GiraOneWebsocketClient websocketClient;
     private GiraOneWebserviceClient webserviceClient;
-    private GiraOneConnectionState connectionState = null;
+    private GiraOneClientConnectionState connectionState = null;
 
     @BeforeEach
     void setUp() {
@@ -63,10 +62,10 @@ public class GiraOneClientTest {
     @Test
     @DisplayName("Should connect against gira one server")
     void shouldStartupClient() {
-        assertEquals(GiraOneConnectionState.Disconnected, connectionState);
+        assertEquals(GiraOneClientConnectionState.Disconnected, connectionState);
         giraOneClient.connect();
         await().atMost(TEN_SECONDS).untilAsserted(() -> {
-            assertEquals(GiraOneConnectionState.Connected, connectionState);
+            assertEquals(GiraOneClientConnectionState.Connected, connectionState);
             assertFalse(giraOneClient.getGiraOneProject().lookupChannels().isEmpty());
         });
     }

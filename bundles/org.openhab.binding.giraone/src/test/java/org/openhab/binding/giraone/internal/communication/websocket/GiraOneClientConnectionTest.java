@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
+import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 
 /**
@@ -72,7 +72,7 @@ public class GiraOneClientConnectionTest {
         GiraOneWebsocketClient giraOneWebsocketClient = new GiraOneWebsocketClient(configuration);
 
         giraOneWebsocketClient.subscribeOnConnectionState(c -> {
-            if (c == GiraOneConnectionState.Connected) {
+            if (c == GiraOneClientConnectionState.Connected) {
                 // GiraOneDataPoint dp = TestDataProvider.dataPointBuilder("slat-position", 0,
                 // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-4:Slat-Position");
                 GiraOneDataPoint dp = new GiraOneDataPoint(
@@ -85,7 +85,7 @@ public class GiraOneClientConnectionTest {
         giraOneWebsocketClient.connect();
 
         await().atMost(ONE_MINUTE).untilAsserted(() -> {
-            assertEquals(GiraOneConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
+            assertEquals(GiraOneClientConnectionState.Connected, giraOneWebsocketClient.connectionState.getValue());
         });
 
         Thread.sleep(60000);

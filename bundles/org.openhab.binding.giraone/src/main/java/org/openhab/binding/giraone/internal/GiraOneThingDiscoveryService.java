@@ -20,7 +20,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.SUPPORTED_THING_TYPE_UID;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
@@ -180,12 +179,11 @@ public class GiraOneThingDiscoveryService extends AbstractThingHandlerDiscoveryS
         stopBackgroundScanning();
     }
 
-    private void onConnectionStateChanged(GiraOneConnectionState connectionState) {
+    private void onConnectionStateChanged(GiraOneBridgeState connectionState) {
         logger.info("ConnectionStateChanged to {}", connectionState);
-        if (connectionState == GiraOneConnectionState.Connected) {
+        if (connectionState == GiraOneBridgeState.Online) {
             startBackgroundScanning();
-        } else if (connectionState == GiraOneConnectionState.Disconnected
-                || connectionState == GiraOneConnectionState.Error) {
+        } else {
             stopBackgroundDiscovery();
         }
     }

@@ -15,7 +15,6 @@ package org.openhab.binding.giraone.internal;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
@@ -39,12 +38,12 @@ public interface GiraOneBridge {
     GiraOneProject lookupGiraOneProject();
 
     /**
-     * Observes the {@link GiraOneConnectionState} of the {@link GiraOneBridge}
+     * Observes the {@link GiraOneBridgeState} of the {@link GiraOneBridge}
      *
-     * @param consumer - The consumer method to receive GiraOneConnectionState Events.
+     * @param consumer - The consumer method to receive GiraOneBridgeState Events.
      * @return A {@link Disposable}
      */
-    Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> consumer);
+    Disposable subscribeOnConnectionState(Consumer<GiraOneBridgeState> consumer);
 
     /**
      * This function triggers the {@link GiraOneBridge} to lookup all datapoints
@@ -67,7 +66,7 @@ public interface GiraOneBridge {
      * Observes all {@link GiraOneValue} for the given device urn.
      *
      * @param datapointUrnPattern
-     * @param consumer - The consumer method to receive GiraOneConnectionState Events.
+     * @param consumer - The consumer method to receive GiraOneBridgeState Events.
      * @return A {@link Disposable}
      */
     Disposable subscribeOnGiraOneDataPointValues(final String datapointUrnPattern, Consumer<GiraOneValue> consumer);
