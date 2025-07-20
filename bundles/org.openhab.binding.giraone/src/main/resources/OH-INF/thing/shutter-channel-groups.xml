@@ -7,7 +7,7 @@
 	<channel-group-type id="blind-covering">
 		<label>Shutter Covering</label>
 		<description>Channel Group for Blind Covering Things</description>
-		<category>Rollershutter</category>
+		<category>Blinds</category>
 		<channels>
 			<channel id="position" typeId="shutter-position">
 				<label>Position</label>

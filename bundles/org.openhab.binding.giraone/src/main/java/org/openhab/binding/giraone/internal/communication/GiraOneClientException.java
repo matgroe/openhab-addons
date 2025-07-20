@@ -16,14 +16,11 @@ import java.io.Serial;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 /**
  * Generic Exception with Gira One Domain.
  *
  * @author Matthias Gröger - Initial contribution
  */
-@NonNullByDefault({})
 public class GiraOneClientException extends RuntimeException {
     public static final String UNKNOWN_ERROR = "@text/giraone.client.unkown-error";
     public static final String UNEXPECTED_CONNECTION_STATE = "@text/giraone.client.unexpected-connection-state";
@@ -59,8 +56,10 @@ public class GiraOneClientException extends RuntimeException {
     @Override
     public String getMessage() {
         StringBuilder sb = new StringBuilder(Objects.requireNonNullElse(super.getMessage(), UNKNOWN_ERROR));
-        if (getCause() != null) {
-            sb.append(formatMessagePlaceholder(getCause().getMessage()));
+
+        Throwable cause = getCause();
+        if (cause != null) {
+            sb.append(formatMessagePlaceholder(cause.getMessage()));
         }
         Arrays.stream(this.placeholders).map(this::formatMessagePlaceholder).forEach(sb::append);
         return sb.toString();

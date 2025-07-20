@@ -20,7 +20,7 @@
 		<item-type>Number:Temperature</item-type>
 		<label>Specified Temperature</label>
 		<description>Change this value to the desired temperature.</description>
-		<category>HVAC</category>
+		<category>FloorHeating</category>
 		<tags>
 			<tag>Setpoint</tag>
 			<tag>Temperature</tag>

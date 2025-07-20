@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.giraone.internal.communication;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
@@ -21,7 +20,6 @@ import org.eclipse.jdt.annotation.Nullable;
  *
  * @author Matthias Groeger - Initial contribution
  */
-@NonNullByDefault({})
 public class GiraOneCommand {
     private static final String MISSING_ANNOTATION = "";
 

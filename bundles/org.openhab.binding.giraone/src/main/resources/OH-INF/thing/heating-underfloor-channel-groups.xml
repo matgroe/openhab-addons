@@ -7,7 +7,7 @@
 	<channel-group-type id="heating-underfloor">
 		<label>Underfloor Heating</label>
 		<description>Channel Group for Blind Covering Things</description>
-		<category>HVAC</category>
+		<category>FloorHeating</category>
 		<channels>
 			<channel id="current" typeId="heating-current-temperature">
 				<label>Current Temperature</label>

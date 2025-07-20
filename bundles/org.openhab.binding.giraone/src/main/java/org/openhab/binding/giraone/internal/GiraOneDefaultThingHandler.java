@@ -12,9 +12,6 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import java.util.Collection;
-import java.util.Optional;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -30,14 +27,12 @@ import org.openhab.core.library.types.StringType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
-import org.openhab.core.thing.ThingStatus;
-import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import java.util.Optional;
 
 /**
  * The {@link GiraOneDefaultThingHandler} is responsible for handling commands, which are
@@ -46,31 +41,11 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
  * @author matthias - Initial contribution
  */
 @NonNullByDefault
-public class GiraOneDefaultThingHandler extends GiraOneAbstractThingHandler {
+public class GiraOneDefaultThingHandler extends GiraOneBaseThingHandler {
     private final Logger logger = LoggerFactory.getLogger(GiraOneDefaultThingHandler.class);
 
     public GiraOneDefaultThingHandler(Thing thing) {
         super(thing);
-    }
-
-    @Override
-    public void initialize() {
-        logger.debug("initialize {}", getThing().getUID());
-        try {
-            applyConfiguration();
-            this.lookupGiraOneProjectChannel().map(this::buildThing).ifPresent(this::updateThing);
-            disposables.add(getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState));
-
-        } catch (Exception exp) {
-            updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
-        }
-    }
-
-    @Override
-    public void dispose() {
-        disposables.dispose();
-        disposables.clear();
-        super.dispose();
     }
 
     /**
@@ -118,20 +93,6 @@ public class GiraOneDefaultThingHandler extends GiraOneAbstractThingHandler {
      */
     protected boolean isValueIncreasing(GiraOneValueChange valueChange) {
         return Float.parseFloat(valueChange.getValue()) > Float.parseFloat(valueChange.getPreviousValue());
-    }
-
-    /**
-     * Register callbacks to {@link GiraOneValue} for {@link GiraOneDataPoint} we're responsible for.
-     *
-     * @param datapoints The datapoints, we're responsible for
-     * @param disposables The CompositeDisposable for all registered subscriptions.
-     */
-    @Override
-    protected void subscribeOnGiraOneDataPointValues(Collection<GiraOneDataPoint> datapoints,
-            CompositeDisposable disposables) {
-        datapoints.stream().map(GiraOneDataPoint::getUrn).distinct()
-                .map(dp -> getGiraOneBridge().subscribeOnGiraOneDataPointValues(dp, this::onGiraOneValue))
-                .forEach(disposables::add);
     }
 
     /**

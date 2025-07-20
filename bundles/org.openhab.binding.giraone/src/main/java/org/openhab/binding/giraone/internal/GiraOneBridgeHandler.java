@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -63,6 +64,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     private final GiraOneClient giraOneClient;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
+    /** Observe this subject for Gira Server connection state */
+    private final ReplaySubject<GiraOneConnectionState> connectionState = ReplaySubject.createWithSize(1);
+
     protected final Subject<GiraOneValue> datapointValues = PublishSubject.create();
 
     public GiraOneBridgeHandler(Bridge bridge) {
@@ -101,6 +105,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     @Override
     public void initialize() {
         logger.info("Initializing 'Gira One Bridge Handler'");
+
+        // dispose and clear all disposables
+        disposables.clear();
 
         // Register at GiraOneClient for all Exceptions
         disposables.add(giraOneClient.observeOnGiraOneClientExceptions(this::onGiraOneClientException));
@@ -167,6 +174,8 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         logger.trace("onDeviceChannelEvent:: {}", value);
         if ("Local-Time".equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
             updateState(CHANNEL_SERVER_TIME, DateTimeType.valueOf(value.getValue()));
+        } else if ("Ready".equalsIgnoreCase(value.getGiraOneDataPoint().getName())) {
+            updateState(CHANNEL_SERVER_TIME, DateTimeType.valueOf(value.getValue()));
         }
     }
 
@@ -184,21 +193,25 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         lookupGiraOneProject();
         this.updateBridgeProperties();
         updateStatus(ThingStatus.ONLINE);
+        this.connectionState.onNext(GiraOneConnectionState.Connected);
     }
 
     protected void clientMovedToTemporaryUnavailable() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
                 "@text/giraone.bridge.temporary-unavailable");
         this.scheduleReconnect();
+        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
     }
 
     protected void clientMovedToDisconnected() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
+        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
     }
 
     protected void clientMovedToError() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
         this.scheduleReconnect();
+        this.connectionState.onNext(GiraOneConnectionState.Disconnected);
     }
 
     void onGiraOneValue(GiraOneValue giraOneValue) {
@@ -248,7 +261,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public Disposable subscribeOnConnectionState(Consumer<GiraOneConnectionState> onNextEvent) {
-        return this.giraOneClient.observeGiraOneConnectionState(onNextEvent);
+        return this.connectionState.subscribe(onNextEvent);
     }
 
     @Override

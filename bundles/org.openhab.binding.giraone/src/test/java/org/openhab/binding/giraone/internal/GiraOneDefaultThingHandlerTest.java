@@ -73,7 +73,7 @@ public class GiraOneDefaultThingHandlerTest {
 
         handler = Mockito.spy(new GiraOneDefaultThingHandler(thing));
 
-        Mockito.doReturn(giraOneBridge).when((GiraOneAbstractThingHandler) handler).getGiraOneBridge();
+        Mockito.doReturn(giraOneBridge).when((GiraOneBaseThingHandler) handler).getGiraOneBridge();
 
         when(handler.getThing()).thenReturn(thing);
     }

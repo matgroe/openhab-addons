@@ -31,6 +31,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneProject;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.core.config.core.Configuration;
+import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
@@ -49,20 +50,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * The {@link GiraOneAbstractThingHandler} is responsible for handling commands, which are
- * sent to one of the shutter channels.
+ * The {@link GiraOneBaseThingHandler} is responsible for handling the
+ * communication between OpenHab and GiraOne
  *
  * @author matthias - Initial contribution
  */
 @NonNullByDefault
-public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
+public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
     protected final CompositeDisposable disposables = new CompositeDisposable();
 
-    private final Logger logger = LoggerFactory.getLogger(GiraOneAbstractThingHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(GiraOneBaseThingHandler.class);
     private static final String CONFIG_MISSING_CHANNEL_URN = "@text/giraone.thing.config.missing.channel-urn";
     private static final String PROJECT_MISSING_CHANNEL_URN = "@text/giraone.project.missing.channel-urn";
 
-    public GiraOneAbstractThingHandler(Thing thing) {
+    public GiraOneBaseThingHandler(Thing thing) {
         super(thing);
     }
 
@@ -72,13 +73,32 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
     }
 
     @Override
+    public void initialize() {
+        logger.debug("initialize {}", getThing().getUID());
+        try {
+            applyConfiguration();
+            disposables.add(getGiraOneBridge().subscribeOnConnectionState(this::onConnectionState));
+        } catch (Exception exp) {
+            updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_OFFLINE, exp.getMessage());
+        }
+    }
+
+    @Override
+    public void dispose() {
+        disposables.dispose();
+        disposables.clear();
+        super.dispose();
+    }
+
+    @Override
     protected void updateState(String channelID, State state) {
-        logger.debug("updateState ::  '{}' :: '{}={}'", this.thing, channelID, state.toString());
         Optional<Channel> channel = thing.getChannels().stream()
                 .filter(f -> channelID.equals(normalizeOpenhabChannelName(f.getUID().getId()))).findFirst();
         if (channel.isPresent()) {
             logger.debug("updateState ::  '{}' :: '{}'", channel.get().getUID(), state.toString());
             super.updateState(channel.get().getUID().getId(), state);
+        } else {
+            logger.info("updateState failed for '{}'. Cannot handle channel-id '{}'", this.thing, channelID);
         }
     }
 
@@ -93,7 +113,7 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
      *
      * @param connectionState The {@link GiraOneConnectionState}.
      */
-    protected void onConnectionState(GiraOneConnectionState connectionState) {
+    void onConnectionState(GiraOneConnectionState connectionState) {
         logger.trace("onConnectionState :: {}", connectionState);
         switch (connectionState) {
             case Connecting -> this.bridgeMovedToConnecting();
@@ -150,18 +170,25 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
     }
 
     protected GiraOneClientConfiguration getGiraOneClientConfiguration() {
-        if (getBridge() != null) {
-            return (getBridge()).getConfiguration().as(GiraOneClientConfiguration.class);
+        Bridge bridge = getBridge();
+        if (bridge != null) {
+            return bridge.getConfiguration().as(GiraOneClientConfiguration.class);
         }
         return getConfigAs(GiraOneClientConfiguration.class);
     }
 
     /**
+     * Builds and Updates the Thing from GiraOneChannel
+     */
+    protected void buildAndUpdateThingDefinition() {
+        this.lookupGiraOneProjectChannel().map(this::buildThing).ifPresent(this::updateThing);
+    }
+
+    /**
      * This function build the thing definition for OpenHab.
      *
-     * @param channel The
-     *
-     * @return The channel
+     * @param channel The {@link GiraOneChannel}
+     * @return The {@link Thing}
      */
     Thing buildThing(GiraOneChannel channel) {
         ThingBuilder thingBuilder = editThing();
@@ -207,6 +234,7 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
             }
         } else {
             logger.trace("startObservingGiraOneChannel :: {}", channel.get());
+            buildAndUpdateThingDefinition();
             updateStatus(ThingStatus.ONLINE);
             subscribeOnGiraOneDataPointValues(channel.get().getDataPoints(), this.disposables);
             getGiraOneBridge().lookupGiraOneChannelValues(channel.get());
@@ -219,8 +247,22 @@ public abstract class GiraOneAbstractThingHandler extends BaseThingHandler {
      * @param datapoints The datapoints, we're responsible for
      * @param disposables The CompositeDisposable for all registered subscriptions.
      */
-    protected abstract void subscribeOnGiraOneDataPointValues(Collection<GiraOneDataPoint> datapoints,
-            CompositeDisposable disposables);
+    protected void subscribeOnGiraOneDataPointValues(Collection<GiraOneDataPoint> datapoints,
+            CompositeDisposable disposables) {
+        datapoints.stream().map(GiraOneDataPoint::getUrn).distinct()
+                .map(dp -> getGiraOneBridge().subscribeOnGiraOneDataPointValues(dp, this::onGiraOneValue))
+                .forEach(disposables::add);
+    }
+
+    /**
+     * Handler function for receiving {@link GiraOneValue} which contains
+     * the value for an item channel.
+     *
+     * @param value The value to apply on a Openhab Thing
+     */
+    protected void onGiraOneValue(GiraOneValue value) {
+        logger.info("empty implementation for onGiraOneValue :: {}", value);
+    }
 
     /**
      * Callback, if {@link GiraOneBridge} moved to {@link GiraOneConnectionState#TemporaryUnavailable}

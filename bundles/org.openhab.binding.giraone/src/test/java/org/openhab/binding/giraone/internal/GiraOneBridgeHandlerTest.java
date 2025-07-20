@@ -12,19 +12,10 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Field;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.stream.Stream;
-
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +23,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
@@ -41,8 +39,9 @@ import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
+import java.lang.reflect.Field;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Stream;
 
 /**
  * Test class for {@link GiraOneBridgeHandler}
@@ -52,13 +51,12 @@ import io.reactivex.rxjava3.functions.Consumer;
 @NonNullByDefault
 class GiraOneBridgeHandlerTest {
     private final Bridge bridge = Mockito.spy(Bridge.class);;
-    private GiraOneBridgeHandler bridgeHandler = mock(GiraOneBridgeHandler.class);
-    private GiraOneClient giraOneClient = mock(GiraOneClient.class);
+    private final GiraOneClient giraOneClient = mock(GiraOneClient.class);
+    private final GiraOneBridgeHandler bridgeHandler = spy(new GiraOneBridgeHandler(bridge, giraOneClient));
 
     @BeforeEach
     void setUp() {
-        giraOneClient = mock(GiraOneClient.class);
-        bridgeHandler = spy(new GiraOneBridgeHandler(bridge, giraOneClient));
+        reset(giraOneClient, bridge, bridgeHandler);
         when(giraOneClient.observeOnGiraOneClientExceptions(any())).thenReturn(Disposable.empty());
         when(giraOneClient.observeGiraOneValues(any())).thenReturn(Disposable.empty());
         when(giraOneClient.observeGiraOneConnectionState(any())).thenReturn(Disposable.empty());
@@ -74,8 +72,8 @@ class GiraOneBridgeHandlerTest {
         Field schedulerField = GiraOneBridgeHandler.class.getSuperclass().getSuperclass().getDeclaredField("scheduler");
         schedulerField.setAccessible(true);
         schedulerField.set(bridgeHandler, scheduler);
-
         bridgeHandler.initialize();
+
         verify(giraOneClient).observeGiraOneValues(any());
         verify(giraOneClient).observeGiraOneConnectionState(captorConnectionState.capture());
         verify(giraOneClient).observeOnGiraOneClientExceptions(any());
@@ -102,10 +100,26 @@ class GiraOneBridgeHandlerTest {
                 "0", "1"), true));
     }
 
+    GiraOneValueChange deviceChannelNotReady = new GiraOneValueChange(
+            "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
+
+    GiraOneValueChange deviceChannelIsReady = new GiraOneValueChange(
+            "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
+
     @DisplayName("Should process received GiraOneValue")
     @ParameterizedTest
     @MethodSource("provideGiraOneValues")
     void shouldDeserialize2WebsocketMessageType(GiraOneValue giraOneValue, boolean shouldProcess) {
-        bridgeHandler.onGiraOneValue(giraOneValue);
+        bridgeHandler.initialize();
+
+        System.out.println("verificationData");
+        ArgumentCaptor<ThingStatus> argCaptorThingStatus = ArgumentCaptor.forClass(ThingStatus.class);
+        ArgumentCaptor<ThingStatusDetail> argCaptorThingStatusDetail = ArgumentCaptor.forClass(ThingStatusDetail.class);
+
+        verify(bridgeHandler, times(1)).updateStatus(argCaptorThingStatus.capture(),
+                argCaptorThingStatusDetail.capture(), any());
+        bridgeHandler.onGiraOneValue(deviceChannelNotReady);
+        argCaptorThingStatus.getAllValues();
+        argCaptorThingStatusDetail.getAllValues();
     }
 }

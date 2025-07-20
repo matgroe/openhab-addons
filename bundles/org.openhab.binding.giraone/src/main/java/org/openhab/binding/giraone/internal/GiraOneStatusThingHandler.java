@@ -15,8 +15,6 @@ package org.openhab.binding.giraone.internal;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.core.thing.Thing;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link GiraOneStatusThingHandler} is responsible for handling commands, which are
@@ -26,7 +24,6 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 public class GiraOneStatusThingHandler extends GiraOneDefaultThingHandler {
-    private final Logger logger = LoggerFactory.getLogger(GiraOneStatusThingHandler.class);
 
     public GiraOneStatusThingHandler(Thing thing) {
         super(thing);

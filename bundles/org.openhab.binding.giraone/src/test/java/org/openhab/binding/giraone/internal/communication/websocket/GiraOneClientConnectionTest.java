@@ -15,9 +15,8 @@ package org.openhab.binding.giraone.internal.communication.websocket;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.ONE_MINUTE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -77,9 +76,9 @@ public class GiraOneClientConnectionTest {
                 // GiraOneDataPoint dp = TestDataProvider.dataPointBuilder("slat-position", 0,
                 // "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-4:Slat-Position");
                 GiraOneDataPoint dp = new GiraOneDataPoint(
-                        "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang.Curtain-1:Step-Up-Down");
+                        "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready");
                 // giraOneWebsocketClient.lookupGiraOneValue(dp);
-                giraOneWebsocketClient.changeGiraOneDataPointValue(dp, 0);
+                giraOneWebsocketClient.lookupGiraOneDataPointValue(dp);
             }
         });
 
