@@ -12,9 +12,10 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_MODE;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_STATUS;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.types.State;

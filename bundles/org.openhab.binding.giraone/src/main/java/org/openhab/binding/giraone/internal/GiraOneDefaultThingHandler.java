@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import java.util.Optional;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
@@ -31,8 +33,6 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 /**
  * The {@link GiraOneDefaultThingHandler} is responsible for handling commands, which are
@@ -196,7 +196,7 @@ public class GiraOneDefaultThingHandler extends GiraOneBaseThingHandler {
      * @param command The {@link StringType} command.
      */
     protected void handleStringTypeCommand(GiraOneDataPoint datapoint, StringType command) {
-        logger.warn("handleStringType :: datapoint={}, command={}", datapoint, command);
+        logger.trace("handleStringType :: datapoint={}, command={}", datapoint, command);
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.toString());
     }
 
@@ -207,7 +207,7 @@ public class GiraOneDefaultThingHandler extends GiraOneBaseThingHandler {
      * @param command The {@link QuantityType} command.
      */
     protected void handleQuantityTypeCommand(GiraOneDataPoint datapoint, QuantityType<?> command) {
-        logger.warn("handleQuantityType is not implemented :: datapoint={}, command={}", datapoint, command);
+        logger.trace("handleQuantityType :: datapoint={}, command={}", datapoint, command);
         getGiraOneBridge().setGiraOneDataPointValue(datapoint, command.floatValue());
     }
 }
