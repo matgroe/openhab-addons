@@ -21,7 +21,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
@@ -123,7 +122,7 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneClientConnectionState#Connected}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeState#Online}
      */
     protected void bridgeMovedToOnline() {
         startObservingGiraOneChannel();
@@ -257,14 +256,14 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneClientConnectionState#Disconnected}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeState#Offline}
      */
     protected void bridgeMovedToOffline() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
     }
 
     /**
-     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneClientConnectionState#Error}
+     * Callback, if {@link GiraOneBridge} moved to {@link GiraOneBridgeState#Error}
      */
     protected void bridgeMovedToError() {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, "Bridge is moved into error state");
