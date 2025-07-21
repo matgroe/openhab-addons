@@ -66,8 +66,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
             GDS_DEVICE_CHANNEL_URN + ":" + GDS_DEVICE_DATAPOINT_READY);
 
     private final Logger logger = LoggerFactory.getLogger(GiraOneBridgeHandler.class);
-    private final GiraOneClient giraOneClient;
     private final CompositeDisposable disposables = new CompositeDisposable();
+
+    private GiraOneClient giraOneClient;
 
     /** Observe this subject for Gira Server connection state */
     private final ReplaySubject<GiraOneBridgeState> connectionState = ReplaySubject.createWithSize(1);
@@ -76,7 +77,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     public GiraOneBridgeHandler(Bridge bridge) {
         super(bridge);
-        this.giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
+        giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
     }
 
     protected GiraOneBridgeHandler(Bridge bridge, GiraOneClient giraOneClient) {
@@ -109,7 +110,14 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void initialize() {
+        this.createGiraOneClientAndInitialize();
+    }
+
+    private void createGiraOneClientAndInitialize() {
         logger.info("Initializing 'Gira One Bridge Handler'");
+
+        // initialize client
+        giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
 
         // dispose and clear all disposables
         disposables.clear();
@@ -153,7 +161,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     @Override
     protected void updateConfiguration(Configuration configuration) {
         super.updateConfiguration(configuration);
-        this.doBackgroundInitialization();
+        this.createGiraOneClientAndInitialize();
     }
 
     @Override

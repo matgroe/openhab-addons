@@ -12,34 +12,20 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.stream.Stream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
@@ -55,7 +41,20 @@ import org.openhab.core.thing.ThingUID;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.ctc.wstx.shaded.msv_core.verifier.jaxp.DocumentBuilderFactoryImpl;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Test class for {@link GiraOneThingDiscoveryService}.
@@ -172,6 +171,20 @@ class GiraOneThingDiscoveryServiceTest {
         ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel);
 
         assertTrue(this.checkThingTypeIdDefinitionExists(expected),
+                "There must be thing-type definition for " + thingTypeUID.getId());
+    }
+
+    @DisplayName("There must be a thing-type definition for each determined thingTypeId")
+    @Test
+    void testForExistingThingTypeDefinition() throws Exception {
+        Optional<GiraOneChannel> channel = TestDataProvider.createGiraOneProject()
+                .lookupChannelByUrn("urn:gds:chv:Covering-Blind-With-Position-16");
+
+        assertTrue(channel.isPresent());
+
+        ThingTypeUID thingTypeUID = discoveryService.detectThingTypeUID(channel.get());
+
+        assertTrue(this.checkThingTypeIdDefinitionExists(thingTypeUID.getId()),
                 "There must be thing-type definition for " + thingTypeUID.getId());
     }
 }

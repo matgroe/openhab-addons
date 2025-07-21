@@ -27,7 +27,7 @@
 		<description>Electric Driven Awning</description>
 		<category>Awning</category>
 		<channel-groups>
-			<channel-group id="shutter" typeId="blind-covering"/>
+			<channel-group id="awning" typeId="blind-covering"/>
 		</channel-groups>
 		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>
@@ -40,7 +40,7 @@
 		<description>Electric Driven Roof Window</description>
 		<category>Window</category>
 		<channel-groups>
-			<channel-group id="shutter" typeId="blind-covering"/>
+			<channel-group id="window" typeId="roof-window"/>
 		</channel-groups>
 		<config-description-ref uri="giraone:channel:definition"/>
 	</thing-type>

@@ -43,4 +43,31 @@
 		</channels>
 	</channel-group-type>
 
+	<channel-group-type id="roof-window">
+		<label>Roof Window</label>
+		<description>Electric Driven Roof Window</description>
+		<category>Window</category>
+		<channels>
+			<channel id="position" typeId="window-position">
+				<label>Position</label>
+				<description>Window Position (0 = Closed ... 100 = Open)</description>
+			</channel>
+
+			<channel id="step-up-down" typeId="shutter-step-up-down">
+				<label>Step Up or Down</label>
+				<description>Raise or Lower the Window Level by Single Step</description>
+			</channel>
+
+			<channel id="up-down" typeId="window-up-down">
+				<label>Move Up or Down</label>
+				<description>Raise or Lower the Window Level</description>
+			</channel>
+
+			<channel id="motion-state" typeId="window-motion-state">
+				<label>Motion State</label>
+				<description>Describes the Shutter's motion state (moving up/down or stopped).</description>
+			</channel>
+		</channels>
+	</channel-group-type>
+
 </thing:thing-descriptions>
