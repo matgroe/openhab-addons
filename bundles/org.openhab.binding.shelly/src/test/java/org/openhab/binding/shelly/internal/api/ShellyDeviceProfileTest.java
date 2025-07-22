@@ -15,8 +15,12 @@ package org.openhab.binding.shelly.internal.api;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.openhab.binding.shelly.internal.ShellyBindingConstants.*;
 import static org.openhab.binding.shelly.internal.discovery.ShellyThingCreator.*;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -24,7 +28,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.openhab.binding.shelly.internal.api1.Shelly1ApiJsonDTO.ShellySettingsDevice;
+import org.openhab.binding.shelly.internal.api1.Shelly1ApiJsonDTO.ShellySettingsGlobal;
+import org.openhab.binding.shelly.internal.api1.Shelly1ApiJsonDTO.ShellySettingsRgbwLight;
 import org.openhab.core.thing.ThingTypeUID;
+
+import com.google.gson.Gson;
 
 /**
  * Tests for {@link ShellyDeviceProfile}.
@@ -34,13 +43,15 @@ import org.openhab.core.thing.ThingTypeUID;
 @NonNullByDefault
 public class ShellyDeviceProfileTest {
 
+    private final Gson gson = new Gson();
+
     @ParameterizedTest
     @MethodSource("provideTestCasesForApiDetermination")
     void determineApi(ThingTypeUID thingTypeUid, boolean expectedIsGeneration2, boolean expectedIsBlu) {
-        boolean actualIsGeneration2 = ShellyDeviceProfile.isGeneration2(thingTypeUid.getId());
+        boolean actualIsGeneration2 = ShellyDeviceProfile.isGeneration2(thingTypeUid);
         assertThat(actualIsGeneration2, is(equalTo(expectedIsGeneration2)));
 
-        boolean actualIsBlue = ShellyDeviceProfile.isBluSeries(thingTypeUid.getId());
+        boolean actualIsBlue = ShellyDeviceProfile.isBluSeries(thingTypeUid);
         assertThat(actualIsBlue, is(equalTo(expectedIsBlu)));
     }
 
@@ -98,11 +109,16 @@ public class ShellyDeviceProfileTest {
                 Arguments.of(THING_TYPE_SHELLYPLUSPLUGUS, true, false), //
                 Arguments.of(THING_TYPE_SHELLYPLUSI4, true, false), //
                 Arguments.of(THING_TYPE_SHELLYPLUSI4DC, true, false), //
-                Arguments.of(THING_TYPE_SHELLY1MINI, true, false), //
-                Arguments.of(THING_TYPE_SHELLYPMMINI, true, false), //
-                Arguments.of(THING_TYPE_SHELLY1PMMINI, true, false), //
+                Arguments.of(THING_TYPE_SHELLYPLUSEM, true, false), //
+                Arguments.of(THING_TYPE_SHELLYPLUS3EM63, true, false), //
 
-                // Shelly Pro
+                // Shelly Mini series
+                Arguments.of(THING_TYPE_SHELLYMINI_1, true, false), //
+                Arguments.of(THING_TYPE_SHELLYMINI_1PM, true, false), //
+                Arguments.of(THING_TYPE_SHELLYMINI_PM, true, false), //
+                Arguments.of(THING_TYPE_SHELLYMINI_EM, true, false), //
+
+                // Shelly Pro series
                 Arguments.of(THING_TYPE_SHELLYPRO1, true, false), //
                 Arguments.of(THING_TYPE_SHELLYPRO1PM, true, false), //
                 Arguments.of(THING_TYPE_SHELLYPRO2, true, false), //
@@ -145,5 +161,58 @@ public class ShellyDeviceProfileTest {
         assertThrows(IllegalArgumentException.class, () -> {
             ShellyDeviceProfile.buildBluServiceName("sbbt", "001A2B3C4D5E");
         });
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideTestCasesForGetControlGroup")
+    void getControlGroup(ThingTypeUID thingTypeUID, String mode, int numRollers, int numOutputs, int numLights,
+            int index, String expectedControlGroup) throws ShellyApiException {
+        ShellyDeviceProfile deviceProfile = new ShellyDeviceProfile();
+        ShellySettingsGlobal settingsGlobal = new ShellySettingsGlobal();
+        ShellySettingsDevice settingsDevice = new ShellySettingsDevice();
+
+        settingsGlobal.mode = mode;
+        settingsGlobal.relays = new ArrayList<>();
+        settingsGlobal.lights = IntStream.range(0, numLights).mapToObj(i -> new ShellySettingsRgbwLight())
+                .collect(Collectors.toCollection(ArrayList::new));
+        settingsDevice.numRollers = numRollers;
+        settingsDevice.numOutputs = numOutputs;
+        deviceProfile.initialize(thingTypeUID, gson.toJson(settingsGlobal), settingsDevice);
+
+        String actualControlGroup = deviceProfile.getControlGroup(index);
+        assertThat("Thing type: " + thingTypeUID + ", mode: " + mode + ", numRollers: " + numRollers + ", numOutputs: "
+                + numOutputs, actualControlGroup, is(equalTo(expectedControlGroup)));
+    }
+
+    private static Stream<Arguments> provideTestCasesForGetControlGroup() {
+        return Stream.of( //
+                Arguments.of(THING_TYPE_SHELLYPLUSDIMMERUS, "", 0, 0, 0, 0, CHANNEL_GROUP_DIMMER_CONTROL),
+                Arguments.of(THING_TYPE_SHELLYPLUSDIMMER10V, "", 0, 0, 0, 0, CHANNEL_GROUP_DIMMER_CONTROL),
+                Arguments.of(THING_TYPE_SHELLYDIMMER, "", 0, 0, 0, 0, CHANNEL_GROUP_STATUS + "1"),
+                Arguments.of(THING_TYPE_SHELLYDIMMER2, "", 0, 0, 0, 1, CHANNEL_GROUP_STATUS + "2"),
+                Arguments.of(THING_TYPE_SHELLY2_ROLLER, "roller", 0, 0, 0, 3, CHANNEL_GROUP_ROL_CONTROL),
+                Arguments.of(THING_TYPE_SHELLY2_ROLLER, "Roller", 1, 0, 0, 3, CHANNEL_GROUP_ROL_CONTROL),
+                Arguments.of(THING_TYPE_SHELLY2_ROLLER, "roller", 2, 0, 0, 3, CHANNEL_GROUP_ROL_CONTROL + "4"),
+                Arguments.of(THING_TYPE_SHELLY25_RELAY, "", 0, 0, 0, 3, CHANNEL_GROUP_STATUS + "4"),
+                Arguments.of(THING_TYPE_SHELLY25_RELAY, "", 0, 1, 0, 3, CHANNEL_GROUP_RELAY_CONTROL),
+                Arguments.of(THING_TYPE_SHELLY25_RELAY, "", 0, 2, 0, 3, CHANNEL_GROUP_RELAY_CONTROL + "4"),
+                Arguments.of(THING_TYPE_SHELLYRGBW2_COLOR, "", 0, 0, 0, 3, CHANNEL_GROUP_LIGHT_CONTROL),
+                Arguments.of(THING_TYPE_SHELLYRGBW2_WHITE, "", 0, 0, 0, 3, CHANNEL_GROUP_LIGHT_CONTROL),
+                Arguments.of(THING_TYPE_SHELLYPLUSRGBWPM, "", 0, 0, 1, 3, CHANNEL_GROUP_LIGHT_CONTROL),
+                Arguments.of(THING_TYPE_SHELLYPLUSRGBWPM, "", 0, 0, 2, 3, CHANNEL_GROUP_LIGHT_CHANNEL + "4"),
+                Arguments.of(THING_TYPE_SHELLYBULB, "", 0, 0, 2, 3, CHANNEL_GROUP_LIGHT_CONTROL),
+                Arguments.of(THING_TYPE_SHELLYBUTTON1, "", 0, 0, 0, 5, CHANNEL_GROUP_STATUS),
+                Arguments.of(THING_TYPE_SHELLYBUTTON2, "", 0, 0, 0, 5, CHANNEL_GROUP_STATUS),
+                Arguments.of(THING_TYPE_SHELLYBLUBUTTON, "", 0, 0, 0, 5, CHANNEL_GROUP_STATUS),
+                Arguments.of(THING_TYPE_SHELLYHT, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYFLOOD, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYDOORWIN, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYSMOKE, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYGAS, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYUNI, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYMOTION, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYSENSE, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYTRV, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR),
+                Arguments.of(THING_TYPE_SHELLYPLUSWALLDISPLAY, "", 0, 0, 0, 5, CHANNEL_GROUP_SENSOR));
     }
 }
