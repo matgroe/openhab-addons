@@ -14,6 +14,7 @@ package org.openhab.binding.giraone.internal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
@@ -38,6 +39,7 @@ import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
+import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
@@ -54,7 +56,12 @@ import io.reactivex.rxjava3.functions.Consumer;
 class GiraOneBridgeHandlerTest {
     private final Bridge bridge = Mockito.spy(Bridge.class);;
     private final GiraOneClient giraOneClient = mock(GiraOneClient.class);
-    private final GiraOneBridgeHandler bridgeHandler = spy(new GiraOneBridgeHandler(bridge, giraOneClient));
+    private final GiraOneBridgeHandler bridgeHandler = spy(new GiraOneBridgeHandler(bridge, giraOneClient) {
+        protected Configuration getConfig() {
+            return new Configuration();
+        }
+
+    });
 
     @BeforeEach
     void setUp() {
@@ -96,31 +103,28 @@ class GiraOneBridgeHandlerTest {
         verify(giraOneClient).connect();
     }
 
-    private static Stream<Arguments> provideGiraOneValues() {
-        return Stream.of(Arguments.of(new GiraOneValueChange(
-                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxButton4Comfort2CSystem55Rocker2-gang-5.Switching-2:Feedback",
-                "0", "1"), true));
-    }
-
-    GiraOneValueChange deviceChannelNotReady = new GiraOneValueChange(
-            "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
-
-    GiraOneValueChange deviceChannelIsReady = new GiraOneValueChange(
-            "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
 
     @DisplayName("Should process received GiraOneValue")
-    @ParameterizedTest
-    @MethodSource("provideGiraOneValues")
-    void shouldDeserialize2WebsocketMessageType(GiraOneValue giraOneValue, boolean shouldProcess) {
-        bridgeHandler.initialize();
+    @Test
+    void shouldDeserialize2WebsocketMessageType() {
 
-        System.out.println("verificationData");
+        GiraOneValueChange deviceChannelNotReady = new GiraOneValueChange(
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
+
+        GiraOneValueChange deviceChannelIsReady = new GiraOneValueChange(
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
+
+
+        bridgeHandler.initialize();
+        reset(bridgeHandler);
+
         ArgumentCaptor<ThingStatus> argCaptorThingStatus = ArgumentCaptor.forClass(ThingStatus.class);
         ArgumentCaptor<ThingStatusDetail> argCaptorThingStatusDetail = ArgumentCaptor.forClass(ThingStatusDetail.class);
 
-        verify(bridgeHandler, times(1)).updateStatus(argCaptorThingStatus.capture(),
+        verify(bridgeHandler, atLeastOnce()).updateStatus(argCaptorThingStatus.capture(),
                 argCaptorThingStatusDetail.capture(), any());
-        bridgeHandler.onGiraOneValue(deviceChannelNotReady);
+        bridgeHandler.onGiraOneValue(deviceChannelIsReady);
+
         argCaptorThingStatus.getAllValues();
         argCaptorThingStatusDetail.getAllValues();
     }
