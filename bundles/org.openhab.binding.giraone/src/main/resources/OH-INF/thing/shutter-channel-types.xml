@@ -5,7 +5,7 @@
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
 	<channel-type id="shutter-position">
-		<item-type>Rollershutter</item-type>
+		<item-type>Number:Dimensionless</item-type>
 		<label>Shutter Position</label>
 		<description>Shutter Blind Level Position</description>
 		<tags>
@@ -68,7 +68,7 @@
 	<channel-type id="window-position">
 		<item-type>Number</item-type>
 		<label>Window Position</label>
-		<description>Window Position (0 = Closed ... 100 = Open)</description>
+		<description>Window Position (0 = 0pen ... 100 = closed)</description>
 		<tags>
 			<tag>Control</tag>
 			<tag>Level</tag>

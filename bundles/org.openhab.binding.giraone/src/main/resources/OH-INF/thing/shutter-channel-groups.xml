@@ -50,7 +50,7 @@
 		<channels>
 			<channel id="position" typeId="window-position">
 				<label>Position</label>
-				<description>Window Position (0 = Closed ... 100 = Open)</description>
+				<description>Window Position (0 = open ... 100 = closed)</description>
 			</channel>
 
 			<channel id="step-up-down" typeId="shutter-step-up-down">
@@ -67,6 +67,7 @@
 				<label>Motion State</label>
 				<description>Describes the Shutter's motion state (moving up/down or stopped).</description>
 			</channel>
+
 		</channels>
 	</channel-group-type>
 
