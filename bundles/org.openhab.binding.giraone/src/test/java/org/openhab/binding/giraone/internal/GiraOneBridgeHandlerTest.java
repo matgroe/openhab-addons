@@ -12,6 +12,9 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import static org.awaitility.Awaitility.await;
+import static org.awaitility.Duration.ONE_MINUTE;
+import static org.awaitility.Duration.ONE_SECOND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
@@ -23,21 +26,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
-import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Bridge;
@@ -58,9 +57,12 @@ class GiraOneBridgeHandlerTest {
     private final GiraOneClient giraOneClient = mock(GiraOneClient.class);
     private final GiraOneBridgeHandler bridgeHandler = spy(new GiraOneBridgeHandler(bridge, giraOneClient) {
         protected Configuration getConfig() {
-            return new Configuration();
+            return new Configuration(
+                    Map.of(
+                        "hostname", "localhost"
+                    )
+            );
         }
-
     });
 
     @BeforeEach
@@ -83,26 +85,30 @@ class GiraOneBridgeHandlerTest {
         schedulerField.set(bridgeHandler, scheduler);
         bridgeHandler.initialize();
 
+
         verify(giraOneClient).observeGiraOneValues(any());
         verify(giraOneClient).observeGiraOneConnectionState(captorConnectionState.capture());
         verify(giraOneClient).observeOnGiraOneClientExceptions(any());
 
         ArgumentCaptor<Runnable> argCaptorRunnable = ArgumentCaptor.forClass(Runnable.class);
-        verify(scheduler).execute(argCaptorRunnable.capture());
-        argCaptorRunnable.getValue().run();
+            verify(scheduler).execute(argCaptorRunnable.capture());
+            argCaptorRunnable.getValue().run();
 
-        ArgumentCaptor<ThingStatus> argCaptorThingStatus = ArgumentCaptor.forClass(ThingStatus.class);
-        ArgumentCaptor<ThingStatusDetail> argCaptorThingStatusDetail = ArgumentCaptor.forClass(ThingStatusDetail.class);
+        // Must lookup position
+        await().atMost(ONE_MINUTE).untilAsserted(() -> {
 
-        verify(bridgeHandler, times(1)).updateStatus(argCaptorThingStatus.capture(),
-                argCaptorThingStatusDetail.capture(), any());
-        assertEquals(ThingStatus.UNKNOWN, argCaptorThingStatus.getValue());
-        assertEquals(ThingStatusDetail.BRIDGE_UNINITIALIZED, argCaptorThingStatusDetail.getValue());
+            ArgumentCaptor<ThingStatus> argCaptorThingStatus = ArgumentCaptor.forClass(ThingStatus.class);
+            ArgumentCaptor<ThingStatusDetail> argCaptorThingStatusDetail = ArgumentCaptor.forClass(ThingStatusDetail.class);
 
-        verify(giraOneClient).disconnect();
-        verify(giraOneClient).connect();
+            verify(bridgeHandler, times(1)).updateStatus(argCaptorThingStatus.capture(),
+                    argCaptorThingStatusDetail.capture(), any());
+            assertEquals(ThingStatus.UNKNOWN, argCaptorThingStatus.getValue());
+            assertEquals(ThingStatusDetail.BRIDGE_UNINITIALIZED, argCaptorThingStatusDetail.getValue());
+
+            verify(giraOneClient).disconnect();
+            verify(giraOneClient).connect();
+        });
     }
-
 
     @DisplayName("Should process received GiraOneValue")
     @Test
@@ -114,16 +120,15 @@ class GiraOneBridgeHandlerTest {
         GiraOneValueChange deviceChannelIsReady = new GiraOneValueChange(
                 "urn:gds:dp:GiraOneServer.GIOSRVKX03:GDS-Device-Channel:Ready", "0", "1");
 
-
         bridgeHandler.initialize();
         reset(bridgeHandler);
+        bridgeHandler.onGiraOneValue(deviceChannelIsReady);
 
         ArgumentCaptor<ThingStatus> argCaptorThingStatus = ArgumentCaptor.forClass(ThingStatus.class);
         ArgumentCaptor<ThingStatusDetail> argCaptorThingStatusDetail = ArgumentCaptor.forClass(ThingStatusDetail.class);
-
         verify(bridgeHandler, atLeastOnce()).updateStatus(argCaptorThingStatus.capture(),
                 argCaptorThingStatusDetail.capture(), any());
-        bridgeHandler.onGiraOneValue(deviceChannelIsReady);
+
 
         argCaptorThingStatus.getAllValues();
         argCaptorThingStatusDetail.getAllValues();

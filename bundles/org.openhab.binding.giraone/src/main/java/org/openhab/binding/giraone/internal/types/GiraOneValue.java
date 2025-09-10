@@ -58,6 +58,18 @@ public class GiraOneValue {
         return "1".equals(getValue());
     }
 
+    public Number getValueAsNumber() {
+        return Float.parseFloat(getValue());
+    }
+
+    public float getValueAsFloat() {
+        return getValueAsNumber().floatValue();
+    }
+
+    public int getValueAsInt() {
+        return getValueAsNumber().intValue();
+    }
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) {

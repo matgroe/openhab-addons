@@ -43,6 +43,21 @@
 		</state>
 	</channel-type>
 
+	<channel-type id="shutter-state">
+		<item-type>String</item-type>
+		<label>Shutter State</label>
+		<description>Describes if the Shutter or Window is opened or closed</description>
+		<tags>
+			<tag>Status</tag>
+		</tags>
+		<state readOnly="true">
+			<options>
+				<option value="OPEN">Open</option>
+				<option value="CLOSED">Closed</option>
+			</options>
+		</state>
+	</channel-type>
+
 	<channel-type id="shutter-up-down">
 		<item-type>Rollershutter</item-type>
 		<label>Move Up or Down</label>
@@ -50,9 +65,9 @@
 		<category>Rollershutter</category>
 		<state>
 			<options>
-				<option value="0">Up</option>
-				<option value="1">Down</option>
-				<option value="100">Down</option>
+				<option value="UP">Up</option>
+				<option value="DOWN">Down</option>
+				<option value="UNDEFINED">Stop</option>
 			</options>
 		</state>
 	</channel-type>

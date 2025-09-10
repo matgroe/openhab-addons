@@ -35,10 +35,47 @@ public class GiraOneValueChange extends GiraOneValue {
     }
 
     /**
+     * @return returns true, if the previous value differs from current value
+     */
+    public boolean isChanged() {
+        return !getValue().equals(getPreviousValue());
+    }
+
+    /**
+     * Checks, if the value as represented by the given {@link GiraOneValueChange} is increasing or not
+     *
+     * @return returns true, if increasing, false otherwise.
+     */
+    public boolean isValueIncreasing() {
+        return getValueAsFloat() > getPreviousValueAsFloat();
+    }
+
+    /**
      * @return The previous value
      */
     public String getPreviousValue() {
         return previousValue;
+    }
+
+    /**
+     * @return The previous value as Number
+     */
+    public Number getPreviousValueAsNumber() {
+        return Float.parseFloat(getPreviousValue());
+    }
+
+    /**
+     * @return The previous value as float
+     */
+    public float getPreviousValueAsFloat() {
+        return getPreviousValueAsNumber().floatValue();
+    }
+
+    /**
+     * @return The previous value as int
+     */
+    public int getPreviousValueAsInt() {
+        return getPreviousValueAsNumber().intValue();
     }
 
     @Override

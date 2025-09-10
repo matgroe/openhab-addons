@@ -32,6 +32,10 @@ public class GiraOneDataPoint {
         this.urn = GiraOneURN.of(urn);
     }
 
+    public GiraOneDataPoint(final GiraOneURN urn) {
+        this.urn = urn;
+    }
+
     public String getName() {
         return urn.getResourceName();
     }

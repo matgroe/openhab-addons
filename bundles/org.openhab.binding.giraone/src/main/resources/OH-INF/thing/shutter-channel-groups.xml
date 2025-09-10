@@ -28,6 +28,11 @@
 				<label>Motion State</label>
 				<description>Describes the Shutter's motion state (moving up/down or stopped).</description>
 			</channel>
+
+			<channel id="shutter-state" typeId="shutter-state">
+				<label>Shutter State</label>
+				<description>Describes if the Shutter is Opened or Closed</description>
+			</channel>
 		</channels>
 	</channel-group-type>
 
@@ -68,6 +73,10 @@
 				<description>Describes the Shutter's motion state (moving up/down or stopped).</description>
 			</channel>
 
+			<channel id="shutter-state" typeId="shutter-state">
+				<label>Window State</label>
+				<description>Describes if the Window is Opened or Closed</description>
+			</channel>
 		</channels>
 	</channel-group-type>
 

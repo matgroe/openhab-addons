@@ -112,14 +112,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void initialize() {
-        this.createGiraOneClientAndInitialize();
-    }
-
-    private void createGiraOneClientAndInitialize() {
         logger.info("Initializing 'Gira One Bridge Handler'");
-
-        // initialize client
-        giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
 
         // dispose and clear all disposables
         disposables.clear();
@@ -162,8 +155,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     protected void updateConfiguration(Configuration configuration) {
+        giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
         super.updateConfiguration(configuration);
-        this.createGiraOneClientAndInitialize();
+        this.initialize();
     }
 
     @Override
@@ -177,7 +171,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
      * @param connectionState The {@link GiraOneClient}'s connection state.
      */
     protected void onConnectionStateChanged(GiraOneClientConnectionState connectionState) {
-        logger.debug("ConnectionStateChanged to {}", connectionState);
+        logger.trace("ConnectionStateChanged to {}", connectionState);
         switch (connectionState) {
             case Connecting -> this.clientMovedToConnecting();
             case Connected -> this.clientMovedToConnected();
@@ -236,7 +230,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     void onGiraOneValue(GiraOneValue giraOneValue) {
-        logger.debug("onGiraOneValue :: {}", giraOneValue);
+        logger.trace("onGiraOneValue :: {}", giraOneValue);
         datapointValues.onNext(giraOneValue);
     }
 
@@ -254,19 +248,19 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void lookupGiraOneChannelValues(final GiraOneChannel channel) {
-        this.logger.debug("lookupGiraOneChannelValues for channel={}", channel);
+        this.logger.trace("lookupGiraOneChannelValues for channel={}", channel);
         channel.getDataPoints().forEach(this::lookupGiraOneDatapointValue);
     }
 
     @Override
     public void lookupGiraOneDatapointValue(GiraOneDataPoint dataPoint) {
-        this.logger.debug("lookupGiraOneDatapointValue for dataPoint={}", dataPoint);
+        this.logger.trace("lookupGiraOneDatapointValue for dataPoint={}", dataPoint);
         giraOneClient.lookupGiraOneDatapointValue(dataPoint);
     }
 
     @Override
     public void setGiraOneDataPointValue(GiraOneDataPoint dataPoint, String value) {
-        this.logger.debug("setGiraOneDataPointValue for dataPoint='{}' to '{}'", dataPoint, value);
+        this.logger.trace("setGiraOneDataPointValue for dataPoint='{}' to '{}'", dataPoint, value);
         this.giraOneClient.changeGiraOneDataPointValue(dataPoint, value);
     }
 

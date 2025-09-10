@@ -39,6 +39,24 @@ public class GiraOneURN {
         return new GiraOneURN(urn);
     }
 
+    /**
+     * @param deviceUrn The device urn String
+     * @param resource the URN resource part
+     * @return The parsed URN
+     */
+    public static GiraOneURN of(final String deviceUrn, final String resource) {
+        return new GiraOneURN(String.format("%s:%s", deviceUrn, resource));
+    }
+
+    /**
+     *
+     * @param urn The URN String representation. *
+     * @return The parsed URN
+     */
+    public static GiraOneURN of(final GiraOneURN urn, final String resource) {
+        return new GiraOneURN(String.format("%s:%s", urn, resource));
+    }
+
     private GiraOneURN(final String urn) {
         this.urnParts = urn.split(DELIMITER);
         if (!"urn".equals(urnParts[0])) {

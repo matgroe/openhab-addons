@@ -66,12 +66,12 @@ public class TestDataProvider {
 
     public static GiraOneDataPoint dataPointStepUpDown() {
         return new GiraOneDataPoint(
-                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down");
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Step-Up-Down");
     }
 
     public static GiraOneDataPoint dataPointUpDown() {
         return new GiraOneDataPoint(
-                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Step-Up-Down");
+                "urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxSwitchingActuator24-gang2C16A2FBlindActuator12-gang-1.Curtain-5:Up-Down");
     }
 
     public static GiraOneDataPoint dataPointMovement() {

@@ -90,7 +90,7 @@ public class GiraOneBindingConstants {
     public static final String CHANNEL_BRIGHTNESS = "brightness";
     public static final String CHANNEL_STEP_UP_DOWN = "step-up-down";
     public static final String CHANNEL_UP_DOWN = "up-down";
-    public static final String CHANNEL_MOVEMENT = "movement";
+    public static final String CHANNEL_MOTION_STATE = "motion-state";
     public static final String CHANNEL_POSITION = "position";
     public static final String CHANNEL_SLAT_POSITION = "slat-position";
     public static final String CHANNEL_CURRENT = "current";
@@ -103,6 +103,6 @@ public class GiraOneBindingConstants {
     public static final String CHANNEL_HEAT_COOL = "heat-cool";
     public static final String CHANNEL_FLOAT = "float";
     public static final String CHANNEL_EXECUTE = "execute";
-    public static final String CHANNEL_TEACH = "teach";
+    public static final String CHANNEL_SHUTTER_STATE = "shutter-state";
     public static final String CHANNEL_SERVER_TIME = "server-time";
 }
