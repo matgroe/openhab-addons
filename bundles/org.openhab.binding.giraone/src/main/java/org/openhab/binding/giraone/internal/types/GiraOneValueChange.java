@@ -30,6 +30,10 @@ public class GiraOneValueChange extends GiraOneValue {
     private final String previousValue;
 
     public GiraOneValueChange(String urn, String value, String previous) {
+        this(GiraOneURN.of(urn), value, previous);
+    }
+
+    public GiraOneValueChange(GiraOneURN urn, String value, String previous) {
         super(urn, value);
         this.previousValue = previous;
     }

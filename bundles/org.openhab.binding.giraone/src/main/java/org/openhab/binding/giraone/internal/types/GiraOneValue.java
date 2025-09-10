@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.Objects;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+
+import java.util.Objects;
 
 /**
  * The {@link GiraOneValue} represents a value for a single source of data
@@ -38,7 +38,11 @@ public class GiraOneValue {
     private final GiraOneURN datapointUrn;
 
     public GiraOneValue(String datapointUrn, String value) {
-        this.datapointUrn = GiraOneURN.of(datapointUrn);
+        this(GiraOneURN.of(datapointUrn), value);
+    }
+
+    public GiraOneValue(GiraOneURN datapointUrn, String value) {
+        this.datapointUrn = datapointUrn;
         this.value = value;
     }
 

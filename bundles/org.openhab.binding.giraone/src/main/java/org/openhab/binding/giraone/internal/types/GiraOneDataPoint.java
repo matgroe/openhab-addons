@@ -12,11 +12,11 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import java.util.Objects;
-
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+
+import java.util.Objects;
 
 /**
  * The GiraOneDataPoint defines a source of data which may have a
@@ -40,12 +40,12 @@ public class GiraOneDataPoint {
         return urn.getResourceName();
     }
 
-    public String getDeviceUrn() {
-        return urn.getParent().toString();
+    public GiraOneURN getDeviceUrn() {
+        return urn.getParent();
     }
 
-    public String getUrn() {
-        return urn.toString();
+    public GiraOneURN getUrn() {
+        return urn;
     }
 
     public void setUrn(String urn) {
@@ -71,6 +71,6 @@ public class GiraOneDataPoint {
 
     @Override
     public String toString() {
-        return getUrn();
+        return urn.toString();
     }
 }

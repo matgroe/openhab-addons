@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_DATAPOINTS;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_NAME;
@@ -19,15 +21,6 @@ import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPE
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_TYPE_ID;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_CHANNEL_URN;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.PROPERTY_FUNCTION_TYPE;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelType;
 import org.openhab.binding.giraone.internal.types.GiraOneChannelTypeId;
@@ -48,7 +41,12 @@ import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The {@link GiraOneBaseThingHandler} is responsible for handling the
@@ -242,7 +240,7 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
      */
     protected void subscribeOnGiraOneDataPointValues(Collection<GiraOneDataPoint> datapoints,
             CompositeDisposable disposables) {
-        datapoints.stream().map(GiraOneDataPoint::getUrn).distinct()
+        datapoints.stream().map(GiraOneDataPoint::getUrn).distinct().map(dp -> dp.toString())
                 .map(dp -> getGiraOneBridge().subscribeOnGiraOneDataPointValues(dp, this::onGiraOneValue))
                 .forEach(disposables::add);
     }

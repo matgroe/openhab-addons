@@ -13,29 +13,23 @@
 package org.openhab.binding.giraone.internal;
 
 import static org.awaitility.Awaitility.await;
-import static org.awaitility.Duration.ONE_MINUTE;
 import static org.awaitility.Duration.ONE_SECOND;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
-
-import java.util.stream.Stream;
-
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
@@ -44,6 +38,8 @@ import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.types.State;
+
+import java.util.stream.Stream;
 
 /**
  * Test class for {@link GiraOneShutterThingHandler}.
@@ -66,21 +62,29 @@ class GiraOneShutterThingHandlerTest {
 
     private static Stream<Arguments> provideForTestShutterMovementDetectionUpDown() {
         return Stream.of(
-                Arguments.of(TestDataProvider.dataPointStepUpDown(), "0", "0", GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
-                Arguments.of(TestDataProvider.dataPointStepUpDown(), "1", "0", GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
-                Arguments.of(TestDataProvider.dataPointStepUpDown(), "0", "1", GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN),
-                Arguments.of(TestDataProvider.dataPointStepUpDown(), "1", "1", GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN),
-                Arguments.of(TestDataProvider.dataPointUpDown(), "0", "0", GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
-                Arguments.of(TestDataProvider.dataPointUpDown(), "1", "0", GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
-                Arguments.of(TestDataProvider.dataPointUpDown(), "0", "1", GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN),
-                Arguments.of(TestDataProvider.dataPointUpDown(), "1", "1", GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN)
-        );
+                Arguments.of(TestDataProvider.dataPointStepUpDown(), "0", "0",
+                        GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
+                Arguments.of(TestDataProvider.dataPointStepUpDown(), "1", "0",
+                        GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
+                Arguments.of(TestDataProvider.dataPointStepUpDown(), "0", "1",
+                        GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN),
+                Arguments.of(TestDataProvider.dataPointStepUpDown(), "1", "1",
+                        GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN),
+                Arguments.of(TestDataProvider.dataPointUpDown(), "0", "0",
+                        GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
+                Arguments.of(TestDataProvider.dataPointUpDown(), "1", "0",
+                        GiraOneShutterThingHandler.MotionState.MOVING_UP, GiraOneShutterThingHandler.Direction.UP),
+                Arguments.of(TestDataProvider.dataPointUpDown(), "0", "1",
+                        GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN),
+                Arguments.of(TestDataProvider.dataPointUpDown(), "1", "1",
+                        GiraOneShutterThingHandler.MotionState.MOVING_DOWN, GiraOneShutterThingHandler.Direction.DOWN));
     }
 
     @DisplayName("Test the shutter movement detection by channel (step-)up-down)")
     @ParameterizedTest
     @MethodSource("provideForTestShutterMovementDetectionUpDown")
-    void testShutterMovementDetectionByStepUpDown(GiraOneDataPoint dataPoint, String oldValue, String newValue, GiraOneShutterThingHandler.MotionState motionState, GiraOneShutterThingHandler.Direction direction) {
+    void testShutterMovementDetectionByStepUpDown(GiraOneDataPoint dataPoint, String oldValue, String newValue,
+            GiraOneShutterThingHandler.MotionState motionState, GiraOneShutterThingHandler.Direction direction) {
         GiraOneValueChange valueChange = new GiraOneValueChange(dataPoint.getUrn(), newValue, oldValue);
         handler.onGiraOneValue(valueChange);
 
@@ -99,7 +103,8 @@ class GiraOneShutterThingHandlerTest {
     @DisplayName("Test the shutter movement start detection by channel movement")
     @Test
     void testShutterMovementStartDetection() {
-        GiraOneValueChange valueChange = new GiraOneValueChange(TestDataProvider.dataPointMovement().getUrn(), "1", "0");
+        GiraOneValueChange valueChange = new GiraOneValueChange(TestDataProvider.dataPointMovement().getUrn(), "1",
+                "0");
         handler.onGiraOneValue(valueChange);
 
         ArgumentCaptor<String> argumentCaptorChannel = ArgumentCaptor.forClass(String.class);
@@ -108,7 +113,8 @@ class GiraOneShutterThingHandlerTest {
 
         assertEquals(1, argumentCaptorChannel.getAllValues().size());
         assertEquals(GiraOneBindingConstants.CHANNEL_MOTION_STATE, argumentCaptorChannel.getAllValues().get(0));
-        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.MotionState.MOVING.toString()), argumentCaptorState.getAllValues().get(0));
+        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.MotionState.MOVING.toString()),
+                argumentCaptorState.getAllValues().get(0));
 
         // Must lookup position
         await().atMost(ONE_SECOND).untilAsserted(() -> {
@@ -121,7 +127,8 @@ class GiraOneShutterThingHandlerTest {
     @DisplayName("Test the shutter movement end detection by channel movement")
     @Test
     void testShutterMovementEndDetection() {
-        GiraOneValueChange valueChange = new GiraOneValueChange(TestDataProvider.dataPointMovement().getUrn(), "0", "1");
+        GiraOneValueChange valueChange = new GiraOneValueChange(TestDataProvider.dataPointMovement().getUrn(), "0",
+                "1");
         handler.onGiraOneValue(valueChange);
 
         ArgumentCaptor<String> argumentCaptorChannel = ArgumentCaptor.forClass(String.class);
@@ -130,19 +137,23 @@ class GiraOneShutterThingHandlerTest {
         assertEquals(3, argumentCaptorChannel.getAllValues().size());
 
         assertEquals(GiraOneBindingConstants.CHANNEL_UP_DOWN, argumentCaptorChannel.getAllValues().get(0));
-        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.Direction.UNDEFINED.toString()), argumentCaptorState.getAllValues().get(0));
+        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.Direction.UNDEFINED.toString()),
+                argumentCaptorState.getAllValues().get(0));
 
         assertEquals(GiraOneBindingConstants.CHANNEL_STEP_UP_DOWN, argumentCaptorChannel.getAllValues().get(1));
-        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.Direction.UNDEFINED.toString()), argumentCaptorState.getAllValues().get(1));
+        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.Direction.UNDEFINED.toString()),
+                argumentCaptorState.getAllValues().get(1));
 
         assertEquals(GiraOneBindingConstants.CHANNEL_MOTION_STATE, argumentCaptorChannel.getAllValues().get(2));
-        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.MotionState.HALTED.toString()), argumentCaptorState.getAllValues().get(2));
+        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.MotionState.HALTED.toString()),
+                argumentCaptorState.getAllValues().get(2));
     }
 
     @DisplayName("Test the shutter movement detection by channel movement")
     @Test
     void testShutterMovementOnPosition() {
-        GiraOneValueChange valueChange = new GiraOneValueChange(TestDataProvider.dataPointPosition().getUrn(), "50", "10");
+        GiraOneValueChange valueChange = new GiraOneValueChange(TestDataProvider.dataPointPosition().getUrn(), "50",
+                "10");
         handler.onGiraOneValue(valueChange);
 
         ArgumentCaptor<String> argumentCaptorChannel = ArgumentCaptor.forClass(String.class);
@@ -150,13 +161,14 @@ class GiraOneShutterThingHandlerTest {
         verify(handler, times(3)).updateState(argumentCaptorChannel.capture(), argumentCaptorState.capture());
 
         assertEquals(GiraOneBindingConstants.CHANNEL_MOTION_STATE, argumentCaptorChannel.getAllValues().get(0));
-        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.MotionState.MOVING_DOWN.toString()), argumentCaptorState.getAllValues().get(0));
+        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.MotionState.MOVING_DOWN.toString()),
+                argumentCaptorState.getAllValues().get(0));
 
         assertEquals(GiraOneBindingConstants.CHANNEL_SHUTTER_STATE, argumentCaptorChannel.getAllValues().get(1));
-        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.ShutterState.OPEN.toString()), argumentCaptorState.getAllValues().get(1));
+        assertEquals(StringType.valueOf(GiraOneShutterThingHandler.ShutterState.OPEN.toString()),
+                argumentCaptorState.getAllValues().get(1));
 
         assertEquals(GiraOneBindingConstants.CHANNEL_POSITION, argumentCaptorChannel.getAllValues().get(2));
         assertEquals(StringType.valueOf(valueChange.getValue()), argumentCaptorState.getAllValues().get(2));
     }
 }
-

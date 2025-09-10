@@ -12,15 +12,15 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * GiraOneChannel
@@ -88,7 +88,7 @@ public class GiraOneChannel {
         return channelTypeId;
     }
 
-    public boolean containsGiraOneDataPoint(String datapointUrn) {
+    public boolean containsGiraOneDataPoint(GiraOneURN datapointUrn) {
         return this.dataPoints.stream().anyMatch(f -> datapointUrn.equals(f.getUrn()));
     }
 

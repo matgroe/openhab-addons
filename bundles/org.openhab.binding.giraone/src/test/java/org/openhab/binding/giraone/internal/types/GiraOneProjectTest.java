@@ -12,20 +12,19 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openhab.binding.giraone.internal.util.TestDataProvider;
+
+import java.util.Optional;
 
 /**
  * Test class for {@link GiraOneProject}.
@@ -61,7 +60,9 @@ class GiraOneProjectTest {
         GiraOneProject project = TestDataProvider.createGiraOneProject();
         GiraOneDataPoint dp = project.lookupGiraOneDataPoint(urn).orElse(null);
         assertNotNull(dp);
-        assertEquals("urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Set-Point",
+        assertEquals(
+                GiraOneURN
+                        .of("urn:gds:dp:GiraOneServer.GIOSRVKX03:KnxHvacActuator6-gang-1.Heatingactuator-1:Set-Point"),
                 dp.getUrn());
         assertEquals("Set-Point", dp.getName());
     }

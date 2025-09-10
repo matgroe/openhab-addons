@@ -15,6 +15,7 @@ package org.openhab.binding.giraone.internal.communication.commands;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
 import org.openhab.binding.giraone.internal.communication.GiraOneServerCommand;
+import org.openhab.binding.giraone.internal.types.GiraOneURN;
 import org.openhab.binding.giraone.internal.util.GenericBuilder;
 
 /**
@@ -49,5 +50,9 @@ public class SetValue extends GiraOneCommand {
 
     public void setUrn(String urn) {
         this.urn = urn;
+    }
+
+    public void setUrn(GiraOneURN urn) {
+        this.urn = urn.toString();
     }
 }
