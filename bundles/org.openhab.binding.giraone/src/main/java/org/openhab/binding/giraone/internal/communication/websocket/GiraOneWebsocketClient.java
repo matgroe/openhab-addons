@@ -21,7 +21,6 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.ReplaySubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import jakarta.websocket.CloseReason;
-import jakarta.websocket.DeploymentException;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jetty.websocket.api.MessageTooLargeException;
@@ -46,7 +45,6 @@ import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -81,7 +79,7 @@ public class GiraOneWebsocketClient {
 
     private Disposable dataPointDisposable = Disposable.empty();
 
-    private final GiraOneWebsocketEndpoint websocketEndpoint;
+    private final GiraOneWebsocketConnection websocketConnection;
 
     /** Observe this subject for received Command-Responses from Gira Server */
     final Subject<GiraOneWebsocketResponse> responses = PublishSubject.create();
@@ -117,7 +115,7 @@ public class GiraOneWebsocketClient {
         this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
         this.timeoutSeconds = config.defaultTimeoutSeconds;
         this.maxTextMessageSize = config.maxTextMessageSize * FACTOR_BYTES_2_KILO_BYTES;
-        this.websocketEndpoint = createWebsocketEndpoint();
+        this.websocketConnection = createGiraOneWebsocketConnection();
     }
 
     String computeWebsocketAuthToken(String username, String password) {
@@ -125,8 +123,8 @@ public class GiraOneWebsocketClient {
         return "ui" + new String(Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8)));
     }
 
-    GiraOneWebsocketEndpoint createWebsocketEndpoint() throws GiraOneClientException {
-        return new GiraOneWebsocketEndpoint();
+    GiraOneWebsocketConnection createGiraOneWebsocketConnection() throws GiraOneClientException {
+        return new GiraOneJakartaWebsocketEndpoint();
     }
 
     void initiateWebsocketSession() {
@@ -134,36 +132,23 @@ public class GiraOneWebsocketClient {
             this.websocketEndpointDisposables.clear();
 
             // register callbacks
-            websocketEndpointDisposables.add(this.websocketEndpoint.subscribeOnMessages(this::onWebSocketText));
-            websocketEndpointDisposables.add(this.websocketEndpoint.subscribeOnThrowable(this::onWebSocketError));
+            websocketEndpointDisposables.add(this.websocketConnection.subscribeOnMessages(this::onWebSocketText));
+            websocketEndpointDisposables.add(this.websocketConnection.subscribeOnThrowable(this::onWebSocketError));
             websocketEndpointDisposables
-                    .add(this.websocketEndpoint.subscribeOnConnectionState(this::onWebSocketConnectionState));
+                    .add(this.websocketConnection.subscribeOnConnectionState(this::onWebSocketConnectionState));
             websocketEndpointDisposables
-                    .add(this.websocketEndpoint.subscribeOnWebsocketCloseReason(this::onWebSocketClosed));
+                    .add(this.websocketConnection.subscribeOnWebsocketCloseReason(this::onWebSocketClosed));
 
-            this.websocketEndpoint.connectTo(URI.create(giraOneWssEndpoint));
-        } catch (IOException exp) {
-            this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp));
+            this.websocketConnection.connectTo(URI.create(giraOneWssEndpoint));
+        } catch (GiraOneClientException exp) {
+            this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp.getCause()));
             this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
-        } catch (DeploymentException exp) {
-            this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, exp));
         }
+        //catch (DeploymentException exp) {
+        //    this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, exp));
+        //}
     }
 
-    /*
-     * void terminateWebsocketSession() {
-     * try {
-     * 
-     * 
-     * } catch (IOException exp) {
-     * this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp));
-     * this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
-     * } catch (DeploymentException exp) {
-     * this.clientExceptions
-     * .onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, exp));
-     * }
-     * }
-     */
     /**
      * Establish a new Websocket connection to the Gira One Server.
      */
@@ -180,13 +165,13 @@ public class GiraOneWebsocketClient {
      * Terminate the websocket connection.
      */
     public void disconnect() {
-        this.disconnect(GiraOneWebsocketEndpoint.WS_CLOSURE_NORMAL);
+        this.disconnect(GiraOneJakartaWebsocketEndpoint.WS_CLOSURE_NORMAL);
     }
 
     private void disconnect(CloseReason closeReason) {
         logger.debug("Disconnecting with {}/{}", closeReason.getCloseCode(), closeReason.getReasonPhrase());
         try {
-            this.websocketEndpoint.disconnect(closeReason);
+            this.websocketConnection.disconnect(closeReason);
         } catch (Exception e) {
             throw new GiraOneClientException(GiraOneClientException.DISCONNECT_FAILED, e);
         } finally {
@@ -305,7 +290,7 @@ public class GiraOneWebsocketClient {
     void send(GiraOneWebsocketRequest command) {
         String message = gson.toJson(command, GiraOneWebsocketRequest.class);
         logger.trace("GiraOneWebsocketRequest '{}' :: {}", command.getCommand(), message);
-        this.websocketEndpoint.sendMessage(message);
+        this.websocketConnection.sendMessage(message);
     }
 
     /**

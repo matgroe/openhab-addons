@@ -6,6 +6,13 @@
 		<feature>openhab-runtime-base</feature>
 		<feature>openhab-core-config-discovery-sddp</feature>
 		<feature>openhab-transport-upnp</feature>
+		<bundle>mvn:jakarta.activation/jakarta.activation-api/2.1.3</bundle>
+		<bundle>mvn:jakarta.xml.bind/jakarta.xml.bind-api/4.0.2</bundle>
+		<bundle>mvn:jakarta.websocket/jakarta.websocket-api/2.2.0</bundle>
+		<bundle>mvn:jakarta.websocket/jakarta.websocket-client-api/2.2.0</bundle>
+		<bundle>mvn:org.glassfish.tyrus/tyrus-client/2.2.0</bundle>
+		<bundle>mvn:org.glassfish.tyrus/tyrus-core/2.2.0</bundle>
+		<bundle>mvn:org.glassfish.tyrus/tyrus-spi/2.2.0</bundle>
 		<bundle start-level="80">mvn:org.openhab.addons.bundles/org.openhab.binding.giraone/${project.version}</bundle>
 	</feature>
 </features>

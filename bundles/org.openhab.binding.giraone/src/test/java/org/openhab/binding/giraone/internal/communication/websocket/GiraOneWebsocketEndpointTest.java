@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 
 /**
- * Test class for {@link GiraOneWebsocketEndpoint}
+ * Test class for {@link GiraOneJakartaWebsocketEndpoint}
  *
  * @author Matthias Groeger - Initial contribution
  */
@@ -31,7 +31,7 @@ public class GiraOneWebsocketEndpointTest {
 
     @Test
     void doSomeTests() throws Exception {
-        GiraOneWebsocketEndpoint endpoint = new GiraOneWebsocketEndpoint();
+        GiraOneJakartaWebsocketEndpoint endpoint = new GiraOneJakartaWebsocketEndpoint();
         endpoint.subscribeOnMessages(x -> {
             System.out.println(" xx " + x);
         });
@@ -42,7 +42,7 @@ public class GiraOneWebsocketEndpointTest {
         });
         endpoint.connectTo(new URI(WSS_ECHO_URI));
 
-        endpoint.disconnect(GiraOneWebsocketEndpoint.WS_CLOSURE_NORMAL);
+        endpoint.disconnect(GiraOneJakartaWebsocketEndpoint.WS_CLOSURE_NORMAL);
         await().atLeast(ONE_SECOND);
     }
 }
