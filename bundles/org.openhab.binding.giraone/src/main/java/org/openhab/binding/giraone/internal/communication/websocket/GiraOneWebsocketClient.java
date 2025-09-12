@@ -12,29 +12,19 @@
  */
 package org.openhab.binding.giraone.internal.communication.websocket;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
+import com.google.gson.Gson;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
+import jakarta.websocket.CloseReason;
+import jakarta.websocket.DeploymentException;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.websocket.api.CloseStatus;
 import org.eclipse.jetty.websocket.api.MessageTooLargeException;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.WebSocketListener;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
@@ -53,18 +43,19 @@ import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
-import org.openhab.core.id.InstanceUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.ReplaySubject;
-import io.reactivex.rxjava3.subjects.Subject;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The class acts as client for the Gira One Server and handles the
@@ -73,18 +64,14 @@ import io.reactivex.rxjava3.subjects.Subject;
  * @author Matthias Gröger - Initial contribution
  */
 @NonNullByDefault({ DefaultLocation.RETURN_TYPE })
-public class GiraOneWebsocketClient implements WebSocketListener {
+public class GiraOneWebsocketClient {
 
     private static final String TEMPLATE_WEBSOCKET_URL = "wss://%s:4432/gds/api?%s";
     private static final int FACTOR_BYTES_2_KILO_BYTES = 1024;
     private static final int DEFAULT_MAX_TEXT_MESSAGE_SIZE = (200 * FACTOR_BYTES_2_KILO_BYTES);
     private static final int DEFAULT_TIMEOUT_SECONDS = 10;
-    private static final int THREAD_POOL_SIZE = 4;
 
-    // websocket close codes : https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
-    private static final CloseStatus WS_CLOSURE_NORMAL = new CloseStatus(1000, "Normal Closure");
-    private static final CloseStatus WS_GOING_AWAY = new CloseStatus(1001, "Going Away");
-
+    private final CompositeDisposable websocketEndpointDisposables = new CompositeDisposable();
     private final Logger logger = LoggerFactory.getLogger(GiraOneWebsocketClient.class);
     private final Gson gson;
     private final String giraOneWssEndpoint;
@@ -92,10 +79,9 @@ public class GiraOneWebsocketClient implements WebSocketListener {
     private int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
     private int maxTextMessageSize = DEFAULT_MAX_TEXT_MESSAGE_SIZE;
 
-    private @Nullable Session websocketSession = null;
-    private QueuedThreadPool jettyThreadPool = new QueuedThreadPool(THREAD_POOL_SIZE);
-
     private Disposable dataPointDisposable = Disposable.empty();
+
+    private final GiraOneWebsocketEndpoint websocketEndpoint;
 
     /** Observe this subject for received Command-Responses from Gira Server */
     final Subject<GiraOneWebsocketResponse> responses = PublishSubject.create();
@@ -131,6 +117,7 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
         this.timeoutSeconds = config.defaultTimeoutSeconds;
         this.maxTextMessageSize = config.maxTextMessageSize * FACTOR_BYTES_2_KILO_BYTES;
+        this.websocketEndpoint = createWebsocketEndpoint();
     }
 
     String computeWebsocketAuthToken(String username, String password) {
@@ -138,47 +125,45 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         return "ui" + new String(Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8)));
     }
 
-    WebSocketClient createWebSocketClient(HttpClient httpClient) throws GiraOneClientException {
-        jettyThreadPool = new QueuedThreadPool(THREAD_POOL_SIZE);
-        jettyThreadPool.setName(getClass().getSimpleName());
-        jettyThreadPool.setDaemon(true);
-        jettyThreadPool.setStopTimeout(0);
+    GiraOneWebsocketEndpoint createWebsocketEndpoint() throws GiraOneClientException {
+        return new GiraOneWebsocketEndpoint();
+    }
 
+    void initiateWebsocketSession() {
         try {
-            jettyThreadPool.start();
-        } catch (Exception e) {
-            throw new GiraOneClientException("Cannot start new ThreadPool.", e);
-        }
+            this.websocketEndpointDisposables.clear();
 
-        WebSocketClient webSocketClient = new WebSocketClient(httpClient);
-        webSocketClient.setExecutor(jettyThreadPool);
-        webSocketClient.getPolicy().setMaxTextMessageSize(maxTextMessageSize);
+            // register callbacks
+            websocketEndpointDisposables.add(this.websocketEndpoint.subscribeOnMessages(this::onWebSocketText));
+            websocketEndpointDisposables.add(this.websocketEndpoint.subscribeOnThrowable(this::onWebSocketError));
+            websocketEndpointDisposables
+                    .add(this.websocketEndpoint.subscribeOnConnectionState(this::onWebSocketConnectionState));
+            websocketEndpointDisposables
+                    .add(this.websocketEndpoint.subscribeOnWebsocketCloseReason(this::onWebSocketClosed));
 
-        try {
-            webSocketClient.start();
-            return webSocketClient;
-        } catch (Exception e) {
-            throw new GiraOneClientException("Cannot start new WebSocketClient.", e);
+            this.websocketEndpoint.connectTo(URI.create(giraOneWssEndpoint));
+        } catch (IOException exp) {
+            this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp));
+            this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
+        } catch (DeploymentException exp) {
+            this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, exp));
         }
     }
 
-    void initiateWebsocketSession(WebSocketClient webSocketClient) {
-        try {
-            Future<Session> clientSessionPromise = webSocketClient.connect(this, URI.create(giraOneWssEndpoint));
-            clientSessionPromise.get(timeoutSeconds, TimeUnit.SECONDS);
-        } catch (Exception exp) {
-            Throwable cause = exp.getCause() != null ? Objects.requireNonNull(exp.getCause())
-                    : Objects.requireNonNull(exp);
-            if (exp.getCause() instanceof ConnectException) {
-                this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, cause));
-                this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
-            } else {
-                this.clientExceptions
-                        .onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, cause));
-            }
-        }
-    }
-
+    /*
+     * void terminateWebsocketSession() {
+     * try {
+     * 
+     * 
+     * } catch (IOException exp) {
+     * this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp));
+     * this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
+     * } catch (DeploymentException exp) {
+     * this.clientExceptions
+     * .onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, exp));
+     * }
+     * }
+     */
     /**
      * Establish a new Websocket connection to the Gira One Server.
      */
@@ -186,33 +171,25 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         if (connectionState.getValue() != GiraOneClientConnectionState.Disconnected) {
             this.disconnect();
         }
-
         logger.debug("Connecting to {}", this.giraOneWssEndpoint);
-        this.connectionState.onNext(GiraOneClientConnectionState.Connecting);
         observeAndEmitDataPointValues();
-        HttpClient httpClient = new HttpClient(new SslContextFactory.Client(true));
-        WebSocketClient webSocketClient = createWebSocketClient(httpClient);
-        initiateWebsocketSession(webSocketClient);
+        this.initiateWebsocketSession();
     }
 
     /**
      * Terminate the websocket connection.
      */
     public void disconnect() {
-        disconnect(WS_CLOSURE_NORMAL);
+        this.disconnect(GiraOneWebsocketEndpoint.WS_CLOSURE_NORMAL);
     }
 
-    private void disconnect(CloseStatus closeStatus) {
-        logger.debug("Disconnecting with {}/{}", closeStatus.getCode(), closeStatus.getPhrase());
+    private void disconnect(CloseReason closeReason) {
+        logger.debug("Disconnecting with {}/{}", closeReason.getCloseCode(), closeReason.getReasonPhrase());
         try {
-            if (this.websocketSession != null) {
-                Objects.requireNonNull(this.websocketSession).close(closeStatus);
-            }
-            this.jettyThreadPool.stop();
+            this.websocketEndpoint.disconnect(closeReason);
         } catch (Exception e) {
             throw new GiraOneClientException(GiraOneClientException.DISCONNECT_FAILED, e);
         } finally {
-            this.websocketSession = null;
             this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
             this.dataPointDisposable.dispose();
         }
@@ -326,13 +303,9 @@ public class GiraOneWebsocketClient implements WebSocketListener {
      * @param command The command to send
      */
     void send(GiraOneWebsocketRequest command) {
-        try {
-            String message = gson.toJson(command, GiraOneWebsocketRequest.class);
-            logger.trace("GiraOneWebsocketRequest '{}' :: {}", command.getCommand(), message);
-            Objects.requireNonNull(websocketSession).getRemote().sendString(message);
-        } catch (IOException exp) {
-            throw new GiraOneClientException("Error on executing server command", exp);
-        }
+        String message = gson.toJson(command, GiraOneWebsocketRequest.class);
+        logger.trace("GiraOneWebsocketRequest '{}' :: {}", command.getCommand(), message);
+        this.websocketEndpoint.sendMessage(message);
     }
 
     /**
@@ -368,13 +341,6 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         }
     }
 
-    @Override
-    @NonNullByDefault({})
-    public void onWebSocketBinary(byte[] bytes, int i, int i1) {
-        logger.error("unsupported binary data received");
-    }
-
-    @Override
     @NonNullByDefault({})
     public void onWebSocketText(String message) {
         logger.trace("Received Message :: {}", message);
@@ -395,17 +361,16 @@ public class GiraOneWebsocketClient implements WebSocketListener {
                 giraOneCommandResponse.getResponseBody());
     }
 
-    @Override
     @NonNullByDefault({})
-    public void onWebSocketClose(int code, String reason) {
-        logger.info("WebSocket is closed with code={} and reason={}", code, reason);
-        if (code == WS_GOING_AWAY.getCode()) {
+    public void onWebSocketClosed(CloseReason reason) {
+        logger.info("WebSocket is closed with code={} and reason={}", reason.getCloseCode(), reason);
+        if (reason.getCloseCode() == CloseReason.CloseCodes.GOING_AWAY
+                || reason.getCloseCode() == CloseReason.CloseCodes.CLOSED_ABNORMALLY) {
             this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
         }
         this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);
     }
 
-    @Override
     @NonNullByDefault({})
     public void onWebSocketError(Throwable throwable) {
         logger.error("Received WebSocketError :: ", throwable);
@@ -419,18 +384,20 @@ public class GiraOneWebsocketClient implements WebSocketListener {
         this.connectionState.onNext(GiraOneClientConnectionState.Error);
     }
 
-    @Override
-    @NonNullByDefault({})
-    public void onWebSocketConnect(Session session) {
-        logger.trace("onWebSocketConnect:: got WebSocket Session :: {}", session);
-        this.websocketSession = session;
-        this.registerApplication();
+    public void onWebSocketConnectionState(GiraOneWebsocketConnectionState connectionState) {
+        logger.trace("onWebSocketConnectionState:: {}", connectionState);
+        if (connectionState == GiraOneWebsocketConnectionState.Connected) {
+            this.registerApplication();
+        } else {
+            this.connectionState.onNext(GiraOneClientConnectionState.valueOf(connectionState.name()));
+        }
     }
 
     private void registerApplication() {
         CompletableFuture.runAsync(() -> {
             logger.trace("Registering Application");
-            execute(RegisterApplication.builder().with(RegisterApplication::setApplicationId, InstanceUUID.get())
+            execute(RegisterApplication.builder()
+                    .with(RegisterApplication::setApplicationId, UUID.randomUUID().toString())
                     .with(RegisterApplication::setApplicationType, "api").build());
             this.connectionState.onNext(GiraOneClientConnectionState.Connected);
         });

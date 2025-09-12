@@ -84,7 +84,6 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
 
     @Override
     public void dispose() {
-        disposables.dispose();
         disposables.clear();
         super.dispose();
     }
@@ -113,7 +112,6 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
      * @param connectionState The {@link GiraOneBridgeState}.
      */
     void onBridgeConnectionState(GiraOneBridgeState connectionState) {
-        logger.trace("onBridgeConnectionState :: {}", connectionState);
         switch (connectionState) {
             case Online -> this.bridgeMovedToOnline();
             case Offline -> this.bridgeMovedToOffline();
@@ -148,14 +146,16 @@ public abstract class GiraOneBaseThingHandler extends BaseThingHandler {
         GiraOneProject project = getGiraOneBridge().lookupGiraOneProject();
         Optional<String> channelUrn = detectChannelUrn();
         if (channelUrn.isPresent()) {
-            logger.debug("detectGiraOneChannel :: try to lookup channel by urn {}", channelUrn.get());
+            logger.debug("lookupGiraOneProjectChannel :: try to lookup channel by urn {}", channelUrn.get());
             Optional<GiraOneChannel> channel = project.lookupChannelByUrn(channelUrn.get());
             if (channel.isPresent()) {
                 return channel;
             } else {
-                logger.warn("detectGiraOneChannel :: channel lookup by urn {} returned without result. ",
+                logger.warn("lookupGiraOneProjectChannel :: channel lookup by urn {} returned without result. ",
                         channelUrn.get());
             }
+        } else {
+            logger.debug("lookupGiraOneProjectChannel :: detectChannelUrn() returned empty channelUrn");
         }
         return Optional.empty();
     }

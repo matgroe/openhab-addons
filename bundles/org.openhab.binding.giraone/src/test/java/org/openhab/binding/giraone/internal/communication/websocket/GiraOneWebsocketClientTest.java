@@ -14,32 +14,16 @@ package org.openhab.binding.giraone.internal.communication.websocket;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.ONE_SECOND;
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jetty.websocket.api.RemoteEndpoint;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Stream;
-
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.websocket.api.RemoteEndpoint;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +34,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.openhab.binding.giraone.internal.GiraOneClientConfiguration;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneCommand;
@@ -62,6 +50,16 @@ import org.openhab.binding.giraone.internal.types.GiraOneEvent;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.ResourceLoader;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.stream.Stream;
 
 /**
  * Test class for {@link GiraOneWebsocketClient}
@@ -100,8 +98,8 @@ class GiraOneWebsocketClientTest {
         Mockito.when(webSocketClient.connect(any(GiraOneWebsocketClient.class), any(URI.class))).thenReturn(session);
 
         giraOneWebsocketClient = Mockito.spy(new GiraOneWebsocketClient(configuration));
-        Mockito.doReturn(webSocketClient).when(giraOneWebsocketClient)
-                .createWebSocketClient(Mockito.any(HttpClient.class));
+        // Mockito.doReturn(webSocketClient).when(giraOneWebsocketClient)
+        // .createWebSocketClient(Mockito.any(HttpClient.class));
     }
 
     @DisplayName("Compute Websocket Authentication Token")
@@ -119,8 +117,6 @@ class GiraOneWebsocketClientTest {
 
         giraOneWebsocketClient.connect();
         assertEquals(GiraOneClientConnectionState.Connecting, giraOneWebsocketClient.connectionState.getValue());
-
-        giraOneWebsocketClient.onWebSocketConnect(websocketSession);
 
         await().atMost(ONE_SECOND).untilAsserted(() -> {
             ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);

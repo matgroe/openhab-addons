@@ -12,13 +12,10 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import java.util.Optional;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.giraone.internal.types.GiraOneChannel;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
-import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.ThingStateFactory;
 import org.openhab.core.library.types.DecimalType;
@@ -33,6 +30,8 @@ import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 /**
  * The {@link GiraOneDefaultThingHandler} is responsible for handling commands, which are
@@ -82,17 +81,6 @@ public class GiraOneDefaultThingHandler extends GiraOneBaseThingHandler {
         logger.debug("onGiraOneValue :: {}", value);
         String thingChannelId = buildThingChannelId(value);
         updateState(thingChannelId, ThingStateFactory.from(thingChannelId, value.getValue()));
-    }
-
-    /**
-     * Checks, if the value as represented by the given {@link GiraOneValueChange} is increasing or not
-     *
-     * @param valueChange
-     *
-     * @return returns true, if increasing, false otherwise.
-     */
-    protected boolean isValueIncreasing(GiraOneValueChange valueChange) {
-        return Float.parseFloat(valueChange.getValue()) > Float.parseFloat(valueChange.getPreviousValue());
     }
 
     /**

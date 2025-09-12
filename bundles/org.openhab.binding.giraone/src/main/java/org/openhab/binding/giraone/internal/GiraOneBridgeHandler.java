@@ -12,16 +12,15 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_SERVER_TIME;
-
-import java.time.Instant;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_SERVER_TIME;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientException;
@@ -44,12 +43,11 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.ReplaySubject;
-import io.reactivex.rxjava3.subjects.Subject;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The {@link GiraOneBridgeHandler} is responsible for handling commands, which are
@@ -94,7 +92,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     public void dispose() {
-        disposables.dispose();
+        disposables.clear();
         giraOneClient.disconnect();
         super.dispose();
     }
@@ -171,7 +169,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
      * @param connectionState The {@link GiraOneClient}'s connection state.
      */
     protected void onConnectionStateChanged(GiraOneClientConnectionState connectionState) {
-        logger.trace("ConnectionStateChanged to {}", connectionState);
+        logger.info("ConnectionStateChanged to {}", connectionState);
         switch (connectionState) {
             case Connecting -> this.clientMovedToConnecting();
             case Connected -> this.clientMovedToConnected();
