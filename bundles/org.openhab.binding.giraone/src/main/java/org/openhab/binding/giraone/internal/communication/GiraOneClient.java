@@ -21,6 +21,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneComponentType;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneProject;
+import org.openhab.binding.giraone.internal.types.GiraOneURN;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +172,11 @@ public class GiraOneClient {
      * @param dataPoint The Datapoint to lookup it's value.
      */
     public void lookupGiraOneDatapointValue(GiraOneDataPoint dataPoint) {
-        this.websocketClient.lookupGiraOneDataPointValue(dataPoint);
+        if (!dataPoint.getUrn().equals(GiraOneURN.INVALID)) {
+            this.websocketClient.lookupGiraOneDataPointValue(dataPoint);
+        } else {
+            logger.warn("lookupGiraOneDatapointValue :: skipping lookup for GiraOneDataPoint '{}'", dataPoint);
+        }
     }
 
     /**

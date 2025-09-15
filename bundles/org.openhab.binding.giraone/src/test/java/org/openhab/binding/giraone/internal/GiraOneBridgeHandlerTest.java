@@ -12,19 +12,11 @@
  */
 package org.openhab.binding.giraone.internal;
 
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.ONE_MINUTE;
 import static org.awaitility.Duration.ONE_SECOND;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.any;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -32,6 +24,17 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.openhab.binding.giraone.internal.communication.GiraOneClient;
 import org.openhab.binding.giraone.internal.communication.GiraOneClientConnectionState;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
@@ -40,9 +43,8 @@ import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * Test class for {@link GiraOneBridgeHandler}

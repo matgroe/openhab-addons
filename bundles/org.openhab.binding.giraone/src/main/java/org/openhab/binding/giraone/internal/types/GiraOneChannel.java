@@ -12,15 +12,15 @@
  */
 package org.openhab.binding.giraone.internal.types;
 
-import org.eclipse.jdt.annotation.DefaultLocation;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * GiraOneChannel

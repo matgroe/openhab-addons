@@ -14,9 +14,17 @@ package org.openhab.binding.giraone.internal;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.ONE_SECOND;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
+
+import java.util.stream.Stream;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,11 +33,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.GENERIC_TYPE_UID;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
@@ -38,8 +41,6 @@ import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.types.State;
-
-import java.util.stream.Stream;
 
 /**
  * Test class for {@link GiraOneShutterThingHandler}.

@@ -12,15 +12,16 @@
  */
 package org.openhab.binding.giraone.internal.communication.websocket;
 
-import com.google.gson.Gson;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.subjects.PublishSubject;
-import io.reactivex.rxjava3.subjects.ReplaySubject;
-import io.reactivex.rxjava3.subjects.Subject;
-import jakarta.websocket.CloseReason;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jetty.websocket.api.MessageTooLargeException;
@@ -39,21 +40,22 @@ import org.openhab.binding.giraone.internal.types.GiraOneChannelCollection;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneDeviceConfiguration;
 import org.openhab.binding.giraone.internal.types.GiraOneEvent;
+import org.openhab.binding.giraone.internal.types.GiraOneURN;
 import org.openhab.binding.giraone.internal.types.GiraOneValue;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.GsonMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import com.google.gson.Gson;
+
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.Subject;
 
 /**
  * The class acts as client for the Gira One Server and handles the
@@ -79,7 +81,7 @@ public class GiraOneWebsocketClient {
 
     private Disposable dataPointDisposable = Disposable.empty();
 
-    private final GiraOneWebsocketConnection websocketConnection;
+    private final GiraOneWebsocketEndpoint websocketConnection;
 
     /** Observe this subject for received Command-Responses from Gira Server */
     final Subject<GiraOneWebsocketResponse> responses = PublishSubject.create();
@@ -123,8 +125,10 @@ public class GiraOneWebsocketClient {
         return "ui" + new String(Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8)));
     }
 
-    GiraOneWebsocketConnection createGiraOneWebsocketConnection() throws GiraOneClientException {
-        return new GiraOneJakartaWebsocketEndpoint();
+    GiraOneWebsocketEndpoint createGiraOneWebsocketConnection() throws GiraOneClientException {
+        return new GiraOneJdkWebsocketEndpoint();
+        // return new GiraOneJettyWebsocketEndpoint();
+        // return new GiraOneOkHttpWebsocketEndpoint();
     }
 
     void initiateWebsocketSession() {
@@ -141,12 +145,10 @@ public class GiraOneWebsocketClient {
 
             this.websocketConnection.connectTo(URI.create(giraOneWssEndpoint));
         } catch (GiraOneClientException exp) {
-            this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp.getCause()));
+            this.clientExceptions
+                    .onNext(new GiraOneClientException(GiraOneClientException.CONNECT_REFUSED, exp.getCause()));
             this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
         }
-        //catch (DeploymentException exp) {
-        //    this.clientExceptions.onNext(new GiraOneClientException(GiraOneClientException.CONNECT_CONFIGURATION, exp));
-        //}
     }
 
     /**
@@ -165,11 +167,11 @@ public class GiraOneWebsocketClient {
      * Terminate the websocket connection.
      */
     public void disconnect() {
-        this.disconnect(GiraOneJakartaWebsocketEndpoint.WS_CLOSURE_NORMAL);
+        this.disconnect(GiraOneWebsocketCloseCode.NORMAL_CLOSURE);
     }
 
-    private void disconnect(CloseReason closeReason) {
-        logger.debug("Disconnecting with {}/{}", closeReason.getCloseCode(), closeReason.getReasonPhrase());
+    private void disconnect(GiraOneWebsocketCloseCode closeReason) {
+        logger.debug("Disconnecting with {}/{}", closeReason.getCode(), closeReason.toString());
         try {
             this.websocketConnection.disconnect(closeReason);
         } catch (Exception e) {
@@ -237,7 +239,7 @@ public class GiraOneWebsocketClient {
      */
     public void lookupGiraOneDataPointValue(final GiraOneDataPoint dataPoint) {
         if (connectionState.getValue() == GiraOneClientConnectionState.Connected) {
-            if (dataPoint.getUrn() != null) {
+            if (dataPoint.getUrn() != null && !GiraOneURN.INVALID.equals(dataPoint.getUrn())) {
                 send(GetValue.builder().with(GetValue::setUrn, dataPoint.getUrn()).build());
             }
         } else {
@@ -290,7 +292,7 @@ public class GiraOneWebsocketClient {
     void send(GiraOneWebsocketRequest command) {
         String message = gson.toJson(command, GiraOneWebsocketRequest.class);
         logger.trace("GiraOneWebsocketRequest '{}' :: {}", command.getCommand(), message);
-        this.websocketConnection.sendMessage(message);
+        this.websocketConnection.send(message);
     }
 
     /**
@@ -347,10 +349,9 @@ public class GiraOneWebsocketClient {
     }
 
     @NonNullByDefault({})
-    public void onWebSocketClosed(CloseReason reason) {
-        logger.info("WebSocket is closed with code={} and reason={}", reason.getCloseCode(), reason);
-        if (reason.getCloseCode() == CloseReason.CloseCodes.GOING_AWAY
-                || reason.getCloseCode() == CloseReason.CloseCodes.CLOSED_ABNORMALLY) {
+    public void onWebSocketClosed(GiraOneWebsocketCloseCode reason) {
+        logger.info("WebSocket is closed with code={} and reason={}", reason.getCode(), reason.toString());
+        if (reason == GiraOneWebsocketCloseCode.GOING_AWAY || reason == GiraOneWebsocketCloseCode.CLOSED_ABNORMALLY) {
             this.connectionState.onNext(GiraOneClientConnectionState.TemporaryUnavailable);
         }
         this.connectionState.onNext(GiraOneClientConnectionState.Disconnected);

@@ -13,7 +13,6 @@
 package org.openhab.binding.giraone.internal.typeadapters;
 
 import java.lang.reflect.Type;
-import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -54,6 +53,9 @@ public class GiraOneMessageTypeDeserializer extends GiraOneMessageJsonTypeAdapte
     private boolean isError(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) {
         GiraOneMessageError error = jsonDeserializationContext.deserialize(jsonObject.getAsJsonObject(PROPERTY_ERROR),
                 GiraOneMessageError.class);
-        return Objects.requireNonNull(error).isErrorState();
+        if (error != null) {
+            return error.isErrorState();
+        }
+        return false;
     }
 }

@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
+import org.openhab.binding.giraone.internal.types.GiraOneURN;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -43,7 +44,7 @@ public class GiraOneDataPointDeserializer extends GiraOneMessageJsonTypeAdapter
                 if (jsonObject.has(GiraOneJsonPropertyNames.PROPERTY_URN)) {
                     return new GiraOneDataPoint(jsonObject.get(GiraOneJsonPropertyNames.PROPERTY_URN).getAsString());
                 }
-                return new GiraOneDataPoint("urn:gds:dp:GiraOneServer:invalid:resource");
+                return new GiraOneDataPoint(GiraOneURN.INVALID);
             } catch (IllegalArgumentException e) {
                 throw new JsonParseException("Cannot parse JsonElement as GiraOneDataPoint.", e);
             }
