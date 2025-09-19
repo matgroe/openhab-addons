@@ -31,6 +31,7 @@ public class GiraOneClientConfiguration {
     public int maxTextMessageSize = 100; // 100kB
     public int tryReconnectAfterSeconds = 30;
     public int buttonReleaseTimeout = 1200;
+    public int sessionTimeToLive = 5;
     public boolean discoverDevices = true;
     public boolean discoverButtons = true;
     public boolean overrideWithProjectSettings = false;

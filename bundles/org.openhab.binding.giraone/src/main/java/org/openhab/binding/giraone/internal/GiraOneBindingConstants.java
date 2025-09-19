@@ -105,4 +105,5 @@ public class GiraOneBindingConstants {
     public static final String CHANNEL_EXECUTE = "execute";
     public static final String CHANNEL_SHUTTER_STATE = "shutter-state";
     public static final String CHANNEL_SERVER_TIME = "server-time";
+    public static final String CHANNEL_CONNECT_TIME = "connect-time";
 }

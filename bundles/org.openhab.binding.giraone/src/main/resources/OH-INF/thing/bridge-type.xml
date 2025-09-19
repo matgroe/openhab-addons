@@ -9,6 +9,7 @@
 		<description>The Gateway to your Gira One Smart-Home installation.</description>
 		<channels>
 			<channel id="server-time" typeId="server-time"/>
+			<channel id="connect-time" typeId="connect-time"/>
 		</channels>
 
 		<config-description>
@@ -42,6 +43,13 @@
 				<label>Default Timeout</label>
 				<description>How long should be waited on any answer before failing?</description>
 				<default>60</default>
+				<advanced>true</advanced>
+			</parameter>
+
+			<parameter name="sessionTimeToLive" type="integer" unit="h" min="1" max="24">
+				<label>Session Time to Live</label>
+				<description>How long should the session to Gira One Server should be kept before reconnect</description>
+				<default>12</default>
 				<advanced>true</advanced>
 			</parameter>
 
@@ -87,6 +95,12 @@
 		<item-type>DateTime</item-type>
 		<label>Server Time</label>
 		<description>Server Time</description>
+	</channel-type>
+
+	<channel-type id="connect-time">
+		<item-type>DateTime</item-type>
+		<label>Last Connection Time</label>
+		<description>Last Connection Time</description>
 	</channel-type>
 
 </thing:thing-descriptions>

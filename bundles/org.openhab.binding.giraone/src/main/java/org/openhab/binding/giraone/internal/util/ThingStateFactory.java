@@ -27,13 +27,22 @@ import org.openhab.core.types.State;
  */
 @NonNullByDefault()
 public abstract class ThingStateFactory {
-
     public static State from(final String channelId, String value) {
         return switch (channelId) {
             case GiraOneBindingConstants.CHANNEL_ON_OFF -> OnOffType.from(value);
             case GiraOneBindingConstants.CHANNEL_SERVER_TIME -> DateTimeType.valueOf(value);
-            case GiraOneBindingConstants.CHANNEL_FLOAT -> DecimalType.valueOf(value);
+            case GiraOneBindingConstants.CHANNEL_FLOAT -> roundWithTwoDecimals(value);
+            case GiraOneBindingConstants.CHANNEL_POSITION, GiraOneBindingConstants.CHANNEL_SLAT_POSITION ->
+                roundAsInteger(value);
             default -> StringType.valueOf(value);
         };
+    }
+
+    private static DecimalType roundAsInteger(String value) {
+        return new DecimalType(Math.round(Float.parseFloat(value)));
+    }
+
+    private static DecimalType roundWithTwoDecimals(String value) {
+        return new DecimalType((float) (Math.round(Float.parseFloat(value) * 100)) / 100);
     }
 }

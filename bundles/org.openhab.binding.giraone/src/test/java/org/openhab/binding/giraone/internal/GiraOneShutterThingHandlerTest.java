@@ -37,6 +37,7 @@ import org.openhab.binding.giraone.internal.types.GiraOneDataPoint;
 import org.openhab.binding.giraone.internal.types.GiraOneValueChange;
 import org.openhab.binding.giraone.internal.util.CaseFormatter;
 import org.openhab.binding.giraone.internal.util.TestDataProvider;
+import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
@@ -170,6 +171,6 @@ class GiraOneShutterThingHandlerTest {
                 argumentCaptorState.getAllValues().get(1));
 
         assertEquals(GiraOneBindingConstants.CHANNEL_POSITION, argumentCaptorChannel.getAllValues().get(2));
-        assertEquals(StringType.valueOf(valueChange.getValue()), argumentCaptorState.getAllValues().get(2));
+        assertEquals(DecimalType.valueOf(valueChange.getValue()), argumentCaptorState.getAllValues().get(2));
     }
 }

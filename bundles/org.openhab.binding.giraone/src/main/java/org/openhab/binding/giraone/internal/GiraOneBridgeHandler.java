@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.giraone.internal;
 
+import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_CONNECT_TIME;
 import static org.openhab.binding.giraone.internal.GiraOneBindingConstants.CHANNEL_SERVER_TIME;
 
 import java.time.Instant;
@@ -117,6 +118,18 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         // dispose and clear all disposables
         disposables.clear();
 
+        disposables.add(subscribeOnGiraOneDataPointValues(String.format("%s:.*", GDS_DEVICE_CHANNEL_URN),
+                this::onDeviceChannelEvent));
+
+        connectionState.onNext(GiraOneBridgeState.Offline);
+
+        scheduler.execute(this::doBackgroundInitialization);
+    }
+
+    protected void doBackgroundInitialization() {
+        //
+        giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
+
         // Register at GiraOneClient for all Exceptions
         disposables.add(giraOneClient.observeOnGiraOneClientExceptions(this::onGiraOneClientException));
 
@@ -126,17 +139,9 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
         // Register for ConnectionState changes
         disposables.add(this.giraOneClient.observeGiraOneConnectionState(this::onConnectionStateChanged));
 
-        subscribeOnGiraOneDataPointValues(String.format("%s:.*", GDS_DEVICE_CHANNEL_URN), this::onDeviceChannelEvent);
-
-        connectionState.onNext(GiraOneBridgeState.Offline);
-
-        scheduler.execute(this::doBackgroundInitialization);
-    }
-
-    protected void doBackgroundInitialization() {
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.BRIDGE_UNINITIALIZED);
-        this.giraOneClient.disconnect();
+
         try {
             this.giraOneClient.connect();
         } catch (GiraOneClientException exp) {
@@ -155,7 +160,6 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
 
     @Override
     protected void updateConfiguration(Configuration configuration) {
-        giraOneClient = new GiraOneClient(getConfigAs(GiraOneClientConfiguration.class));
         super.updateConfiguration(configuration);
         this.initialize();
     }
@@ -195,6 +199,7 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     private void scheduleReconnect() {
+        this.giraOneClient.disconnect();
         GiraOneClientConfiguration cfg = getConfigAs(GiraOneClientConfiguration.class);
         logger.info("Schedule server reconnect in {} seconds.", cfg.tryReconnectAfterSeconds);
         scheduler.schedule(this::doBackgroundInitialization, cfg.tryReconnectAfterSeconds, TimeUnit.SECONDS);
@@ -205,10 +210,22 @@ public class GiraOneBridgeHandler extends BaseBridgeHandler implements GiraOneBr
     }
 
     protected void clientMovedToConnected() {
+        updateState(CHANNEL_CONNECT_TIME, new DateTimeType());
         lookupGiraOneProject();
         this.updateBridgeProperties();
         this.lookupGiraOneDatapointValue(G1_DATAPOINT_READY);
         updateStatus(ThingStatus.ONLINE);
+
+        GiraOneClientConfiguration cfg = getConfigAs(GiraOneClientConfiguration.class);
+
+        // terminate and reconnect to gira server from time to time
+        logger.info("Schedule Terminate and Re-Initiate Session in {} hours", cfg.sessionTimeToLive);
+        scheduler.schedule(() -> {
+            logger.info("Terminate and Re-Initiate Session");
+            this.giraOneClient.disconnect();
+            doBackgroundInitialization();
+
+        }, cfg.sessionTimeToLive, TimeUnit.HOURS);
     }
 
     protected void clientMovedToTemporaryUnavailable() {

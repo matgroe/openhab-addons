@@ -127,8 +127,6 @@ public class GiraOneWebsocketClient {
 
     GiraOneWebsocketEndpoint createGiraOneWebsocketConnection() throws GiraOneClientException {
         return new GiraOneJdkWebsocketEndpoint();
-        // return new GiraOneJettyWebsocketEndpoint();
-        // return new GiraOneOkHttpWebsocketEndpoint();
     }
 
     void initiateWebsocketSession() {

@@ -81,7 +81,6 @@ public class GiraOneJdkWebsocketEndpoint extends GiraOneWebsocketEndpoint {
     public GiraOneJdkWebsocketEndpoint() {
         this.onWebsocketState(GiraOneWebsocketConnectionState.Disconnected);
         this.subscribeOnConnectionState(this::subscribeOnConnectionState);
-        this.httpClient = HttpClient.newBuilder().sslContext(createSSLContext()).build();
     }
 
     private void subscribeOnConnectionState(GiraOneWebsocketConnectionState connectionState) {
@@ -106,7 +105,7 @@ public class GiraOneJdkWebsocketEndpoint extends GiraOneWebsocketEndpoint {
     }
 
     private void processSendingQueueItem(String item) {
-        logger.info("processSendingQueueItem {}", item);
+        logger.trace("processSendingQueueItem {}", item);
         try {
             this.websocket.sendText(item, true).join().request(1);
         } catch (Exception e) {
@@ -122,6 +121,7 @@ public class GiraOneJdkWebsocketEndpoint extends GiraOneWebsocketEndpoint {
     void connectTo(URI endpoint) throws GiraOneWebsocketException {
         onWebsocketState(GiraOneWebsocketConnectionState.Connecting);
         try {
+            this.httpClient = HttpClient.newBuilder().sslContext(createSSLContext()).build();
             this.websocket = this.httpClient.newWebSocketBuilder().buildAsync(endpoint, new WebSocketClient()).get(30,
                     TimeUnit.SECONDS);
             onWebsocketState(GiraOneWebsocketConnectionState.Connected);
