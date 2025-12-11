@@ -66,7 +66,7 @@ Bridged endpoints will be added to the inbox once the parent Node is added as a 
 
 The pairing action can be found in the settings of the "Controller" thing under the "Actions" -> "Pair Matter Device"
 
-<img src="doc/pairing.png" alt="Matter Pairing" width="600"/>
+<img src="./doc/pairing.png" alt="Matter Pairing" width="600"/>
 
 This action will give feedback on the pairing process, if successful a device will be added to the Inbox.
 
@@ -74,7 +74,7 @@ See [Device Pairing: Code Types](#device-pairing-code-types) for more informatio
 
 The same codes can also be used in the openHAB Thing discovery UI, although feedback is limited and only a single controller is supported.  
 
-<img src="doc/thing-discovery.png" alt="Thing Discovery" width="600"/>
+<img src="./doc/thing-discovery.png" alt="Thing Discovery" width="600"/>
 
 ### Device Pairing: Code Types
 
@@ -226,6 +226,7 @@ Possible channels include:
 | colorcontrol-temperature                                    | Dimmer                   | Color Temperature            | Sets the color temperature of the light                                                                                                                                                                                                                              | ColorLight       |          |             |
 | colorcontrol-temperature-abs                                | Number:Temperature       | Color Temperature            | Sets the color temperature of the light in mirek                                                                                                                                                                                                                     | ColorLight       |          | %.0f %unit% |
 | doorlock-lockstate                                          | Switch                   | Door Lock State              | Locks and unlocks the door and maintains the lock state                                                                                                                                                                                                              | Door             |          |             |
+| doorlock-doorstate                                          | Contact                  | Door Sensor State            | Door Sensor State                                                                                                                                                                                                                                                    | Door             | true     |             |
 | fancontrol-fanmode                                          | Number                   | Fan Mode                     | Set the fan mode                                                                                                                                                                                                                                                     | HVAC             |          |             |
 | onoffcontrol-onoff                                          | Switch                   | Switch                       | Switches the power on and off                                                                                                                                                                                                                                        | Light            |          |             |
 | levelcontrol-level                                          | Dimmer                   | Dimmer                       | Sets the level of the light                                                                                                                                                                                                                                          | Light            |          |             |
